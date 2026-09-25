@@ -54,18 +54,21 @@ a{color:inherit;text-decoration:none}
 .trust-row{display:flex;gap:26px;flex-wrap:wrap;margin-top:42px;color:#ccd6df;font-size:12px}
 .trust-row span::before{content:"◆";margin-right:8px;color:var(--gold);font-size:8px}
 
-.hero-visual{position:relative;min-height:650px;background:linear-gradient(145deg,#18334e,#091625)}
-.interior-wall{position:absolute;inset:0;background:
-radial-gradient(circle at 50% 35%,rgba(229,204,144,.18),transparent 31%),
-linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
-linear-gradient(#18354f,#0b1d30);background-size:auto,92px 100%,auto}
-.interior-wall::before,.interior-wall::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:rgba(218,195,143,.18)}
-.interior-wall::before{left:18%}.interior-wall::after{right:18%}
-.crest-stage{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:min(330px,72%);aspect-ratio:1;border:1px solid rgba(198,161,91,.55);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle,rgba(198,161,91,.14),rgba(7,24,42,.5));box-shadow:0 30px 80px rgba(0,0,0,.25)}
-.crest-stage::before{content:"";position:absolute;inset:20px;border:1px solid rgba(198,161,91,.28);border-radius:50%}
-.crest-stage strong{position:relative;font-family:"PT Serif",serif;color:var(--gold-2);font-size:30px;line-height:1.08;letter-spacing:.03em}
-.crest-kicker,.crest-size{position:relative;color:#d9c28d;letter-spacing:.14em;text-transform:uppercase}
-.crest-kicker{font-size:11px;margin-bottom:12px}.crest-size{font-size:9px;margin-top:13px}
+.hero-visual{
+  position:relative;
+  min-height:650px;
+  background-color:#0e263d;
+  background-image:
+    radial-gradient(circle at 50% 43%,rgba(214,181,112,.20),rgba(7,24,42,.10) 38%,rgba(7,24,42,.82) 88%),
+    url('assets/gerb-rf.webp');
+  background-repeat:no-repeat;
+  background-position:center,center;
+  background-size:cover,88% auto;
+  background-blend-mode:normal,multiply;
+  box-shadow:inset 0 0 80px rgba(0,0,0,.28);
+}
+.interior-wall{display:none}
+.crest-stage{display:none}
 .visual-caption{position:absolute;left:30px;right:30px;bottom:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.2);color:#c4d0dc;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
 
 .section{padding:96px 0}
