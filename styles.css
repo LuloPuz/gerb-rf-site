@@ -362,3 +362,20 @@ a{color:inherit;text-decoration:none}
 .product-card-large:has(img[src*="metallizaciya"]) .product-gallery-thumbs{
   background:#FEFCF8 !important;
 }
+
+/* Slightly enlarge product artwork inside all bar-relief gallery frames */
+.catalog-products .product-gallery-main{
+  padding:12px !important;
+  box-sizing:border-box;
+}
+.catalog-products .product-gallery-main img{
+  width:100%;
+  height:100%;
+  max-width:none;
+  max-height:none;
+  object-fit:contain;
+  object-position:center;
+}
+@media(max-width:620px){
+  .catalog-products .product-gallery-main{padding:8px !important}
+}
