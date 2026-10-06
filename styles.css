@@ -660,3 +660,63 @@ body.lightbox-open{overflow:hidden}
 
 .custom-size-inline-copy{display:flex;flex-direction:column;gap:3px;text-align:left}
 .custom-size-inline-copy small{font-size:10px;font-weight:500;line-height:1.35;color:#6d7479;letter-spacing:0}
+
+/* Final product: lighter custom-size typography and exact 700px column alignment */
+.custom-size-inline strong{
+  font-weight:500 !important;
+}
+.custom-size-inline > span:last-child{
+  font-weight:500 !important;
+}
+.custom-size-inline-copy small{
+  font-weight:400 !important;
+}
+@media(min-width:901px){
+  .final-product-grid{align-items:start !important}
+  .final-product-gallery,
+  .final-product-info{
+    height:700px !important;
+    min-height:700px !important;
+    max-height:700px !important;
+    box-sizing:border-box !important;
+  }
+  .final-product-info{
+    padding:0 !important;
+    overflow:hidden;
+  }
+  .final-product-info .eyebrow{margin:0 0 14px !important}
+  .final-product-info h1{
+    margin:0 0 2px !important;
+    font-size:56px !important;
+    line-height:1 !important;
+  }
+  .final-product-info .final-finish{margin:0 0 20px !important}
+  .final-product-info .final-price{
+    padding:0 0 18px !important;
+    margin-bottom:16px !important;
+  }
+  .final-product-info .size-label{margin:0 0 9px !important}
+  .final-product-info .size-options{gap:8px !important}
+  .final-product-info .size-option{padding:10px !important}
+  .final-product-info .custom-size-inline{
+    margin-top:10px !important;
+    padding:10px 16px !important;
+    min-height:58px;
+    box-sizing:border-box;
+  }
+  .final-product-info .production-time{
+    margin:10px 0 !important;
+    padding:13px 18px !important;
+  }
+  .final-product-info .production-time strong{font-size:16px !important}
+  .final-product-info .production-time span{line-height:1.45 !important}
+  .final-product-info .final-order-button{
+    margin-top:auto !important;
+    height:48px !important;
+    min-height:48px !important;
+    flex:0 0 48px !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+}
