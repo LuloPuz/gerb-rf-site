@@ -535,3 +535,19 @@ body.lightbox-open{overflow:hidden}
  .image-zoom-hint{right:10px;bottom:10px}
  .product-lightbox{padding:16px}
 }
+
+/* Precisely align the right product column with the gallery frame */
+.final-product-info{
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+  height:700px;
+}
+.final-product-info .eyebrow{margin-top:0}
+.final-product-info h1{margin-top:26px}
+.final-product-info .final-order-button{
+  margin-top:auto;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
