@@ -646,3 +646,14 @@ body.lightbox-open{overflow:hidden}
     flex:0 0 48px;
   }
 }
+
+/* Align custom-size and production-time text to one vertical axis */
+.final-product-info .custom-size-inline{
+  padding-left:18px !important;
+  padding-right:18px !important;
+}
+.final-product-info .production-time{
+  padding-left:18px !important;
+  padding-right:18px !important;
+  border-left:2px solid var(--gold);
+}
