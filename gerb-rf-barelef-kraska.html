@@ -18,7 +18,7 @@
 <p class="catalog-breadcrumb"><a href="index.html">Главная</a><span> / </span><a href="gerb-rf.html">Герб РФ</a><span> / </span><a href="gerb-rf-bez-shchita.html">Без щита</a><span> / </span><a href="gerb-rf-barelef.html">Барельеф</a><span> / </span>Покрытие краской</p>
 <div class="final-product-grid">
   <div class="final-product-gallery" data-gallery>
-    <div class="final-product-main"><img src="assets/gerb-rf-bez-shchita.png" alt="Герб Российской Федерации без щита с покрытием краской" data-gallery-main></div>
+    <button class="final-product-main" type="button" data-zoom-open aria-label="Увеличить изображение"><img src="assets/gerb-rf-bez-shchita.png" alt="Герб Российской Федерации без щита с покрытием краской" data-gallery-main><span class="image-zoom-hint">Увеличить</span></button>
     <div class="final-product-thumbs">
       <button class="gallery-thumb active" type="button" data-src="assets/gerb-rf-bez-shchita.png" aria-label="Вид спереди"><img src="assets/gerb-rf-bez-shchita.png" alt=""></button>
       <button class="gallery-thumb" type="button" data-src="assets/gerb-rf-barelef-kraska-side.png" aria-label="Вид сбоку"><img src="assets/gerb-rf-barelef-kraska-side.png" alt=""></button>
@@ -59,6 +59,10 @@
  <div class="custom-size-actions"><a class="button button-gold" href="mailto:abolo@bk.ru?subject=Нужен%20другой%20размер%20герба">Оставить заявку</a><span class="messenger-note">Telegram · MAX</span><a class="contact-phone" href="tel:+79999999999">+7 999 999-99-99</a></div>
 </div></section>
 </main>
+<div class="product-lightbox" data-lightbox aria-hidden="true">
+  <button class="product-lightbox-close" type="button" data-zoom-close aria-label="Закрыть">×</button>
+  <img src="assets/gerb-rf-bez-shchita.png" alt="Герб Российской Федерации — увеличенное изображение" data-lightbox-image>
+</div>
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="gerb-rf.html">Герб РФ</a><a href="index.html#moscow">Герб Москвы</a><a href="index.html#regions">Гербы регионов</a><a href="index.html#cities">Гербы городов</a></div><div><h3>Контакты</h3><a href="mailto:abolo@bk.ru">abolo@bk.ru</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 <script src="script.js?v=20261005-hq3"></script>
 <script>
@@ -80,5 +84,20 @@ document.querySelectorAll('.size-option').forEach(function(button){
   price.textContent=new Intl.NumberFormat('ru-RU').format(Number(button.dataset.price))+' ₽';
  });
 });
+
+const zoomOpen=document.querySelector('[data-zoom-open]');
+const lightbox=document.querySelector('[data-lightbox]');
+const lightboxImage=document.querySelector('[data-lightbox-image]');
+const zoomClose=document.querySelector('[data-zoom-close]');
+if(zoomOpen && lightbox){
+ zoomOpen.addEventListener('click',function(){
+  lightboxImage.src=document.querySelector('[data-gallery-main]').src;
+  lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false');
+  document.body.classList.add('lightbox-open');
+ });
+ zoomClose.addEventListener('click',function(){lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');document.body.classList.remove('lightbox-open')});
+ lightbox.addEventListener('click',function(e){if(e.target===lightbox){zoomClose.click()}});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape' && lightbox.classList.contains('open')) zoomClose.click()});
+}
 </script>
 </body></html>
