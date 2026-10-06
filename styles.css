@@ -570,3 +570,42 @@ body.lightbox-open{overflow:hidden}
 .catalog-breadcrumb span{
   padding:0 10px !important;
 }
+
+/* Make custom-size ordering impossible to miss */
+.custom-size-inline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-top:13px;
+  padding:14px 16px;
+  border:1px solid #c8a45b;
+  background:#fffaf0;
+  color:var(--navy);
+  font-size:12px;
+  transition:.18s;
+}
+.custom-size-inline:hover{background:#f3ead7;border-color:#9A773D}
+.custom-size-inline strong{font-family:"PT Serif",serif;font-size:15px;font-weight:600}
+.custom-size-inline span{font-weight:700;color:#9A773D;white-space:nowrap}
+.custom-size{
+  padding:52px 0;
+  background:#e8dfcf;
+  border-top:3px solid #c8a45b;
+  border-bottom:1px solid #d4c7b2;
+}
+.custom-size-inner{
+  padding:8px 0;
+}
+.custom-size-inner>div:first-child{
+  position:relative;
+  padding-left:24px;
+  border-left:3px solid #9A773D;
+}
+.custom-size h2{font-size:46px}
+.custom-size-actions .button{min-height:50px;display:flex;align-items:center;justify-content:center}
+@media(max-width:620px){
+ .custom-size-inline{align-items:flex-start;flex-direction:column;gap:5px}
+ .custom-size-inline span{white-space:normal}
+ .custom-size h2{font-size:36px}
+}
