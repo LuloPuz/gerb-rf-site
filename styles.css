@@ -784,3 +784,17 @@ body.lightbox-open{overflow:hidden}
   object-fit:contain !important;
   object-position:center !important;
 }
+
+/* Metallization: slightly smaller product scale to visually match painted relief */
+.product-metal-page .final-product-main{
+  padding:30px !important;
+}
+.product-metal-page .final-product-main img{
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:none !important;
+}
