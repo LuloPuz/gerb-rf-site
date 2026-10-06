@@ -47,9 +47,7 @@ a{color:inherit;text-decoration:none}
   color:#fff;
   overflow:hidden;
   background-color:var(--navy);
-  background-image:
-    linear-gradient(90deg,rgba(7,24,42,.98) 0%,rgba(7,24,42,.93) 30%,rgba(7,24,42,.64) 48%,rgba(7,24,42,.18) 64%,rgba(7,24,42,.02) 78%),
-    url('assets/hero-derzhava.webp');
+  background-image:url('assets/hero-derzhava-q85.jpg');
   background-repeat:no-repeat;
   background-position:center center;
   background-size:cover;
@@ -59,7 +57,7 @@ a{color:inherit;text-decoration:none}
   position:absolute;
   inset:0;
   pointer-events:none;
-  background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.12));
+  background:transparent;
 }
 .hero-grid{position:relative;z-index:1;min-height:650px;display:block}
 .hero-copy{
@@ -162,9 +160,7 @@ a{color:inherit;text-decoration:none}
   .hero{
     min-height:640px;
     background-position:62% center;
-    background-image:
-      linear-gradient(90deg,rgba(7,24,42,.99) 0%,rgba(7,24,42,.94) 42%,rgba(7,24,42,.62) 68%,rgba(7,24,42,.28) 100%),
-      url('assets/hero-derzhava.webp');
+    background-image:url('assets/hero-derzhava-q85.jpg');
   }
   .hero-copy{width:min(680px,72%);padding:68px 0 58px}
   .main-nav{display:none;position:absolute;top:86px;left:20px;right:20px;padding:20px;background:var(--paper);box-shadow:var(--shadow);flex-direction:column;align-items:flex-start}
@@ -177,9 +173,7 @@ a{color:inherit;text-decoration:none}
   .hero{
     min-height:auto;
     background-position:68% center;
-    background-image:
-      linear-gradient(90deg,rgba(7,24,42,.995) 0%,rgba(7,24,42,.96) 66%,rgba(7,24,42,.75) 100%),
-      url('assets/hero-derzhava.webp');
+    background-image:url('assets/hero-derzhava-q85.jpg');
   }
   .hero-copy{width:100%;padding:56px 0 48px}
   .container{width:min(100% - 28px,1180px)}
