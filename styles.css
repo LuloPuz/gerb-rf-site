@@ -207,3 +207,57 @@ a{color:inherit;text-decoration:none}
   .trust-row span:last-child{border-bottom:0}
 }
 
+
+/* Catalog page */
+.nav-active{color:var(--gold)!important}
+.catalog-head{padding:74px 0 58px;background:var(--paper);border-bottom:1px solid var(--line)}
+.catalog-breadcrumb{margin:0 0 34px;color:#8a9299;font-size:12px}
+.catalog-breadcrumb a{color:var(--navy)}
+.catalog-breadcrumb span{padding:0 8px;color:#b5b8ba}
+.catalog-head .eyebrow{color:#98763d;margin-bottom:13px}
+.catalog-head h1{max-width:900px;margin:0;font-family:"PT Serif",serif;font-size:clamp(46px,5vw,72px);font-weight:400;line-height:1.08;color:var(--navy)}
+.catalog-intro{max-width:760px;margin:22px 0 0;color:var(--muted);font-size:16px}
+.catalog-switcher{background:#fff;border-bottom:1px solid var(--line)}
+.catalog-tabs{display:grid;grid-template-columns:repeat(4,1fr)}
+.catalog-tab{display:flex;align-items:center;gap:15px;padding:22px 26px;border-right:1px solid var(--line);font-family:"PT Serif",serif;font-size:18px;color:var(--navy);transition:.2s}
+.catalog-tab:first-child{border-left:1px solid var(--line)}
+.catalog-tab span{font-family:"Golos Text",sans-serif;font-size:10px;color:#9b865c}
+.catalog-tab:hover{background:var(--cream)}
+.catalog-tab.active{background:var(--navy);color:#fff}
+.catalog-tab.active span{color:var(--gold-2)}
+.catalog-products{padding:78px 0 104px;background:#f8f6f0}
+.catalog-section-heading{display:grid;grid-template-columns:1fr .7fr;gap:70px;align-items:end;margin-bottom:38px}
+.catalog-section-heading .eyebrow{color:#98763d;margin-bottom:12px}
+.catalog-section-heading h2{margin:0;font-family:"PT Serif",serif;font-size:46px;font-weight:400;line-height:1.1;color:var(--navy)}
+.catalog-section-heading>p{max-width:480px;margin:0;color:var(--muted);font-size:14px}
+.product-grid-large{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.product-card-large{background:#fff;border:1px solid var(--line);box-shadow:0 16px 45px rgba(7,24,42,.06)}
+.product-image-placeholder{height:430px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:linear-gradient(145deg,#f2eee5,#faf9f5);border-bottom:1px solid var(--line);color:#9b8c70}
+.product-image-placeholder::before{content:"";width:86px;height:104px;border:1px solid #c9bfae;border-radius:43% 43% 50% 50%;margin-bottom:8px;opacity:.55}
+.product-image-placeholder span{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase}
+.product-image-placeholder small{font-family:"PT Serif",serif;font-size:15px;color:#817865}
+.product-info{padding:32px 34px 36px}
+.product-type{margin:0 0 9px;color:#9a7941;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.product-info h3{margin:0 0 15px;font-family:"PT Serif",serif;font-size:31px;font-weight:400;line-height:1.15;color:var(--navy)}
+.product-info>p:not(.product-type){max-width:620px;min-height:68px;margin:0;color:var(--muted);font-size:13px}
+.product-actions{display:flex;align-items:center;gap:24px;margin-top:27px}
+.product-more{font-size:12px;font-weight:700;color:#7b5f2f}
+.catalog-note{background:#efe9dd;border-top:1px solid #ded5c4}
+.catalog-note-inner{min-height:112px;display:flex;align-items:center;gap:50px}
+.catalog-note-inner>span{font-family:"PT Serif",serif;font-size:20px;letter-spacing:.08em;color:var(--navy)}
+.catalog-note-inner p{margin:0;max-width:800px;color:#5f6870;font-size:13px}
+@media(max-width:900px){
+ .catalog-tabs{grid-template-columns:repeat(2,1fr)}
+ .product-grid-large,.catalog-section-heading{grid-template-columns:1fr}
+ .catalog-section-heading{gap:18px}
+}
+@media(max-width:620px){
+ .catalog-head{padding:52px 0 42px}
+ .catalog-head h1{font-size:43px}
+ .catalog-tabs{grid-template-columns:1fr 1fr}
+ .catalog-tab{padding:16px 13px;font-size:15px}
+ .product-image-placeholder{height:300px}
+ .product-info{padding:25px 22px 28px}
+ .product-actions{align-items:flex-start;flex-direction:column}
+ .catalog-note-inner{padding:28px 0;align-items:flex-start;flex-direction:column;gap:10px}
+}
