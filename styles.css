@@ -551,3 +551,13 @@ body.lightbox-open{overflow:hidden}
   align-items:center;
   justify-content:center;
 }
+
+/* Unified readable gold micro-headings */
+.eyebrow,
+.catalog-head .eyebrow,
+.catalog-section-heading .eyebrow,
+.product-type{
+  color:#9A773D !important;
+  font-size:12px !important;
+  letter-spacing:.11em !important;
+}
