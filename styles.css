@@ -261,3 +261,7 @@ a{color:inherit;text-decoration:none}
  .product-actions{align-items:flex-start;flex-direction:column}
  .catalog-note-inner{padding:28px 0;align-items:flex-start;flex-direction:column;gap:10px}
 }
+
+.product-image-real{padding:28px;background:#f8f5ed}
+.product-image-real::before{display:none}
+.product-image-real img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
