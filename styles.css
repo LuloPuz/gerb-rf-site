@@ -720,3 +720,18 @@ body.lightbox-open{overflow:hidden}
     justify-content:center;
   }
 }
+
+/* Unified callout alignment and secondary copy */
+.final-product-info .custom-size-inline,
+.final-product-info .production-time{
+  padding-left:18px !important;
+  padding-right:18px !important;
+}
+.final-product-info .custom-size-inline-copy small{
+  font-family:"Golos Text",sans-serif !important;
+  font-size:12px !important;
+  font-weight:400 !important;
+  line-height:1.45 !important;
+  color:#626a70 !important;
+  letter-spacing:0 !important;
+}
