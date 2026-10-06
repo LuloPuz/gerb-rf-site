@@ -288,3 +288,8 @@ a{color:inherit;text-decoration:none}
     padding:22px;
   }
 }
+
+/* Blend the Russian coat of arms image background into its card */
+.product-image-placeholder.product-image-real{
+  background:#fbfaf7;
+}
