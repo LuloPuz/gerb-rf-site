@@ -561,3 +561,12 @@ body.lightbox-open{overflow:hidden}
   font-size:12px !important;
   letter-spacing:.11em !important;
 }
+
+/* More readable breadcrumbs sitewide */
+.catalog-breadcrumb{
+  font-size:14px !important;
+  line-height:1.55;
+}
+.catalog-breadcrumb span{
+  padding:0 10px !important;
+}
