@@ -304,3 +304,8 @@ a{color:inherit;text-decoration:none}
 
 .method-note{margin-top:18px;padding:15px 17px;border-left:2px solid var(--gold);background:#f8f5ed;color:#626a70;font-size:12px;line-height:1.65}
 .method-note strong{color:var(--navy)}
+
+/* Equalize finish cards and align their action buttons */
+.catalog-products .product-grid-large > .product-card-large{display:flex;flex-direction:column}
+.catalog-products .product-grid-large > .product-card-large .product-info{display:flex;flex:1;flex-direction:column}
+.catalog-products .product-grid-large > .product-card-large .product-actions{margin-top:auto;padding-top:27px}
