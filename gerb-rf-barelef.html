@@ -26,7 +26,19 @@
 <div class="product-grid-large">
 
 <article class="product-card-large">
-<div class="product-image-placeholder product-image-real"><img src="assets/gerb-rf-bez-shchita.png" alt="Барельеф герба Российской Федерации с покрытием краской"></div>
+<div class="product-gallery" data-gallery>
+  <div class="product-image-placeholder product-image-real product-gallery-main">
+    <img src="assets/gerb-rf-bez-shchita.png" alt="Барельеф герба Российской Федерации с покрытием краской" data-gallery-main>
+  </div>
+  <div class="product-gallery-thumbs" aria-label="Фотографии товара">
+    <button class="gallery-thumb active" type="button" data-src="assets/gerb-rf-bez-shchita.png" aria-label="Вид спереди">
+      <img src="assets/gerb-rf-bez-shchita.png" alt="">
+    </button>
+    <button class="gallery-thumb" type="button" data-src="assets/gerb-rf-barelef-kraska-side.png" aria-label="Вид сбоку">
+      <img src="assets/gerb-rf-barelef-kraska-side.png" alt="">
+    </button>
+  </div>
+</div>
 <div class="product-info">
 <p class="product-type">Барельеф · вариант отделки</p>
 <h3>Покрытие краской</h3>
@@ -53,4 +65,16 @@
 </main>
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="gerb-rf.html">Герб РФ</a><a href="index.html#moscow">Герб Москвы</a><a href="index.html#regions">Гербы регионов</a><a href="index.html#cities">Гербы городов</a></div><div><h3>Контакты</h3><a href="mailto:abolo@bk.ru">abolo@bk.ru</a><a href="tel:+79164998375">+7 916 499-83-75</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 <script src="script.js?v=20261005-hq3"></script>
+<script>
+document.querySelectorAll('[data-gallery]').forEach(function(gallery){
+  var main=gallery.querySelector('[data-gallery-main]');
+  gallery.querySelectorAll('.gallery-thumb').forEach(function(button){
+    button.addEventListener('click',function(){
+      main.src=button.dataset.src;
+      gallery.querySelectorAll('.gallery-thumb').forEach(function(item){item.classList.remove('active')});
+      button.classList.add('active');
+    });
+  });
+});
+</script>
 </body></html>
