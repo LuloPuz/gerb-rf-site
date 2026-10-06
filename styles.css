@@ -798,3 +798,13 @@ body.lightbox-open{overflow:hidden}
   object-position:center !important;
   transform:none !important;
 }
+
+/* Bar relief comparison: visually match metallization product size to paint */
+.catalog-products .product-gallery-main img.metal-card-image{
+  width:92% !important;
+  height:92% !important;
+  margin:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:none !important;
+}
