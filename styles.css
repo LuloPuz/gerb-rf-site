@@ -301,3 +301,6 @@ a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion:reduce){
   .product-image-link img{transition:none}
 }
+
+.method-note{margin-top:18px;padding:15px 17px;border-left:2px solid var(--gold);background:#f8f5ed;color:#626a70;font-size:12px;line-height:1.65}
+.method-note strong{color:var(--navy)}
