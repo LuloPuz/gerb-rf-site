@@ -47,7 +47,7 @@ a{color:inherit;text-decoration:none}
   color:#fff;
   overflow:hidden;
   background-color:var(--navy);
-  background-image:url('assets/hero-derzhava-q85.jpg');
+  background-image:url('assets/hero-derzhava-final.jpg');
   background-repeat:no-repeat;
   background-position:center center;
   background-size:auto 100%;
@@ -160,7 +160,7 @@ a{color:inherit;text-decoration:none}
   .hero{
     min-height:640px;
     background-position:center center;
-    background-image:url('assets/hero-derzhava-q85.jpg');
+    background-image:url('assets/hero-derzhava-final.jpg');
   }
   .hero-copy{width:min(680px,72%);padding:68px 0 58px}
   .main-nav{display:none;position:absolute;top:86px;left:20px;right:20px;padding:20px;background:var(--paper);box-shadow:var(--shadow);flex-direction:column;align-items:flex-start}
@@ -173,7 +173,7 @@ a{color:inherit;text-decoration:none}
   .hero{
     min-height:auto;
     background-position:center center;
-    background-image:url('assets/hero-derzhava-q85.jpg');
+    background-image:url('assets/hero-derzhava-final.jpg');
   }
   .hero-copy{width:100%;padding:56px 0 48px}
   .container{width:min(100% - 28px,1180px)}
