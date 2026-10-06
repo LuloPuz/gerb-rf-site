@@ -773,3 +773,14 @@ body.lightbox-open{overflow:hidden}
   .catalog-products .product-gallery-main,
   .final-product-main{padding:12px !important}
 }
+
+/* Match painted relief's visible product scale to metallization */
+.product-paint-page .final-product-main{
+  padding:8px !important;
+}
+.product-paint-page .final-product-main img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
