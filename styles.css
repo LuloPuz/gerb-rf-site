@@ -609,3 +609,40 @@ body.lightbox-open{overflow:hidden}
  .custom-size-inline span{white-space:normal}
  .custom-size h2{font-size:36px}
 }
+
+/* Rebalance final product details after custom-size CTA */
+@media(min-width:901px){
+  .final-product-info{
+    height:700px !important;
+    padding:0 !important;
+    display:flex;
+    flex-direction:column;
+  }
+  .final-product-info .eyebrow{margin:0 0 18px}
+  .final-product-info h1{
+    margin:0 0 4px;
+    font-size:58px;
+    line-height:1.02;
+  }
+  .final-product-info .final-finish{margin:0 0 25px}
+  .final-product-info .final-price{
+    padding:0 0 22px;
+    margin-bottom:20px;
+  }
+  .final-product-info .size-label{margin:0 0 11px}
+  .final-product-info .size-options{gap:8px}
+  .final-product-info .size-option{padding:11px 10px}
+  .final-product-info .custom-size-inline{
+    margin-top:12px;
+    padding:12px 15px;
+  }
+  .final-product-info .production-time{
+    margin:12px 0;
+    padding:15px 18px;
+  }
+  .final-product-info .final-order-button{
+    margin-top:auto;
+    min-height:48px;
+    flex:0 0 48px;
+  }
+}
