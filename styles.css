@@ -657,3 +657,6 @@ body.lightbox-open{overflow:hidden}
   padding-right:18px !important;
   border-left:2px solid var(--gold);
 }
+
+.custom-size-inline-copy{display:flex;flex-direction:column;gap:3px;text-align:left}
+.custom-size-inline-copy small{font-size:10px;font-weight:500;line-height:1.35;color:#6d7479;letter-spacing:0}
