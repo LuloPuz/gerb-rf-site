@@ -319,3 +319,31 @@ a{color:inherit;text-decoration:none}
 .gallery-thumb img{display:block;width:100%;height:100%;object-fit:contain}
 .product-gallery-main img{transition:opacity .2s ease,transform .38s ease}
 .product-gallery-main:hover img{transform:scale(1.05)}
+
+/* Bar relief finish cards: identical gallery and content geometry */
+.catalog-products .product-grid-large > .product-card-large .product-gallery{
+  height:514px;
+  display:flex;
+  flex-direction:column;
+}
+.catalog-products .product-grid-large > .product-card-large .product-gallery-main{
+  height:430px;
+  min-height:430px;
+  flex:0 0 430px;
+}
+.catalog-products .product-grid-large > .product-card-large .product-gallery-thumbs{
+  height:84px;
+  box-sizing:border-box;
+  flex:0 0 84px;
+  align-items:center;
+  padding:10px 20px;
+}
+.catalog-products .product-grid-large > .product-card-large .product-info{
+  min-height:252px;
+  box-sizing:border-box;
+}
+@media(max-width:620px){
+ .catalog-products .product-grid-large > .product-card-large .product-gallery{height:384px}
+ .catalog-products .product-grid-large > .product-card-large .product-gallery-main{height:300px;min-height:300px;flex-basis:300px}
+ .catalog-products .product-grid-large > .product-card-large .product-info{min-height:0}
+}
