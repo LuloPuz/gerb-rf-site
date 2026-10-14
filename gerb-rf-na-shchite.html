@@ -6,17 +6,28 @@
 <meta name="description" content="Герб Российской Федерации на щите. Выбор исполнения: барельеф или горельеф.">
 <meta name="theme-color" content="#07182a"><link rel="stylesheet" href="styles.css">
 <style>
-/* На этой странице оба герба имеют одинаковую высоту; ширина меняется только пропорционально */
+/* Визуально выравниваем сами гербы по высоте, не искажая пропорции изображений. */
 .product-grid-large .product-image-real img{
   width:auto !important;
-  height:310px !important;
-  max-width:92% !important;
-  max-height:310px !important;
   object-fit:contain !important;
   flex:0 0 auto;
 }
+.product-grid-large .product-card-large:first-child .product-image-real img{
+  height:327px !important;
+  max-height:327px !important;
+  max-width:92% !important;
+}
+.product-grid-large .product-card-large:nth-child(2) .product-image-real img{
+  height:310px !important;
+  max-height:310px !important;
+  max-width:92% !important;
+}
 @media(max-width:620px){
-  .product-grid-large .product-image-real img{
+  .product-grid-large .product-card-large:first-child .product-image-real img{
+    height:232px !important;
+    max-height:232px !important;
+  }
+  .product-grid-large .product-card-large:nth-child(2) .product-image-real img{
     height:220px !important;
     max-height:220px !important;
   }
