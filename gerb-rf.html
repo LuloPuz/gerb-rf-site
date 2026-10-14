@@ -7,6 +7,49 @@
   <meta name="description" content="Настенные гербы Российской Федерации: герб России без щита и герб России на щите. Изготовление и поставка по России.">
   <meta name="theme-color" content="#07182a">
   <link rel="stylesheet" href="styles.css">
+  <style>
+  /* Visual balance for the two real product photos on this page.
+     We scale each artwork proportionally and keep both centered in identical frames. */
+  .catalog-products .product-grid-large > .product-card-large:nth-child(-n+2) .product-image-real{
+    height:430px;
+    min-height:430px;
+    padding:24px !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .catalog-products .product-grid-large > .product-card-large:nth-child(-n+2) .product-image-real img{
+    width:auto !important;
+    max-width:92% !important;
+    object-fit:contain !important;
+    object-position:center !important;
+    flex:0 0 auto;
+  }
+  .catalog-products .product-grid-large > .product-card-large:first-child .product-image-real img{
+    height:305px !important;
+    max-height:305px !important;
+  }
+  .catalog-products .product-grid-large > .product-card-large:nth-child(2) .product-image-real img{
+    height:325px !important;
+    max-height:325px !important;
+  }
+  @media(max-width:620px){
+    .catalog-products .product-grid-large > .product-card-large:nth-child(-n+2) .product-image-real{
+      height:300px;
+      min-height:300px;
+      padding:18px !important;
+    }
+    .catalog-products .product-grid-large > .product-card-large:first-child .product-image-real img{
+      height:210px !important;
+      max-height:210px !important;
+    }
+    .catalog-products .product-grid-large > .product-card-large:nth-child(2) .product-image-real img{
+      height:225px !important;
+      max-height:225px !important;
+    }
+  }
+  </style>
 </head>
 <body>
 <header class="site-header">
