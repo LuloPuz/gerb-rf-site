@@ -1,0 +1,165 @@
+@media (max-width: 720px){
+  html,body{max-width:100%;overflow-x:hidden}
+  body{-webkit-text-size-adjust:100%}
+  .container{width:calc(100% - 24px)!important;max-width:none!important}
+
+  /* Header and navigation */
+  .site-header{backdrop-filter:blur(18px)}
+  .header-inner{min-height:68px!important;gap:12px!important}
+  .brand{min-width:0!important;flex:1 1 auto}
+  .brand strong{font-size:22px!important;letter-spacing:.07em}
+  .brand small{display:none!important}
+  .nav-toggle{display:grid!important;place-items:center;width:44px;height:44px;margin-left:auto!important;padding:0;border:1px solid rgba(7,24,42,.12);font-size:25px;line-height:1;border-radius:0}
+  .main-nav{top:68px!important;left:12px!important;right:12px!important;gap:0!important;padding:8px!important;max-height:calc(100vh - 84px);overflow:auto;border:1px solid var(--line);box-shadow:0 18px 50px rgba(7,24,42,.18)!important}
+  .main-nav a{display:flex;width:100%;min-height:48px;align-items:center;padding:0 14px;border-bottom:1px solid rgba(222,216,202,.7);font-size:15px}
+  .main-nav a:last-child{border-bottom:0}
+  .header-cta{display:none!important}
+
+  /* Hero */
+  .hero{min-height:560px!important;background-position:64% center!important}
+  .hero::before{background:linear-gradient(180deg,rgba(4,18,32,.76) 0%,rgba(4,18,32,.68) 48%,rgba(4,18,32,.44) 100%)!important}
+  .hero-grid{min-height:560px!important}
+  .hero-copy{width:100%!important;padding:48px 0 42px!important}
+  .hero h1{font-size:38px!important;line-height:1.08!important;letter-spacing:-.02em}
+  .hero-lead{margin-top:18px!important;font-size:17px!important;line-height:1.45!important}
+  .hero-note{margin-top:14px!important;font-size:13px!important;line-height:1.55!important;color:#d6dde3!important}
+  .hero-actions{margin-top:26px!important;gap:10px!important}
+  .hero-actions .button{width:100%;min-height:52px}
+  .trust-row{margin-top:28px!important;padding-top:14px!important;gap:0!important}
+  .trust-row span{padding:8px 0!important;font-size:11px!important}
+
+  /* General sections */
+  .section{padding:54px 0!important}
+  .section-heading{margin-bottom:24px!important;gap:12px!important}
+  .section h2{font-size:34px!important;line-height:1.12!important}
+  .split-heading{gap:14px!important}
+  .category-grid,.benefit-grid,.material-grid,.interior-grid{grid-template-columns:1fr!important;gap:14px!important}
+  .category-card{box-shadow:0 10px 28px rgba(7,24,42,.05)}
+  .category-card:hover{transform:none}
+  .product-visual{height:205px!important}
+  .card-body{padding:20px!important}
+  .card-body h3{font-size:22px!important}
+  .card-body p{min-height:0!important;margin-bottom:14px!important}
+  .benefit-grid{margin-top:28px!important}
+  .benefit-grid article{padding:24px 0!important}
+  .benefit-grid h3{font-size:22px!important;margin:12px 0 8px!important}
+  .material-grid{margin-top:24px!important}
+  .material-grid article{padding:24px!important}
+  .material-grid h3{font-size:22px!important;margin:12px 0 6px!important}
+  .scene{height:220px!important}
+
+  /* CTA and footer */
+  .cta{padding:48px 0!important}
+  .cta-inner{gap:22px!important}
+  .cta h2{font-size:34px!important;line-height:1.12!important}
+  .cta .button{width:100%}
+  .site-footer{padding:46px 0 20px!important}
+  .footer-grid{gap:30px!important}
+  .footer-grid h3{margin-bottom:10px!important}
+  .legal-line{margin-top:30px!important;gap:8px!important;line-height:1.5}
+
+  /* Catalog heads and tabs */
+  .catalog-head{padding:34px 0 32px!important}
+  .catalog-breadcrumb{margin-bottom:20px!important;font-size:12px!important;line-height:1.6!important;overflow-wrap:anywhere}
+  .catalog-breadcrumb span{padding:0 5px!important}
+  .catalog-head .eyebrow{margin-bottom:9px!important}
+  .catalog-head h1{font-size:38px!important;line-height:1.06!important}
+  .catalog-intro{margin-top:15px!important;font-size:14px!important;line-height:1.6!important}
+  .catalog-tabs{grid-template-columns:1fr 1fr!important}
+  .catalog-tab{min-height:58px;padding:12px!important;font-size:14px!important}
+  .catalog-products{padding-top:42px!important;padding-bottom:48px!important}
+  .catalog-section-heading{margin-bottom:22px!important;gap:10px!important}
+  .catalog-section-heading h2{font-size:32px!important;line-height:1.1!important}
+  .catalog-section-heading>p{font-size:13px!important;line-height:1.55!important}
+  .product-grid-large{grid-template-columns:1fr!important;gap:18px!important}
+  .product-card-large{min-width:0!important}
+  .product-image-placeholder,.product-image-placeholder.product-image-real{height:300px!important;min-height:300px!important;padding:16px!important}
+  .product-info{padding:22px 18px 24px!important}
+  .product-info h3{font-size:27px!important;margin-bottom:10px!important}
+  .product-info>p:not(.product-type){min-height:0!important;font-size:13px!important;line-height:1.65!important}
+  .product-actions{margin-top:20px!important;padding-top:0!important;gap:10px!important;flex-direction:column!important;align-items:stretch!important}
+  .product-actions .button{width:100%;min-height:50px}
+  .product-more{display:block;padding:8px 0;text-align:center}
+
+  /* Catalog photo galleries */
+  .catalog-products .product-grid-large>.product-card-large .product-gallery{height:auto!important}
+  .catalog-products .product-grid-large>.product-card-large .product-gallery-main{height:300px!important;min-height:300px!important;flex:0 0 300px!important;padding:10px!important}
+  .catalog-products .product-grid-large>.product-card-large .product-gallery-thumbs{height:auto!important;min-height:76px!important;flex:0 0 auto!important;padding:8px 10px 10px!important;overflow-x:auto;justify-content:flex-start!important;-webkit-overflow-scrolling:touch}
+  .gallery-thumb{width:62px!important;height:62px!important;min-width:62px!important;flex:0 0 62px!important}
+  .gallery-thumb:hover{transform:none}
+
+  /* Final product pages */
+  .product-final{padding:24px 0 48px!important}
+  .product-final .catalog-breadcrumb{margin-bottom:18px!important}
+  .final-product-grid{grid-template-columns:1fr!important;gap:26px!important}
+  .final-product-gallery{height:auto!important;min-height:0!important;max-height:none!important}
+  .final-product-main{height:auto!important;min-height:0!important;aspect-ratio:1/1;padding:8px!important}
+  .final-product-main img{transform:none!important}
+  .final-product-thumbs{height:auto!important;min-height:78px!important;padding:8px 10px!important;justify-content:flex-start!important;gap:8px!important;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .final-product-info{height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;overflow:visible!important}
+  .final-product-info .eyebrow{margin:0 0 10px!important}
+  .final-product-info h1{margin:0 0 5px!important;font-size:36px!important;line-height:1.04!important}
+  .final-product-info .final-finish{margin:0 0 18px!important;font-size:18px!important;line-height:1.35!important}
+  .final-product-info .final-price{margin:0 0 18px!important;padding:0 0 16px!important;font-size:34px!important}
+  .final-product-info .size-label{margin:0 0 9px!important}
+  .size-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .size-option{min-height:48px;padding:10px 8px!important;font-size:12px!important}
+  .custom-size-inline{margin-top:10px!important;padding:13px 14px!important;gap:6px!important}
+  .custom-size-inline strong{font-size:15px!important}
+  .custom-size-inline-copy small{font-size:11px!important}
+  .production-time{margin:12px 0!important;padding:14px 15px!important}
+  .production-time strong{font-size:16px!important}
+  .production-time span{font-size:12px!important}
+  .final-order-button{min-height:52px!important;margin-top:12px!important}
+
+  .product-about{padding:48px 0!important}
+  .product-about-grid{grid-template-columns:1fr!important;gap:20px!important}
+  .product-about h2,.custom-size h2{font-size:32px!important;line-height:1.12!important}
+  .about-copy p{font-size:14px!important;line-height:1.7!important}
+  .custom-size{padding:42px 0!important}
+  .custom-size-inner{grid-template-columns:1fr!important;gap:24px!important}
+  .custom-size-inner>div:first-child{padding-left:16px!important}
+  .custom-size-actions{max-width:none!important;width:100%!important}
+  .custom-size-actions .button{width:100%}
+
+  /* Lightbox on phones */
+  .product-lightbox{padding:12px!important;align-items:center!important;background:rgba(5,15,25,.94)!important}
+  .product-lightbox img{max-width:100%!important;width:auto!important;max-height:84vh!important;box-shadow:none!important}
+  .product-lightbox-close{top:8px!important;right:12px!important;width:44px;height:44px;font-size:38px!important;background:rgba(5,15,25,.45)!important;z-index:2}
+
+  /* Better touch behaviour */
+  .button,.size-option,.gallery-thumb,.nav-toggle{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .product-image-link:hover img,.product-gallery-main:hover img,.final-product-main:hover img{transform:none!important}
+}
+
+@media (max-width: 480px){
+  .container{width:calc(100% - 20px)!important}
+  .header-inner{min-height:64px!important}
+  .main-nav{top:64px!important;left:10px!important;right:10px!important}
+  .brand strong{font-size:20px!important}
+  .nav-toggle{width:42px;height:42px}
+
+  .hero{min-height:530px!important;background-position:68% center!important}
+  .hero-grid{min-height:530px!important}
+  .hero-copy{padding:40px 0 34px!important}
+  .hero h1{font-size:34px!important}
+  .hero-lead{font-size:16px!important}
+
+  .catalog-head h1{font-size:34px!important}
+  .catalog-tabs{grid-template-columns:1fr!important}
+  .catalog-tab{min-height:52px}
+  .catalog-section-heading h2{font-size:29px!important}
+  .product-info h3{font-size:25px!important}
+
+  .product-image-placeholder,.product-image-placeholder.product-image-real{height:270px!important;min-height:270px!important}
+  .catalog-products .product-grid-large>.product-card-large .product-gallery-main{height:270px!important;min-height:270px!important;flex-basis:270px!important}
+
+  .final-product-main{aspect-ratio:1/1.03}
+  .final-product-info h1{font-size:33px!important}
+  .final-product-info .final-finish{font-size:17px!important}
+  .final-product-info .final-price{font-size:32px!important}
+  .size-options{grid-template-columns:1fr 1fr!important}
+  .size-option{font-size:11px!important}
+  .gallery-thumb{width:58px!important;height:58px!important;min-width:58px!important;flex-basis:58px!important}
+  .product-about h2,.custom-size h2{font-size:30px!important}
+}
