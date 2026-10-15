@@ -7,6 +7,23 @@ if (!document.querySelector('link[data-mobile-styles]')) {
   document.head.appendChild(mobileStyles);
 }
 
+// Temporary public contact email used across the entire site.
+const publicEmail = 'xxx@xxx.xxx';
+document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+  const href = link.getAttribute('href') || '';
+  link.setAttribute('href', href.replace(/abolo@bk\.ru/gi, publicEmail));
+  if (link.textContent) {
+    link.textContent = link.textContent.replace(/abolo@bk\.ru/gi, publicEmail);
+  }
+});
+const emailTextWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+let emailTextNode;
+while ((emailTextNode = emailTextWalker.nextNode())) {
+  if (/abolo@bk\.ru/i.test(emailTextNode.nodeValue || '')) {
+    emailTextNode.nodeValue = emailTextNode.nodeValue.replace(/abolo@bk\.ru/gi, publicEmail);
+  }
+}
+
 const navToggle = document.querySelector('.nav-toggle');
 const nav = document.querySelector('.main-nav');
 
