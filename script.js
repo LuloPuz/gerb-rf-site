@@ -1,3 +1,12 @@
+// Dedicated mobile stylesheet shared by every page.
+if (!document.querySelector('link[data-mobile-styles]')) {
+  const mobileStyles = document.createElement('link');
+  mobileStyles.rel = 'stylesheet';
+  mobileStyles.href = 'mobile.css?v=20261015-1';
+  mobileStyles.dataset.mobileStyles = 'true';
+  document.head.appendChild(mobileStyles);
+}
+
 const navToggle = document.querySelector('.nav-toggle');
 const nav = document.querySelector('.main-nav');
 
