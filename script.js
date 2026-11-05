@@ -87,3 +87,118 @@ document.addEventListener('keydown', event => {
   if (event.key === 'ArrowRight') cycleLightboxImage(1);
   if (event.key === 'ArrowLeft') cycleLightboxImage(-1);
 });
+
+
+// Home page catalog search
+(() => {
+  const root = document.querySelector('[data-site-search]');
+  if (!root) return;
+
+  const form = root.querySelector('[data-site-search-form]');
+  const input = root.querySelector('[data-site-search-input]');
+  const results = root.querySelector('[data-site-search-results]');
+  const hintButtons = root.querySelectorAll('[data-search-query]');
+
+  const pages = [
+    {title:'Герб Российской Федерации', meta:'Каталог · Герб РФ', url:'gerb-rf.html', keys:'герб россии российской федерации рф государственный'},
+    {title:'Герб России без щита', meta:'Варианты исполнения', url:'gerb-rf-bez-shchita.html', keys:'без щита орел двуглавый'},
+    {title:'Герб России без щита — барельеф', meta:'Барельеф', url:'gerb-rf-barelef.html', keys:'без щита барельеф рельеф'},
+    {title:'Герб России без щита — горельеф', meta:'Горельеф', url:'gerb-rf-gorelef.html', keys:'без щита горельеф глубокий рельеф'},
+    {title:'Герб России без щита — покрытие краской', meta:'Барельеф · Краска', url:'gerb-rf-barelef-kraska.html', keys:'без щита краска окрашенный барельеф'},
+    {title:'Герб России без щита — металлизация', meta:'Барельеф · Металлизация', url:'gerb-rf-barelef-metallizaciya.html', keys:'без щита металлизация золотой барельеф'},
+    {title:'Герб России на щите', meta:'Варианты исполнения', url:'gerb-rf-na-shchite.html', keys:'на щите щит'},
+    {title:'Герб России на щите — барельеф', meta:'Барельеф', url:'gerb-rf-na-shchite-barelef.html', keys:'на щите барельеф'},
+    {title:'Герб России на щите — горельеф', meta:'Горельеф', url:'gerb-rf-na-shchite-gorelef.html', keys:'на щите горельеф'},
+    {title:'Барельеф на щите — покрытие краской', meta:'Выбор материала щита', url:'gerb-rf-na-shchite-barelef-kraska.html', keys:'краска на щите барельеф материал'},
+    {title:'Герб России на бархатном щите', meta:'Краска · Бархат', url:'gerb-rf-na-shchite-barelef-kraska-barhat.html', keys:'бархат бархатный флок композит краска'},
+    {title:'Герб России на пластиковом щите', meta:'Краска · Пластик', url:'gerb-rf-na-shchite-barelef-kraska-plastik.html', keys:'пластик пластиковый краска'},
+    {title:'Герб России на металлическом щите', meta:'Краска · Металл', url:'gerb-rf-na-shchite-barelef-kraska-metall.html', keys:'металл металлический краска'},
+    {title:'Барельеф на щите — металлизация', meta:'Выбор материала щита', url:'gerb-rf-na-shchite-barelef-metallizaciya.html', keys:'металлизация на щите материал'},
+    {title:'Герб России на бархатном щите — металлизация', meta:'Металлизация · Бархат', url:'gerb-rf-na-shchite-barelef-metallizaciya-barhat.html', keys:'металлизация бархат бархатный флок'},
+    {title:'Герб России на пластиковом щите — металлизация', meta:'Металлизация · Пластик', url:'gerb-rf-na-shchite-barelef-metallizaciya-plastik.html', keys:'металлизация пластик пластиковый'}
+  ];
+
+  const normalize = value => String(value || '')
+    .toLocaleLowerCase('ru-RU')
+    .replace(/ё/g,'е')
+    .replace(/[^a-zа-я0-9]+/gi,' ')
+    .trim();
+
+  const rankPages = query => {
+    const q = normalize(query);
+    if (!q) return [];
+    const words = q.split(/\s+/).filter(Boolean);
+
+    return pages.map(page => {
+      const title = normalize(page.title);
+      const haystack = normalize(page.title + ' ' + page.meta + ' ' + page.keys);
+      let score = 0;
+      if (title === q) score += 100;
+      if (title.startsWith(q)) score += 45;
+      if (haystack.includes(q)) score += 30;
+      words.forEach(word => {
+        if (title.includes(word)) score += 12;
+        else if (haystack.includes(word)) score += 6;
+      });
+      return {page, score};
+    }).filter(item => item.score > 0)
+      .sort((a,b) => b.score - a.score)
+      .slice(0,6)
+      .map(item => item.page);
+  };
+
+  const render = query => {
+    const matches = rankPages(query);
+    if (!normalize(query)) {
+      results.hidden = true;
+      results.innerHTML = '';
+      return matches;
+    }
+
+    if (!matches.length) {
+      results.innerHTML = '<div class="home-search-empty">Ничего не нашли. Попробуйте: «без щита», «барельеф», «металлизация» или «пластиковый щит».</div>';
+      results.hidden = false;
+      return matches;
+    }
+
+    results.innerHTML = matches.map(page =>
+      '<a class="home-search-result" href="' + page.url + '">' +
+        '<span><strong>' + page.title + '</strong><small>' + page.meta + '</small></span>' +
+        '<span aria-hidden="true">→</span>' +
+      '</a>'
+    ).join('');
+    results.hidden = false;
+    return matches;
+  };
+
+  input.addEventListener('input', () => render(input.value));
+  input.addEventListener('focus', () => {
+    if (normalize(input.value)) render(input.value);
+  });
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const matches = rankPages(input.value);
+    if (matches.length) window.location.href = matches[0].url;
+    else render(input.value);
+  });
+
+  hintButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      input.value = button.dataset.searchQuery || '';
+      input.focus();
+      render(input.value);
+    });
+  });
+
+  document.addEventListener('click', event => {
+    if (!root.contains(event.target)) results.hidden = true;
+  });
+
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      results.hidden = true;
+      input.blur();
+    }
+  });
+})();
