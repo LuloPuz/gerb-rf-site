@@ -69,6 +69,35 @@
       </div>
     </section>
 
+
+    <section class="home-search-section" aria-label="Поиск по каталогу">
+      <div class="container">
+        <div class="home-search-card" data-site-search>
+          <div class="home-search-copy">
+            <p class="eyebrow">Быстрый поиск</p>
+            <h2>Найдите нужный герб</h2>
+            <p>Введите исполнение, покрытие или материал щита.</p>
+          </div>
+          <div class="home-search-ui">
+            <form class="home-search-form" data-site-search-form role="search">
+              <span class="home-search-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>
+              </span>
+              <input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Например: металлизация на пластиковом щите" aria-label="Поиск по каталогу" data-site-search-input>
+              <button class="home-search-submit" type="submit">Найти</button>
+            </form>
+            <div class="home-search-results" data-site-search-results hidden></div>
+            <div class="home-search-hints" aria-label="Популярные запросы">
+              <button type="button" data-search-query="Герб России без щита">Без щита</button>
+              <button type="button" data-search-query="Герб России на щите">На щите</button>
+              <button type="button" data-search-query="Металлизация">Металлизация</button>
+              <button type="button" data-search-query="Пластиковый щит">Пластиковый щит</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="catalog">
       <div class="container">
         <div class="section-heading">
@@ -199,6 +228,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261005-hq3"></script>
+  <script src="script.js?v=20261105-search1"></script>
 </body>
 </html>
