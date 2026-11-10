@@ -1119,3 +1119,30 @@ body.lightbox-open{overflow:hidden}
     max-height:90% !important;
   }
 }
+
+
+/* Homepage RF card: taller media area */
+.category-card#rf .product-visual.rf-category-photo{
+  height:300px !important;
+  min-height:300px !important;
+  padding:18px 22px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.category-card#rf .product-visual.rf-category-photo img{
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  margin:auto !important;
+}
+@media(max-width:620px){
+  .category-card#rf .product-visual.rf-category-photo{
+    height:270px !important;
+    min-height:270px !important;
+    padding:14px 16px !important;
+  }
+}
