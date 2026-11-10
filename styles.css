@@ -1085,3 +1085,37 @@ body.lightbox-open{overflow:hidden}
     padding:12px !important;
   }
 }
+
+
+/* Homepage RF card: show the complete shield */
+.product-visual.rf-category-photo{
+  padding:20px 24px !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(198,161,91,.10), transparent 47%),
+    #fbfaf7 !important;
+  border-bottom:1px solid #e2ddd2;
+}
+.product-visual.rf-category-photo img{
+  width:88% !important;
+  height:88% !important;
+  max-width:88% !important;
+  max-height:88% !important;
+  margin:auto;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:none !important;
+}
+.category-card:hover .product-visual.rf-category-photo img{
+  transform:scale(1.025) !important;
+}
+@media(max-width:620px){
+  .product-visual.rf-category-photo{
+    padding:16px 18px !important;
+  }
+  .product-visual.rf-category-photo img{
+    width:90% !important;
+    height:90% !important;
+    max-width:90% !important;
+    max-height:90% !important;
+  }
+}
