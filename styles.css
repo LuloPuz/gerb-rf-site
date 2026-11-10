@@ -1146,3 +1146,29 @@ body.lightbox-open{overflow:hidden}
     padding:14px 16px !important;
   }
 }
+
+
+/* Fully clickable RF category card */
+.category-card-clickable{
+  position:relative;
+  cursor:pointer;
+}
+.category-card-clickable .category-card-hit{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:block;
+}
+.category-card-clickable .card-body,
+.category-card-clickable .product-visual{
+  position:relative;
+  z-index:1;
+}
+.category-card-clickable:hover{
+  transform:translateY(-6px);
+  box-shadow:var(--shadow);
+}
+.category-card-clickable:focus-within{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+}
