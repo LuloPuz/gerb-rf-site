@@ -1,3 +1,8 @@
+// Route Moscow links to the Moscow catalog page.
+document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forEach(link => {
+  link.setAttribute('href', 'gerb-moskvy.html');
+});
+
 // Dedicated mobile stylesheet shared by every page.
 if (!document.querySelector('link[data-mobile-styles]')) {
   const mobileStyles = document.createElement('link');
@@ -101,6 +106,9 @@ document.addEventListener('keydown', event => {
 
   const pages = [
     {title:'Герб Российской Федерации', meta:'Каталог · Герб РФ', url:'gerb-rf.html', keys:'герб россии российской федерации рф государственный'},
+    {title:'Герб Москвы', meta:'Каталог · Барельеф', url:'gerb-moskvy.html', keys:'герб москвы москва барельеф'},
+    {title:'Герб Москвы без щита', meta:'Москва · Барельеф', url:'gerb-moskvy-bez-shchita.html', keys:'герб москвы без щита барельеф'},
+    {title:'Герб Москвы на щите', meta:'Москва · Барельеф', url:'gerb-moskvy-na-shchite.html', keys:'герб москвы на щите барельеф'},
     {title:'Герб России без щита', meta:'Варианты исполнения', url:'gerb-rf-bez-shchita.html', keys:'без щита орел двуглавый'},
     {title:'Герб России без щита — барельеф', meta:'Барельеф', url:'gerb-rf-barelef.html', keys:'без щита барельеф рельеф'},
     {title:'Герб России без щита — горельеф', meta:'Горельеф', url:'gerb-rf-gorelef.html', keys:'без щита горельеф глубокий рельеф'},
