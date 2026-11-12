@@ -45,6 +45,21 @@
   .moscow-finish-card .finish-mark strong{font-size:28px}
   .moscow-finish-card .product-image-real{padding:16px !important}
 }
+
+/* Moscow finish card image hover */
+.moscow-finish-card .product-image-real{
+  overflow:hidden !important;
+}
+.moscow-finish-card .product-image-real img{
+  transition:transform .35s ease !important;
+  transform:scale(1) !important;
+}
+.moscow-finish-card:hover .product-image-real img{
+  transform:scale(1.06) !important;
+}
+@media (prefers-reduced-motion:reduce){
+  .moscow-finish-card .product-image-real img{transition:none !important}
+}
 </style>
 </head>
 <body>
