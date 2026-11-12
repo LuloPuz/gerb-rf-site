@@ -108,6 +108,8 @@ document.addEventListener('keydown', event => {
     {title:'Герб Российской Федерации', meta:'Каталог · Герб РФ', url:'gerb-rf.html', keys:'герб россии российской федерации рф государственный'},
     {title:'Герб Москвы', meta:'Каталог · Барельеф', url:'gerb-moskvy.html', keys:'герб москвы москва барельеф'},
     {title:'Герб Москвы без щита', meta:'Москва · Барельеф', url:'gerb-moskvy-bez-shchita.html', keys:'герб москвы без щита барельеф'},
+    {title:'Герб Москвы без щита — покрытие краской', meta:'Москва · Барельеф · Краска', url:'gerb-moskvy-bez-shchita-kraska.html', keys:'герб москвы без щита краска окрашивание барельеф'},
+    {title:'Герб Москвы без щита — металлизация', meta:'Москва · Барельеф · Металлизация', url:'gerb-moskvy-bez-shchita-metallizaciya.html', keys:'герб москвы без щита металлизация металл барельеф'},
     {title:'Герб Москвы на щите', meta:'Москва · Барельеф', url:'gerb-moskvy-na-shchite.html', keys:'герб москвы на щите барельеф'},
     {title:'Герб России без щита', meta:'Варианты исполнения', url:'gerb-rf-bez-shchita.html', keys:'без щита орел двуглавый'},
     {title:'Герб России без щита — барельеф', meta:'Барельеф', url:'gerb-rf-barelef.html', keys:'без щита барельеф рельеф'},
