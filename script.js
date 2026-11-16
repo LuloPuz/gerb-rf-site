@@ -114,6 +114,7 @@ document.addEventListener('keydown', event => {
     {title:'Герб Москвы на щите — покрытие краской', meta:'Москва · Барельеф · Краска', url:'gerb-moskvy-na-shchite-kraska.html', keys:'герб москвы на щите краска окрашивание барельеф'},
     {title:'Герб Москвы на щите — металлизация', meta:'Москва · Барельеф · Металлизация', url:'gerb-moskvy-na-shchite-metallizaciya.html', keys:'герб москвы на щите металлизация барельеф'},
     {title:'Герб Москвы на пластиковом щите — металлизация', meta:'Москва · Металлизация · Пластик', url:'gerb-moskvy-na-shchite-metallizaciya-plastik.html', keys:'герб москвы пластиковый щит пластик металлизация барельеф'},
+    {title:'Герб Москвы на бархатном щите — металлизация', meta:'Москва · Металлизация · Бархат', url:'gerb-moskvy-na-shchite-metallizaciya-barhat.html', keys:'герб москвы бархатный щит бархат флок металлизация барельеф'},
     {title:'Герб России без щита', meta:'Варианты исполнения', url:'gerb-rf-bez-shchita.html', keys:'без щита орел двуглавый'},
     {title:'Герб России без щита — барельеф', meta:'Барельеф', url:'gerb-rf-barelef.html', keys:'без щита барельеф рельеф'},
     {title:'Герб России без щита — горельеф', meta:'Горельеф', url:'gerb-rf-gorelef.html', keys:'без щита горельеф глубокий рельеф'},
