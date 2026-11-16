@@ -55,4 +55,9 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://lulopuz.github.io/gerb-rf-site/gerb-moskvy-na-shchite-kraska-plastik.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
