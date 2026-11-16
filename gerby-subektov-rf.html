@@ -6,7 +6,7 @@
 <title>Гербы субъектов и городов Российской Федерации | Держава</title>
 <meta name="description" content="Каталог гербов субъектов и городов Российской Федерации: республики, края, области, автономные округа, города федерального значения и города России. Поиск по алфавиту.">
 <meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261116-subjects3">
+<link rel="stylesheet" href="styles.css?v=20261116-subjects4">
 <style>
 .subjects-head{padding:58px 0 38px;border-bottom:1px solid var(--line)}
 .subjects-breadcrumb{margin:0 0 24px;color:#7a8187;font-size:13px}
@@ -32,19 +32,63 @@
 .subject-alphabet a:hover{border-color:#c8a45b;background:#fffaf0;color:var(--navy)}
 .subjects-catalog{padding:46px 0 86px}
 .subject-letter-group{scroll-margin-top:250px;margin-bottom:54px}
+.subject-grid{align-items:stretch}
+.subject-grid .subject-card{height:100%}
 .subject-letter-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:19px}
 .subject-letter{font-family:"PT Serif",serif;font-size:42px;line-height:1;color:#9A773D}
 .subject-letter-line{height:1px;background:#ded8ca}
 .subject-letter-count{color:#92999f;font-size:11px}
 .subject-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.subject-card{position:relative;min-height:185px;padding:24px 24px 22px;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:transform .2s,box-shadow .2s,border-color .2s}
+.subject-card{
+  position:relative;
+  min-height:252px;
+  padding:24px 24px 22px;
+  border:1px solid #ded8ca;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(7,24,42,.035);
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+  display:flex;
+  flex-direction:column;
+}
 .subject-card:hover{transform:translateY(-3px);border-color:#cfbd98;box-shadow:0 18px 38px rgba(7,24,42,.08)}
-.subject-card-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.subject-card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  height:22px;
+  min-height:22px;
+}
 .subject-type{color:#9A773D;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .subject-card-arrow{color:#c6a15b;font-size:16px}
-.subject-card h3{margin:15px 0 7px;font-family:"PT Serif",serif;font-size:24px;font-weight:400;line-height:1.16;color:var(--navy)}
-.subject-card p{margin:0;color:#737d84;font-size:12px;line-height:1.55}
-.subject-card-link{display:inline-block;margin-top:18px;color:#8a6e39;font-size:11px;font-weight:700}
+.subject-card h3{
+  margin:15px 0 0;
+  min-height:88px;
+  max-height:88px;
+  overflow:hidden;
+  font-family:"PT Serif",serif;
+  font-size:24px;
+  font-weight:400;
+  line-height:1.16;
+  color:var(--navy);
+}
+.subject-card p{
+  margin:0;
+  min-height:40px;
+  max-height:40px;
+  overflow:hidden;
+  color:#737d84;
+  font-size:12px;
+  line-height:1.55;
+}
+.subject-card-link{
+  display:inline-block;
+  margin-top:auto;
+  padding-top:17px;
+  color:#8a6e39;
+  font-size:11px;
+  font-weight:700
+}
 .subject-card-link:hover{color:var(--navy)}
 .subject-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
 .subject-empty.show{display:block}
@@ -71,7 +115,10 @@
  .subjects-catalog{padding:34px 0 60px}
  .subject-letter-group{scroll-margin-top:20px;margin-bottom:40px}
  .subject-grid{grid-template-columns:1fr}
- .subject-card{min-height:0;padding:21px}
+ .subject-card{min-height:230px;padding:21px}
+ .subject-card h3{min-height:auto;max-height:none}
+ .subject-card p{min-height:auto;max-height:none}
+ .subject-card-link{margin-top:18px;padding-top:0}
 }
 </style>
 </head>
@@ -1119,7 +1166,7 @@
 <div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div>
 </div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261116-subjects3"></script>
+<script src="script.js?v=20261116-subjects4"></script>
 <script>
 (function(){
  const input=document.getElementById('subjectSearch');
