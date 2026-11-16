@@ -30,4 +30,14 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://lulopuz.github.io/gerb-rf-site/gerb-moskvy-na-shchite-kraska.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lulopuz.github.io/gerb-rf-site/gerb-moskvy-na-shchite-metallizaciya.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
