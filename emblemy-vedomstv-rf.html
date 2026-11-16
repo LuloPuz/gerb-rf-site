@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Эмблемы ведомств Российской Федерации | Держава</title>
+<meta name="description" content="Каталог эмблем министерств, федеральных служб, органов власти и ведомств Российской Федерации. Поиск по названию и алфавиту.">
+<meta name="theme-color" content="#07182a">
+<link rel="stylesheet" href="styles.css?v=20261116-departments2">
+<style>
+.agencies-head{padding:58px 0 38px;border-bottom:1px solid var(--line)}
+.agencies-breadcrumb{margin:0 0 24px;color:#7a8187;font-size:13px}
+.agencies-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:64px;align-items:end}
+.agencies-hero h1{max-width:900px;margin:0;font-family:"PT Serif",serif;font-size:clamp(48px,5.2vw,76px);font-weight:400;line-height:1.02;color:var(--navy);letter-spacing:-.025em}
+.agencies-intro{margin:0 0 6px;color:#66717a;font-size:14px;line-height:1.75}
+.agencies-meta{display:flex;gap:22px;margin-top:22px;color:#8b7040;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.agencies-tools{position:sticky;top:86px;z-index:20;padding:24px 0 20px;background:rgba(251,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,216,202,.9)}
+.agency-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+.agency-search-box{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;height:64px;border:1px solid #cfc7b7;background:#fff;box-shadow:0 12px 32px rgba(7,24,42,.06)}
+.agency-search-icon{display:grid;place-items:center;color:#9A773D;font-size:21px}
+.agency-search-input{height:62px;border:0;outline:0;background:transparent;color:var(--navy);font:500 14px "Golos Text",sans-serif}
+.agency-search-input::placeholder{color:#92999f;font-weight:400}
+.agency-search-clear{margin-right:10px;padding:9px 12px;border:0;background:transparent;color:#7b8389;font:600 11px "Golos Text",sans-serif;cursor:pointer}
+.agency-count{display:flex;align-items:center;justify-content:center;min-width:150px;padding:0 20px;border:1px solid #d7cfbf;background:#f7f2e7;color:#7b6847;font-size:12px;font-weight:700}
+.agency-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.agency-filter{padding:9px 13px;border:1px solid #d7cfbf;background:#fff;color:#5f686f;font:600 11px "Golos Text",sans-serif;cursor:pointer;transition:.18s}
+.agency-filter:hover,.agency-filter.active{border-color:#9A773D;background:#f5eddd;color:var(--navy)}
+.agency-alphabet{display:flex;flex-wrap:wrap;gap:4px;margin-top:14px}
+.agency-alphabet a{display:grid;place-items:center;width:35px;height:35px;border:1px solid transparent;color:#6d747a;font:600 12px "Golos Text",sans-serif}
+.agency-alphabet a:hover{border-color:#c8a45b;background:#fffaf0;color:var(--navy)}
+.agencies-catalog{padding:46px 0 86px}
+.agency-letter-group{scroll-margin-top:250px;margin-bottom:54px}
+.agency-letter-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:19px}
+.agency-letter{font-family:"PT Serif",serif;font-size:42px;line-height:1;color:#9A773D}
+.agency-letter-line{height:1px;background:#ded8ca}
+.agency-letter-count{color:#92999f;font-size:11px}
+.agency-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.agency-card{position:relative;min-height:185px;padding:24px 24px 22px;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:.2s}
+.agency-card:hover{transform:translateY(-3px);border-color:#cfbd98;box-shadow:0 18px 38px rgba(7,24,42,.08)}
+.agency-card-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.agency-type{color:#9A773D;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.agency-arrow{color:#c6a15b;font-size:16px}
+.agency-card h3{margin:15px 0 7px;font-family:"PT Serif",serif;font-size:23px;font-weight:400;line-height:1.18;color:var(--navy)}
+.agency-card p{margin:0;color:#737d84;font-size:12px;line-height:1.55}
+.agency-link{display:inline-block;margin-top:18px;color:#8a6e39;font-size:11px;font-weight:700}
+.agency-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
+.agency-empty.show{display:block}
+.agency-empty strong{display:block;font-family:"PT Serif",serif;font-size:30px;font-weight:400;color:var(--navy)}
+.agency-source{margin-top:54px;padding:18px 20px;border-left:2px solid #c6a15b;background:#f7f2e7;color:#69737a;font-size:11px;line-height:1.65}
+@media(max-width:1020px){.agencies-hero{grid-template-columns:1fr;gap:20px}.agency-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.agencies-tools{top:78px}}
+@media(max-width:680px){
+ .agencies-head{padding:38px 0 28px}.agencies-hero h1{font-size:44px}.agencies-tools{position:relative;top:auto;padding:18px 0}
+ .agency-search-row{grid-template-columns:1fr}.agency-count{min-height:42px}.agency-search-box{grid-template-columns:44px minmax(0,1fr) auto;height:58px}
+ .agency-search-input{height:56px;font-size:13px}.agency-filter-row{flex-wrap:nowrap;overflow:auto;padding-bottom:3px}.agency-filter{white-space:nowrap}
+ .agency-alphabet{gap:2px}.agency-alphabet a{width:31px;height:31px}.agencies-catalog{padding:34px 0 60px}.agency-letter-group{scroll-margin-top:20px;margin-bottom:40px}.agency-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="index.html"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></a>
+<button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">☰</button>
+<nav class="main-nav"><a href="index.html#catalog">Каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Регионы</a><a class="nav-active" href="emblemy-vedomstv-rf.html">Ведомства</a><a href="index.html#production">О производстве</a></nav>
+<a class="button button-gold header-cta" href="#request">Получить предложение</a>
+</div></header>
+<main>
+<section class="agencies-head"><div class="container">
+<p class="agencies-breadcrumb"><a href="index.html">Главная</a> / Каталог / Эмблемы ведомств Российской Федерации</p>
+<div class="agencies-hero"><div><p class="eyebrow">Каталог · Ведомства РФ</p><h1>Эмблемы ведомств Российской Федерации</h1><div class="agencies-meta"><span>46 позиций</span><span>Поиск по алфавиту</span></div></div>
+<p class="agencies-intro">Министерства, федеральные службы, органы государственной власти, судебные и надзорные структуры. Найдите нужное ведомство через поиск, алфавит или фильтр.</p></div>
+</div></section>
+<section class="agencies-tools"><div class="container">
+<div class="agency-search-row"><label class="agency-search-box"><span class="agency-search-icon">⌕</span><input class="agency-search-input" id="agencySearch" type="search" placeholder="Например: Министерство финансов" aria-label="Поиск ведомства"><button class="agency-search-clear" id="agencyClear" type="button" hidden>Очистить</button></label><div class="agency-count" id="agencyCount">Найдено: 46</div></div>
+<div class="agency-filter-row" id="agencyFilters">
+<button class="agency-filter active" data-type="all">Все</button><button class="agency-filter" data-type="Министерство">Министерства</button><button class="agency-filter" data-type="Федеральная служба">Федеральные службы</button><button class="agency-filter" data-type="Федеральный орган">Органы власти</button><button class="agency-filter" data-type="Судебный орган">Суды</button><button class="agency-filter" data-type="Структура МВД">Структуры МВД</button><button class="agency-filter" data-type="Структура МЧС">Структуры МЧС</button>
+</div>
+<nav class="agency-alphabet" aria-label="Алфавит"><a href="#letter-В">В</a><a href="#letter-Г">Г</a><a href="#letter-Д">Д</a><a href="#letter-К">К</a><a href="#letter-М">М</a><a href="#letter-Н">Н</a><a href="#letter-П">П</a><a href="#letter-С">С</a><a href="#letter-У">У</a><a href="#letter-Ф">Ф</a><a href="#letter-Ц">Ц</a></nav>
+</div></section>
+<section class="agencies-catalog"><div class="container"><div id="agencyList">
+<section class="agency-letter-group" id="letter-В" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">В</span><span class="agency-letter-line"></span><span class="agency-letter-count">3</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="верховный суд" data-type="Судебный орган">
+    <div class="agency-card-top"><span class="agency-type">Судебный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Верховного Суда</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Верховного Суда">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="внутренние войска (национальная гвардия)" data-type="Силовое ведомство">
+    <div class="agency-card-top"><span class="agency-type">Силовое ведомство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема внутренних войск (Национальной гвардии)</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема внутренних войск (Национальной гвардии)">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="высший арбитражный суд" data-type="Судебный орган">
+    <div class="agency-card-top"><span class="agency-type">Судебный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Высшего Арбитражного Суда</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Высшего Арбитражного Суда">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-Г" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">Г</span><span class="agency-letter-line"></span><span class="agency-letter-count">6</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="генеральная прокуратура" data-type="Надзорный орган">
+    <div class="agency-card-top"><span class="agency-type">Надзорный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Генеральной Прокуратуры</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Генеральной Прокуратуры">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="геральдический совет при президенте рф" data-type="При Президенте РФ">
+    <div class="agency-card-top"><span class="agency-type">При Президенте РФ</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Геральдического Совета при Президенте РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Геральдического Совета при Президенте РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="главное управление специальных программ президента российской федерации" data-type="При Президенте РФ">
+    <div class="agency-card-top"><span class="agency-type">При Президенте РФ</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Главного управления специальных программ Президента РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Главного управления специальных программ Президента РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="государственная дума" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Государственной Думы РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Государственной Думы РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="государственная инспекция по маломерным судам" data-type="Структура МЧС">
+    <div class="agency-card-top"><span class="agency-type">Структура МЧС</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Государственной инспекции по маломерным судам</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Государственной инспекции по маломерным судам">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="государственная противопожарная служба" data-type="Структура МЧС">
+    <div class="agency-card-top"><span class="agency-type">Структура МЧС</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Государственной противопожарной службы</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Государственной противопожарной службы">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-Д" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">Д</span><span class="agency-letter-line"></span><span class="agency-letter-count">7</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="департамент государственной защиты имущества мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента государственной защиты имущества МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента государственной защиты имущества МВД">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="департамент обеспечения безопасности дорожного движения мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента обеспечения безопасности дорожного движения МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента обеспечения безопасности дорожного движения МВД">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="департамент обеспечения правопорядка на транспорте мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента обеспечения правопорядка на транспорте МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента обеспечения правопорядка на транспорте МВД">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="департамент охраны общественного порядка мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента охраны общественного порядка МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента охраны общественного порядка МВД">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="департамент по борьбе с организованной преступностью и терроризмом мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента по борьбе с организованной преступностью и терроризмом МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента по борьбе с организованной преступностью и терроризмом МВД">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="департамент уголовного розыска мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента уголовного розыска МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента уголовного розыска МВД">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="департамент экономической безопасности мвд" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Департамента экономической безопасности МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Департамента экономической безопасности МВД">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-К" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">К</span><span class="agency-letter-line"></span><span class="agency-letter-count">2</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="комиссия по военно-техническому сотрудничеству с иностранными государствами при президенте рф" data-type="При Президенте РФ">
+    <div class="agency-card-top"><span class="agency-type">При Президенте РФ</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Комиссии по военно-техническому сотрудничеству при Президенте РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Комиссии по военно-техническому сотрудничеству при Президенте РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="конституционный суд" data-type="Судебный орган">
+    <div class="agency-card-top"><span class="agency-type">Судебный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Конституционного Суда</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Конституционного Суда">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-М" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">М</span><span class="agency-letter-line"></span><span class="agency-letter-count">9</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="министерство внутренних дел (мвд)" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства внутренних дел (МВД)</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства внутренних дел (МВД)">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство здравоохранения и социального развития" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства здравоохранения и социального развития</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства здравоохранения и социального развития">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство иностранных дел (мид)" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства иностранных дел РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства иностранных дел РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство информационных технологий и связи" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства информационных технологий и связи</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства информационных технологий и связи">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство культуры российской федерации" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства культуры РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства культуры РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство науки и высшего образования российской федерации" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства науки и высшего образования РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства науки и высшего образования РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство обороны российской федерации" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства обороны Российской Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства обороны Российской Федерации">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство по делам гражданской обороны, чрезвычайным ситуациям и ликвидации последствий стихийных бедствий (мчс)" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема МЧС России</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема МЧС России">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="министерство финансов российской федерации" data-type="Министерство">
+    <div class="agency-card-top"><span class="agency-type">Министерство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Министерства финансов РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Министерства финансов РФ">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-Н" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">Н</span><span class="agency-letter-line"></span><span class="agency-letter-count">1</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="национальное центральное бюро интерпола при мвд россии" data-type="Структура МВД">
+    <div class="agency-card-top"><span class="agency-type">Структура МВД</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Национального центрального бюро Интерпола при МВД России</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Национального центрального бюро Интерпола при МВД России">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-П" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">П</span><span class="agency-letter-line"></span><span class="agency-letter-count">1</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="президент российской федерации" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Президента Российской Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Президента Российской Федерации">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-С" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">С</span><span class="agency-letter-line"></span><span class="agency-letter-count">6</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="служба безопасности президента рф" data-type="При Президенте РФ">
+    <div class="agency-card-top"><span class="agency-type">При Президенте РФ</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Службы безопасности Президента РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Службы безопасности Президента РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="служба внешней разведки рф" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Службы внешней разведки РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Службы внешней разведки РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="совет безопасности" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Совета Безопасности</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Совета Безопасности">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="совет федерации" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Совета Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Совета Федерации">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="судебный департамент при верховном суде российской федерации" data-type="Судебный орган">
+    <div class="agency-card-top"><span class="agency-type">Судебный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Судебного департамента при Верховном Суде РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Судебного департамента при Верховном Суде РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="счетная палата" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Счетной Палаты РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Счетной Палаты РФ">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-У" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">У</span><span class="agency-letter-line"></span><span class="agency-letter-count">1</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="управление делами президента российской федерации" data-type="При Президенте РФ">
+    <div class="agency-card-top"><span class="agency-type">При Президенте РФ</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Управления делами Президента Российской Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Управления делами Президента Российской Федерации">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-Ф" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">Ф</span><span class="agency-letter-line"></span><span class="agency-letter-count">8</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="федеральная антимонопольная служба" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Федеральной антимонопольной службы</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Федеральной антимонопольной службы">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральная миграционная служба" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Федеральной миграционной службы (ФМС)</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Федеральной миграционной службы (ФМС)">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральная служба безопасности россии" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Федеральной службы безопасности России</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Федеральной службы безопасности России">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральная служба войск национальной гвардии российской федерации" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Федеральной службы войск национальной гвардии РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Федеральной службы войск национальной гвардии РФ">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральная служба по надзору в сфере защиты прав потребителей и благополучия человека" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Роспотребнадзора</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Роспотребнадзора">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральная служба по надзору в сфере природопользования" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Росприроднадзора</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Росприроднадзора">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральная служба судебных приставов" data-type="Федеральная служба">
+    <div class="agency-card-top"><span class="agency-type">Федеральная служба</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Федеральной службы судебных приставов</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Федеральной службы судебных приставов">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="федеральное медико-биологическое агентство" data-type="Федеральное агентство">
+    <div class="agency-card-top"><span class="agency-type">Федеральное агентство</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Федерального медико-биологического агентства</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Федерального медико-биологического агентства">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="agency-letter-group" id="letter-Ц" data-letter-group>
+  <div class="agency-letter-head"><span class="agency-letter">Ц</span><span class="agency-letter-line"></span><span class="agency-letter-count">2</span></div>
+  <div class="agency-grid">
+  <article class="agency-card" data-agency-card data-name="центральная избирательная комиссия" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Центральной Избирательной Комиссии</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Центральной Избирательной Комиссии">Уточнить исполнение →</a>
+  </article><article class="agency-card" data-agency-card data-name="центральный банк" data-type="Федеральный орган">
+    <div class="agency-card-top"><span class="agency-type">Федеральный орган</span><span class="agency-arrow">↗</span></div>
+    <h3>Эмблема Центрального Банка</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="agency-link" data-agency-request="Эмблема Центрального Банка">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section></div><div class="agency-empty" id="agencyEmpty"><strong>Ничего не найдено</strong><span>Попробуйте изменить запрос или выбрать другой тип ведомства.</span></div><div class="agency-source">Наименования ведомств и структур собраны по разделу «Эмблемы ведомств» сайта «Золотая корона». Исторические наименования сохранены в формулировке источника.</div></div></section>
+<section class="cta" id="request"><div class="container cta-inner"><div><p class="eyebrow eyebrow-light">Индивидуальный заказ</p><h2>Нужна эмблема конкретного ведомства?</h2><p id="agencyRequestText">Уточним исполнение, размер, материал и подготовим предложение.</p></div><a class="button button-gold" id="agencyRequestButton" href="mailto:xxx@xxx.xxx?subject=Эмблема%20ведомства%20РФ">Отправить запрос</a></div></section>
+</main>
+<footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Гербы субъектов и городов Российской Федерации</a><a href="emblemy-vedomstv-rf.html">Эмблемы ведомств РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
+<script src="script.js?v=20261116-departments2"></script>
+<script>
+(function(){
+ const input=document.getElementById('agencySearch'),clear=document.getElementById('agencyClear'),count=document.getElementById('agencyCount'),empty=document.getElementById('agencyEmpty');
+ const cards=[...document.querySelectorAll('[data-agency-card]')],groups=[...document.querySelectorAll('[data-letter-group]')],filters=[...document.querySelectorAll('[data-type]')];
+ let active='all'; const norm=s=>(s||'').toLocaleLowerCase('ru').replaceAll('ё','е').replace(/\s+/g,' ').trim();
+ function apply(){const q=norm(input.value);let v=0;cards.forEach(c=>{const show=(!q||norm(c.dataset.name+' '+c.dataset.type+' '+c.querySelector('h3').textContent).includes(q))&&(active==='all'||c.dataset.type===active);c.hidden=!show;if(show)v++;});groups.forEach(g=>g.hidden=![...g.querySelectorAll('[data-agency-card]')].some(c=>!c.hidden));count.textContent='Найдено: '+v;clear.hidden=!input.value;empty.classList.toggle('show',v===0)}
+ input.addEventListener('input',apply);clear.addEventListener('click',()=>{input.value='';input.focus();apply()});filters.forEach(b=>b.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');active=b.dataset.type;apply()}));
+ document.querySelectorAll('[data-agency-request]').forEach(a=>a.addEventListener('click',()=>{const name=a.dataset.agencyRequest;document.getElementById('agencyRequestText').textContent='Вы выбрали: '+name+'. Уточним исполнение, размер, материал и подготовим предложение.';document.getElementById('agencyRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent(name)}));
+ apply();
+})();
+</script>
+</body>
+</html>
