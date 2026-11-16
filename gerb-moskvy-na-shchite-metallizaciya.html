@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Герб Москвы на щите — металлизация | Держава</title>
 <meta name="description" content="Барельеф герба Москвы на щите с металлизацией. Выбор материала щита: пластик, бархат или металл.">
-<meta name="theme-color" content="#07182a"><link rel="stylesheet" href="styles.css?v=20261116-moscow-metal-shield2">
+<meta name="theme-color" content="#07182a"><link rel="stylesheet" href="styles.css?v=20261116-moscow-metal-shield3">
 <style>
 .product-grid-shield{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .product-grid-shield>.product-card-large{display:flex;flex-direction:column}
@@ -20,7 +20,15 @@
   width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;
   object-fit:contain!important;object-position:center!important;transition:transform .35s ease
 }
-.material-card:hover .product-image-real img{transform:scale(1.045)}
+.material-card .shield-card-image{
+  transform-origin:center center;
+}
+.material-card .shield-card-image-plastic{transform:scale(.98)}
+.material-card .shield-card-image-velvet{transform:scale(1.00)}
+.material-card .shield-card-image-metal{transform:scale(1.19)}
+.material-card:hover .shield-card-image-plastic{transform:scale(1.025)}
+.material-card:hover .shield-card-image-velvet{transform:scale(1.045)}
+.material-card:hover .shield-card-image-metal{transform:scale(1.235)}
 .material-placeholder{
   display:flex!important;align-items:center!important;justify-content:center!important;
   flex-direction:column;gap:10px;text-align:center;background:#fbfaf7!important
@@ -71,7 +79,7 @@
 <article class="product-card-large material-card">
   <a class="material-hit" href="gerb-moskvy-na-shchite-metallizaciya-plastik.html" aria-label="Открыть герб Москвы с металлизацией на пластиковом щите"></a>
   <div class="product-image-placeholder product-image-real">
-    <img src="assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal1" alt="Герб Москвы с металлизацией на пластиковом щите">
+    <img class="shield-card-image shield-card-image-plastic" src="assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal2" alt="Герб Москвы с металлизацией на пластиковом щите">
   </div>
   <div class="product-info">
     <p class="product-type">Металлизация · Пластик</p>
@@ -84,7 +92,7 @@
 <article class="product-card-large material-card">
   <a class="material-hit" href="gerb-moskvy-na-shchite-metallizaciya-barhat.html" aria-label="Открыть герб Москвы с металлизацией на бархатном щите"></a>
   <div class="product-image-placeholder product-image-real">
-    <img src="Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal1" alt="Герб Москвы с металлизацией на бархатном щите">
+    <img class="shield-card-image shield-card-image-velvet" src="Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal2" alt="Герб Москвы с металлизацией на бархатном щите">
   </div>
   <div class="product-info">
     <p class="product-type">Металлизация · Бархат</p>
@@ -97,7 +105,7 @@
 <article class="product-card-large material-card">
   <a class="material-hit" href="gerb-moskvy-na-shchite-metallizaciya-metall.html" aria-label="Открыть герб Москвы с металлизацией на металлическом щите"></a>
   <div class="product-image-placeholder product-image-real">
-    <img src="Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield1" alt="Герб Москвы с металлизацией на металлическом щите">
+    <img class="shield-card-image shield-card-image-metal" src="Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield2" alt="Герб Москвы с металлизацией на металлическом щите">
   </div>
   <div class="product-info">
     <p class="product-type">Металлизация · Металл</p>
@@ -117,5 +125,5 @@
 <div><h3>Каталог</h3><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="index.html#regions">Гербы регионов</a><a href="index.html#cities">Гербы городов</a></div>
 <div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div>
 </div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
-<script src="script.js?v=20261116-moscow-metal-shield1"></script>
+<script src="script.js?v=20261116-moscow-metal-shield3"></script>
 </body></html>
