@@ -1212,3 +1212,21 @@ body.lightbox-open{overflow:hidden}
     padding:14px 16px !important;
   }
 }
+
+
+/* Homepage Moscow visual-size correction */
+.category-card#moscow .product-visual.moscow-category-photo img{
+  transform:scale(1.18) !important;
+  transform-origin:center center !important;
+}
+.category-card#moscow:hover .product-visual.moscow-category-photo img{
+  transform:scale(1.21) !important;
+}
+@media(max-width:620px){
+  .category-card#moscow .product-visual.moscow-category-photo img{
+    transform:scale(1.15) !important;
+  }
+  .category-card#moscow:hover .product-visual.moscow-category-photo img{
+    transform:scale(1.18) !important;
+  }
+}
