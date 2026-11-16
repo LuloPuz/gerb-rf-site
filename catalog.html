@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Весь каталог | Держава</title>
+<meta name="description" content="Полный каталог настенных гербов: герб Российской Федерации и герб Москвы во всех доступных исполнениях, покрытиях и материалах щита.">
+<meta name="theme-color" content="#07182a">
+<link rel="stylesheet" href="styles.css?v=20261116-allcatalog1">
+<style>
+.all-head{padding:58px 0 38px;border-bottom:1px solid var(--line)}
+.all-breadcrumb{margin:0 0 24px;color:#7a8187;font-size:13px}
+.all-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:64px;align-items:end}
+.all-hero h1{margin:0;font-family:"PT Serif",serif;font-size:clamp(52px,5.4vw,78px);font-weight:400;line-height:1;color:var(--navy);letter-spacing:-.025em}
+.all-intro{margin:0 0 5px;color:#66717a;font-size:14px;line-height:1.75}
+.all-meta{display:flex;gap:22px;margin-top:22px;color:#8b7040;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.all-tools{position:sticky;top:86px;z-index:20;padding:22px 0 18px;background:rgba(251,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,216,202,.9)}
+.all-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+.all-search-box{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;height:62px;border:1px solid #cfc7b7;background:#fff;box-shadow:0 12px 32px rgba(7,24,42,.06)}
+.all-search-icon{display:grid;place-items:center;color:#9A773D;font-size:21px}
+.all-search-input{height:60px;border:0;outline:0;background:transparent;color:var(--navy);font:500 14px "Golos Text",sans-serif}
+.all-search-input::placeholder{color:#92999f;font-weight:400}
+.all-search-clear{margin-right:10px;padding:9px 12px;border:0;background:transparent;color:#7b8389;font:600 11px "Golos Text",sans-serif;cursor:pointer}
+.all-count{display:flex;align-items:center;justify-content:center;min-width:160px;padding:0 20px;border:1px solid #d7cfbf;background:#f7f2e7;color:#7b6847;font-size:12px;font-weight:700}
+.all-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.all-filter{padding:9px 13px;border:1px solid #d7cfbf;background:#fff;color:#5f686f;font:600 11px "Golos Text",sans-serif;cursor:pointer}
+.all-filter:hover,.all-filter.active{border-color:#9A773D;background:#f5eddd;color:var(--navy)}
+.all-alphabet{display:flex;align-items:center;gap:5px;margin-top:14px}
+.all-alphabet span{margin-right:7px;color:#8a7044;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.all-alphabet a{display:grid;place-items:center;width:38px;height:38px;border:1px solid #ded8ca;background:#fff;color:#6d747a;font:600 13px "Golos Text",sans-serif}
+.all-alphabet a:hover{border-color:#c8a45b;background:#fffaf0;color:var(--navy)}
+.all-catalog{padding:48px 0 92px}
+.all-group{scroll-margin-top:230px;margin-bottom:72px}
+.all-group[hidden]{display:none}
+.all-group-banner{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:28px;align-items:center;margin-bottom:22px;padding:28px 30px;border:1px solid #d8cfbd;background:linear-gradient(105deg,#f1e8d8 0%,#fbfaf6 58%,#f4efe5 100%);box-shadow:0 14px 36px rgba(7,24,42,.045)}
+.all-group-letter{display:grid;place-items:center;width:74px;height:74px;border:1px solid #b6914d;color:#9A773D;font-family:"PT Serif",serif;font-size:38px}
+.all-group-copy .eyebrow{margin-bottom:6px}
+.all-group-copy h2{margin:0;font-family:"PT Serif",serif;font-size:38px;font-weight:400;line-height:1.08;color:var(--navy)}
+.all-group-copy>p:last-child{max-width:760px;margin:8px 0 0;color:#69737a;font-size:12px}
+.all-group-side{display:grid;grid-template-columns:auto auto;gap:0 7px;align-items:baseline;text-align:right}
+.all-group-side strong{font-family:"PT Serif",serif;font-size:34px;font-weight:400;color:var(--navy)}
+.all-group-side span{color:#7b8389;font-size:11px}
+.all-group-side a{grid-column:1/-1;margin-top:7px;color:#8a6e39;font-size:11px;font-weight:700}
+.all-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.all-product-card{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:.22s}
+.all-product-card:hover{transform:translateY(-4px);border-color:#cfbd98;box-shadow:0 18px 42px rgba(7,24,42,.09)}
+.all-product-hit{position:absolute;inset:0;z-index:5}
+.all-product-media{height:300px;display:flex;align-items:center;justify-content:center;padding:22px;overflow:hidden;background:#fbfaf7;border-bottom:1px solid #e7e1d7}
+.all-product-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(var(--media-scale,1));transition:transform .35s ease}
+.all-product-card:hover .all-product-media img{transform:scale(calc(var(--media-scale,1) + .025))}
+.all-product-body{display:flex;flex:1;flex-direction:column;padding:22px 22px 20px;min-height:235px}
+.all-product-kicker{height:18px;color:#9A773D;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.all-product-body h3{margin:12px 0 0;min-height:76px;font-family:"PT Serif",serif;font-size:24px;font-weight:400;line-height:1.18;color:var(--navy)}
+.all-product-body>p{margin:0;min-height:38px;color:#737d84;font-size:12px;line-height:1.5}
+.all-product-foot{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-top:auto;padding-top:18px;border-top:1px solid #eee9df;color:#806b45;font-size:11px}
+.all-product-foot strong{margin-left:3px;font-family:"PT Serif",serif;font-size:20px;font-weight:400;color:var(--navy)}
+.all-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
+.all-empty.show{display:block}
+.all-empty strong{display:block;font-family:"PT Serif",serif;font-size:32px;font-weight:400;color:var(--navy)}
+.all-empty span{display:block;margin-top:8px;color:#7b8389;font-size:13px}
+.all-directory-links{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.all-directory-link{display:flex;justify-content:space-between;gap:20px;padding:24px;border:1px solid #ded8ca;background:#fff}
+.all-directory-link strong{font-family:"PT Serif",serif;font-size:24px;font-weight:400;color:var(--navy)}
+.all-directory-link span{align-self:center;color:#9A773D;font-size:12px;font-weight:700}
+@media(max-width:1050px){.all-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.all-hero{grid-template-columns:1fr;gap:20px}.all-tools{top:78px}}
+@media(max-width:700px){
+ .all-head{padding:38px 0 28px}.all-hero h1{font-size:46px}.all-tools{position:relative;top:auto;padding:18px 0}
+ .all-search-row{grid-template-columns:1fr}.all-count{min-height:42px}.all-filter-row{flex-wrap:nowrap;overflow:auto;padding-bottom:3px}.all-filter{white-space:nowrap}
+ .all-group{scroll-margin-top:20px;margin-bottom:54px}.all-group-banner{grid-template-columns:58px minmax(0,1fr);gap:16px;padding:21px}.all-group-letter{width:54px;height:54px;font-size:28px}
+ .all-group-copy h2{font-size:29px}.all-group-side{grid-column:1/-1;text-align:left;display:flex;gap:6px;align-items:baseline}.all-group-side a{margin-left:auto}
+ .all-product-grid{grid-template-columns:1fr}.all-product-media{height:300px}.all-product-body{min-height:0}.all-product-body h3{min-height:0}.all-product-body>p{min-height:0;margin-top:8px}
+ .all-directory-links{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="index.html"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></a>
+<button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">☰</button>
+<nav class="main-nav"><a class="nav-active" href="catalog.html">Каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Регионы</a><a href="emblemy-vedomstv-rf.html">Ведомства</a><a href="index.html#production">О производстве</a></nav>
+<a class="button button-gold header-cta" href="#catalog-products">Смотреть товары</a>
+</div></header>
+<main>
+<section class="all-head"><div class="container">
+<p class="all-breadcrumb"><a href="index.html">Главная</a> / Весь каталог</p>
+<div class="all-hero"><div><p class="eyebrow">Полный ассортимент</p><h1>Весь каталог</h1><div class="all-meta"><span>18 товаров с фото</span><span>2 основных раздела</span></div></div>
+<p class="all-intro">Все готовые товарные исполнения, для которых на сайте уже есть реальные изображения. Товары сгруппированы по тематике и расположены в алфавитном порядке.</p></div>
+</div></section>
+<section class="all-tools"><div class="container">
+<div class="all-search-row"><label class="all-search-box"><span class="all-search-icon">⌕</span><input class="all-search-input" id="allSearch" type="search" autocomplete="off" placeholder="Например: Москва, металлизация, бархатный щит" aria-label="Поиск по всему каталогу"><button class="all-search-clear" id="allClear" type="button" hidden>Очистить</button></label><div class="all-count" id="allCount">Найдено: 18</div></div>
+<div class="all-filter-row" id="allFilters">
+<button class="all-filter active" type="button" data-filter="all">Все товары</button>
+<button class="all-filter" type="button" data-filter="Без щита">Без щита</button>
+<button class="all-filter" type="button" data-filter="На щите">На щите</button>
+<button class="all-filter" type="button" data-filter="paint">Покрытие краской</button>
+<button class="all-filter" type="button" data-filter="metal">Металлизация</button>
+<button class="all-filter" type="button" data-filter="gorelief">Горельеф</button>
+</div>
+<nav class="all-alphabet" aria-label="Разделы по алфавиту"><span>По алфавиту</span><a href="#group-moscow">М</a><a href="#group-rf">Р</a></nav>
+</div></section>
+<section class="all-catalog" id="catalog-products"><div class="container">
+<div id="allProductList"><section class="all-group" id="group-moscow" data-product-group>
+  <div class="all-group-banner">
+    <div class="all-group-letter">М</div>
+    <div class="all-group-copy"><p class="eyebrow">Раздел каталога</p><h2>Герб Москвы</h2><p>Все доступные исполнения герба Москвы: без щита и на щите, покрытие краской и металлизация.</p></div>
+    <div class="all-group-side"><strong data-group-count>8</strong><span>товаров</span><a href="gerb-moskvy.html">Открыть раздел →</a></div>
+  </div>
+  <div class="all-product-grid"><article class="all-product-card" data-product-card data-group="moscow" data-location="Без щита" data-finish="paint" data-search="герб москвы без щита — покрытие краской без щита · барельеф краска москва без щита барельеф краска окрашивание">
+  <a class="all-product-hit" href="gerb-moskvy-bez-shchita-kraska.html" aria-label="Открыть Герб Москвы без щита — покрытие краской"></a>
+  <div class="all-product-media"><img src="assets/Герб Москвы краска без щита.png?v=20261112-moscow-paint1" alt="Герб Москвы без щита — покрытие краской" style="--media-scale:1.03"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">Без щита · Барельеф</div>
+    <h3>Герб Москвы без щита — покрытие краской</h3>
+    <p>Краска</p>
+    <div class="all-product-foot"><span>от <strong>4 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="Без щита" data-finish="metal" data-search="герб москвы без щита — металлизация без щита · барельеф металлизация москва без щита барельеф металлизация">
+  <a class="all-product-hit" href="gerb-moskvy-bez-shchita-metallizaciya.html" aria-label="Открыть Герб Москвы без щита — металлизация"></a>
+  <div class="all-product-media"><img src="Герб Москвы металлизация без щита.png?v=20261112-moscow-metal1" alt="Герб Москвы без щита — металлизация" style="--media-scale:1.03"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">Без щита · Барельеф</div>
+    <h3>Герб Москвы без щита — металлизация</h3>
+    <p>Металлизация</p>
+    <div class="all-product-foot"><span>от <strong>5 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на пластиковом щите — покрытие краской на щите · барельеф краска · пластик москва на щите барельеф краска пластик пластиковый">
+  <a class="all-product-hit" href="gerb-moskvy-na-shchite-kraska-plastik.html" aria-label="Открыть Герб Москвы на пластиковом щите — покрытие краской"></a>
+  <div class="all-product-media"><img src="Герб Москвы краска пластиковый щит.png?v=20261116-moscow-paint-plastic1" alt="Герб Москвы на пластиковом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб Москвы на пластиковом щите — покрытие краской</h3>
+    <p>Краска · Пластик</p>
+    <div class="all-product-foot"><span>от <strong>15 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на бархатном щите — покрытие краской на щите · барельеф краска · бархат москва на щите барельеф краска бархат флок">
+  <a class="all-product-hit" href="gerb-moskvy-na-shchite-kraska-barhat.html" aria-label="Открыть Герб Москвы на бархатном щите — покрытие краской"></a>
+  <div class="all-product-media"><img src="Герб Москвы краска бархатный щит.png?v=20261116-moscow-paint-barhat1" alt="Герб Москвы на бархатном щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб Москвы на бархатном щите — покрытие краской</h3>
+    <p>Краска · Бархат</p>
+    <div class="all-product-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на металлическом щите — покрытие краской на щите · барельеф краска · металл москва на щите барельеф краска металл металлический">
+  <a class="all-product-hit" href="gerb-moskvy-na-shchite-kraska-metall.html" aria-label="Открыть Герб Москвы на металлическом щите — покрытие краской"></a>
+  <div class="all-product-media"><img src="Герб Москвы краска металл щит.png?v=20261116-moscow-paint-metal1" alt="Герб Москвы на металлическом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб Москвы на металлическом щите — покрытие краской</h3>
+    <p>Краска · Металл</p>
+    <div class="all-product-foot"><span>от <strong>19 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на пластиковом щите — металлизация на щите · барельеф металлизация · пластик москва на щите барельеф металлизация пластик пластиковый">
+  <a class="all-product-hit" href="gerb-moskvy-na-shchite-metallizaciya-plastik.html" aria-label="Открыть Герб Москвы на пластиковом щите — металлизация"></a>
+  <div class="all-product-media"><img src="assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal1" alt="Герб Москвы на пластиковом щите — металлизация" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб Москвы на пластиковом щите — металлизация</h3>
+    <p>Металлизация · Пластик</p>
+    <div class="all-product-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на бархатном щите — металлизация на щите · барельеф металлизация · бархат москва на щите барельеф металлизация бархат флок">
+  <a class="all-product-hit" href="gerb-moskvy-na-shchite-metallizaciya-barhat.html" aria-label="Открыть Герб Москвы на бархатном щите — металлизация"></a>
+  <div class="all-product-media"><img src="Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal1" alt="Герб Москвы на бархатном щите — металлизация" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб Москвы на бархатном щите — металлизация</h3>
+    <p>Металлизация · Бархат</p>
+    <div class="all-product-foot"><span>от <strong>18 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на металлическом щите — металлизация на щите · барельеф металлизация · металл москва на щите барельеф металлизация металл металлический">
+  <a class="all-product-hit" href="gerb-moskvy-na-shchite-metallizaciya-metall.html" aria-label="Открыть Герб Москвы на металлическом щите — металлизация"></a>
+  <div class="all-product-media"><img src="Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield1" alt="Герб Москвы на металлическом щите — металлизация" style="--media-scale:1.3"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб Москвы на металлическом щите — металлизация</h3>
+    <p>Металлизация · Металл</p>
+    <div class="all-product-foot"><span>от <strong>20 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article></div>
+</section><section class="all-group" id="group-rf" data-product-group>
+  <div class="all-group-banner">
+    <div class="all-group-letter">Р</div>
+    <div class="all-group-copy"><p class="eyebrow">Раздел каталога</p><h2>Герб Российской Федерации</h2><p>Полный ассортимент гербов России: барельеф и горельеф, без щита и на щите, все доступные покрытия и основы.</p></div>
+    <div class="all-group-side"><strong data-group-count>10</strong><span>товаров</span><a href="gerb-rf.html">Открыть раздел →</a></div>
+  </div>
+  <div class="all-product-grid"><article class="all-product-card" data-product-card data-group="rf" data-location="Без щита" data-finish="paint" data-search="герб россии без щита — покрытие краской без щита · барельеф краска россия рф без щита барельеф краска окрашивание">
+  <a class="all-product-hit" href="gerb-rf-barelef-kraska.html" aria-label="Открыть Герб России без щита — покрытие краской"></a>
+  <div class="all-product-media"><img src="assets/gerb-rf-bez-shchita.png" alt="Герб России без щита — покрытие краской" style="--media-scale:1.04"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">Без щита · Барельеф</div>
+    <h3>Герб России без щита — покрытие краской</h3>
+    <p>Краска</p>
+    <div class="all-product-foot"><span>от <strong>4 990 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="Без щита" data-finish="metal" data-search="герб россии без щита — металлизация без щита · барельеф металлизация россия рф без щита барельеф металлизация">
+  <a class="all-product-hit" href="gerb-rf-barelef-metallizaciya.html" aria-label="Открыть Герб России без щита — металлизация"></a>
+  <div class="all-product-media"><img src="assets/Золотой двуглавый орёл России (1).png" alt="Герб России без щита — металлизация" style="--media-scale:1.04"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">Без щита · Барельеф</div>
+    <h3>Герб России без щита — металлизация</h3>
+    <p>Металлизация</p>
+    <div class="all-product-foot"><span>от <strong>8 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="Без щита" data-finish="gorelief" data-search="герб россии без щита — горельеф без щита · горельеф горельеф россия рф без щита горельеф">
+  <a class="all-product-hit" href="gerb-rf-gorelef.html" aria-label="Открыть Герб России без щита — горельеф"></a>
+  <div class="all-product-media"><img src="assets/горельеф-вид-спереди.png" alt="Герб России без щита — горельеф" style="--media-scale:1.04"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">Без щита · Горельеф</div>
+    <h3>Герб России без щита — горельеф</h3>
+    <p>Горельеф</p>
+    <div class="all-product-foot"><span>от <strong>24 990 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на пластиковом щите — покрытие краской на щите · барельеф краска · пластик россия рф на щите барельеф краска пластик пластиковый">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-kraska-plastik.html" aria-label="Открыть Герб России на пластиковом щите — покрытие краской"></a>
+  <div class="all-product-media"><img src="Герб РФ барельеф краска на пластиковой щите анфас.png" alt="Герб России на пластиковом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб России на пластиковом щите — покрытие краской</h3>
+    <p>Краска · Пластик</p>
+    <div class="all-product-foot"><span>от <strong>9 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на бархатном щите — покрытие краской на щите · барельеф краска · бархат россия рф на щите барельеф краска бархат флок">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-kraska-barhat.html" aria-label="Открыть Герб России на бархатном щите — покрытие краской"></a>
+  <div class="all-product-media"><img src="assets/Барельеф краска на щите флок (композит) анфас.png" alt="Герб России на бархатном щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб России на бархатном щите — покрытие краской</h3>
+    <p>Краска · Бархат</p>
+    <div class="all-product-foot"><span>от <strong>11 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на металлическом щите — покрытие краской на щите · барельеф краска · металл россия рф на щите барельеф краска металл металлический">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-kraska-metall.html" aria-label="Открыть Герб России на металлическом щите — покрытие краской"></a>
+  <div class="all-product-media"><img src="assets/Герб РФ барельеф краска на метал щите анфас.png" alt="Герб России на металлическом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб России на металлическом щите — покрытие краской</h3>
+    <p>Краска · Металл</p>
+    <div class="all-product-foot"><span>от <strong>16 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на пластиковом щите — металлизация на щите · барельеф металлизация · пластик россия рф на щите барельеф металлизация пластик пластиковый">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-plastik.html" aria-label="Открыть Герб России на пластиковом щите — металлизация"></a>
+  <div class="all-product-media"><img src="Герб рф металлизация щит пластик анфас.png" alt="Герб России на пластиковом щите — металлизация" style="--media-scale:1.08"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб России на пластиковом щите — металлизация</h3>
+    <p>Металлизация · Пластик</p>
+    <div class="all-product-foot"><span>от <strong>13 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на бархатном щите — металлизация на щите · барельеф металлизация · бархат россия рф на щите барельеф металлизация бархат флок">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-barhat.html" aria-label="Открыть Герб России на бархатном щите — металлизация"></a>
+  <div class="all-product-media"><img src="Герб рф металлизация щит бархат анфас.png" alt="Герб России на бархатном щите — металлизация" style="--media-scale:1.08"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб России на бархатном щите — металлизация</h3>
+    <p>Металлизация · Бархат</p>
+    <div class="all-product-foot"><span>от <strong>14 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на металлическом щите — металлизация на щите · барельеф металлизация · металл россия рф на щите барельеф металлизация металл металлический">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-metall.html" aria-label="Открыть Герб России на металлическом щите — металлизация"></a>
+  <div class="all-product-media"><img src="Герб металлизация щит метал анфас.png" alt="Герб России на металлическом щите — металлизация" style="--media-scale:1.12"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Барельеф</div>
+    <h3>Герб России на металлическом щите — металлизация</h3>
+    <p>Металлизация · Металл</p>
+    <div class="all-product-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="gorelief" data-search="герб россии на щите — горельеф на щите · горельеф горельеф россия рф на щите горельеф">
+  <a class="all-product-hit" href="gerb-rf-na-shchite-gorelef.html" aria-label="Открыть Герб России на щите — горельеф"></a>
+  <div class="all-product-media"><img src="assets/Горельеф на щите анфас.png" alt="Герб России на щите — горельеф" style="--media-scale:1.06"></div>
+  <div class="all-product-body">
+    <div class="all-product-kicker">На щите · Горельеф</div>
+    <h3>Герб России на щите — горельеф</h3>
+    <p>Горельеф</p>
+    <div class="all-product-foot"><span>от <strong>29 900 ₽</strong></span><span>Подробнее →</span></div>
+  </div>
+</article></div>
+</section></div>
+<div class="all-empty" id="allEmpty"><strong>Ничего не найдено</strong><span>Попробуйте изменить запрос или снять фильтр.</span></div>
+<div class="all-directory-links">
+<a class="all-directory-link" href="gerby-subektov-rf.html"><strong>Гербы субъектов и городов Российской Федерации</strong><span>Открыть справочник →</span></a>
+<a class="all-directory-link" href="emblemy-vedomstv-rf.html"><strong>Эмблемы ведомств Российской Федерации</strong><span>Открыть справочник →</span></a>
+</div>
+</div></section>
+</main>
+<footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Субъекты и города РФ</a><a href="emblemy-vedomstv-rf.html">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
+<script src="script.js?v=20261116-allcatalog1"></script>
+<script>
+(function(){
+ const input=document.getElementById('allSearch'),clear=document.getElementById('allClear'),count=document.getElementById('allCount'),empty=document.getElementById('allEmpty');
+ const cards=[...document.querySelectorAll('[data-product-card]')],groups=[...document.querySelectorAll('[data-product-group]')],filters=[...document.querySelectorAll('[data-filter]')];
+ let active='all';const norm=s=>(s||'').toLocaleLowerCase('ru').replaceAll('ё','е').replace(/\s+/g,' ').trim();
+ function apply(){
+  const q=norm(input.value);let visible=0;
+  cards.forEach(c=>{
+   const matchText=!q||norm(c.dataset.search).includes(q);
+   let matchFilter=true;
+   if(active==='Без щита'||active==='На щите')matchFilter=c.dataset.location===active;
+   else if(active!=='all')matchFilter=c.dataset.finish===active;
+   const show=matchText&&matchFilter;c.hidden=!show;if(show)visible++;
+  });
+  groups.forEach(g=>{
+   const visibleCards=[...g.querySelectorAll('[data-product-card]')].filter(c=>!c.hidden);
+   g.hidden=visibleCards.length===0;
+   const counter=g.querySelector('[data-group-count]');if(counter)counter.textContent=visibleCards.length;
+  });
+  count.textContent='Найдено: '+visible;clear.hidden=!input.value;empty.classList.toggle('show',visible===0);
+ }
+ input.addEventListener('input',apply);clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
+ filters.forEach(b=>b.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');active=b.dataset.filter;apply()}));
+ apply();
+})();
+</script>
+</body>
+</html>
