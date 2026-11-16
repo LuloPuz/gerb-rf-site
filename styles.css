@@ -1172,3 +1172,43 @@ body.lightbox-open{overflow:hidden}
   outline:2px solid var(--gold);
   outline-offset:3px;
 }
+
+
+/* Homepage Moscow card: match RF proportions */
+.category-card#moscow .product-visual.moscow-category-photo{
+  height:300px !important;
+  min-height:300px !important;
+  padding:18px 22px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(198,161,91,.10), transparent 47%),
+    #fbfaf7 !important;
+  border-bottom:1px solid #e2ddd2;
+}
+.category-card#moscow .product-visual.moscow-category-photo::before{
+  display:none !important;
+}
+.category-card#moscow .product-visual.moscow-category-photo img{
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  margin:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:none !important;
+  transition:transform .35s ease;
+}
+.category-card#moscow:hover .product-visual.moscow-category-photo img{
+  transform:scale(1.025) !important;
+}
+@media(max-width:620px){
+  .category-card#moscow .product-visual.moscow-category-photo{
+    height:270px !important;
+    min-height:270px !important;
+    padding:14px 16px !important;
+  }
+}
