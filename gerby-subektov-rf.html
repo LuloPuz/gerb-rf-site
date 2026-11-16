@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Гербы субъектов Российской Федерации | Держава</title>
+<meta name="description" content="Каталог гербов субъектов Российской Федерации: республики, края, области, автономные округа и города федерального значения. Поиск по алфавиту.">
+<meta name="theme-color" content="#07182a">
+<link rel="stylesheet" href="styles.css?v=20261116-subjects1">
+<style>
+.subjects-head{padding:58px 0 38px;border-bottom:1px solid var(--line)}
+.subjects-breadcrumb{margin:0 0 24px;color:#7a8187;font-size:13px}
+.subjects-breadcrumb a:hover{color:#9A773D}
+.subjects-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:64px;align-items:end}
+.subjects-hero h1{max-width:880px;margin:0;font-family:"PT Serif",serif;font-size:clamp(48px,5.2vw,76px);font-weight:400;line-height:1.02;color:var(--navy);letter-spacing:-.025em}
+.subjects-intro{margin:0 0 6px;color:#66717a;font-size:14px;line-height:1.75}
+.subjects-meta{display:flex;gap:22px;margin-top:22px;color:#8b7040;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.subjects-tools{position:sticky;top:86px;z-index:20;padding:24px 0 20px;background:rgba(251,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,216,202,.9)}
+.subject-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+.subject-search-box{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;height:64px;border:1px solid #cfc7b7;background:#fff;box-shadow:0 12px 32px rgba(7,24,42,.06)}
+.subject-search-icon{display:grid;place-items:center;color:#9A773D;font-size:21px}
+.subject-search-input{height:62px;border:0;outline:0;background:transparent;color:var(--navy);font:500 14px "Golos Text",sans-serif}
+.subject-search-input::placeholder{color:#92999f;font-weight:400}
+.subject-search-clear{margin-right:10px;padding:9px 12px;border:0;background:transparent;color:#7b8389;font:600 11px "Golos Text",sans-serif;cursor:pointer}
+.subject-search-clear:hover{color:var(--navy)}
+.subject-result-count{display:flex;align-items:center;justify-content:center;min-width:150px;padding:0 20px;border:1px solid #d7cfbf;background:#f7f2e7;color:#7b6847;font-size:12px;font-weight:700}
+.subject-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.subject-filter{padding:9px 13px;border:1px solid #d7cfbf;background:#fff;color:#5f686f;font:600 11px "Golos Text",sans-serif;cursor:pointer;transition:.18s}
+.subject-filter:hover,.subject-filter.active{border-color:#9A773D;background:#f5eddd;color:var(--navy)}
+.subject-alphabet{display:flex;flex-wrap:wrap;gap:4px;margin-top:14px}
+.subject-alphabet a{display:grid;place-items:center;width:35px;height:35px;border:1px solid transparent;color:#6d747a;font:600 12px "Golos Text",sans-serif;transition:.18s}
+.subject-alphabet a:hover{border-color:#c8a45b;background:#fffaf0;color:var(--navy)}
+.subjects-catalog{padding:46px 0 86px}
+.subject-letter-group{scroll-margin-top:250px;margin-bottom:54px}
+.subject-letter-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:19px}
+.subject-letter{font-family:"PT Serif",serif;font-size:42px;line-height:1;color:#9A773D}
+.subject-letter-line{height:1px;background:#ded8ca}
+.subject-letter-count{color:#92999f;font-size:11px}
+.subject-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.subject-card{position:relative;min-height:185px;padding:24px 24px 22px;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:transform .2s,box-shadow .2s,border-color .2s}
+.subject-card:hover{transform:translateY(-3px);border-color:#cfbd98;box-shadow:0 18px 38px rgba(7,24,42,.08)}
+.subject-card-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.subject-type{color:#9A773D;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.subject-card-arrow{color:#c6a15b;font-size:16px}
+.subject-card h3{margin:15px 0 7px;font-family:"PT Serif",serif;font-size:24px;font-weight:400;line-height:1.16;color:var(--navy)}
+.subject-card p{margin:0;color:#737d84;font-size:12px;line-height:1.55}
+.subject-card-link{display:inline-block;margin-top:18px;color:#8a6e39;font-size:11px;font-weight:700}
+.subject-card-link:hover{color:var(--navy)}
+.subject-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
+.subject-empty.show{display:block}
+.subject-empty strong{display:block;font-family:"PT Serif",serif;font-size:30px;font-weight:400;color:var(--navy)}
+.subject-empty span{display:block;margin-top:8px;color:#7b8389;font-size:13px}
+.subjects-source-note{margin-top:54px;padding:18px 20px;border-left:2px solid #c6a15b;background:#f7f2e7;color:#69737a;font-size:11px;line-height:1.65}
+@media(max-width:1020px){
+ .subjects-hero{grid-template-columns:1fr;gap:20px}
+ .subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .subjects-tools{top:78px}
+}
+@media(max-width:680px){
+ .subjects-head{padding:38px 0 28px}
+ .subjects-hero h1{font-size:44px}
+ .subjects-tools{position:relative;top:auto;padding:18px 0}
+ .subject-search-row{grid-template-columns:1fr}
+ .subject-result-count{min-height:42px}
+ .subject-search-box{grid-template-columns:44px minmax(0,1fr) auto;height:58px}
+ .subject-search-input{height:56px;font-size:13px}
+ .subject-filter-row{flex-wrap:nowrap;overflow:auto;padding-bottom:3px}
+ .subject-filter{white-space:nowrap}
+ .subject-alphabet{gap:2px}
+ .subject-alphabet a{width:31px;height:31px}
+ .subjects-catalog{padding:34px 0 60px}
+ .subject-letter-group{scroll-margin-top:20px;margin-bottom:40px}
+ .subject-grid{grid-template-columns:1fr}
+ .subject-card{min-height:0;padding:21px}
+}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="index.html"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></a>
+<button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">☰</button>
+<nav class="main-nav">
+<a href="index.html#catalog">Каталог</a>
+<a href="gerb-rf.html">Герб РФ</a>
+<a href="gerb-moskvy.html">Герб Москвы</a>
+<a class="nav-active" href="gerby-subektov-rf.html">Регионы</a>
+<a href="index.html#cities">Города</a>
+<a href="index.html#production">О производстве</a>
+</nav>
+<a class="button button-gold header-cta" href="#request">Получить предложение</a>
+</div></header>
+
+<main>
+<section class="subjects-head"><div class="container">
+<p class="subjects-breadcrumb"><a href="index.html">Главная</a> / Каталог / Гербы субъектов РФ</p>
+<div class="subjects-hero">
+<div>
+<p class="eyebrow">Каталог · Субъекты РФ</p>
+<h1>Гербы субъектов Российской Федерации</h1>
+<div class="subjects-meta"><span>86 позиций</span><span>Поиск по алфавиту</span></div>
+</div>
+<p class="subjects-intro">Республики, края, области, автономные округа, автономная область и города федерального значения. Найдите нужный субъект через поиск, алфавит или фильтр по типу.</p>
+</div>
+</div></section>
+
+<section class="subjects-tools" aria-label="Поиск и фильтры"><div class="container">
+<div class="subject-search-row">
+<label class="subject-search-box">
+<span class="subject-search-icon" aria-hidden="true">⌕</span>
+<input class="subject-search-input" id="subjectSearch" type="search" autocomplete="off" placeholder="Например: Архангельская область" aria-label="Поиск субъекта РФ">
+<button class="subject-search-clear" id="subjectClear" type="button" hidden>Очистить</button>
+</label>
+<div class="subject-result-count" id="subjectCount">Найдено: 86</div>
+</div>
+<div class="subject-filter-row" id="subjectFilters">
+<button class="subject-filter active" type="button" data-type="all">Все</button>
+<button class="subject-filter" type="button" data-type="Республика">Республики</button>
+<button class="subject-filter" type="button" data-type="Край">Края</button>
+<button class="subject-filter" type="button" data-type="Область">Области</button>
+<button class="subject-filter" type="button" data-type="Город федерального значения">Города фед. значения</button>
+<button class="subject-filter" type="button" data-type="Автономный округ">Автономные округа</button>
+<button class="subject-filter" type="button" data-type="Автономная область">Автономная область</button>
+</div>
+<nav class="subject-alphabet" aria-label="Алфавит"><a href="#letter-А" data-letter-link="А">А</a><a href="#letter-Б" data-letter-link="Б">Б</a><a href="#letter-В" data-letter-link="В">В</a><a href="#letter-Д" data-letter-link="Д">Д</a><a href="#letter-Е" data-letter-link="Е">Е</a><a href="#letter-З" data-letter-link="З">З</a><a href="#letter-И" data-letter-link="И">И</a><a href="#letter-К" data-letter-link="К">К</a><a href="#letter-Л" data-letter-link="Л">Л</a><a href="#letter-М" data-letter-link="М">М</a><a href="#letter-Н" data-letter-link="Н">Н</a><a href="#letter-О" data-letter-link="О">О</a><a href="#letter-П" data-letter-link="П">П</a><a href="#letter-Р" data-letter-link="Р">Р</a><a href="#letter-С" data-letter-link="С">С</a><a href="#letter-Т" data-letter-link="Т">Т</a><a href="#letter-У" data-letter-link="У">У</a><a href="#letter-Х" data-letter-link="Х">Х</a><a href="#letter-Ч" data-letter-link="Ч">Ч</a><a href="#letter-Я" data-letter-link="Я">Я</a></nav>
+</div></section>
+
+<section class="subjects-catalog"><div class="container">
+<div id="subjectsList">
+<section class="subject-letter-group" id="letter-А" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">А</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">7</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="агинский бурятский автономный округ" data-type="Автономный округ">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономный округ</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Агинский Бурятский автономный округ</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Агинский Бурятский автономный округ">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="адыгея" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Адыгея</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Адыгея">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="алтай" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Алтай</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Алтай">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="алтайский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Алтайский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Алтайский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="амурская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Амурская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Амурская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="архангельская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Архангельская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Архангельская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="астраханская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Астраханская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Астраханская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Б" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Б</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">4</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="башкортостан" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Башкортостан</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Башкортостан">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="белгородская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Белгородская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Белгородская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="брянская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Брянская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Брянская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="бурятия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Бурятия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Бурятия">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-В" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">В</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">4</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="владимирская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Владимирская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Владимирская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="волгоградская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Волгоградская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Волгоградская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="вологодская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Вологодская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Вологодская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="воронежская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Воронежская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Воронежская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Д" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Д</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">1</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="дагестан" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Дагестан</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Дагестан">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Е" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Е</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">1</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="еврейская автономная область" data-type="Автономная область">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономная область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Еврейская автономная область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Еврейская автономная область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-З" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">З</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">1</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="забайкальский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Забайкальский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Забайкальский край">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-И" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">И</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">3</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="ивановская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ивановская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ивановская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="ингушетия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ингушетия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ингушетия">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="иркутская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Иркутская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Иркутская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-К" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">К</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">15</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="кабардино-балкарская республика" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Кабардино-Балкарская Республика</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Кабардино-Балкарская Республика">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="калининградская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Калининградская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Калининградская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="калмыкия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Калмыкия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Калмыкия">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="калужская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Калужская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Калужская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="камчатский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Камчатский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Камчатский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="карачаево-черкесская республика" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Карачаево-Черкесская Республика</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Карачаево-Черкесская Республика">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="карелия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Карелия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Карелия">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="кемеровская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Кемеровская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Кемеровская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="кировская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Кировская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Кировская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="коми" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Коми</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Коми">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="костромская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Костромская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Костромская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="краснодарский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Краснодарский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Краснодарский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="красноярский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Красноярский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Красноярский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="курганская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Курганская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Курганская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="курская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Курская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Курская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Л" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Л</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">2</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="ленинградская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ленинградская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ленинградская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="липецкая область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Липецкая область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Липецкая область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-М" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">М</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">6</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="магаданская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Магаданская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Магаданская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="марий эл" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Марий Эл</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Марий Эл">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="мордовия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Мордовия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Мордовия">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="москва" data-type="Город федерального значения">
+      <div class="subject-card-top">
+        <span class="subject-type">Город федерального значения</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Москва</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Москва">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="московская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Московская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Московская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="мурманская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Мурманская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Мурманская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Н" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Н</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">4</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="ненецкий автономный округ" data-type="Автономный округ">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономный округ</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ненецкий автономный округ</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ненецкий автономный округ">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="нижегородская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Нижегородская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Нижегородская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="новгородская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Новгородская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Новгородская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="новосибирская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Новосибирская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Новосибирская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-О" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">О</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">3</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="омская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Омская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Омская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="оренбургская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Оренбургская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Оренбургская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="орловская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Орловская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Орловская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-П" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">П</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">4</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="пензенская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Пензенская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Пензенская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="пермский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Пермский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Пермский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="приморский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Приморский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Приморский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="псковская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Псковская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Псковская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Р" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Р</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">2</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="ростовская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ростовская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ростовская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="рязанская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Рязанская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Рязанская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-С" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">С</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">9</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="самарская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Самарская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Самарская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="санкт-петербург" data-type="Город федерального значения">
+      <div class="subject-card-top">
+        <span class="subject-type">Город федерального значения</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Санкт-Петербург</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Санкт-Петербург">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="саратовская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Саратовская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Саратовская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="саха (якутия)" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Саха (Якутия)</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Саха (Якутия)">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="сахалинская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Сахалинская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Сахалинская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="свердловская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Свердловская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Свердловская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="северная осетия — алания" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Северная Осетия — Алания</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Северная Осетия — Алания">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="смоленская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Смоленская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Смоленская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="ставропольский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ставропольский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ставропольский край">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Т" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Т</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">7</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="тамбовская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тамбовская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Тамбовская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="татарстан" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Татарстан</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Татарстан">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="тверская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тверская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Тверская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="томская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Томская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Томская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="тульская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тульская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Тульская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="тыва" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тыва</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Тыва">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="тюменская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тюменская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Тюменская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-У" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">У</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">3</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="удмуртская республика" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Удмуртская Республика</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Удмуртская Республика">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="ульяновская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ульяновская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ульяновская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="усть-ордынский бурятский автономный округ" data-type="Автономный округ">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономный округ</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Усть-Ордынский Бурятский автономный округ</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Усть-Ордынский Бурятский автономный округ">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Х" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Х</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">3</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="хабаровский край" data-type="Край">
+      <div class="subject-card-top">
+        <span class="subject-type">Край</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Хабаровский край</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Хабаровский край">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="хакасия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Хакасия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Хакасия">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="ханты-мансийский автономный округ — югра" data-type="Автономный округ">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономный округ</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ханты-Мансийский автономный округ — Югра</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ханты-Мансийский автономный округ — Югра">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Ч" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Ч</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">5</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="челябинская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Челябинская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Челябинская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="чеченская республика" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Чеченская Республика</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Чеченская Республика">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="читинская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Читинская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Читинская область">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="чувашская республика — чувашия" data-type="Республика">
+      <div class="subject-card-top">
+        <span class="subject-type">Республика</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Чувашская Республика — Чувашия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Чувашская Республика — Чувашия">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="чукотский автономный округ" data-type="Автономный округ">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономный округ</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Чукотский автономный округ</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Чукотский автономный округ">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="subject-letter-group" id="letter-Я" data-letter-group>
+  <div class="subject-letter-head">
+    <span class="subject-letter">Я</span>
+    <span class="subject-letter-line"></span>
+    <span class="subject-letter-count">2</span>
+  </div>
+  <div class="subject-grid">
+    
+    <article class="subject-card" data-subject-card data-name="ямало-ненецкий автономный округ" data-type="Автономный округ">
+      <div class="subject-card-top">
+        <span class="subject-type">Автономный округ</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ямало-Ненецкий автономный округ</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ямало-Ненецкий автономный округ">Уточнить исполнение →</a>
+    </article>
+    <article class="subject-card" data-subject-card data-name="ярославская область" data-type="Область">
+      <div class="subject-card-top">
+        <span class="subject-type">Область</span>
+        <span class="subject-card-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ярославская область</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="subject-card-link" data-subject-request="Ярославская область">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section></div>
+<div class="subject-empty" id="subjectEmpty">
+<strong>Ничего не найдено</strong>
+<span>Попробуйте изменить запрос или выбрать другой тип субъекта.</span>
+</div>
+<div class="subjects-source-note">Перечень собран по каталогу символики субъектов РФ, указанному в исходном источнике для наполнения этой страницы.</div>
+</div></section>
+
+<section class="cta" id="request"><div class="container cta-inner">
+<div><p class="eyebrow eyebrow-light">Индивидуальный заказ</p><h2>Нужен герб конкретного субъекта?</h2><p id="requestText">Уточним исполнение, размер, материал и подготовим предложение.</p></div>
+<a class="button button-gold" id="subjectRequestButton" href="mailto:xxx@xxx.xxx?subject=Герб%20субъекта%20РФ">Отправить запрос</a>
+</div></section>
+</main>
+
+<footer class="site-footer"><div class="container footer-grid">
+<div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div>
+<div><h3>Каталог</h3><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Гербы субъектов РФ</a><a href="index.html#cities">Гербы городов</a></div>
+<div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div>
+</div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
+
+<script src="script.js?v=20261116-subjects1"></script>
+<script>
+(function(){
+ const input=document.getElementById('subjectSearch');
+ const clear=document.getElementById('subjectClear');
+ const count=document.getElementById('subjectCount');
+ const empty=document.getElementById('subjectEmpty');
+ const cards=[...document.querySelectorAll('[data-subject-card]')];
+ const groups=[...document.querySelectorAll('[data-letter-group]')];
+ const filters=[...document.querySelectorAll('[data-type]')];
+ let activeType='all';
+
+ const norm=s=>(s||'').toLocaleLowerCase('ru').replaceAll('ё','е').replace(/\s+/g,' ').trim();
+
+ function apply(){
+   const q=norm(input.value);
+   let visible=0;
+   cards.forEach(card=>{
+     const matchesText=!q || norm(card.dataset.name+' '+card.dataset.type).includes(q);
+     const matchesType=activeType==='all' || card.dataset.type===activeType;
+     const show=matchesText && matchesType;
+     card.hidden=!show;
+     if(show) visible++;
+   });
+   groups.forEach(group=>{
+     const has=[...group.querySelectorAll('[data-subject-card]')].some(card=>!card.hidden);
+     group.hidden=!has;
+   });
+   count.textContent='Найдено: '+visible;
+   clear.hidden=!input.value;
+   empty.classList.toggle('show',visible===0);
+ }
+
+ input.addEventListener('input',apply);
+ clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
+ filters.forEach(btn=>btn.addEventListener('click',()=>{
+   filters.forEach(x=>x.classList.remove('active'));
+   btn.classList.add('active');
+   activeType=btn.dataset.type;
+   apply();
+ }));
+ document.querySelectorAll('[data-subject-request]').forEach(link=>link.addEventListener('click',()=>{
+   const name=link.dataset.subjectRequest;
+   const text=document.getElementById('requestText');
+   const button=document.getElementById('subjectRequestButton');
+   text.textContent='Вы выбрали: Герб '+name+'. Уточним исполнение, размер, материал и подготовим предложение.';
+   button.href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent('Герб '+name);
+ }));
+ apply();
+})();
+</script>
+</body>
+</html>
