@@ -12,6 +12,25 @@
 .moscow-choice-card:focus-within{outline:2px solid var(--gold);outline-offset:3px}
 .moscow-bar-label{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:8px 11px;border:1px solid #d5c29a;background:#fffaf0;color:#8b6d37;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .moscow-bar-label::before{content:"◆";font-size:7px;color:var(--gold)}
+
+/* Moscow choice real image */
+.moscow-choice-card .product-image-real{
+  overflow:hidden;
+  background:#fbfaf7 !important;
+}
+.moscow-choice-card .product-image-real img{
+  display:block;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transition:transform .35s ease;
+}
+.moscow-choice-card:hover .product-image-real img{
+  transform:scale(1.045);
+}
 </style>
 </head>
 <body>
@@ -43,7 +62,7 @@
 <div class="product-grid-large">
 <article class="product-card-large moscow-choice-card">
 <a class="moscow-choice-hit" href="gerb-moskvy-bez-shchita.html" aria-label="Открыть герб Москвы без щита"></a>
-<div class="product-image-placeholder"><span>Изображение товара</span><small>Барельеф · Без щита</small></div>
+<div class="product-image-placeholder product-image-real"><img src="Герб Москвы металлизация без щита.png?v=20261116-moscow-card1" alt="Герб Москвы без щита — барельеф, металлизация"></div>
 <div class="product-info"><p class="product-type">Герб Москвы · Барельеф</p><h3>Герб Москвы без щита</h3><p>Самостоятельное рельефное изображение герба без дополнительной щитовой основы.</p><div class="product-actions"><span class="button button-gold">Выбрать без щита</span><span class="product-more">Перейти к вариантам →</span></div></div>
 </article>
 
@@ -58,5 +77,5 @@
 </main>
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="index.html#regions">Гербы регионов</a><a href="index.html#cities">Гербы городов</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
-<script src="script.js?v=20261112-moscow1"></script>
+<script src="script.js?v=20261116-moscow-card1"></script>
 </body></html>
