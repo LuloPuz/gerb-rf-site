@@ -113,6 +113,7 @@ document.addEventListener('keydown', event => {
     {title:'Герб Москвы на щите', meta:'Москва · Барельеф', url:'gerb-moskvy-na-shchite.html', keys:'герб москвы на щите барельеф'},
     {title:'Герб Москвы на щите — покрытие краской', meta:'Москва · Барельеф · Краска', url:'gerb-moskvy-na-shchite-kraska.html', keys:'герб москвы на щите краска окрашивание барельеф'},
     {title:'Герб Москвы на пластиковом щите — покрытие краской', meta:'Москва · Краска · Пластик', url:'gerb-moskvy-na-shchite-kraska-plastik.html', keys:'герб москвы пластиковый щит пластик краска окрашивание барельеф'},
+    {title:'Герб Москвы на бархатном щите — покрытие краской', meta:'Москва · Краска · Бархат', url:'gerb-moskvy-na-shchite-kraska-barhat.html', keys:'герб москвы бархатный щит бархат флок краска окрашивание барельеф'},
     {title:'Герб Москвы на щите — металлизация', meta:'Москва · Барельеф · Металлизация', url:'gerb-moskvy-na-shchite-metallizaciya.html', keys:'герб москвы на щите металлизация барельеф'},
     {title:'Герб Москвы на пластиковом щите — металлизация', meta:'Москва · Металлизация · Пластик', url:'gerb-moskvy-na-shchite-metallizaciya-plastik.html', keys:'герб москвы пластиковый щит пластик металлизация барельеф'},
     {title:'Герб Москвы на бархатном щите — металлизация', meta:'Москва · Металлизация · Бархат', url:'gerb-moskvy-na-shchite-metallizaciya-barhat.html', keys:'герб москвы бархатный щит бархат флок металлизация барельеф'},
