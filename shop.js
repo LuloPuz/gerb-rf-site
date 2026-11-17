@@ -106,7 +106,7 @@
 
     if(!items.length){
       list.innerHTML='<div class="cart-empty"><strong>Корзина пока пуста</strong><p>Выберите герб, размер и добавьте его в корзину.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a></div>';
-      summary.innerHTML='<h2>Ваш заказ</h2><div class="summary-row"><span>Товаров</span><strong>0</strong></div><div class="summary-total"><span>Итого</span><strong>0 ₽</strong></div>';
+      summary.innerHTML='<h2>Ваш заказ</h2><div class="summary-row"><span>Товаров</span><strong>0</strong></div><div class="summary-total"><span>Итого</span><strong>0 ₽</strong></div><a class="cart-continue-button" href="catalog.html">← Продолжить покупки</a>';
       if(checkout) checkout.hidden=true;
       return;
     }
@@ -124,6 +124,7 @@
       '<div class="summary-row"><span>Доставка</span><strong>Уточняется</strong></div>'+
       '<div class="summary-total"><span>Итого</span><strong>'+money(cartTotal())+'</strong></div>'+
       '<button class="cart-checkout-button" type="button" data-open-checkout>Перейти к оформлению</button>'+
+      '<a class="cart-continue-button" href="catalog.html">← Продолжить покупки</a>'+
       '<p class="cart-summary-note">После оформления заказ сохранится в кабинете. Оплата и доставка подтверждаются менеджером.</p>';
 
     list.querySelectorAll('[data-cart-index]').forEach(row=>{
