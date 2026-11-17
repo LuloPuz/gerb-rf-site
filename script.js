@@ -10,16 +10,17 @@
     {label:'Каталог',href:isHome?'#catalog':'catalog.html',active:path==='catalog.html'},
     {label:'Герб РФ',href:'gerb-rf.html',active:path.startsWith('gerb-rf')},
     {label:'Герб Москвы',href:'gerb-moskvy.html',active:path.startsWith('gerb-moskvy')},
-    {label:'Гербы субъектов РФ',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html'},
-    {label:'Гербы городов РФ',href:'gerby-subektov-rf.html',active:false},
+    {label:'Гербы субъектов РФ',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html',className:'nav-chip nav-chip-subjects'},
+    {label:'Гербы городов РФ',href:'gerby-subektov-rf.html',active:false,className:'nav-chip nav-chip-cities'},
     {label:'Ведомства',href:'emblemy-vedomstv-rf.html',active:path==='emblemy-vedomstv-rf.html'},
     {label:'Производство',href:isHome?'#production':'index.html#production',active:false}
   ];
 
   nav.setAttribute('aria-label','Основная навигация');
-  nav.innerHTML=items.map(item =>
-    '<a'+(item.active?' class="nav-active"':'')+' href="'+item.href+'">'+item.label+'</a>'
-  ).join('');
+  nav.innerHTML=items.map(item => {
+    const classes=[item.active?'nav-active':'',item.className||''].filter(Boolean).join(' ');
+    return '<a'+(classes?' class="'+classes+'"':'')+' href="'+item.href+'">'+item.label+'</a>';
+  }).join('');
 
   // Keep the mobile menu behavior after replacing the links.
   nav.querySelectorAll('a').forEach(link=>{
