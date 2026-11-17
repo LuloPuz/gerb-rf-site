@@ -7,12 +7,6 @@
   const isHome=path===''||path==='index.html';
 
   const items=[
-    {label:'Каталог',href:isHome?'#catalog':'catalog.html',active:path==='catalog.html'},
-    {label:'Герб РФ',href:'catalog.html?q='+encodeURIComponent('герб россии'),active:false},
-    {label:'Герб Москвы',href:'catalog.html?q='+encodeURIComponent('герб москвы'),active:false},
-    {label:'Гербы субъектов РФ',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html'},
-    {label:'Гербы городов РФ',href:'gerby-subektov-rf.html',active:false},
-    {label:'Ведомства',href:'emblemy-vedomstv-rf.html',active:path==='emblemy-vedomstv-rf.html'},
     {label:'Производство',href:isHome?'#production':'index.html#production',active:false},
     {label:'Контакты',href:'#contacts',active:false}
   ];
@@ -39,7 +33,7 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-header8';
+  shopStyles.href='shop.css?v=20261117-searchhero1';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
