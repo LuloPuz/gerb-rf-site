@@ -1,39 +1,44 @@
-// Unified site header navigation
+// Unified search-first site header
 (() => {
-  const nav=document.querySelector('.main-nav');
-  if(!nav) return;
+  const header=document.querySelector('.header-inner');
+  if(!header) return;
 
-  const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
-  const isHome=path===''||path==='index.html';
+  const brand=header.querySelector('.brand');
+  if(brand){
+    brand.setAttribute('href','index.html');
+    brand.setAttribute('aria-label','На главную');
+  }
 
-  const items=[
-    {label:'Производство',href:isHome?'#production':'index.html#production',active:false},
-    {label:'Контакты',href:'#contacts',active:false}
-  ];
+  header.querySelector('.nav-toggle')?.remove();
+  header.querySelector('.main-nav')?.remove();
+  header.querySelector('.header-cta')?.remove();
+  header.querySelector('.shop-header-actions')?.remove();
 
-  // Unified contacts anchor
-  const footer=document.querySelector('.site-footer');
-  if(footer && !footer.id) footer.id='contacts';
-
-  nav.setAttribute('aria-label','Основная навигация');
-  nav.innerHTML=items.map(item =>
-    '<a'+(item.active?' class="nav-active"':'')+' href="'+item.href+'">'+item.label+'</a>'
-  ).join('');
-
-  // Keep the mobile menu behavior after replacing the links.
-  nav.querySelectorAll('a').forEach(link=>{
-    link.addEventListener('click',()=>{
-      nav.classList.remove('open');
-      document.querySelector('.nav-toggle')?.setAttribute('aria-expanded','false');
-    });
-  });
+  if(!header.querySelector('[data-header-site-search]')){
+    const search=document.createElement('div');
+    search.className='header-site-search';
+    search.dataset.headerSiteSearch='';
+    search.setAttribute('data-site-search','');
+    search.innerHTML=
+      '<div class="home-search-ui">'+
+        '<form class="home-search-form" data-site-search-form role="search">'+
+          '<span class="home-search-icon" aria-hidden="true">'+
+            '<svg viewBox="0 0 24 24" width="21" height="21" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>'+
+          '</span>'+
+          '<input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Поиск по сайту: Герб России, Москва, область, МВД, металлизация..." aria-label="Поиск по сайту" data-site-search-input>'+
+          '<button class="home-search-submit" type="submit">Найти</button>'+
+        '</form>'+
+        '<div class="home-search-results" data-site-search-results hidden></div>'+
+      '</div>';
+    header.appendChild(search);
+  }
 })();
 
 // Derzhava commerce assets
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-searchhero1';
+  shopStyles.href='shop.css?v=20261117-headersearch1';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
