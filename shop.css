@@ -1,0 +1,164 @@
+
+/* Derzhava commerce layer */
+.shop-header-actions{display:flex;align-items:center;gap:8px}
+.shop-header-link{
+  position:relative;display:flex;align-items:center;justify-content:center;width:44px;height:44px;
+  border:1px solid rgba(7,24,42,.12);background:rgba(255,255,255,.58);color:var(--navy);
+  transition:.2s;backdrop-filter:blur(10px)
+}
+.shop-header-link:hover{border-color:rgba(154,119,61,.55);background:#fffaf0;transform:translateY(-1px)}
+.shop-header-link svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+.shop-cart-count{
+  position:absolute;right:-5px;top:-6px;display:grid;place-items:center;min-width:19px;height:19px;padding:0 5px;
+  border-radius:10px;background:var(--gold);color:var(--navy);font:800 9px "Golos Text",sans-serif;
+  box-shadow:0 4px 12px rgba(7,24,42,.18)
+}
+.shop-cart-count[data-empty="true"]{display:none}
+
+.shop-product-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:2px}
+.shop-add-button{
+  min-height:54px;border:1px solid var(--gold);background:var(--gold);color:var(--navy);
+  font:800 13px "Golos Text",sans-serif;letter-spacing:.025em;cursor:pointer;transition:.2s
+}
+.shop-add-button:hover{background:var(--gold-2);transform:translateY(-1px)}
+.shop-add-button.is-added{background:var(--navy);border-color:var(--navy);color:#fff}
+.shop-go-cart{
+  display:flex;align-items:center;justify-content:center;min-width:142px;padding:0 18px;
+  border:1px solid #cfc7b7;background:#fff;color:var(--navy);font:700 12px "Golos Text",sans-serif
+}
+.shop-go-cart:hover{border-color:#9A773D;background:#fffaf0}
+.final-order-button.shop-direct-order{
+  margin-top:10px;background:transparent!important;border-color:#d7cfbf!important;color:#6a737a!important;min-height:44px!important;
+  font-size:11px!important
+}
+.final-order-button.shop-direct-order:hover{background:#fff!important;color:var(--navy)!important;transform:none!important}
+
+.shop-toast{
+  position:fixed;right:28px;bottom:28px;z-index:1000;max-width:360px;padding:16px 18px;
+  border:1px solid rgba(154,119,61,.35);background:rgba(7,24,42,.94);color:#fff;
+  box-shadow:0 18px 48px rgba(7,24,42,.24);backdrop-filter:blur(16px);
+  font:600 12px/1.5 "Golos Text",sans-serif;opacity:0;transform:translateY(12px);
+  pointer-events:none;transition:.22s
+}
+.shop-toast.show{opacity:1;transform:translateY(0)}
+.shop-toast strong{color:var(--gold-2)}
+
+.commerce-page{padding:54px 0 90px;background:var(--paper);min-height:70vh}
+.commerce-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end;margin-bottom:34px}
+.commerce-head h1{margin:7px 0 0;font:400 clamp(44px,5vw,72px)/1.05 "PT Serif",serif;color:var(--navy)}
+.commerce-head p:not(.eyebrow){max-width:650px;margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.commerce-breadcrumb{margin:0 0 18px;color:#8a9299;font-size:12px}
+.commerce-breadcrumb a{color:var(--navy)}
+.commerce-shell{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(330px,.65fr);gap:24px;align-items:start}
+
+.cart-list{display:grid;gap:12px}
+.cart-empty{
+  padding:64px 34px;border:1px solid var(--line);background:#fff;text-align:center
+}
+.cart-empty strong{display:block;font:400 30px "PT Serif",serif;color:var(--navy)}
+.cart-empty p{margin:8px 0 22px;color:var(--muted);font-size:13px}
+.cart-item{
+  display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:20px;align-items:center;
+  padding:16px;border:1px solid var(--line);background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035)
+}
+.cart-item-media{height:130px;display:flex;align-items:center;justify-content:center;background:#fbfaf7;overflow:hidden}
+.cart-item-media img{width:100%;height:100%;object-fit:contain;padding:7px}
+.cart-item h3{margin:3px 0 5px;font:400 22px/1.18 "PT Serif",serif;color:var(--navy)}
+.cart-item-meta{color:#7b8389;font-size:11px;line-height:1.5}
+.cart-item-price{margin-top:10px;font:400 20px "PT Serif",serif;color:var(--navy)}
+.cart-item-actions{display:flex;align-items:center;gap:8px;margin-top:14px}
+.qty-control{display:flex;align-items:center;border:1px solid #d8d2c6;background:#fff}
+.qty-control button{width:36px;height:34px;border:0;background:transparent;color:var(--navy);font-size:18px;cursor:pointer}
+.qty-control span{min-width:34px;text-align:center;font-size:12px;font-weight:700}
+.cart-remove{border:0;background:transparent;color:#8d7a6a;font:600 10px "Golos Text",sans-serif;cursor:pointer}
+.cart-remove:hover{color:#8b2c2c}
+.cart-line-total{min-width:130px;text-align:right;font:400 23px "PT Serif",serif;color:var(--navy)}
+
+.cart-summary{
+  position:sticky;top:110px;padding:24px;border:1px solid #d8cfbd;background:#f5efe4;
+  box-shadow:0 16px 38px rgba(7,24,42,.06)
+}
+.cart-summary h2{margin:0 0 20px;font:400 29px "PT Serif",serif;color:var(--navy)}
+.summary-row{display:flex;justify-content:space-between;gap:20px;padding:10px 0;color:#67717a;font-size:12px;border-bottom:1px solid rgba(126,111,86,.15)}
+.summary-total{display:flex;justify-content:space-between;align-items:end;gap:20px;padding:21px 0 18px}
+.summary-total span{font-size:12px;font-weight:700;color:#6d747a}
+.summary-total strong{font:400 34px "PT Serif",serif;color:var(--navy)}
+.cart-checkout-button{width:100%;min-height:54px;border:0;background:var(--navy);color:#fff;font:800 12px "Golos Text",sans-serif;cursor:pointer}
+.cart-checkout-button:hover{background:var(--navy-2)}
+.cart-summary-note{margin:12px 0 0;color:#7b8389;font-size:10px;line-height:1.55}
+
+.checkout-panel{margin-top:24px;padding:28px;border:1px solid var(--line);background:#fff}
+.checkout-panel[hidden]{display:none!important}
+.checkout-panel h2{margin:0 0 6px;font:400 34px "PT Serif",serif;color:var(--navy)}
+.checkout-panel>p{margin:0 0 22px;color:var(--muted);font-size:12px}
+.checkout-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:grid;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7a6d57}
+.field input,.field textarea,.field select{
+  width:100%;min-height:48px;padding:11px 13px;border:1px solid #d8d2c6;background:#fff;color:var(--navy);
+  font:500 13px "Golos Text",sans-serif;outline:none
+}
+.field textarea{min-height:96px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#9A773D;box-shadow:0 0 0 3px rgba(154,119,61,.08)}
+.checkout-actions{display:flex;gap:10px;align-items:center;margin-top:18px}
+.checkout-submit{min-height:52px;padding:0 24px;border:0;background:var(--gold);color:var(--navy);font:800 12px "Golos Text",sans-serif;cursor:pointer}
+.checkout-cancel{min-height:52px;padding:0 20px;border:1px solid #d8d2c6;background:#fff;color:#69737a;font:700 11px "Golos Text",sans-serif;cursor:pointer}
+
+.order-success{padding:34px;border:1px solid #d6cfbf;background:#f5efe4}
+.order-success h2{margin:0;font:400 34px "PT Serif",serif;color:var(--navy)}
+.order-success p{color:#66717a;font-size:12px;line-height:1.7}
+.order-success-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+.account-layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;align-items:start}
+.account-nav{position:sticky;top:110px;padding:10px;border:1px solid var(--line);background:#fff}
+.account-nav button{
+  width:100%;padding:14px 15px;border:0;background:transparent;color:#5f686f;text-align:left;
+  font:700 12px "Golos Text",sans-serif;cursor:pointer
+}
+.account-nav button.active,.account-nav button:hover{background:#f5efe4;color:var(--navy)}
+.account-panel{padding:30px;border:1px solid var(--line);background:#fff}
+.account-panel[hidden]{display:none!important}
+.account-panel h2{margin:0 0 6px;font:400 36px "PT Serif",serif;color:var(--navy)}
+.account-panel-lead{margin:0 0 24px;color:var(--muted);font-size:12px}
+.account-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px}
+.account-stat{padding:20px;border:1px solid #ded8ca;background:#fbfaf7}
+.account-stat small{display:block;color:#8b7040;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.account-stat strong{display:block;margin-top:8px;font:400 30px "PT Serif",serif;color:var(--navy)}
+.account-order{padding:19px 0;border-bottom:1px solid #eee9df}
+.account-order:first-child{padding-top:0}
+.account-order-head{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.account-order h3{margin:0;font:400 20px "PT Serif",serif;color:var(--navy)}
+.account-order-status{padding:6px 9px;background:#f5efe4;color:#806b45;font-size:9px;font-weight:800;text-transform:uppercase}
+.account-order p{margin:5px 0 0;color:#7b8389;font-size:11px}
+.account-order-total{font:400 20px "PT Serif",serif;color:var(--navy)}
+.profile-save{margin-top:18px;min-height:50px;padding:0 24px;border:0;background:var(--navy);color:#fff;font:800 12px "Golos Text",sans-serif;cursor:pointer}
+.local-note{margin-top:18px;padding:14px 16px;border-left:2px solid var(--gold);background:#f7f2e7;color:#69737a;font-size:10px;line-height:1.6}
+
+@media(max-width:1100px){
+  .shop-header-actions{margin-left:auto}
+  .main-nav+.shop-header-actions{margin-left:auto}
+  .commerce-shell{grid-template-columns:1fr}
+  .cart-summary{position:relative;top:auto}
+}
+@media(max-width:1050px){
+  .shop-header-actions{margin-left:0}
+  .shop-header-link{width:42px;height:42px}
+}
+@media(max-width:760px){
+  .commerce-page{padding:34px 0 60px}
+  .commerce-head{grid-template-columns:1fr;gap:10px}
+  .commerce-head h1{font-size:44px}
+  .cart-item{grid-template-columns:92px minmax(0,1fr);gap:12px}
+  .cart-item-media{height:92px}
+  .cart-line-total{grid-column:2;text-align:left}
+  .checkout-grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+  .account-layout{grid-template-columns:1fr}
+  .account-nav{position:relative;top:auto;display:flex;overflow:auto}
+  .account-nav button{width:auto;white-space:nowrap}
+  .account-stats{grid-template-columns:1fr}
+  .shop-product-actions{grid-template-columns:1fr}
+  .shop-go-cart{min-height:48px}
+  .shop-toast{left:14px;right:14px;bottom:16px;max-width:none}
+}
