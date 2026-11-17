@@ -15,7 +15,7 @@
   width:100%;min-height:60px;padding:14px 16px;border:1px solid #d8d2c6;background:#fff;color:var(--navy);
   font:500 15px "Manrope",sans-serif;outline:0
 }
-.offer-field input:focus,.offer-field select:focus,.offer-field textarea:focus{border-color:#9A773D;box-shadow:0 0 0 3px rgba(154,119,61,.08)}
+.offer-field input:focus,.offer-field select:focus,.offer-field textarea:focus{border-color:#A67C32;box-shadow:0 0 0 3px rgba(154,119,61,.08)}
 .offer-help{margin:0;color:#8a9197;font-size:12px;line-height:1.55}
 .offer-contact-row{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px}
 .offer-heraldry-wrap{position:relative}
@@ -33,7 +33,7 @@
   display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 18px;
   border:1px solid #d8d2c6;background:#fbfaf7;color:#665d50;font:600 13px "Manrope",sans-serif;cursor:pointer
 }
-.offer-not-found:hover{border-color:#9A773D;background:#fffaf0;color:var(--navy)}
+.offer-not-found:hover{border-color:#A67C32;background:#fffaf0;color:var(--navy)}
 .offer-custom[hidden]{display:none!important}
 .offer-size-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .offer-size-input{position:relative}
