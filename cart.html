@@ -6,7 +6,7 @@
 <meta name="description" content="Корзина заказов настенных гербов Держава.">
 <meta name="theme-color" content="#07182a">
 <link rel="stylesheet" href="styles.css?v=20261117-shop1">
-<link rel="stylesheet" href="shop.css?v=20261117-shop3">
+<link rel="stylesheet" href="shop.css?v=20261117-shop4">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner">
@@ -20,13 +20,17 @@
 <div class="commerce-head"><div><p class="eyebrow">Ваш заказ</p><h1>Корзина</h1></div><p>Проверьте выбранные размеры и количество. Доставка и окончательный срок подтверждаются менеджером после оформления.</p></div>
 <div class="commerce-shell"><div><div class="cart-list" data-cart-list></div>
 <section class="checkout-panel" data-checkout-panel hidden><h2>Оформление заказа</h2><p>Заполните контакты. Эти данные сохранятся в личном кабинете на текущем устройстве.</p>
-<form data-checkout-form><div class="checkout-grid">
-<div class="field"><label>Имя / контактное лицо</label><input name="name" required autocomplete="name"></div>
-<div class="field"><label>Телефон</label><input name="phone" required autocomplete="tel"></div>
-<div class="field"><label>Email</label><input name="email" type="email" autocomplete="email"></div>
-<div class="field"><label>Организация</label><input name="organization"></div>
-<div class="field"><label>ИНН</label><input name="inn" inputmode="numeric"></div>
-<div class="field"><label>Способ получения</label><select name="delivery"><option>Доставка транспортной компанией</option><option>Самовывоз</option><option>Согласовать с менеджером</option></select></div>
+<form data-checkout-form><div class="checkout-grid checkout-grid-columns">
+<div class="checkout-column">
+  <div class="field"><label>Имя / контактное лицо</label><input name="name" required autocomplete="name"></div>
+  <div class="field"><label>Телефон</label><input name="phone" required autocomplete="tel"></div>
+  <div class="field"><label>Способ получения</label><select name="delivery"><option>Доставка транспортной компанией</option><option>Самовывоз</option><option>Согласовать с менеджером</option></select></div>
+</div>
+<div class="checkout-column">
+  <div class="field"><label>Организация</label><input name="organization" placeholder="Не обязательно"></div>
+  <div class="field"><label>Email</label><input name="email" type="email" autocomplete="email" placeholder="Не обязательно"></div>
+  <div class="field"><label>ИНН</label><input name="inn" inputmode="numeric" placeholder="Не обязательно"></div>
+</div>
 <div class="field full"><label>Адрес доставки</label><input name="address" autocomplete="street-address"></div>
 <div class="field full"><label>Комментарий</label><textarea name="comment" placeholder="Например: нужны счёт и договор на организацию"></textarea></div>
 </div><div class="checkout-actions"><button class="checkout-submit" type="submit">Оформить заказ</button><button class="checkout-cancel" type="button" data-checkout-cancel>Отмена</button></div></form>
