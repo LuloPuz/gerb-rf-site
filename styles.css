@@ -1294,3 +1294,69 @@ body.lightbox-open{overflow:hidden}
     padding:20px !important;
   }
 }
+
+
+/* Page back navigation */
+.page-back-nav{
+  display:flex;
+  align-items:center;
+  margin:0 0 18px;
+}
+.page-back-button{
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  gap:11px;
+  min-height:50px;
+  padding:0 18px 0 13px;
+  border:1px solid rgba(154,119,61,.28);
+  border-radius:16px;
+  background:rgba(255,255,255,.52);
+  color:var(--navy);
+  box-shadow:0 10px 28px rgba(7,24,42,.07);
+  backdrop-filter:blur(14px) saturate(125%);
+  -webkit-backdrop-filter:blur(14px) saturate(125%);
+  font:700 12px "Golos Text",sans-serif;
+  cursor:pointer;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.page-back-button::before{
+  content:"←";
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:rgba(154,119,61,.10);
+  color:#9A773D;
+  font-size:18px;
+  font-weight:500;
+  line-height:1;
+  transition:transform .2s ease,background .2s ease;
+}
+.page-back-button:hover{
+  transform:translateY(-1px);
+  border-color:rgba(154,119,61,.52);
+  background:rgba(255,255,255,.76);
+  box-shadow:0 14px 34px rgba(7,24,42,.10);
+}
+.page-back-button:hover::before{
+  transform:translateX(-2px);
+  background:rgba(154,119,61,.16);
+}
+.page-back-button:focus-visible{
+  outline:2px solid rgba(154,119,61,.62);
+  outline-offset:3px;
+}
+@media(max-width:650px){
+  .page-back-nav{margin-bottom:15px}
+  .page-back-button{
+    min-height:46px;
+    padding:0 15px 0 11px;
+    border-radius:14px;
+  }
+  .page-back-button::before{
+    width:28px;
+    height:28px;
+  }
+}
