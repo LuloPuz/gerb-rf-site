@@ -1687,7 +1687,7 @@
   // for a subject/city that already has real product photos, show those
   // products inside the "Subjects and cities" filter instead of the
   // generic text-only directory card.
-  const moscowCityQuery=/\b(?:мск|москв(?:а|ы|е|у|ой)?)\b/.test(qNorm) && !/\bобласт/.test(qNorm);
+  const moscowCityQuery=(/\bмск\b/.test(qNorm) || /\bмоск(?:в(?:а|ы|е|у|ой)?)?\b/.test(qNorm)) && !/\bобласт/.test(qNorm);
   let visible=0;
 
   popular.forEach(card=>{
