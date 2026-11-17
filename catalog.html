@@ -5,7 +5,7 @@
 <title>Весь каталог | Держава</title>
 <meta name="description" content="Полный каталог настенных гербов: герб Российской Федерации и герб Москвы во всех доступных исполнениях, покрытиях и материалах щита.">
 <meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261116-allcatalog2">
+<link rel="stylesheet" href="styles.css?v=20261117-allcatalog3">
 <style>
 .all-head{padding:58px 0 38px;border-bottom:1px solid var(--line)}
 .all-breadcrumb{margin:0 0 24px;color:#7a8187;font-size:13px}
@@ -40,19 +40,19 @@
 .all-group-side strong{font-family:"PT Serif",serif;font-size:34px;font-weight:400;color:var(--navy)}
 .all-group-side span{color:#7b8389;font-size:11px}
 .all-group-side a{grid-column:1/-1;margin-top:7px;color:#8a6e39;font-size:11px;font-weight:700}
-.all-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.all-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .all-product-card{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:.22s}
 .all-product-card:hover{transform:translateY(-4px);border-color:#cfbd98;box-shadow:0 18px 42px rgba(7,24,42,.09)}
 .all-product-hit{position:absolute;inset:0;z-index:5}
-.all-product-media{height:300px;display:flex;align-items:center;justify-content:center;padding:22px;overflow:hidden;background:#fbfaf7;border-bottom:1px solid #e7e1d7}
+.all-product-media{height:230px;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;background:#fbfaf7;border-bottom:1px solid #e7e1d7}
 .all-product-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(var(--media-scale,1));transition:transform .35s ease}
 .all-product-card:hover .all-product-media img{transform:scale(calc(var(--media-scale,1) + .025))}
-.all-product-body{display:flex;flex:1;flex-direction:column;padding:22px 22px 20px;min-height:235px}
-.all-product-kicker{height:18px;color:#9A773D;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.all-product-body h3{margin:12px 0 0;min-height:76px;font-family:"PT Serif",serif;font-size:24px;font-weight:400;line-height:1.18;color:var(--navy)}
-.all-product-body>p{margin:0;min-height:38px;color:#737d84;font-size:12px;line-height:1.5}
-.all-product-foot{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-top:auto;padding-top:18px;border-top:1px solid #eee9df;color:#806b45;font-size:11px}
-.all-product-foot strong{margin-left:3px;font-family:"PT Serif",serif;font-size:20px;font-weight:400;color:var(--navy)}
+.all-product-body{display:flex;flex:1;flex-direction:column;padding:17px 17px 16px;min-height:205px}
+.all-product-kicker{height:16px;color:#9A773D;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.all-product-body h3{margin:10px 0 0;min-height:68px;font-family:"PT Serif",serif;font-size:20px;font-weight:400;line-height:1.17;color:var(--navy)}
+.all-product-body>p{margin:0;min-height:34px;color:#737d84;font-size:11px;line-height:1.45}
+.all-product-foot{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;border-top:1px solid #eee9df;color:#806b45;font-size:10px}
+.all-product-foot strong{margin-left:3px;font-family:"PT Serif",serif;font-size:18px;font-weight:400;color:var(--navy)}
 .catalog-filter-hidden{display:none !important}
 .all-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
 .all-empty.show{display:block}
@@ -62,13 +62,14 @@
 .all-directory-link{display:flex;justify-content:space-between;gap:20px;padding:24px;border:1px solid #ded8ca;background:#fff}
 .all-directory-link strong{font-family:"PT Serif",serif;font-size:24px;font-weight:400;color:var(--navy)}
 .all-directory-link span{align-self:center;color:#9A773D;font-size:12px;font-weight:700}
-@media(max-width:1050px){.all-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.all-hero{grid-template-columns:1fr;gap:20px}.all-tools{top:78px}}
+@media(max-width:1180px){.all-product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.all-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.all-hero{grid-template-columns:1fr;gap:20px}.all-tools{top:78px}}
 @media(max-width:700px){
  .all-head{padding:38px 0 28px}.all-hero h1{font-size:46px}.all-tools{position:relative;top:auto;padding:18px 0}
  .all-search-row{grid-template-columns:1fr}.all-count{min-height:42px}.all-filter-row{flex-wrap:nowrap;overflow:auto;padding-bottom:3px}.all-filter{white-space:nowrap}
  .all-group{scroll-margin-top:20px;margin-bottom:54px}.all-group-banner{grid-template-columns:58px minmax(0,1fr);gap:16px;padding:21px}.all-group-letter{width:54px;height:54px;font-size:28px}
  .all-group-copy h2{font-size:29px}.all-group-side{grid-column:1/-1;text-align:left;display:flex;gap:6px;align-items:baseline}.all-group-side a{margin-left:auto}
- .all-product-grid{grid-template-columns:1fr}.all-product-media{height:300px}.all-product-body{min-height:0}.all-product-body h3{min-height:0}.all-product-body>p{min-height:0;margin-top:8px}
+ .all-product-grid{grid-template-columns:1fr}.all-product-media{height:280px}.all-product-body{min-height:0}.all-product-body h3{min-height:0;font-size:23px}.all-product-body>p{min-height:0;margin-top:8px;font-size:12px}
  .all-directory-links{grid-template-columns:1fr}
 }
 </style>
@@ -284,7 +285,7 @@
 </div></section>
 </main>
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Субъекты и города РФ</a><a href="emblemy-vedomstv-rf.html">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
-<script src="script.js?v=20261116-allcatalog2"></script>
+<script src="script.js?v=20261117-allcatalog3"></script>
 <script>
 (function(){
  const input=document.getElementById('allSearch'),clear=document.getElementById('allClear'),count=document.getElementById('allCount'),empty=document.getElementById('allEmpty');
