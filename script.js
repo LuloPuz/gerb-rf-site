@@ -1,3 +1,34 @@
+// Unified site header navigation
+(() => {
+  const nav=document.querySelector('.main-nav');
+  if(!nav) return;
+
+  const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const isHome=path===''||path==='index.html';
+
+  const items=[
+    {label:'Каталог',href:isHome?'#catalog':'catalog.html',active:path==='catalog.html'},
+    {label:'Герб РФ',href:'gerb-rf.html',active:path.startsWith('gerb-rf')},
+    {label:'Герб Москвы',href:'gerb-moskvy.html',active:path.startsWith('gerb-moskvy')},
+    {label:'Регионы',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html'},
+    {label:'Ведомства',href:'emblemy-vedomstv-rf.html',active:path==='emblemy-vedomstv-rf.html'},
+    {label:'Производство',href:isHome?'#production':'index.html#production',active:false}
+  ];
+
+  nav.setAttribute('aria-label','Основная навигация');
+  nav.innerHTML=items.map(item =>
+    '<a'+(item.active?' class="nav-active"':'')+' href="'+item.href+'">'+item.label+'</a>'
+  ).join('');
+
+  // Keep the mobile menu behavior after replacing the links.
+  nav.querySelectorAll('a').forEach(link=>{
+    link.addEventListener('click',()=>{
+      nav.classList.remove('open');
+      document.querySelector('.nav-toggle')?.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+
 // Derzhava commerce assets
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
@@ -280,9 +311,3 @@ document.addEventListener('keydown', event => {
 })();
 
 
-// Compact production nav label
-document.querySelectorAll('.main-nav a').forEach(link => {
-  if ((link.textContent || '').trim() === 'О производстве') {
-    link.textContent = 'Производство';
-  }
-});
