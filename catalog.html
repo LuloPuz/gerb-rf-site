@@ -5,7 +5,7 @@
 <title>Весь каталог | Держава</title>
 <meta name="description" content="Полный каталог Державы: гербы субъектов и городов Российской Федерации, эмблемы ведомств и популярные готовые исполнения с фотографиями.">
 <meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261117-catalogsearch2">
+<link rel="stylesheet" href="styles.css?v=20261117-catalogsearch3">
 <style>
 .catalog-head-full{padding:58px 0 38px;border-bottom:1px solid var(--line)}
 .catalog-breadcrumb-full{margin:0 0 24px;color:#7a8187;font-size:13px}
@@ -1585,7 +1585,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261117-catalogsearch2"></script>
+<script src="script.js?v=20261117-catalogsearch3"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
@@ -1641,7 +1641,7 @@
 
  const aliasesFor=value=>{
    const low=normalize(value);
-   let aliases=' россия российская федерация рф';
+   let aliases='';
    if(/министерств.*внутренн.*дел|\bмвд\b/.test(low)) aliases+=' мвд полиция';
    if(/чрезвычайн|\bмчс\b/.test(low)) aliases+=' мчс';
    if(/федеральн.*служб.*безопасност|\bфсб\b/.test(low)) aliases+=' фсб';
@@ -1660,6 +1660,7 @@
    if(/государственн.*дум/.test(low)) aliases+=' госдума гд';
    if(/совет.*федерац/.test(low)) aliases+=' совфед сф';
    if(/генеральн.*прокурат/.test(low)) aliases+=' генпрокуратура прокуратура';
+   if(/герб.*(росси|российск)|росси.*герб|двуглав.*орел/.test(low)) aliases+=' россия россии российская российской федерация рф государственный герб';
    if(/бархат/.test(low)) aliases+=' флок';
    if(/металл/.test(low)) aliases+=' металлический металлическом';
    if(/пластик/.test(low)) aliases+=' пластиковый пластиковом';
@@ -1682,7 +1683,10 @@
 
   popular.forEach(card=>{
    const allowed=active==='all'||active==='popular';
-   const hay=(card.dataset.search||'')+' '+card.textContent;
+   const title=card.querySelector('h3')?.textContent || '';
+   const kicker=card.querySelector('.popular-kicker')?.textContent || '';
+   const finish=card.querySelector('.popular-body>p')?.textContent || '';
+   const hay=(card.dataset.search||'')+' '+title+' '+kicker+' '+finish;
    const show=allowed && queryMatches(q,hay);
    card.classList.toggle('catalog-hidden',!show);
    card.hidden=!show;
@@ -1696,7 +1700,8 @@
   directory.forEach(card=>{
    const kind=card.dataset.kind;
    const allowed=active==='all'||active===kind;
-   const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+card.textContent;
+   const title=card.querySelector('h3')?.textContent || '';
+   const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+title;
    const matchesQuery=allowed && queryMatches(q,hay);
 
    // A directory card is only a fallback. If matching real product cards
