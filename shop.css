@@ -297,3 +297,50 @@
 @media(max-width:1050px){
   .main-nav{gap:0!important}
 }
+
+
+/* Final compact header composition */
+.header-inner{
+  min-height:88px!important;
+  display:grid!important;
+  grid-template-columns:270px minmax(360px,1fr) auto auto!important;
+  gap:22px!important;
+  align-items:center!important;
+}
+.header-site-search{position:relative;width:100%;min-width:0}
+.header-site-search .home-search-ui{position:relative;width:100%}
+.header-site-search .home-search-form{
+  display:grid!important;
+  grid-template-columns:50px minmax(0,1fr) 96px!important;
+  width:100%!important;
+  min-height:52px!important;
+  border:1px solid #d7d0c4!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.header-site-search .home-search-form:focus-within{
+  border-color:#a98546!important;
+  box-shadow:0 0 0 3px rgba(198,161,91,.10)!important;
+}
+.header-site-search .home-search-icon{width:50px!important;color:#92723d!important}
+.header-site-search .home-search-input{height:50px!important;padding-right:12px!important;font-size:13px!important;font-weight:450!important}
+.header-site-search .home-search-submit{min-width:96px!important;padding:0 16px!important;font-size:11px!important}
+.header-site-search .home-search-results{top:58px!important;left:0!important;right:0!important;z-index:200!important;max-height:440px!important}
+.header-inner>.main-nav{display:flex!important;align-items:center!important;gap:22px!important;margin:0!important;font-size:13px!important;font-weight:500!important;white-space:nowrap}
+.header-inner>.main-nav a{min-height:52px!important;display:flex!important;align-items:center!important}
+.header-inner>.shop-header-actions{margin:0!important;padding-left:14px!important;border-left:1px solid rgba(7,24,42,.09)!important}
+@media(max-width:1050px){
+  .header-inner{grid-template-columns:220px minmax(280px,1fr) auto!important}
+  .header-inner>.main-nav{display:none!important}
+}
+@media(max-width:720px){
+  .header-inner{min-height:auto!important;grid-template-columns:1fr auto!important;gap:10px 12px!important;padding-top:12px!important;padding-bottom:12px!important}
+  .header-inner>.brand{grid-column:1}
+  .header-inner>.shop-header-actions{grid-column:2;grid-row:1;margin-left:auto!important;padding-left:0!important;border-left:0!important}
+  .header-site-search{grid-column:1/-1;grid-row:2}
+  .header-site-search .home-search-form{grid-template-columns:44px minmax(0,1fr)!important}
+  .header-site-search .home-search-icon{width:44px!important}
+  .header-site-search .home-search-input{font-size:12px!important}
+  .header-site-search .home-search-submit{grid-column:1/-1;min-height:42px;border-left:0!important;border-top:1px solid #cfbd98!important}
+  .header-site-search .home-search-results{top:100px!important}
+}
