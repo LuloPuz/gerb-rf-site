@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#07182a">
 <link rel="stylesheet" href="styles.css?v=20261117-offer1">
 <link rel="stylesheet" href="shop.css?v=20261117-headersearch3">
-<link rel="stylesheet" href="offer.css?v=20261117-offer3">
+<link rel="stylesheet" href="offer.css?v=20261117-offer4">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner">
@@ -19,8 +19,11 @@
 <div class="container">
 <p class="offer-crumbs"><a href="index.html">Главная</a> / Получить предложение</p>
 <div class="offer-head">
-  <div><p class="eyebrow">Индивидуальный запрос</p><h1>Получить предложение</h1></div>
-  <p>Укажите, какой герб вам нужен и примерный размер. Мы подготовим вариант исполнения и свяжемся удобным для вас способом.</p>
+  <div>
+    <p class="eyebrow">Индивидуальный запрос</p>
+    <h1>Получить предложение</h1>
+    <p class="offer-head-note">Укажите, какой герб вам нужен и примерный размер. Мы подготовим вариант исполнения и свяжемся удобным для вас способом. Если какие-то данные пока неизвестны, поля можно оставить пустыми — уточним всё позже.</p>
+  </div>
 </div>
 
 <form class="offer-form" data-offer-form>
@@ -29,12 +32,12 @@
   <div class="offer-contact-stack">
     <div class="offer-field">
       <label>Имя</label>
-      <input name="name" required autocomplete="name" placeholder="Как к вам обращаться">
+      <input name="name" autocomplete="name" placeholder="Как к вам обращаться">
     </div>
 
     <div class="offer-field">
       <label>Как вам удобнее связаться?</label>
-      <select name="contact_method" required>
+      <select name="contact_method">
         <option value="phone">По телефону</option>
         <option value="telegram">Telegram</option>
         <option value="max">MAX</option>
@@ -45,7 +48,7 @@
 
     <div class="offer-field">
       <label data-contact-label>Номер телефона для связи</label>
-      <input name="contact_value" required type="tel" placeholder="+7 999 999-99-99">
+      <input name="contact_value" type="tel" placeholder="+7 999 999-99-99">
       <p class="offer-help" data-contact-help></p>
     </div>
   </div>
@@ -102,5 +105,5 @@
 
 <script src="offer-data.js?v=20261117-offer1"></script>
 <script src="script.js?v=20261117-headersearch3"></script>
-<script src="offer.js?v=20261117-offer1"></script>
+<script src="offer.js?v=20261117-offer4"></script>
 </body></html>
