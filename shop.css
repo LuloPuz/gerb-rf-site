@@ -13,8 +13,8 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  width:39px;
-  height:39px;
+  width:44px;
+  height:44px;
   border:0;
   border-radius:50%;
   background:transparent;
@@ -26,21 +26,21 @@
   background:rgba(154,119,61,.075);
   transform:translateY(-1px);
 }
-.shop-header-link svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.65}
+.shop-header-link svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.65}
 .shop-cart-count{
   position:absolute;
-  right:-1px;
-  top:1px;
+  right:-2px;
+  top:0;
   display:grid;
   place-items:center;
-  min-width:17px;
-  height:17px;
+  min-width:19px;
+  height:19px;
   padding:0 4px;
   border:2px solid var(--paper);
   border-radius:9px;
   background:var(--gold);
   color:var(--navy);
-  font:800 8px "Golos Text",sans-serif;
+  font:800 9px "Golos Text",sans-serif;
   box-shadow:none;
 }
 .shop-cart-count[data-empty="true"]{display:none}
@@ -246,15 +246,15 @@
   border-bottom:1px solid rgba(7,24,42,.075)!important;
   box-shadow:0 1px 0 rgba(255,255,255,.6)!important;
 }
-.header-inner{min-height:76px!important;gap:24px!important}
+.header-inner{min-height:82px!important;gap:26px!important}
 .brand{min-width:260px!important}
-.brand small{font-size:8px!important;letter-spacing:.07em!important;color:#7a838b!important}
-.main-nav{gap:25px!important;font-size:12px!important;font-weight:650!important}
+.brand small{font-size:9px!important;letter-spacing:.065em!important;color:#7a838b!important}
+.main-nav{gap:28px!important;font-size:14px!important;font-weight:650!important}
 .main-nav a{
   position:relative!important;
   display:flex!important;
   align-items:center!important;
-  min-height:76px!important;
+  min-height:82px!important;
   white-space:nowrap!important;
   color:#33404c;
 }
@@ -273,7 +273,7 @@
 .header-cta{display:none!important}
 @media(max-width:1050px){
   .main-nav{
-    top:76px!important;
+    top:82px!important;
     gap:0!important;
     padding:14px 18px!important;
     align-items:stretch!important;
