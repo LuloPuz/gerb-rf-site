@@ -221,3 +221,138 @@
   .home-search-copy h2{font-size:26px!important}
   .home-search-input{font-size:12px!important}
 }
+
+
+/* iPhone 13 homepage contrast + compact catalog */
+@media (max-width: 430px){
+
+  /* HERO: stronger readability over photo */
+  .hero{
+    background-position:61% center!important;
+  }
+  .hero::before{
+    background:
+      linear-gradient(180deg,
+        rgba(3,15,28,.90) 0%,
+        rgba(3,15,28,.84) 38%,
+        rgba(3,15,28,.77) 68%,
+        rgba(3,15,28,.67) 100%
+      )!important;
+  }
+  .hero h1,
+  .hero-lead,
+  .hero-note{
+    text-shadow:0 2px 12px rgba(0,0,0,.36);
+  }
+  .hero h1{
+    color:#fff!important;
+  }
+  .hero-lead{
+    color:#f7f7f5!important;
+  }
+  .hero-note{
+    color:#e2e7eb!important;
+  }
+
+  /* CATALOG: two compact product cards per row */
+  .popular-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  .popular-card{
+    min-width:0!important;
+    box-shadow:0 6px 16px rgba(7,24,42,.035)!important;
+  }
+  .popular-media{
+    height:126px!important;
+    min-height:126px!important;
+    padding:8px!important;
+  }
+  .popular-body{
+    min-height:138px!important;
+    padding:11px 10px 10px!important;
+  }
+  .popular-kicker{
+    height:auto!important;
+    min-height:0!important;
+    margin:0 0 6px!important;
+    font-size:9px!important;
+    font-weight:600!important;
+    line-height:1.25!important;
+    letter-spacing:.055em!important;
+  }
+  .popular-body h3{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    overflow:hidden!important;
+    min-height:54px!important;
+    max-height:54px!important;
+    margin:0!important;
+    font-size:16px!important;
+    line-height:1.13!important;
+  }
+  .popular-body>p{
+    display:none!important;
+  }
+  .popular-foot{
+    gap:4px!important;
+    margin-top:auto!important;
+    padding-top:9px!important;
+    font-size:9px!important;
+    line-height:1.2!important;
+  }
+  .popular-foot strong{
+    margin-left:1px!important;
+    font-size:15px!important;
+    white-space:nowrap!important;
+  }
+  .popular-foot>span:last-child{
+    display:none!important;
+  }
+
+  /* Directory cards also stay compact, two per row */
+  .directory-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+  .directory-card{
+    min-height:158px!important;
+    padding:13px 11px 12px!important;
+  }
+  .directory-card-top{
+    height:auto!important;
+    min-height:18px!important;
+  }
+  .directory-type{
+    font-size:8px!important;
+    font-weight:600!important;
+    letter-spacing:.05em!important;
+  }
+  .directory-arrow{
+    font-size:13px!important;
+  }
+  .directory-card h3{
+    min-height:54px!important;
+    max-height:54px!important;
+    margin-top:8px!important;
+    font-size:16px!important;
+    line-height:1.13!important;
+  }
+  .directory-card p{
+    display:none!important;
+  }
+  .directory-link{
+    padding-top:8px!important;
+    font-size:9px!important;
+    font-weight:600!important;
+  }
+
+  /* Slightly tighter catalog section spacing on phone */
+  .catalog-section{
+    margin-bottom:38px!important;
+  }
+  .catalog-section-head{
+    margin-bottom:14px!important;
+  }
+}
