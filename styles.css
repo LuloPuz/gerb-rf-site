@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=PT+Serif:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=PT+Serif:wght@400;700&display=swap');
 
 :root{
   --navy:#07182a;
@@ -17,7 +17,7 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Golos Text",Arial,sans-serif;line-height:1.6}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",Arial,sans-serif;line-height:1.6}
 a{color:inherit;text-decoration:none}
 .container{width:min(1440px,calc(100% - 40px));margin:0 auto}
 
@@ -59,12 +59,12 @@ a{color:inherit;text-decoration:none}
 .header-cta{display:none!important}
 .nav-toggle{display:none;border:0;background:transparent;font-size:26px;color:var(--navy);cursor:pointer}
 
-.button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:1px solid transparent;font-size:13px;font-weight:700;letter-spacing:.03em;transition:.2s}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:1px solid transparent;font-size:13px;font-weight:600;letter-spacing:.03em;transition:.2s}
 .button-gold{background:var(--gold);color:var(--navy)}
 .button-gold:hover{background:var(--gold-2);transform:translateY(-1px)}
 .button-outline{border-color:rgba(255,255,255,.45);color:#fff}
 .button-outline:hover{border-color:var(--gold);color:var(--gold-2)}
-.text-link{font-weight:700;color:var(--navy)}
+.text-link{font-weight:600;color:var(--navy)}
 .text-link:hover{color:var(--gold)}
 
 .hero{
@@ -138,14 +138,14 @@ a{color:inherit;text-decoration:none}
 .category-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
 .product-visual{height:240px;display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#7f121a,#b6202c);color:#f1d791}
 .product-visual::before{content:"";position:absolute;width:142px;height:142px;border:1px solid rgba(246,216,150,.6);border-radius:50%;box-shadow:0 0 0 18px rgba(246,216,150,.07),0 0 0 38px rgba(246,216,150,.035)}
-.product-visual span{position:relative;font-family:"PT Serif",serif;font-weight:700;letter-spacing:.08em}
+.product-visual span{position:relative;font-family:"PT Serif",serif;font-weight:600;letter-spacing:.08em}
 .visual-moscow{background:linear-gradient(135deg,#8f1722,#c62b31)}
 .visual-region{background:linear-gradient(135deg,#173d5b,#285f85)}
 .visual-city{background:linear-gradient(135deg,#4a3427,#7d563b)}
 .card-body{padding:24px}
 .card-body h3{margin:0 0 10px;font-family:"PT Serif",serif;font-size:23px;line-height:1.2;color:var(--navy)}
 .card-body p{min-height:84px;margin:0 0 18px;color:var(--muted);font-size:13px}
-.card-body a{font-size:12px;font-weight:700;color:#7b5f2f}
+.card-body a{font-size:12px;font-weight:600;color:#7b5f2f}
 
 .section-dark{background:var(--navy);color:#fff}
 .section-dark h2{color:#fff}
@@ -224,7 +224,7 @@ a{color:inherit;text-decoration:none}
   .split-heading{gap:20px}.cta h2{font-size:36px}.footer-grid{gap:36px}.legal-line{flex-direction:column}
 }
 /* Typography system: PT Serif for display, Golos Text for interface */
-.main-nav,.button,.card-body p,.benefit-grid p,.split-heading>p,.material-grid p,.site-footer{font-family:"Golos Text",Arial,sans-serif}
+.main-nav,.button,.card-body p,.benefit-grid p,.split-heading>p,.material-grid p,.site-footer{font-family:"Manrope",Arial,sans-serif}
 .card-body h3,.benefit-grid h3,.material-grid h3,.interior-card h3{font-family:"PT Serif",serif}
 @media(max-width:1050px){
   .trust-row{grid-template-columns:repeat(2,1fr);row-gap:14px}
@@ -252,7 +252,7 @@ a{color:inherit;text-decoration:none}
 .catalog-tabs{display:grid;grid-template-columns:repeat(4,1fr)}
 .catalog-tab{display:flex;align-items:center;gap:15px;padding:22px 26px;border-right:1px solid var(--line);font-family:"PT Serif",serif;font-size:18px;color:var(--navy);transition:.2s}
 .catalog-tab:first-child{border-left:1px solid var(--line)}
-.catalog-tab span{font-family:"Golos Text",sans-serif;font-size:10px;color:#9b865c}
+.catalog-tab span{font-family:"Manrope",sans-serif;font-size:10px;color:#9b865c}
 .catalog-tab:hover{background:var(--cream)}
 .catalog-tab.active{background:var(--navy);color:#fff}
 .catalog-tab.active span{color:var(--gold-2)}
@@ -268,11 +268,11 @@ a{color:inherit;text-decoration:none}
 .product-image-placeholder span{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase}
 .product-image-placeholder small{font-family:"PT Serif",serif;font-size:15px;color:#817865}
 .product-info{padding:32px 34px 36px}
-.product-type{margin:0 0 9px;color:#9a7941;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.product-type{margin:0 0 9px;color:#9a7941;font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}
 .product-info h3{margin:0 0 15px;font-family:"PT Serif",serif;font-size:31px;font-weight:400;line-height:1.15;color:var(--navy)}
 .product-info>p:not(.product-type){max-width:620px;min-height:68px;margin:0;color:var(--muted);font-size:13px}
 .product-actions{display:flex;align-items:center;gap:24px;margin-top:27px}
-.product-more{font-size:12px;font-weight:700;color:#7b5f2f}
+.product-more{font-size:12px;font-weight:600;color:#7b5f2f}
 .catalog-note{background:#efe9dd;border-top:1px solid #ded5c4}
 .catalog-note-inner{min-height:112px;display:flex;align-items:center;gap:50px}
 .catalog-note-inner>span{font-family:"PT Serif",serif;font-size:20px;letter-spacing:.08em;color:var(--navy)}
@@ -423,9 +423,9 @@ a{color:inherit;text-decoration:none}
 .final-product-info h1{margin:10px 0 4px;font-family:"PT Serif",serif;font-size:clamp(42px,4.3vw,64px);font-weight:400;line-height:1.05;color:var(--navy)}
 .final-finish{margin:0 0 32px;font-family:"PT Serif",serif;font-size:23px;color:#777066}
 .final-price{padding:0 0 25px;border-bottom:1px solid var(--line);font-family:"PT Serif",serif;font-size:42px;color:var(--navy)}
-.size-label{margin:27px 0 13px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#777}
+.size-label{margin:27px 0 13px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#777}
 .size-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.size-option{padding:14px 12px;border:1px solid #d9d2c6;background:#fff;color:var(--navy);font:600 13px "Golos Text",sans-serif;cursor:pointer;transition:.18s}
+.size-option{padding:14px 12px;border:1px solid #d9d2c6;background:#fff;color:var(--navy);font:600 13px "Manrope",sans-serif;cursor:pointer;transition:.18s}
 .size-option:hover{border-color:#a98a50}
 .size-option.active{border-color:var(--navy);background:var(--navy);color:#fff}
 .production-time{display:grid;gap:5px;margin:26px 0;padding:18px 20px;border-left:2px solid var(--gold);background:#f0ebdf}
@@ -442,7 +442,7 @@ a{color:inherit;text-decoration:none}
 .custom-size-inner>div:first-child{max-width:780px}
 .custom-size-inner p:not(.eyebrow){color:#606970;line-height:1.7}
 .custom-size-actions{min-width:260px;display:flex;flex-direction:column;align-items:stretch;gap:12px;text-align:center}
-.messenger-note{font-size:12px;font-weight:700;letter-spacing:.1em;color:#8a7044}
+.messenger-note{font-size:12px;font-weight:600;letter-spacing:.1em;color:#8a7044}
 .contact-phone{font-family:"PT Serif",serif;font-size:20px;color:var(--navy)}
 @media(max-width:900px){
  .final-product-grid,.product-about-grid,.custom-size-inner{grid-template-columns:1fr;gap:34px}
@@ -500,7 +500,7 @@ a{color:inherit;text-decoration:none}
   border:1px solid rgba(7,24,42,.16);
   background:rgba(252,250,245,.92);
   color:var(--navy);
-  font:600 11px "Golos Text",sans-serif;
+  font:600 11px "Manrope",sans-serif;
   letter-spacing:.05em;
 }
 .final-product-thumbs{flex:0 0 88px;height:88px}
@@ -618,7 +618,7 @@ body.lightbox-open{overflow:hidden}
 }
 .custom-size-inline:hover{background:#f3ead7;border-color:#9A773D}
 .custom-size-inline strong{font-family:"PT Serif",serif;font-size:15px;font-weight:600}
-.custom-size-inline span{font-weight:700;color:#9A773D;white-space:nowrap}
+.custom-size-inline span{font-weight:600;color:#9A773D;white-space:nowrap}
 .custom-size{
   padding:52px 0;
   background:#e8dfcf;
@@ -759,7 +759,7 @@ body.lightbox-open{overflow:hidden}
   padding-right:18px !important;
 }
 .final-product-info .custom-size-inline-copy small{
-  font-family:"Golos Text",sans-serif !important;
+  font-family:"Manrope",sans-serif !important;
   font-size:12px !important;
   font-weight:400 !important;
   line-height:1.45 !important;
@@ -919,7 +919,7 @@ body.lightbox-open{overflow:hidden}
   outline:0;
   background:transparent;
   color:var(--navy);
-  font:500 14px "Golos Text",sans-serif;
+  font:500 14px "Manrope",sans-serif;
 }
 .home-search-input::placeholder{color:#92999f;font-weight:400}
 .home-search-input::-webkit-search-cancel-button{opacity:.45}
@@ -931,7 +931,7 @@ body.lightbox-open{overflow:hidden}
   border-left:1px solid #cfbd98;
   background:var(--gold);
   color:var(--navy);
-  font:700 12px "Golos Text",sans-serif;
+  font:600 12px "Manrope",sans-serif;
   letter-spacing:.035em;
   cursor:pointer;
   transition:background .18s ease;
@@ -948,7 +948,7 @@ body.lightbox-open{overflow:hidden}
   border:0;
   background:transparent;
   color:#7b6847;
-  font:500 11px "Golos Text",sans-serif;
+  font:500 11px "Manrope",sans-serif;
   cursor:pointer;
 }
 .home-search-hints button::before{
@@ -1274,7 +1274,7 @@ body.lightbox-open{overflow:hidden}
   min-height:58px !important;
   padding:0 32px !important;
   font-size:14px !important;
-  font-weight:700 !important;
+  font-weight:600 !important;
   letter-spacing:.025em !important;
 }
 @media(max-width:720px){
@@ -1353,7 +1353,7 @@ body.lightbox-open{overflow:hidden}
 }
 .hero-search-head span{
   color:#9A773D;
-  font:700 9px "Golos Text",sans-serif;
+  font:600 9px "Manrope",sans-serif;
   letter-spacing:.14em;
   text-transform:uppercase;
 }
@@ -1433,7 +1433,7 @@ body.lightbox-open{overflow:hidden}
 }
 .top-search-intro span{
   color:#9A773D;
-  font:700 9px "Golos Text",sans-serif;
+  font:600 9px "Manrope",sans-serif;
   letter-spacing:.15em;
   text-transform:uppercase;
 }
@@ -1629,7 +1629,7 @@ body.lightbox-open{overflow:hidden}
   border:1px solid #cfc7b7;
   background:#fff;
   color:var(--navy);
-  font:700 12px "Golos Text",sans-serif;
+  font:600 12px "Manrope",sans-serif;
   letter-spacing:.015em;
   transition:border-color .18s ease,background .18s ease,transform .18s ease;
 }
@@ -1646,4 +1646,83 @@ body.lightbox-open{overflow:hidden}
     width:100%;
     margin-top:4px;
   }
+}
+
+
+/* Typography system v2 */
+body{
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:15px;
+  line-height:1.68;
+  letter-spacing:.002em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button,input,select,textarea{
+  font-family:"Manrope",Arial,sans-serif;
+  letter-spacing:.002em;
+}
+.brand small{
+  font-size:10px!important;
+  font-weight:400!important;
+  letter-spacing:.055em!important;
+  line-height:1.35;
+}
+.main-nav{
+  font-size:14px!important;
+  font-weight:500!important;
+  letter-spacing:.006em!important;
+}
+.button{
+  font-size:14px!important;
+  font-weight:600!important;
+  letter-spacing:.012em!important;
+}
+.eyebrow{
+  font-size:12px!important;
+  font-weight:600!important;
+  letter-spacing:.145em!important;
+  line-height:1.4;
+}
+.hero-note{
+  font-size:15px!important;
+  line-height:1.68!important;
+}
+.trust-row{
+  font-size:12px!important;
+  line-height:1.5!important;
+}
+.home-search-input{
+  font-size:15px!important;
+  font-weight:400!important;
+  letter-spacing:.003em!important;
+}
+.home-search-submit{
+  font-size:13px!important;
+  font-weight:600!important;
+  letter-spacing:.012em!important;
+}
+.home-search-hints button{
+  font-size:12px!important;
+  font-weight:500!important;
+  letter-spacing:.003em!important;
+}
+.home-search-result small,
+.home-search-empty{
+  font-size:12px!important;
+  line-height:1.5!important;
+}
+.text-link{
+  font-size:14px;
+  font-weight:600!important;
+  letter-spacing:.005em;
+}
+.card-body p,
+.home-product-body p,
+.section-heading p,
+.split-heading>p,
+.footer-grid a,
+.footer-grid p{
+  font-size:14px!important;
+  line-height:1.65!important;
 }
