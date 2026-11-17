@@ -1,5 +1,7 @@
 
 (() => {
+  if(window.__derzhavaShopInit) return;
+  window.__derzhavaShopInit=true;
   const CART_KEY='derzhava_cart_v1';
   const PROFILE_KEY='derzhava_profile_v1';
   const ORDERS_KEY='derzhava_orders_v1';
