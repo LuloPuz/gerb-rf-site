@@ -409,3 +409,124 @@
   font-weight:400!important;
   line-height:1.45!important;
 }
+
+
+/* Product readability system v3 */
+.size-label,
+.final-product-info .size-label{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  letter-spacing:.075em!important;
+  line-height:1.4!important;
+  color:#5f676d!important;
+}
+.size-option,
+.final-product-info .size-option{
+  min-height:52px!important;
+  padding:14px 14px!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:16px!important;
+  font-weight:600!important;
+  line-height:1.25!important;
+  letter-spacing:.008em!important;
+}
+.size-option.active{
+  font-weight:600!important;
+}
+.final-finish{
+  font-size:25px!important;
+  line-height:1.35!important;
+  color:#6d6a64!important;
+}
+.production-time{
+  gap:7px!important;
+}
+.production-time strong{
+  font-size:19px!important;
+  line-height:1.3!important;
+}
+.production-time span{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:400!important;
+  line-height:1.65!important;
+  letter-spacing:.002em!important;
+  color:#5f6870!important;
+}
+.custom-size-inline{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  line-height:1.5!important;
+}
+.custom-size-inline strong{
+  font-size:17px!important;
+  line-height:1.35!important;
+}
+.custom-size-inline small,
+.custom-size-inline-copy small{
+  display:block;
+  margin-top:3px;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  line-height:1.55!important;
+  letter-spacing:.002em!important;
+  color:#697179!important;
+}
+.custom-size-inline>span:last-child{
+  font-size:13px!important;
+  font-weight:600!important;
+  letter-spacing:.004em!important;
+}
+.catalog-breadcrumb{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:400!important;
+  line-height:1.6!important;
+  letter-spacing:.002em!important;
+  color:#7a8289!important;
+}
+.image-zoom-hint{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  letter-spacing:.025em!important;
+}
+.product-type,
+.product-image-placeholder span,
+.messenger-note{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:1.45!important;
+  letter-spacing:.08em!important;
+}
+.product-info>p:not(.product-type),
+.catalog-section-heading>p,
+.catalog-note-inner p,
+.about-copy p,
+.custom-size-inner p:not(.eyebrow){
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:15px!important;
+  font-weight:400!important;
+  line-height:1.72!important;
+  letter-spacing:.002em!important;
+}
+.product-more{
+  font-size:13px!important;
+  font-weight:600!important;
+  letter-spacing:.004em!important;
+}
+@media(max-width:620px){
+  .size-option,
+  .final-product-info .size-option{
+    min-height:50px!important;
+    font-size:15px!important;
+  }
+  .production-time span,
+  .custom-size-inline small,
+  .custom-size-inline-copy small{
+    font-size:13px!important;
+  }
+}
