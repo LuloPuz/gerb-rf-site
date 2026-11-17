@@ -9,21 +9,63 @@
   <meta property="og:title" content="Государственная и муниципальная символика">
   <meta property="og:description" content="Настенные гербы РФ, Москвы, регионов и городов России.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="styles.css?v=20261117-homecatalog2">
+  <link rel="stylesheet" href="styles.css?v=20261117-homepicker3">
 
   <style>
-    .home-picker-section{padding:64px 0 8px;background:#fbfaf6}
-    .home-picker{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(0,1.7fr);gap:28px;padding:34px;border:1px solid #d8cfbd;background:linear-gradient(120deg,#f2eadb 0%,#fbfaf6 55%,#f4efe5 100%);box-shadow:0 16px 38px rgba(7,24,42,.05)}
-    .home-picker-intro{padding:10px 16px 10px 4px}
-    .home-picker-intro h2{margin:8px 0 14px;font-family:"PT Serif",serif;font-size:38px;font-weight:400;line-height:1.08;color:var(--navy)}
-    .home-picker-intro>p:last-of-type{margin:0 0 24px;color:#68737a;font-size:13px;line-height:1.65}
-    .home-picker-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    .home-picker-options article{position:relative;padding:18px 18px 17px;border:1px solid #ddd4c3;background:rgba(255,255,255,.72)}
-    .home-picker-options article>span{display:block;margin-bottom:7px;color:#9A773D;font-size:9px;font-weight:700;letter-spacing:.12em}
-    .home-picker-options h3{margin:0 0 7px;font-family:"PT Serif",serif;font-size:21px;font-weight:400;color:var(--navy)}
-    .home-picker-options p{margin:0;color:#737d84;font-size:11px;line-height:1.55}
-    .home-picker-options strong{font-weight:700;color:#4f5960}
-    .home-picker-wide{grid-column:span 1}
+    .home-picker-section{padding:58px 0 12px;background:#fbfaf6}
+    .home-picker-shell{border:1px solid #d8cfbd;background:#fbfaf7;box-shadow:0 16px 38px rgba(7,24,42,.045)}
+    .home-picker-heading{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:48px;align-items:end;padding:30px 32px 26px;border-bottom:1px solid #ded8ca}
+    .home-picker-heading h2{margin:7px 0 0;font-family:"PT Serif",serif;font-size:40px;font-weight:400;line-height:1.08;color:var(--navy)}
+    .home-picker-heading>p{margin:0;color:#6f7980;font-size:13px;line-height:1.65}
+    .home-picker-tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #d8d2c6}
+    .home-picker-tab{display:flex;align-items:center;gap:13px;min-height:66px;padding:0 22px;border:0;border-right:1px solid #d8d2c6;background:#fff;color:var(--navy);font:400 16px "PT Serif",serif;text-align:left;cursor:pointer}
+    .home-picker-tab:last-child{border-right:0}
+    .home-picker-tab span{color:#a68b58;font:600 9px "Golos Text",sans-serif;letter-spacing:.08em}
+    .home-picker-tab:hover{background:#f8f4eb}
+    .home-picker-tab.active{background:#07182a;color:#fff}
+    .home-picker-panel{padding:30px 32px 32px}
+    .home-picker-panel[hidden]{display:none!important}
+    .home-picker-panel-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.75fr);gap:40px;align-items:end;margin-bottom:20px}
+    .home-picker-panel-head h3{margin:5px 0 0;font-family:"PT Serif",serif;font-size:34px;font-weight:400;color:var(--navy)}
+    .home-picker-panel-head>p{margin:0;color:#737d84;font-size:12px;line-height:1.6}
+    .home-picker-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .home-picker-choice{display:grid;grid-template-columns:minmax(230px,.9fr) minmax(0,1.1fr);min-height:300px;border:1px solid #ded8ca;background:#fff;transition:.22s}
+    .home-picker-choice:hover{transform:translateY(-3px);border-color:#cfbd98;box-shadow:0 16px 34px rgba(7,24,42,.075)}
+    .home-picker-choice-media{display:flex;align-items:center;justify-content:center;padding:22px;background:#fbfaf7;border-right:1px solid #e4ded3;overflow:hidden}
+    .home-picker-choice-media img{display:block;width:100%;height:100%;max-width:100%;max-height:250px;object-fit:contain;object-position:center;transition:transform .35s ease}
+    .home-picker-choice:hover .home-picker-choice-media img{transform:scale(1.035)}
+    .home-picker-choice-body{display:flex;flex-direction:column;padding:24px}
+    .home-picker-choice-body .product-type{margin:0 0 10px;color:#9A773D!important;font-size:10px!important;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    .home-picker-choice-body h4{margin:0 0 10px;font-family:"PT Serif",serif;font-size:27px;font-weight:400;line-height:1.12;color:var(--navy)}
+    .home-picker-choice-body>p:not(.product-type){margin:0;color:#737d84;font-size:12px;line-height:1.55}
+    .home-picker-choice-body>span{margin-top:auto;padding-top:18px;color:#8a6e39;font-size:11px;font-weight:700}
+    .home-picker-material-note{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ded8ca;background:#f5efe4}
+    .home-picker-material-note>div{padding:16px 20px;border-right:1px solid #ddd3c0}
+    .home-picker-material-note>div:last-child{border-right:0}
+    .home-picker-material-note strong{display:block;margin-bottom:4px;color:#9A773D;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+    .home-picker-material-note span{color:#5f686f;font-size:11px}
+    @media(max-width:1050px){
+      .home-picker-heading,.home-picker-panel-head{grid-template-columns:1fr;gap:12px}
+      .home-picker-tabs{grid-template-columns:1fr 1fr}
+      .home-picker-tab:nth-child(2){border-right:0}
+      .home-picker-tab:nth-child(-n+2){border-bottom:1px solid #d8d2c6}
+      .home-picker-choice{grid-template-columns:1fr;min-height:0}
+      .home-picker-choice-media{height:270px;border-right:0;border-bottom:1px solid #e4ded3}
+      .home-picker-material-note{grid-template-columns:1fr 1fr}
+      .home-picker-material-note>div:nth-child(2){border-right:0}
+      .home-picker-material-note>div:nth-child(-n+2){border-bottom:1px solid #ddd3c0}
+    }
+    @media(max-width:650px){
+      .home-picker-section{padding-top:38px}
+      .home-picker-heading,.home-picker-panel{padding-left:20px;padding-right:20px}
+      .home-picker-heading h2{font-size:32px}
+      .home-picker-tabs{grid-template-columns:1fr}
+      .home-picker-tab{border-right:0!important;border-bottom:1px solid #d8d2c6!important}
+      .home-picker-choice-grid{grid-template-columns:1fr}
+      .home-picker-choice-media{height:250px}
+      .home-picker-material-note{grid-template-columns:1fr}
+      .home-picker-material-note>div{border-right:0;border-bottom:1px solid #ddd3c0}
+    }
 
     .home-catalog-section{padding-top:68px!important}
     .home-catalog-lead{max-width:720px;margin:10px 0 0;color:#737d84;font-size:13px;line-height:1.6}
@@ -360,44 +402,81 @@
 
     <section class="home-picker-section" id="picker">
       <div class="container">
-        <div class="home-picker">
-          <div class="home-picker-intro">
-            <p class="eyebrow">Поможем с выбором</p>
-            <h2>Подберём герб под задачу и интерьер</h2>
-            <p>Если вы не знаете, какое исполнение выбрать, ориентируйтесь на внешний вид, материал основы и бюджет. Ниже — короткая памятка по основным вариантам.</p>
-            <a class="button button-gold" href="catalog.html">Перейти в каталог</a>
+        <div class="home-picker-shell">
+          <div class="home-picker-heading">
+            <div>
+              <p class="eyebrow">Поможем с выбором</p>
+              <h2>Подберём герб под задачу и интерьер</h2>
+            </div>
+            <p>Выберите символику и базовое исполнение. Дальше мы уже ведём по готовой ветке: покрытие, материал щита, размер и цена.</p>
           </div>
-          <div class="home-picker-options">
-            <article>
-              <span>01</span>
-              <h3>Без щита</h3>
-              <p>Самостоятельный объёмный рельеф. Хорошо подходит, когда нужен чистый силуэт герба без дополнительной основы.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <h3>На щите</h3>
-              <p>Рельеф устанавливается на декоративную основу. Такой вариант выглядит массивнее и представительнее.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <h3>Краска</h3>
-              <p>Более спокойное матовое исполнение с проработкой официальных цветов и деталей символики.</p>
-            </article>
-            <article>
-              <span>04</span>
-              <h3>Металлизация</h3>
-              <p>Выраженный металлический блеск и более торжественный внешний вид поверхности.</p>
-            </article>
-            <article class="home-picker-wide">
-              <span>05</span>
-              <h3>Материал щита</h3>
-              <p><strong>Пластик</strong> — практичная гладкая основа. <strong>Бархат</strong> — более мягкая и представительская фактура. <strong>Металл</strong> — строгая прочная основа с премиальным ощущением.</p>
-            </article>
-            <article class="home-picker-wide">
-              <span>06</span>
-              <h3>Барельеф или горельеф</h3>
-              <p><strong>Барельеф</strong> — более спокойный объём. <strong>Горельеф</strong> — значительно более выраженная глубина и пластика.</p>
-            </article>
+
+          <div class="home-picker-tabs" role="tablist" aria-label="Выбор раздела">
+            <button class="home-picker-tab active" type="button" role="tab" aria-selected="true" data-picker-tab="rf"><span>01</span>Россия</button>
+            <button class="home-picker-tab" type="button" role="tab" aria-selected="false" data-picker-tab="moscow"><span>02</span>Москва</button>
+            <a class="home-picker-tab" href="gerby-subektov-rf.html"><span>03</span>Субъекты и города</a>
+            <a class="home-picker-tab" href="emblemy-vedomstv-rf.html"><span>04</span>Ведомства</a>
+          </div>
+
+          <div class="home-picker-panel active" data-picker-panel="rf">
+            <div class="home-picker-panel-head">
+              <div><p class="eyebrow">Российская Федерация</p><h3>Варианты исполнения</h3></div>
+              <p>Сначала выберите основу. На следующем шаге — барельеф или горельеф, покрытие и материал.</p>
+            </div>
+            <div class="home-picker-choice-grid">
+              <a class="home-picker-choice" href="gerb-rf-bez-shchita.html">
+                <div class="home-picker-choice-media"><img src="assets/gerb-rf-bez-shchita.png" alt="Герб Российской Федерации без щита"></div>
+                <div class="home-picker-choice-body">
+                  <p class="product-type">Настенный герб</p>
+                  <h4>Герб России без щита</h4>
+                  <p>Самостоятельное объёмное изображение без фоновой щитовой основы.</p>
+                  <span>Выбрать исполнение →</span>
+                </div>
+              </a>
+              <a class="home-picker-choice" href="gerb-rf-na-shchite.html">
+                <div class="home-picker-choice-media"><img src="assets/Барельеф краска на щите флок (композит) анфас.png" alt="Герб Российской Федерации на щите"></div>
+                <div class="home-picker-choice-body">
+                  <p class="product-type">Настенный герб</p>
+                  <h4>Герб России на щите</h4>
+                  <p>Объёмный герб на декоративной основе: пластик, бархат или металл.</p>
+                  <span>Выбрать исполнение →</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="home-picker-panel" data-picker-panel="moscow" hidden>
+            <div class="home-picker-panel-head">
+              <div><p class="eyebrow">Герб Москвы · Барельеф</p><h3>Варианты исполнения</h3></div>
+              <p>Выберите основу. Затем зададим покрытие — краска или металлизация — и материал щита.</p>
+            </div>
+            <div class="home-picker-choice-grid">
+              <a class="home-picker-choice" href="gerb-moskvy-bez-shchita.html">
+                <div class="home-picker-choice-media"><img src="Герб Москвы металлизация без щита.png?v=20261112-moscow-metal1" alt="Герб Москвы без щита"></div>
+                <div class="home-picker-choice-body">
+                  <p class="product-type">Герб Москвы · Барельеф</p>
+                  <h4>Герб Москвы без щита</h4>
+                  <p>Самостоятельное рельефное изображение без дополнительной щитовой основы.</p>
+                  <span>Перейти к вариантам →</span>
+                </div>
+              </a>
+              <a class="home-picker-choice" href="gerb-moskvy-na-shchite.html">
+                <div class="home-picker-choice-media"><img src="Герб Москвы краска бархатный щит.png?v=20261116-moscow-choice-shield1" alt="Герб Москвы на щите"></div>
+                <div class="home-picker-choice-body">
+                  <p class="product-type">Герб Москвы · Барельеф</p>
+                  <h4>Герб Москвы на щите</h4>
+                  <p>Барельеф на декоративной щитовой основе для официальных интерьеров.</p>
+                  <span>Перейти к вариантам →</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="home-picker-material-note">
+            <div><strong>Дальше по ветке</strong><span>Краска или металлизация</span></div>
+            <div><strong>Материал щита</strong><span>Пластик · бархат · металл</span></div>
+            <div><strong>Тип рельефа</strong><span>Барельеф · горельеф</span></div>
+            <div><strong>Финальный шаг</strong><span>Размеры и цены</span></div>
           </div>
         </div>
       </div>
@@ -483,6 +562,24 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261117-homecatalog2"></script>
+  <script src="script.js?v=20261117-homepicker3"></script>
+
+  <script>
+  (function(){
+    const tabs=[...document.querySelectorAll('[data-picker-tab]')];
+    const panels=[...document.querySelectorAll('[data-picker-panel]')];
+    if(!tabs.length||!panels.length) return;
+    tabs.forEach(tab=>tab.addEventListener('click',()=>{
+      const key=tab.dataset.pickerTab;
+      tabs.forEach(t=>{t.classList.toggle('active',t===tab);t.setAttribute('aria-selected',t===tab?'true':'false')});
+      panels.forEach(p=>{
+        const active=p.dataset.pickerPanel===key;
+        p.hidden=!active;
+        p.classList.toggle('active',active);
+      });
+    }));
+  })();
+  </script>
+
 </body>
 </html>
