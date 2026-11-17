@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#07182a">
 <link rel="stylesheet" href="styles.css?v=20261117-offer1">
 <link rel="stylesheet" href="shop.css?v=20261117-headersearch3">
-<link rel="stylesheet" href="offer.css?v=20261117-offer2">
+<link rel="stylesheet" href="offer.css?v=20261117-offer3">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner">
@@ -26,14 +26,14 @@
 <form class="offer-form" data-offer-form>
   <h2 class="offer-section-title">Контактные данные</h2>
 
-  <div class="offer-field">
-    <label>Имя</label>
-    <input name="name" required autocomplete="name" placeholder="Как к вам обращаться">
-  </div>
+  <div class="offer-contact-stack">
+    <div class="offer-field">
+      <label>Имя</label>
+      <input name="name" required autocomplete="name" placeholder="Как к вам обращаться">
+    </div>
 
-  <div class="offer-field">
-    <label>Как вам удобнее связаться?</label>
-    <div class="offer-contact-row">
+    <div class="offer-field">
+      <label>Как вам удобнее связаться?</label>
       <select name="contact_method" required>
         <option value="phone">По телефону</option>
         <option value="telegram">Telegram</option>
@@ -41,12 +41,13 @@
         <option value="whatsapp">WhatsApp</option>
         <option value="email">Email</option>
       </select>
-      <div>
-        <label data-contact-label style="position:absolute;width:1px;height:1px;overflow:hidden">Номер телефона для связи</label>
-        <input name="contact_value" required type="tel" placeholder="+7 999 999-99-99">
-      </div>
     </div>
-    <p class="offer-help" data-contact-help></p>
+
+    <div class="offer-field">
+      <label data-contact-label>Номер телефона для связи</label>
+      <input name="contact_value" required type="tel" placeholder="+7 999 999-99-99">
+      <p class="offer-help" data-contact-help></p>
+    </div>
   </div>
 
   <h2 class="offer-section-title">Какой герб вам нужен?</h2>
