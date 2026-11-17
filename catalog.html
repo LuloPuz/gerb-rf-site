@@ -1681,10 +1681,20 @@
 
  function apply(){
   const q=input.value || '';
+  const qNorm=normalize(q);
+  // Product cards normally belong to "Popular", but when a user searches
+  // for a subject/city that already has real product photos, show those
+  // products inside the "Subjects and cities" filter instead of the
+  // generic text-only directory card.
+  const moscowCityQuery=/\bмоскв(?:а|ы|е|у|ой)?\b/.test(qNorm) && !/\bобласт/.test(qNorm);
   let visible=0;
 
   popular.forEach(card=>{
-   const allowed=active==='all'||active==='popular';
+   const isMoscowProduct=card.dataset.group==='moscow';
+   const allowed=
+     active==='all' ||
+     active==='popular' ||
+     (active==='subjects' && moscowCityQuery && isMoscowProduct);
    const title=card.querySelector('h3')?.textContent || '';
    const kicker=card.querySelector('.popular-kicker')?.textContent || '';
    const finish=card.querySelector('.popular-body>p')?.textContent || '';
