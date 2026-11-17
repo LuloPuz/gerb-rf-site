@@ -10,10 +10,10 @@
 .offer-section-title:first-child{padding-top:0}
 .offer-field{display:grid;gap:10px;position:relative}
 .offer-field.full{grid-column:1/-1}
-.offer-field label{font-size:12px;font-weight:800;letter-spacing:.075em;text-transform:uppercase;color:#6f624d}
+.offer-field label{font-size:12px;font-weight:600;letter-spacing:.075em;text-transform:uppercase;color:#6f624d}
 .offer-field input,.offer-field select,.offer-field textarea{
   width:100%;min-height:60px;padding:14px 16px;border:1px solid #d8d2c6;background:#fff;color:var(--navy);
-  font:500 15px "Golos Text",sans-serif;outline:0
+  font:500 15px "Manrope",sans-serif;outline:0
 }
 .offer-field input:focus,.offer-field select:focus,.offer-field textarea:focus{border-color:#9A773D;box-shadow:0 0 0 3px rgba(154,119,61,.08)}
 .offer-help{margin:0;color:#8a9197;font-size:12px;line-height:1.55}
@@ -31,7 +31,7 @@
 .offer-result small{display:block;margin-top:3px;color:#81898f;font-size:12px}
 .offer-not-found{
   display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 18px;
-  border:1px solid #d8d2c6;background:#fbfaf7;color:#665d50;font:700 13px "Golos Text",sans-serif;cursor:pointer
+  border:1px solid #d8d2c6;background:#fbfaf7;color:#665d50;font:600 13px "Manrope",sans-serif;cursor:pointer
 }
 .offer-not-found:hover{border-color:#9A773D;background:#fffaf0;color:var(--navy)}
 .offer-custom[hidden]{display:none!important}
@@ -40,9 +40,9 @@
 .offer-size-input input{padding-right:54px}
 .offer-size-unit{position:absolute;right:16px;bottom:20px;color:#7f868c;font-size:13px;pointer-events:none}
 .offer-actions{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:26px;border-top:1px solid #ece7dd}
-.offer-submit{min-height:58px;padding:0 30px;border:1px solid var(--gold);background:var(--gold);color:var(--navy);font:800 14px "Golos Text",sans-serif;cursor:pointer}
+.offer-submit{min-height:58px;padding:0 30px;border:1px solid var(--gold);background:var(--gold);color:var(--navy);font:600 14px "Manrope",sans-serif;cursor:pointer}
 .offer-submit:hover{background:var(--gold-2)}
-.offer-back{display:inline-flex;align-items:center;justify-content:center;min-height:58px;padding:0 24px;border:1px solid #d8d2c6;color:#68727a;font:700 13px "Golos Text",sans-serif}
+.offer-back{display:inline-flex;align-items:center;justify-content:center;min-height:58px;padding:0 24px;border:1px solid #d8d2c6;color:#68727a;font:600 13px "Manrope",sans-serif}
 .offer-note{grid-column:1/-1;margin:0;color:#8b9297;font-size:12px;line-height:1.55}
 @media(max-width:800px){
   .offer-head{grid-template-columns:1fr;gap:12px}
@@ -101,4 +101,50 @@
     margin-top:16px!important;
     font-size:15px!important;
   }
+}
+
+
+/* Offer typography system v2 */
+.offer-head-note{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:17px!important;
+  font-weight:400!important;
+  line-height:1.72!important;
+}
+.offer-field label{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  letter-spacing:.065em!important;
+  line-height:1.45!important;
+}
+.offer-field input,
+.offer-field select,
+.offer-field textarea{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:16px!important;
+  font-weight:400!important;
+  line-height:1.5!important;
+  letter-spacing:.002em!important;
+}
+.offer-help,
+.offer-note,
+.offer-result small{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  line-height:1.6!important;
+}
+.offer-not-found,
+.offer-submit,
+.offer-back{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:600!important;
+  letter-spacing:.008em!important;
+}
+.offer-size-unit{
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:400!important;
 }
