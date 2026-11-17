@@ -185,3 +185,22 @@
   .shop-go-cart{min-height:48px}
   .shop-toast{left:14px;right:14px;bottom:16px;max-width:none}
 }
+
+.checkout-grid-columns{
+  grid-template-columns:1fr 1fr;
+  column-gap:16px;
+  row-gap:14px;
+}
+.checkout-column{
+  display:grid;
+  gap:14px;
+  align-content:start;
+}
+.field input::placeholder{
+  color:#a3a7aa;
+  opacity:.72;
+  font-weight:400;
+}
+@media(max-width:760px){
+  .checkout-grid-columns{grid-template-columns:1fr}
+}
