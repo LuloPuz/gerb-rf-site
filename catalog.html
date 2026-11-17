@@ -3,74 +3,84 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Весь каталог | Держава</title>
-<meta name="description" content="Полный каталог настенных гербов: герб Российской Федерации и герб Москвы во всех доступных исполнениях, покрытиях и материалах щита.">
+<meta name="description" content="Полный каталог Державы: гербы субъектов и городов Российской Федерации, эмблемы ведомств и популярные готовые исполнения с фотографиями.">
 <meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261117-allcatalog3">
+<link rel="stylesheet" href="styles.css?v=20261117-allcatalog4">
 <style>
-.all-head{padding:58px 0 38px;border-bottom:1px solid var(--line)}
-.all-breadcrumb{margin:0 0 24px;color:#7a8187;font-size:13px}
-.all-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:64px;align-items:end}
-.all-hero h1{margin:0;font-family:"PT Serif",serif;font-size:clamp(52px,5.4vw,78px);font-weight:400;line-height:1;color:var(--navy);letter-spacing:-.025em}
-.all-intro{margin:0 0 5px;color:#66717a;font-size:14px;line-height:1.75}
-.all-meta{display:flex;gap:22px;margin-top:22px;color:#8b7040;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.all-tools{position:sticky;top:86px;z-index:20;padding:22px 0 18px;background:rgba(251,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,216,202,.9)}
-.all-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
-.all-search-box{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;height:62px;border:1px solid #cfc7b7;background:#fff;box-shadow:0 12px 32px rgba(7,24,42,.06)}
-.all-search-icon{display:grid;place-items:center;color:#9A773D;font-size:21px}
-.all-search-input{height:60px;border:0;outline:0;background:transparent;color:var(--navy);font:500 14px "Golos Text",sans-serif}
-.all-search-input::placeholder{color:#92999f;font-weight:400}
-.all-search-clear{margin-right:10px;padding:9px 12px;border:0;background:transparent;color:#7b8389;font:600 11px "Golos Text",sans-serif;cursor:pointer}
-.all-count{display:flex;align-items:center;justify-content:center;min-width:160px;padding:0 20px;border:1px solid #d7cfbf;background:#f7f2e7;color:#7b6847;font-size:12px;font-weight:700}
-.all-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.all-filter{padding:9px 13px;border:1px solid #d7cfbf;background:#fff;color:#5f686f;font:600 11px "Golos Text",sans-serif;cursor:pointer}
-.all-filter:hover,.all-filter.active{border-color:#9A773D;background:#f5eddd;color:var(--navy)}
-.all-alphabet{display:flex;align-items:center;gap:5px;margin-top:14px}
-.all-alphabet span{margin-right:7px;color:#8a7044;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.all-alphabet a{display:grid;place-items:center;width:38px;height:38px;border:1px solid #ded8ca;background:#fff;color:#6d747a;font:600 13px "Golos Text",sans-serif}
-.all-alphabet a:hover{border-color:#c8a45b;background:#fffaf0;color:var(--navy)}
-.all-catalog{padding:48px 0 92px}
-.all-group{scroll-margin-top:230px;margin-bottom:72px}
-.all-group[hidden]{display:none}
-.all-group-banner{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:28px;align-items:center;margin-bottom:22px;padding:28px 30px;border:1px solid #d8cfbd;background:linear-gradient(105deg,#f1e8d8 0%,#fbfaf6 58%,#f4efe5 100%);box-shadow:0 14px 36px rgba(7,24,42,.045)}
-.all-group-letter{display:grid;place-items:center;width:74px;height:74px;border:1px solid #b6914d;color:#9A773D;font-family:"PT Serif",serif;font-size:38px}
-.all-group-copy .eyebrow{margin-bottom:6px}
-.all-group-copy h2{margin:0;font-family:"PT Serif",serif;font-size:38px;font-weight:400;line-height:1.08;color:var(--navy)}
-.all-group-copy>p:last-child{max-width:760px;margin:8px 0 0;color:#69737a;font-size:12px}
-.all-group-side{display:grid;grid-template-columns:auto auto;gap:0 7px;align-items:baseline;text-align:right}
-.all-group-side strong{font-family:"PT Serif",serif;font-size:34px;font-weight:400;color:var(--navy)}
-.all-group-side span{color:#7b8389;font-size:11px}
-.all-group-side a{grid-column:1/-1;margin-top:7px;color:#8a6e39;font-size:11px;font-weight:700}
-.all-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.all-product-card{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:.22s}
-.all-product-card:hover{transform:translateY(-4px);border-color:#cfbd98;box-shadow:0 18px 42px rgba(7,24,42,.09)}
-.all-product-hit{position:absolute;inset:0;z-index:5}
-.all-product-media{height:230px;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;background:#fbfaf7;border-bottom:1px solid #e7e1d7}
-.all-product-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(var(--media-scale,1));transition:transform .35s ease}
-.all-product-card:hover .all-product-media img{transform:scale(calc(var(--media-scale,1) + .025))}
-.all-product-body{display:flex;flex:1;flex-direction:column;padding:17px 17px 16px;min-height:205px}
-.all-product-kicker{height:16px;color:#9A773D;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
-.all-product-body h3{margin:10px 0 0;min-height:68px;font-family:"PT Serif",serif;font-size:20px;font-weight:400;line-height:1.17;color:var(--navy)}
-.all-product-body>p{margin:0;min-height:34px;color:#737d84;font-size:11px;line-height:1.45}
-.all-product-foot{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;border-top:1px solid #eee9df;color:#806b45;font-size:10px}
-.all-product-foot strong{margin-left:3px;font-family:"PT Serif",serif;font-size:18px;font-weight:400;color:var(--navy)}
-.catalog-filter-hidden{display:none !important}
-.all-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
-.all-empty.show{display:block}
-.all-empty strong{display:block;font-family:"PT Serif",serif;font-size:32px;font-weight:400;color:var(--navy)}
-.all-empty span{display:block;margin-top:8px;color:#7b8389;font-size:13px}
-.all-directory-links{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
-.all-directory-link{display:flex;justify-content:space-between;gap:20px;padding:24px;border:1px solid #ded8ca;background:#fff}
-.all-directory-link strong{font-family:"PT Serif",serif;font-size:24px;font-weight:400;color:var(--navy)}
-.all-directory-link span{align-self:center;color:#9A773D;font-size:12px;font-weight:700}
-@media(max-width:1180px){.all-product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:900px){.all-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.all-hero{grid-template-columns:1fr;gap:20px}.all-tools{top:78px}}
+.catalog-head-full{padding:58px 0 38px;border-bottom:1px solid var(--line)}
+.catalog-breadcrumb-full{margin:0 0 24px;color:#7a8187;font-size:13px}
+.catalog-hero-full{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:64px;align-items:end}
+.catalog-hero-full h1{margin:0;font-family:"PT Serif",serif;font-size:clamp(52px,5.4vw,78px);font-weight:400;line-height:1;color:var(--navy);letter-spacing:-.025em}
+.catalog-intro-full{margin:0 0 5px;color:#66717a;font-size:14px;line-height:1.75}
+.catalog-meta-full{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px;color:#8b7040;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+
+.catalog-tools-full{position:sticky;top:86px;z-index:20;padding:22px 0 18px;background:rgba(251,250,246,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,216,202,.9)}
+.catalog-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+.catalog-search-box{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;height:62px;border:1px solid #cfc7b7;background:#fff;box-shadow:0 12px 32px rgba(7,24,42,.06)}
+.catalog-search-icon{display:grid;place-items:center;color:#9A773D;font-size:21px}
+.catalog-search-input{height:60px;border:0;outline:0;background:transparent;color:var(--navy);font:500 14px "Golos Text",sans-serif}
+.catalog-search-input::placeholder{color:#92999f;font-weight:400}
+.catalog-search-clear{margin-right:10px;padding:9px 12px;border:0;background:transparent;color:#7b8389;font:600 11px "Golos Text",sans-serif;cursor:pointer}
+.catalog-search-count{display:flex;align-items:center;justify-content:center;min-width:160px;padding:0 20px;border:1px solid #d7cfbf;background:#f7f2e7;color:#7b6847;font-size:12px;font-weight:700}
+.catalog-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.catalog-filter{padding:10px 14px;border:1px solid #d7cfbf;background:#fff;color:#5f686f;font:600 11px "Golos Text",sans-serif;cursor:pointer}
+.catalog-filter:hover,.catalog-filter.active{border-color:#9A773D;background:#f5eddd;color:var(--navy)}
+
+.full-catalog{padding:48px 0 92px}
+.catalog-section{margin-bottom:74px;scroll-margin-top:185px}
+.catalog-section-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end;margin-bottom:22px}
+.catalog-section-head h2{margin:0;font-family:"PT Serif",serif;font-size:42px;font-weight:400;line-height:1.08;color:var(--navy)}
+.catalog-section-head p{max-width:760px;margin:9px 0 0;color:#69737a;font-size:13px;line-height:1.6}
+.catalog-section-count{color:#8a7044;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.catalog-alphabet{display:flex;flex-wrap:wrap;gap:4px;margin-top:16px}
+.catalog-alphabet a{display:grid;place-items:center;width:34px;height:34px;border:1px solid #ded8ca;background:#fff;color:#6d747a;font:600 12px "Golos Text",sans-serif}
+.catalog-alphabet a:hover{border-color:#c8a45b;background:#fffaf0;color:var(--navy)}
+
+.popular-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.popular-card{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid #ded8ca;background:#fff;box-shadow:0 10px 26px rgba(7,24,42,.035);transition:.22s}
+.popular-card:hover{transform:translateY(-4px);border-color:#cfbd98;box-shadow:0 18px 42px rgba(7,24,42,.09)}
+.popular-hit{position:absolute;inset:0;z-index:5}
+.popular-media{height:230px;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;background:#fbfaf7;border-bottom:1px solid #e7e1d7}
+.popular-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(var(--media-scale,1));transition:transform .35s ease}
+.popular-card:hover .popular-media img{transform:scale(calc(var(--media-scale,1) + .025))}
+.popular-body{display:flex;flex:1;flex-direction:column;padding:17px 17px 16px;min-height:205px}
+.popular-kicker{height:16px;color:#9A773D;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.popular-body h3{margin:10px 0 0;min-height:68px;font-family:"PT Serif",serif;font-size:20px;font-weight:400;line-height:1.17;color:var(--navy)}
+.popular-body>p{margin:0;min-height:34px;color:#737d84;font-size:11px;line-height:1.45}
+.popular-foot{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;border-top:1px solid #eee9df;color:#806b45;font-size:10px}
+.popular-foot strong{margin-left:3px;font-family:"PT Serif",serif;font-size:18px;font-weight:400;color:var(--navy)}
+
+.directory-letter-group{scroll-margin-top:185px;margin-bottom:46px}
+.directory-letter-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:16px}
+.directory-letter{font-family:"PT Serif",serif;font-size:38px;line-height:1;color:#9A773D}
+.directory-letter-line{height:1px;background:#ded8ca}
+.directory-letter-count{color:#92999f;font-size:11px}
+.directory-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
+.directory-card{position:relative;display:flex;flex-direction:column;min-height:238px;height:100%;padding:21px 21px 19px;border:1px solid #ded8ca;background:#fff;box-shadow:0 8px 22px rgba(7,24,42,.03);transition:.2s}
+.directory-card:hover{transform:translateY(-3px);border-color:#cfbd98;box-shadow:0 16px 34px rgba(7,24,42,.075)}
+.directory-card-top{display:flex;align-items:center;justify-content:space-between;gap:14px;height:21px;min-height:21px}
+.directory-type{color:#9A773D;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.directory-arrow{color:#c6a15b;font-size:15px}
+.directory-card h3{margin:13px 0 0;min-height:82px;max-height:82px;overflow:hidden;font-family:"PT Serif",serif;font-size:20px;font-weight:400;line-height:1.17;color:var(--navy)}
+.directory-card p{margin:0;min-height:39px;max-height:39px;overflow:hidden;color:#737d84;font-size:11px;line-height:1.5}
+.directory-link{display:inline-block;margin-top:auto;padding-top:15px;color:#8a6e39;font-size:10px;font-weight:700}
+.catalog-hidden{display:none !important}
+.catalog-empty{display:none;padding:70px 30px;text-align:center;border:1px solid #ded8ca;background:#fff}
+.catalog-empty.show{display:block}
+.catalog-empty strong{display:block;font-family:"PT Serif",serif;font-size:32px;font-weight:400;color:var(--navy)}
+.catalog-empty span{display:block;margin-top:8px;color:#7b8389;font-size:13px}
+
+@media(max-width:1180px){.popular-grid,.directory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){
+ .catalog-hero-full{grid-template-columns:1fr;gap:20px}.catalog-tools-full{top:78px}
+ .popular-grid,.directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:700px){
- .all-head{padding:38px 0 28px}.all-hero h1{font-size:46px}.all-tools{position:relative;top:auto;padding:18px 0}
- .all-search-row{grid-template-columns:1fr}.all-count{min-height:42px}.all-filter-row{flex-wrap:nowrap;overflow:auto;padding-bottom:3px}.all-filter{white-space:nowrap}
- .all-group{scroll-margin-top:20px;margin-bottom:54px}.all-group-banner{grid-template-columns:58px minmax(0,1fr);gap:16px;padding:21px}.all-group-letter{width:54px;height:54px;font-size:28px}
- .all-group-copy h2{font-size:29px}.all-group-side{grid-column:1/-1;text-align:left;display:flex;gap:6px;align-items:baseline}.all-group-side a{margin-left:auto}
- .all-product-grid{grid-template-columns:1fr}.all-product-media{height:280px}.all-product-body{min-height:0}.all-product-body h3{min-height:0;font-size:23px}.all-product-body>p{min-height:0;margin-top:8px;font-size:12px}
- .all-directory-links{grid-template-columns:1fr}
+ .catalog-head-full{padding:38px 0 28px}.catalog-hero-full h1{font-size:46px}.catalog-tools-full{position:relative;top:auto;padding:18px 0}
+ .catalog-search-row{grid-template-columns:1fr}.catalog-search-count{min-height:42px}.catalog-filter-row{flex-wrap:nowrap;overflow:auto;padding-bottom:3px}.catalog-filter{white-space:nowrap}
+ .catalog-section{scroll-margin-top:20px;margin-bottom:56px}.catalog-section-head{grid-template-columns:1fr;gap:8px}.catalog-section-head h2{font-size:34px}
+ .popular-grid,.directory-grid{grid-template-columns:1fr}.popular-media{height:280px}.popular-body{min-height:0}.popular-body h3{min-height:0;font-size:23px}.popular-body>p{min-height:0;margin-top:8px;font-size:12px}
+ .directory-letter-group{scroll-margin-top:20px}.directory-card{min-height:220px}.directory-card h3{min-height:auto;max-height:none;font-size:22px}.directory-card p{min-height:auto;max-height:none;margin-top:8px;font-size:12px}.directory-link{margin-top:18px;padding-top:0}
 }
 </style>
 </head>
@@ -79,253 +89,1577 @@
 <a class="brand" href="index.html"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></a>
 <button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">☰</button>
 <nav class="main-nav"><a class="nav-active" href="catalog.html">Каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Регионы</a><a href="emblemy-vedomstv-rf.html">Ведомства</a><a href="index.html#production">О производстве</a></nav>
-<a class="button button-gold header-cta" href="#catalog-products">Смотреть товары</a>
+<a class="button button-gold header-cta" href="#popular">Популярное</a>
 </div></header>
+
 <main>
-<section class="all-head"><div class="container">
-<p class="all-breadcrumb"><a href="index.html">Главная</a> / Весь каталог</p>
-<div class="all-hero"><div><p class="eyebrow">Полный ассортимент</p><h1>Весь каталог</h1><div class="all-meta"><span>18 товаров с фото</span><span>2 основных раздела</span></div></div>
-<p class="all-intro">Все готовые товарные исполнения, для которых на сайте уже есть реальные изображения. Товары сгруппированы по тематике и расположены в алфавитном порядке.</p></div>
-</div></section>
-<section class="all-tools"><div class="container">
-<div class="all-search-row"><label class="all-search-box"><span class="all-search-icon">⌕</span><input class="all-search-input" id="allSearch" type="search" autocomplete="off" placeholder="Например: Москва, металлизация, бархатный щит" aria-label="Поиск по всему каталогу"><button class="all-search-clear" id="allClear" type="button" hidden>Очистить</button></label><div class="all-count" id="allCount">Найдено: 18</div></div>
-<div class="all-filter-row" id="allFilters">
-<button class="all-filter active" type="button" data-filter="all">Все товары</button>
-<button class="all-filter" type="button" data-filter="Без щита">Без щита</button>
-<button class="all-filter" type="button" data-filter="На щите">На щите</button>
-<button class="all-filter" type="button" data-filter="paint">Покрытие краской</button>
-<button class="all-filter" type="button" data-filter="metal">Металлизация</button>
-<button class="all-filter" type="button" data-filter="gorelief">Горельеф</button>
+<section class="catalog-head-full"><div class="container">
+<p class="catalog-breadcrumb-full"><a href="index.html">Главная</a> / Весь каталог</p>
+<div class="catalog-hero-full">
+<div><p class="eyebrow">Полный ассортимент</p><h1>Весь каталог</h1><div class="catalog-meta-full"><span>86 гербов субъектов и городов</span><span>46 эмблем ведомств</span><span>18 популярных исполнений с фото</span></div></div>
+<p class="catalog-intro-full">Здесь собран весь каталог: гербы субъектов и городов Российской Федерации, эмблемы ведомств и отдельная витрина популярных готовых исполнений с реальными фотографиями.</p>
 </div>
-<nav class="all-alphabet" aria-label="Разделы по алфавиту"><span>По алфавиту</span><a href="#group-moscow">М</a><a href="#group-rf">Р</a></nav>
 </div></section>
-<section class="all-catalog" id="catalog-products"><div class="container">
-<div id="allProductList"><section class="all-group" id="group-moscow" data-product-group>
-  <div class="all-group-banner">
-    <div class="all-group-letter">М</div>
-    <div class="all-group-copy"><p class="eyebrow">Раздел каталога</p><h2>Герб Москвы</h2><p>Все доступные исполнения герба Москвы: без щита и на щите, покрытие краской и металлизация.</p></div>
-    <div class="all-group-side"><strong data-group-count>8</strong><span>товаров</span><a href="gerb-moskvy.html">Открыть раздел →</a></div>
-  </div>
-  <div class="all-product-grid"><article class="all-product-card" data-product-card data-group="moscow" data-location="Без щита" data-finish="paint" data-search="герб москвы без щита — покрытие краской без щита · барельеф краска москва без щита барельеф краска окрашивание">
-  <a class="all-product-hit" href="gerb-moskvy-bez-shchita-kraska.html" aria-label="Открыть Герб Москвы без щита — покрытие краской"></a>
-  <div class="all-product-media"><img src="assets/Герб Москвы краска без щита.png?v=20261112-moscow-paint1" alt="Герб Москвы без щита — покрытие краской" style="--media-scale:1.03"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">Без щита · Барельеф</div>
+
+<section class="catalog-tools-full"><div class="container">
+<div class="catalog-search-row">
+<label class="catalog-search-box"><span class="catalog-search-icon">⌕</span><input class="catalog-search-input" id="catalogSearch" type="search" autocomplete="off" placeholder="Например: Московская область, МВД, металлизация" aria-label="Поиск по всему каталогу"><button class="catalog-search-clear" id="catalogClear" type="button" hidden>Очистить</button></label>
+<div class="catalog-search-count" id="catalogCount">Найдено: 150</div>
+</div>
+<div class="catalog-filter-row" id="catalogFilters">
+<button class="catalog-filter active" type="button" data-section-filter="all">Весь каталог</button>
+<button class="catalog-filter" type="button" data-section-filter="popular">Популярное</button>
+<button class="catalog-filter" type="button" data-section-filter="subjects">Субъекты и города РФ</button>
+<button class="catalog-filter" type="button" data-section-filter="agencies">Ведомства РФ</button>
+</div>
+</div></section>
+
+<section class="full-catalog"><div class="container">
+<section class="catalog-section" id="popular" data-catalog-section="popular">
+<div class="catalog-section-head"><div><p class="eyebrow">Витрина</p><h2>Популярное</h2><p>Все готовые исполнения, для которых на сайте уже есть реальные фотографии: гербы России и Москвы с разными покрытиями, щитами и без щита.</p></div><span class="catalog-section-count">18 товаров с фото</span></div>
+<div class="popular-grid"><article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="Без щита" data-finish="paint" data-search="герб москвы без щита — покрытие краской без щита · барельеф краска москва без щита барельеф краска окрашивание">
+  <a class="popular-hit" href="gerb-moskvy-bez-shchita-kraska.html" aria-label="Открыть Герб Москвы без щита — покрытие краской"></a>
+  <div class="popular-media"><img src="assets/Герб Москвы краска без щита.png?v=20261112-moscow-paint1" alt="Герб Москвы без щита — покрытие краской" style="--media-scale:1.03"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">Без щита · Барельеф</div>
     <h3>Герб Москвы без щита — покрытие краской</h3>
     <p>Краска</p>
-    <div class="all-product-foot"><span>от <strong>4 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>4 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="Без щита" data-finish="metal" data-search="герб москвы без щита — металлизация без щита · барельеф металлизация москва без щита барельеф металлизация">
-  <a class="all-product-hit" href="gerb-moskvy-bez-shchita-metallizaciya.html" aria-label="Открыть Герб Москвы без щита — металлизация"></a>
-  <div class="all-product-media"><img src="Герб Москвы металлизация без щита.png?v=20261112-moscow-metal1" alt="Герб Москвы без щита — металлизация" style="--media-scale:1.03"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">Без щита · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="Без щита" data-finish="metal" data-search="герб москвы без щита — металлизация без щита · барельеф металлизация москва без щита барельеф металлизация">
+  <a class="popular-hit" href="gerb-moskvy-bez-shchita-metallizaciya.html" aria-label="Открыть Герб Москвы без щита — металлизация"></a>
+  <div class="popular-media"><img src="Герб Москвы металлизация без щита.png?v=20261112-moscow-metal1" alt="Герб Москвы без щита — металлизация" style="--media-scale:1.03"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">Без щита · Барельеф</div>
     <h3>Герб Москвы без щита — металлизация</h3>
     <p>Металлизация</p>
-    <div class="all-product-foot"><span>от <strong>5 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>5 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на пластиковом щите — покрытие краской на щите · барельеф краска · пластик москва на щите барельеф краска пластик пластиковый">
-  <a class="all-product-hit" href="gerb-moskvy-na-shchite-kraska-plastik.html" aria-label="Открыть Герб Москвы на пластиковом щите — покрытие краской"></a>
-  <div class="all-product-media"><img src="Герб Москвы краска пластиковый щит.png?v=20261116-moscow-paint-plastic1" alt="Герб Москвы на пластиковом щите — покрытие краской" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на пластиковом щите — покрытие краской на щите · барельеф краска · пластик москва на щите барельеф краска пластик пластиковый">
+  <a class="popular-hit" href="gerb-moskvy-na-shchite-kraska-plastik.html" aria-label="Открыть Герб Москвы на пластиковом щите — покрытие краской"></a>
+  <div class="popular-media"><img src="Герб Москвы краска пластиковый щит.png?v=20261116-moscow-paint-plastic1" alt="Герб Москвы на пластиковом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб Москвы на пластиковом щите — покрытие краской</h3>
     <p>Краска · Пластик</p>
-    <div class="all-product-foot"><span>от <strong>15 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>15 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на бархатном щите — покрытие краской на щите · барельеф краска · бархат москва на щите барельеф краска бархат флок">
-  <a class="all-product-hit" href="gerb-moskvy-na-shchite-kraska-barhat.html" aria-label="Открыть Герб Москвы на бархатном щите — покрытие краской"></a>
-  <div class="all-product-media"><img src="Герб Москвы краска бархатный щит.png?v=20261116-moscow-paint-barhat1" alt="Герб Москвы на бархатном щите — покрытие краской" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на бархатном щите — покрытие краской на щите · барельеф краска · бархат москва на щите барельеф краска бархат флок">
+  <a class="popular-hit" href="gerb-moskvy-na-shchite-kraska-barhat.html" aria-label="Открыть Герб Москвы на бархатном щите — покрытие краской"></a>
+  <div class="popular-media"><img src="Герб Москвы краска бархатный щит.png?v=20261116-moscow-paint-barhat1" alt="Герб Москвы на бархатном щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб Москвы на бархатном щите — покрытие краской</h3>
     <p>Краска · Бархат</p>
-    <div class="all-product-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на металлическом щите — покрытие краской на щите · барельеф краска · металл москва на щите барельеф краска металл металлический">
-  <a class="all-product-hit" href="gerb-moskvy-na-shchite-kraska-metall.html" aria-label="Открыть Герб Москвы на металлическом щите — покрытие краской"></a>
-  <div class="all-product-media"><img src="Герб Москвы краска металл щит.png?v=20261116-moscow-paint-metal1" alt="Герб Москвы на металлическом щите — покрытие краской" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на металлическом щите — покрытие краской на щите · барельеф краска · металл москва на щите барельеф краска металл металлический">
+  <a class="popular-hit" href="gerb-moskvy-na-shchite-kraska-metall.html" aria-label="Открыть Герб Москвы на металлическом щите — покрытие краской"></a>
+  <div class="popular-media"><img src="Герб Москвы краска металл щит.png?v=20261116-moscow-paint-metal1" alt="Герб Москвы на металлическом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб Москвы на металлическом щите — покрытие краской</h3>
     <p>Краска · Металл</p>
-    <div class="all-product-foot"><span>от <strong>19 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>19 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на пластиковом щите — металлизация на щите · барельеф металлизация · пластик москва на щите барельеф металлизация пластик пластиковый">
-  <a class="all-product-hit" href="gerb-moskvy-na-shchite-metallizaciya-plastik.html" aria-label="Открыть Герб Москвы на пластиковом щите — металлизация"></a>
-  <div class="all-product-media"><img src="assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal1" alt="Герб Москвы на пластиковом щите — металлизация" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на пластиковом щите — металлизация на щите · барельеф металлизация · пластик москва на щите барельеф металлизация пластик пластиковый">
+  <a class="popular-hit" href="gerb-moskvy-na-shchite-metallizaciya-plastik.html" aria-label="Открыть Герб Москвы на пластиковом щите — металлизация"></a>
+  <div class="popular-media"><img src="assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal1" alt="Герб Москвы на пластиковом щите — металлизация" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб Москвы на пластиковом щите — металлизация</h3>
     <p>Металлизация · Пластик</p>
-    <div class="all-product-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на бархатном щите — металлизация на щите · барельеф металлизация · бархат москва на щите барельеф металлизация бархат флок">
-  <a class="all-product-hit" href="gerb-moskvy-na-shchite-metallizaciya-barhat.html" aria-label="Открыть Герб Москвы на бархатном щите — металлизация"></a>
-  <div class="all-product-media"><img src="Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal1" alt="Герб Москвы на бархатном щите — металлизация" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на бархатном щите — металлизация на щите · барельеф металлизация · бархат москва на щите барельеф металлизация бархат флок">
+  <a class="popular-hit" href="gerb-moskvy-na-shchite-metallizaciya-barhat.html" aria-label="Открыть Герб Москвы на бархатном щите — металлизация"></a>
+  <div class="popular-media"><img src="Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal1" alt="Герб Москвы на бархатном щите — металлизация" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб Москвы на бархатном щите — металлизация</h3>
     <p>Металлизация · Бархат</p>
-    <div class="all-product-foot"><span>от <strong>18 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>18 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на металлическом щите — металлизация на щите · барельеф металлизация · металл москва на щите барельеф металлизация металл металлический">
-  <a class="all-product-hit" href="gerb-moskvy-na-shchite-metallizaciya-metall.html" aria-label="Открыть Герб Москвы на металлическом щите — металлизация"></a>
-  <div class="all-product-media"><img src="Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield1" alt="Герб Москвы на металлическом щите — металлизация" style="--media-scale:1.3"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на металлическом щите — металлизация на щите · барельеф металлизация · металл москва на щите барельеф металлизация металл металлический">
+  <a class="popular-hit" href="gerb-moskvy-na-shchite-metallizaciya-metall.html" aria-label="Открыть Герб Москвы на металлическом щите — металлизация"></a>
+  <div class="popular-media"><img src="Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield1" alt="Герб Москвы на металлическом щите — металлизация" style="--media-scale:1.3"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб Москвы на металлическом щите — металлизация</h3>
     <p>Металлизация · Металл</p>
-    <div class="all-product-foot"><span>от <strong>20 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>20 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article></div>
-</section><section class="all-group" id="group-rf" data-product-group>
-  <div class="all-group-banner">
-    <div class="all-group-letter">Р</div>
-    <div class="all-group-copy"><p class="eyebrow">Раздел каталога</p><h2>Герб Российской Федерации</h2><p>Полный ассортимент гербов России: барельеф и горельеф, без щита и на щите, все доступные покрытия и основы.</p></div>
-    <div class="all-group-side"><strong data-group-count>10</strong><span>товаров</span><a href="gerb-rf.html">Открыть раздел →</a></div>
-  </div>
-  <div class="all-product-grid"><article class="all-product-card" data-product-card data-group="rf" data-location="Без щита" data-finish="paint" data-search="герб россии без щита — покрытие краской без щита · барельеф краска россия рф без щита барельеф краска окрашивание">
-  <a class="all-product-hit" href="gerb-rf-barelef-kraska.html" aria-label="Открыть Герб России без щита — покрытие краской"></a>
-  <div class="all-product-media"><img src="assets/gerb-rf-bez-shchita.png" alt="Герб России без щита — покрытие краской" style="--media-scale:1.04"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">Без щита · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="Без щита" data-finish="paint" data-search="герб россии без щита — покрытие краской без щита · барельеф краска россия рф без щита барельеф краска окрашивание">
+  <a class="popular-hit" href="gerb-rf-barelef-kraska.html" aria-label="Открыть Герб России без щита — покрытие краской"></a>
+  <div class="popular-media"><img src="assets/gerb-rf-bez-shchita.png" alt="Герб России без щита — покрытие краской" style="--media-scale:1.04"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">Без щита · Барельеф</div>
     <h3>Герб России без щита — покрытие краской</h3>
     <p>Краска</p>
-    <div class="all-product-foot"><span>от <strong>4 990 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>4 990 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="Без щита" data-finish="metal" data-search="герб россии без щита — металлизация без щита · барельеф металлизация россия рф без щита барельеф металлизация">
-  <a class="all-product-hit" href="gerb-rf-barelef-metallizaciya.html" aria-label="Открыть Герб России без щита — металлизация"></a>
-  <div class="all-product-media"><img src="assets/Золотой двуглавый орёл России (1).png" alt="Герб России без щита — металлизация" style="--media-scale:1.04"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">Без щита · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="Без щита" data-finish="metal" data-search="герб россии без щита — металлизация без щита · барельеф металлизация россия рф без щита барельеф металлизация">
+  <a class="popular-hit" href="gerb-rf-barelef-metallizaciya.html" aria-label="Открыть Герб России без щита — металлизация"></a>
+  <div class="popular-media"><img src="assets/Золотой двуглавый орёл России (1).png" alt="Герб России без щита — металлизация" style="--media-scale:1.04"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">Без щита · Барельеф</div>
     <h3>Герб России без щита — металлизация</h3>
     <p>Металлизация</p>
-    <div class="all-product-foot"><span>от <strong>8 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>8 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="Без щита" data-finish="gorelief" data-search="герб россии без щита — горельеф без щита · горельеф горельеф россия рф без щита горельеф">
-  <a class="all-product-hit" href="gerb-rf-gorelef.html" aria-label="Открыть Герб России без щита — горельеф"></a>
-  <div class="all-product-media"><img src="assets/горельеф-вид-спереди.png" alt="Герб России без щита — горельеф" style="--media-scale:1.04"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">Без щита · Горельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="Без щита" data-finish="gorelief" data-search="герб россии без щита — горельеф без щита · горельеф горельеф россия рф без щита горельеф">
+  <a class="popular-hit" href="gerb-rf-gorelef.html" aria-label="Открыть Герб России без щита — горельеф"></a>
+  <div class="popular-media"><img src="assets/горельеф-вид-спереди.png" alt="Герб России без щита — горельеф" style="--media-scale:1.04"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">Без щита · Горельеф</div>
     <h3>Герб России без щита — горельеф</h3>
     <p>Горельеф</p>
-    <div class="all-product-foot"><span>от <strong>24 990 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>24 990 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на пластиковом щите — покрытие краской на щите · барельеф краска · пластик россия рф на щите барельеф краска пластик пластиковый">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-kraska-plastik.html" aria-label="Открыть Герб России на пластиковом щите — покрытие краской"></a>
-  <div class="all-product-media"><img src="Герб РФ барельеф краска на пластиковой щите анфас.png" alt="Герб России на пластиковом щите — покрытие краской" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на пластиковом щите — покрытие краской на щите · барельеф краска · пластик россия рф на щите барельеф краска пластик пластиковый">
+  <a class="popular-hit" href="gerb-rf-na-shchite-barelef-kraska-plastik.html" aria-label="Открыть Герб России на пластиковом щите — покрытие краской"></a>
+  <div class="popular-media"><img src="Герб РФ барельеф краска на пластиковой щите анфас.png" alt="Герб России на пластиковом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб России на пластиковом щите — покрытие краской</h3>
     <p>Краска · Пластик</p>
-    <div class="all-product-foot"><span>от <strong>9 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>9 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на бархатном щите — покрытие краской на щите · барельеф краска · бархат россия рф на щите барельеф краска бархат флок">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-kraska-barhat.html" aria-label="Открыть Герб России на бархатном щите — покрытие краской"></a>
-  <div class="all-product-media"><img src="assets/Барельеф краска на щите флок (композит) анфас.png" alt="Герб России на бархатном щите — покрытие краской" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на бархатном щите — покрытие краской на щите · барельеф краска · бархат россия рф на щите барельеф краска бархат флок">
+  <a class="popular-hit" href="gerb-rf-na-shchite-barelef-kraska-barhat.html" aria-label="Открыть Герб России на бархатном щите — покрытие краской"></a>
+  <div class="popular-media"><img src="assets/Барельеф краска на щите флок (композит) анфас.png" alt="Герб России на бархатном щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб России на бархатном щите — покрытие краской</h3>
     <p>Краска · Бархат</p>
-    <div class="all-product-foot"><span>от <strong>11 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>11 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на металлическом щите — покрытие краской на щите · барельеф краска · металл россия рф на щите барельеф краска металл металлический">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-kraska-metall.html" aria-label="Открыть Герб России на металлическом щите — покрытие краской"></a>
-  <div class="all-product-media"><img src="assets/Герб РФ барельеф краска на метал щите анфас.png" alt="Герб России на металлическом щите — покрытие краской" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на металлическом щите — покрытие краской на щите · барельеф краска · металл россия рф на щите барельеф краска металл металлический">
+  <a class="popular-hit" href="gerb-rf-na-shchite-barelef-kraska-metall.html" aria-label="Открыть Герб России на металлическом щите — покрытие краской"></a>
+  <div class="popular-media"><img src="assets/Герб РФ барельеф краска на метал щите анфас.png" alt="Герб России на металлическом щите — покрытие краской" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб России на металлическом щите — покрытие краской</h3>
     <p>Краска · Металл</p>
-    <div class="all-product-foot"><span>от <strong>16 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>16 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на пластиковом щите — металлизация на щите · барельеф металлизация · пластик россия рф на щите барельеф металлизация пластик пластиковый">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-plastik.html" aria-label="Открыть Герб России на пластиковом щите — металлизация"></a>
-  <div class="all-product-media"><img src="Герб рф металлизация щит пластик анфас.png" alt="Герб России на пластиковом щите — металлизация" style="--media-scale:1.08"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на пластиковом щите — металлизация на щите · барельеф металлизация · пластик россия рф на щите барельеф металлизация пластик пластиковый">
+  <a class="popular-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-plastik.html" aria-label="Открыть Герб России на пластиковом щите — металлизация"></a>
+  <div class="popular-media"><img src="Герб рф металлизация щит пластик анфас.png" alt="Герб России на пластиковом щите — металлизация" style="--media-scale:1.08"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб России на пластиковом щите — металлизация</h3>
     <p>Металлизация · Пластик</p>
-    <div class="all-product-foot"><span>от <strong>13 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>13 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на бархатном щите — металлизация на щите · барельеф металлизация · бархат россия рф на щите барельеф металлизация бархат флок">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-barhat.html" aria-label="Открыть Герб России на бархатном щите — металлизация"></a>
-  <div class="all-product-media"><img src="Герб рф металлизация щит бархат анфас.png" alt="Герб России на бархатном щите — металлизация" style="--media-scale:1.08"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на бархатном щите — металлизация на щите · барельеф металлизация · бархат россия рф на щите барельеф металлизация бархат флок">
+  <a class="popular-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-barhat.html" aria-label="Открыть Герб России на бархатном щите — металлизация"></a>
+  <div class="popular-media"><img src="Герб рф металлизация щит бархат анфас.png" alt="Герб России на бархатном щите — металлизация" style="--media-scale:1.08"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб России на бархатном щите — металлизация</h3>
     <p>Металлизация · Бархат</p>
-    <div class="all-product-foot"><span>от <strong>14 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>14 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на металлическом щите — металлизация на щите · барельеф металлизация · металл россия рф на щите барельеф металлизация металл металлический">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-metall.html" aria-label="Открыть Герб России на металлическом щите — металлизация"></a>
-  <div class="all-product-media"><img src="Герб металлизация щит метал анфас.png" alt="Герб России на металлическом щите — металлизация" style="--media-scale:1.12"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Барельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на металлическом щите — металлизация на щите · барельеф металлизация · металл россия рф на щите барельеф металлизация металл металлический">
+  <a class="popular-hit" href="gerb-rf-na-shchite-barelef-metallizaciya-metall.html" aria-label="Открыть Герб России на металлическом щите — металлизация"></a>
+  <div class="popular-media"><img src="Герб металлизация щит метал анфас.png" alt="Герб России на металлическом щите — металлизация" style="--media-scale:1.12"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Барельеф</div>
     <h3>Герб России на металлическом щите — металлизация</h3>
     <p>Металлизация · Металл</p>
-    <div class="all-product-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>17 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
-</article><article class="all-product-card" data-product-card data-group="rf" data-location="На щите" data-finish="gorelief" data-search="герб россии на щите — горельеф на щите · горельеф горельеф россия рф на щите горельеф">
-  <a class="all-product-hit" href="gerb-rf-na-shchite-gorelef.html" aria-label="Открыть Герб России на щите — горельеф"></a>
-  <div class="all-product-media"><img src="assets/Горельеф на щите анфас.png" alt="Герб России на щите — горельеф" style="--media-scale:1.06"></div>
-  <div class="all-product-body">
-    <div class="all-product-kicker">На щите · Горельеф</div>
+</article>
+<article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="gorelief" data-search="герб россии на щите — горельеф на щите · горельеф горельеф россия рф на щите горельеф">
+  <a class="popular-hit" href="gerb-rf-na-shchite-gorelef.html" aria-label="Открыть Герб России на щите — горельеф"></a>
+  <div class="popular-media"><img src="assets/Горельеф на щите анфас.png" alt="Герб России на щите — горельеф" style="--media-scale:1.06"></div>
+  <div class="popular-body">
+    <div class="popular-kicker">На щите · Горельеф</div>
     <h3>Герб России на щите — горельеф</h3>
     <p>Горельеф</p>
-    <div class="all-product-foot"><span>от <strong>29 900 ₽</strong></span><span>Подробнее →</span></div>
+    <div class="popular-foot"><span>от <strong>29 900 ₽</strong></span><span>Подробнее →</span></div>
   </div>
 </article></div>
+</section>
+
+<section class="catalog-section" id="subjects" data-catalog-section="subjects">
+<div class="catalog-section-head"><div><p class="eyebrow">По алфавиту</p><h2>Гербы субъектов и городов Российской Федерации</h2><p>Полный перечень из уже созданного справочника. Используйте алфавит или общий поиск сверху.</p><nav class="catalog-alphabet" aria-label="Алфавит гербов субъектов и городов"><a href="#subjects-letter-А">А</a><a href="#subjects-letter-Б">Б</a><a href="#subjects-letter-В">В</a><a href="#subjects-letter-Д">Д</a><a href="#subjects-letter-Е">Е</a><a href="#subjects-letter-З">З</a><a href="#subjects-letter-И">И</a><a href="#subjects-letter-К">К</a><a href="#subjects-letter-Л">Л</a><a href="#subjects-letter-М">М</a><a href="#subjects-letter-Н">Н</a><a href="#subjects-letter-О">О</a><a href="#subjects-letter-П">П</a><a href="#subjects-letter-Р">Р</a><a href="#subjects-letter-С">С</a><a href="#subjects-letter-Т">Т</a><a href="#subjects-letter-У">У</a><a href="#subjects-letter-Х">Х</a><a href="#subjects-letter-Ч">Ч</a><a href="#subjects-letter-Я">Я</a></nav></div><span class="catalog-section-count">86 позиций</span></div>
+<div data-directory-list="subjects"><section class="directory-letter-group" id="subjects-letter-А" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">А</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">7</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="агинский бурятский автономный округ" data-type="Автономный округ">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономный округ</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Агинского Бурятского автономного округа</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Агинский Бурятский автономный округ" data-subject-genitive="Агинского Бурятского автономного округа">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="адыгея" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Адыгея</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Адыгея" data-subject-genitive="Республики Адыгея">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="алтай" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Алтай</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Алтай" data-subject-genitive="Республики Алтай">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="алтайский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Алтайского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Алтайский край" data-subject-genitive="Алтайского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="амурская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Амурской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Амурская область" data-subject-genitive="Амурской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="архангельская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Архангельской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Архангельская область" data-subject-genitive="Архангельской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="астраханская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Астраханской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Астраханская область" data-subject-genitive="Астраханской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Б" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Б</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">4</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="башкортостан" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Башкортостан</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Башкортостан" data-subject-genitive="Республики Башкортостан">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="белгородская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Белгородской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Белгородская область" data-subject-genitive="Белгородской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="брянская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Брянской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Брянская область" data-subject-genitive="Брянской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="бурятия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Бурятия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Бурятия" data-subject-genitive="Республики Бурятия">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-В" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">В</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">4</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="владимирская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Владимирской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Владимирская область" data-subject-genitive="Владимирской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="волгоградская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Волгоградской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Волгоградская область" data-subject-genitive="Волгоградской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="вологодская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Вологодской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Вологодская область" data-subject-genitive="Вологодской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="воронежская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Воронежской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Воронежская область" data-subject-genitive="Воронежской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Д" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Д</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">1</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="дагестан" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Дагестан</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Дагестан" data-subject-genitive="Республики Дагестан">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Е" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Е</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">1</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="еврейская автономная область" data-type="Автономная область">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономная область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Еврейской автономной области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Еврейская автономная область" data-subject-genitive="Еврейской автономной области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-З" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">З</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">1</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="забайкальский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Забайкальского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Забайкальский край" data-subject-genitive="Забайкальского края">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-И" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">И</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">3</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ивановская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ивановской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ивановская область" data-subject-genitive="Ивановской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ингушетия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Ингушетия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ингушетия" data-subject-genitive="Республики Ингушетия">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="иркутская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Иркутской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Иркутская область" data-subject-genitive="Иркутской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-К" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">К</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">15</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="кабардино-балкарская республика" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Кабардино-Балкарской Республики</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Кабардино-Балкарская Республика" data-subject-genitive="Кабардино-Балкарской Республики">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="калининградская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Калининградской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Калининградская область" data-subject-genitive="Калининградской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="калмыкия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Калмыкия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Калмыкия" data-subject-genitive="Республики Калмыкия">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="калужская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Калужской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Калужская область" data-subject-genitive="Калужской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="камчатский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Камчатского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Камчатский край" data-subject-genitive="Камчатского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="карачаево-черкесская республика" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Карачаево-Черкесской Республики</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Карачаево-Черкесская Республика" data-subject-genitive="Карачаево-Черкесской Республики">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="карелия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Карелия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Карелия" data-subject-genitive="Республики Карелия">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="кемеровская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Кемеровской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Кемеровская область" data-subject-genitive="Кемеровской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="кировская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Кировской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Кировская область" data-subject-genitive="Кировской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="коми" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Коми</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Коми" data-subject-genitive="Республики Коми">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="костромская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Костромской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Костромская область" data-subject-genitive="Костромской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="краснодарский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Краснодарского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Краснодарский край" data-subject-genitive="Краснодарского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="красноярский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Красноярского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Красноярский край" data-subject-genitive="Красноярского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="курганская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Курганской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Курганская область" data-subject-genitive="Курганской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="курская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Курской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Курская область" data-subject-genitive="Курской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Л" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Л</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">2</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ленинградская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ленинградской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ленинградская область" data-subject-genitive="Ленинградской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="липецкая область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Липецкой области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Липецкая область" data-subject-genitive="Липецкой области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-М" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">М</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">6</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="магаданская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Магаданской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Магаданская область" data-subject-genitive="Магаданской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="марий эл" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Марий Эл</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Марий Эл" data-subject-genitive="Республики Марий Эл">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="мордовия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Мордовия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Мордовия" data-subject-genitive="Республики Мордовия">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="москва" data-type="Город федерального значения">
+      <div class="directory-card-top">
+        <span class="directory-type">Город федерального значения</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Москвы</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Москва" data-subject-genitive="Москвы">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="московская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Московской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Московская область" data-subject-genitive="Московской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="мурманская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Мурманской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Мурманская область" data-subject-genitive="Мурманской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Н" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Н</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">4</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ненецкий автономный округ" data-type="Автономный округ">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономный округ</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ненецкого автономного округа</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ненецкий автономный округ" data-subject-genitive="Ненецкого автономного округа">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="нижегородская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Нижегородской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Нижегородская область" data-subject-genitive="Нижегородской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="новгородская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Новгородской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Новгородская область" data-subject-genitive="Новгородской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="новосибирская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Новосибирской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Новосибирская область" data-subject-genitive="Новосибирской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-О" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">О</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">3</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="омская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Омской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Омская область" data-subject-genitive="Омской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="оренбургская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Оренбургской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Оренбургская область" data-subject-genitive="Оренбургской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="орловская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Орловской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Орловская область" data-subject-genitive="Орловской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-П" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">П</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">4</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="пензенская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Пензенской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Пензенская область" data-subject-genitive="Пензенской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="пермский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Пермского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Пермский край" data-subject-genitive="Пермского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="приморский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Приморского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Приморский край" data-subject-genitive="Приморского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="псковская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Псковской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Псковская область" data-subject-genitive="Псковской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Р" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Р</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">2</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ростовская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ростовской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ростовская область" data-subject-genitive="Ростовской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="рязанская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Рязанской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Рязанская область" data-subject-genitive="Рязанской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-С" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">С</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">9</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="самарская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Самарской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Самарская область" data-subject-genitive="Самарской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="санкт-петербург" data-type="Город федерального значения">
+      <div class="directory-card-top">
+        <span class="directory-type">Город федерального значения</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Санкт-Петербурга</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Санкт-Петербург" data-subject-genitive="Санкт-Петербурга">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="саратовская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Саратовской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Саратовская область" data-subject-genitive="Саратовской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="саха (якутия)" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Саха (Якутия)</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Саха (Якутия)" data-subject-genitive="Республики Саха (Якутия)">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="сахалинская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Сахалинской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Сахалинская область" data-subject-genitive="Сахалинской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="свердловская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Свердловской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Свердловская область" data-subject-genitive="Свердловской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="северная осетия — алания" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Северная Осетия — Алания</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Северная Осетия — Алания" data-subject-genitive="Республики Северная Осетия — Алания">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="смоленская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Смоленской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Смоленская область" data-subject-genitive="Смоленской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ставропольский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ставропольского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ставропольский край" data-subject-genitive="Ставропольского края">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Т" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Т</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">7</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="тамбовская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тамбовской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Тамбовская область" data-subject-genitive="Тамбовской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="татарстан" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Татарстан</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Татарстан" data-subject-genitive="Республики Татарстан">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="тверская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тверской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Тверская область" data-subject-genitive="Тверской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="томская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Томской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Томская область" data-subject-genitive="Томской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="тульская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тульской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Тульская область" data-subject-genitive="Тульской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="тыва" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Тыва</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Тыва" data-subject-genitive="Республики Тыва">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="тюменская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Тюменской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Тюменская область" data-subject-genitive="Тюменской области">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-У" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">У</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">3</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="удмуртская республика" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Удмуртской Республики</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Удмуртская Республика" data-subject-genitive="Удмуртской Республики">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ульяновская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ульяновской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ульяновская область" data-subject-genitive="Ульяновской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="усть-ордынский бурятский автономный округ" data-type="Автономный округ">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономный округ</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Усть-Ордынского Бурятского автономного округа</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Усть-Ордынский Бурятский автономный округ" data-subject-genitive="Усть-Ордынского Бурятского автономного округа">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Х" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Х</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">3</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="хабаровский край" data-type="Край">
+      <div class="directory-card-top">
+        <span class="directory-type">Край</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Хабаровского края</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Хабаровский край" data-subject-genitive="Хабаровского края">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="хакасия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Республики Хакасия</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Хакасия" data-subject-genitive="Республики Хакасия">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ханты-мансийский автономный округ — югра" data-type="Автономный округ">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономный округ</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ханты-Мансийского автономного округа — Югры</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ханты-Мансийский автономный округ — Югра" data-subject-genitive="Ханты-Мансийского автономного округа — Югры">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Ч" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Ч</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">5</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="челябинская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Челябинской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Челябинская область" data-subject-genitive="Челябинской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="чеченская республика" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Чеченской Республики</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Чеченская Республика" data-subject-genitive="Чеченской Республики">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="читинская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Читинской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Читинская область" data-subject-genitive="Читинской области">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="чувашская республика — чувашия" data-type="Республика">
+      <div class="directory-card-top">
+        <span class="directory-type">Республика</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Чувашской Республики — Чувашии</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Чувашская Республика — Чувашия" data-subject-genitive="Чувашской Республики — Чувашии">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="чукотский автономный округ" data-type="Автономный округ">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономный округ</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Чукотского автономного округа</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Чукотский автономный округ" data-subject-genitive="Чукотского автономного округа">Уточнить исполнение →</a>
+    </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="subjects-letter-Я" data-letter-group>
+  <div class="directory-letter-head">
+    <span class="directory-letter">Я</span>
+    <span class="directory-letter-line"></span>
+    <span class="directory-letter-count">2</span>
+  </div>
+  <div class="directory-grid">
+    
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ямало-ненецкий автономный округ" data-type="Автономный округ">
+      <div class="directory-card-top">
+        <span class="directory-type">Автономный округ</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ямало-Ненецкого автономного округа</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ямало-Ненецкий автономный округ" data-subject-genitive="Ямало-Ненецкого автономного округа">Уточнить исполнение →</a>
+    </article>
+    <article class="directory-card subject-card" data-catalog-card data-kind="subjects" data-subject-card data-name="ярославская область" data-type="Область">
+      <div class="directory-card-top">
+        <span class="directory-type">Область</span>
+        <span class="directory-arrow" aria-hidden="true">↗</span>
+      </div>
+      <h3>Герб Ярославской области</h3>
+      <p>Настенное исполнение герба субъекта Российской Федерации.</p>
+      <a href="#request" class="directory-link" data-subject-request="Ярославская область" data-subject-genitive="Ярославской области">Уточнить исполнение →</a>
+    </article>
+  </div>
 </section></div>
-<div class="all-empty" id="allEmpty"><strong>Ничего не найдено</strong><span>Попробуйте изменить запрос или снять фильтр.</span></div>
-<div class="all-directory-links">
-<a class="all-directory-link" href="gerby-subektov-rf.html"><strong>Гербы субъектов и городов Российской Федерации</strong><span>Открыть справочник →</span></a>
-<a class="all-directory-link" href="emblemy-vedomstv-rf.html"><strong>Эмблемы ведомств Российской Федерации</strong><span>Открыть справочник →</span></a>
-</div>
+</section>
+
+<section class="catalog-section" id="agencies" data-catalog-section="agencies">
+<div class="catalog-section-head"><div><p class="eyebrow">По алфавиту</p><h2>Эмблемы ведомств Российской Федерации</h2><p>Министерства, федеральные службы, государственные органы, судебные и надзорные структуры.</p><nav class="catalog-alphabet" aria-label="Алфавит ведомств"><a href="#agencies-letter-В">В</a><a href="#agencies-letter-Г">Г</a><a href="#agencies-letter-Д">Д</a><a href="#agencies-letter-К">К</a><a href="#agencies-letter-М">М</a><a href="#agencies-letter-Н">Н</a><a href="#agencies-letter-П">П</a><a href="#agencies-letter-С">С</a><a href="#agencies-letter-У">У</a><a href="#agencies-letter-Ф">Ф</a><a href="#agencies-letter-Ц">Ц</a></nav></div><span class="catalog-section-count">46 позиций</span></div>
+<div data-directory-list="agencies"><section class="directory-letter-group" id="agencies-letter-В" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">В</span><span class="directory-letter-line"></span><span class="directory-letter-count">3</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="верховный суд" data-type="Судебный орган">
+    <div class="directory-card-top"><span class="directory-type">Судебный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Верховного Суда</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Верховного Суда">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="внутренние войска (национальная гвардия)" data-type="Силовое ведомство">
+    <div class="directory-card-top"><span class="directory-type">Силовое ведомство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема внутренних войск (Национальной гвардии)</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема внутренних войск (Национальной гвардии)">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="высший арбитражный суд" data-type="Судебный орган">
+    <div class="directory-card-top"><span class="directory-type">Судебный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Высшего Арбитражного Суда</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Высшего Арбитражного Суда">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-Г" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">Г</span><span class="directory-letter-line"></span><span class="directory-letter-count">6</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="генеральная прокуратура" data-type="Надзорный орган">
+    <div class="directory-card-top"><span class="directory-type">Надзорный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Генеральной Прокуратуры</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Генеральной Прокуратуры">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="геральдический совет при президенте рф" data-type="При Президенте РФ">
+    <div class="directory-card-top"><span class="directory-type">При Президенте РФ</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Геральдического Совета при Президенте РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Геральдического Совета при Президенте РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="главное управление специальных программ президента российской федерации" data-type="При Президенте РФ">
+    <div class="directory-card-top"><span class="directory-type">При Президенте РФ</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Главного управления специальных программ Президента РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Главного управления специальных программ Президента РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="государственная дума" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Государственной Думы РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Государственной Думы РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="государственная инспекция по маломерным судам" data-type="Структура МЧС">
+    <div class="directory-card-top"><span class="directory-type">Структура МЧС</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Государственной инспекции по маломерным судам</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Государственной инспекции по маломерным судам">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="государственная противопожарная служба" data-type="Структура МЧС">
+    <div class="directory-card-top"><span class="directory-type">Структура МЧС</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Государственной противопожарной службы</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Государственной противопожарной службы">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-Д" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">Д</span><span class="directory-letter-line"></span><span class="directory-letter-count">7</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент государственной защиты имущества мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента государственной защиты имущества МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента государственной защиты имущества МВД">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент обеспечения безопасности дорожного движения мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента обеспечения безопасности дорожного движения МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента обеспечения безопасности дорожного движения МВД">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент обеспечения правопорядка на транспорте мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента обеспечения правопорядка на транспорте МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента обеспечения правопорядка на транспорте МВД">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент охраны общественного порядка мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента охраны общественного порядка МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента охраны общественного порядка МВД">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент по борьбе с организованной преступностью и терроризмом мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента по борьбе с организованной преступностью и терроризмом МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента по борьбе с организованной преступностью и терроризмом МВД">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент уголовного розыска мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента уголовного розыска МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента уголовного розыска МВД">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="департамент экономической безопасности мвд" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Департамента экономической безопасности МВД</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Департамента экономической безопасности МВД">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-К" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">К</span><span class="directory-letter-line"></span><span class="directory-letter-count">2</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="комиссия по военно-техническому сотрудничеству с иностранными государствами при президенте рф" data-type="При Президенте РФ">
+    <div class="directory-card-top"><span class="directory-type">При Президенте РФ</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Комиссии по военно-техническому сотрудничеству при Президенте РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Комиссии по военно-техническому сотрудничеству при Президенте РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="конституционный суд" data-type="Судебный орган">
+    <div class="directory-card-top"><span class="directory-type">Судебный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Конституционного Суда</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Конституционного Суда">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-М" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">М</span><span class="directory-letter-line"></span><span class="directory-letter-count">9</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство внутренних дел (мвд)" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства внутренних дел (МВД)</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства внутренних дел (МВД)">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство здравоохранения и социального развития" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства здравоохранения и социального развития</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства здравоохранения и социального развития">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство иностранных дел (мид)" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства иностранных дел РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства иностранных дел РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство информационных технологий и связи" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства информационных технологий и связи</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства информационных технологий и связи">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство культуры российской федерации" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства культуры РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства культуры РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство науки и высшего образования российской федерации" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства науки и высшего образования РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства науки и высшего образования РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство обороны российской федерации" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства обороны Российской Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства обороны Российской Федерации">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство по делам гражданской обороны, чрезвычайным ситуациям и ликвидации последствий стихийных бедствий (мчс)" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема МЧС России</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема МЧС России">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="министерство финансов российской федерации" data-type="Министерство">
+    <div class="directory-card-top"><span class="directory-type">Министерство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Министерства финансов РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Министерства финансов РФ">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-Н" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">Н</span><span class="directory-letter-line"></span><span class="directory-letter-count">1</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="национальное центральное бюро интерпола при мвд россии" data-type="Структура МВД">
+    <div class="directory-card-top"><span class="directory-type">Структура МВД</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Национального центрального бюро Интерпола при МВД России</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Национального центрального бюро Интерпола при МВД России">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-П" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">П</span><span class="directory-letter-line"></span><span class="directory-letter-count">1</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="президент российской федерации" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Президента Российской Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Президента Российской Федерации">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-С" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">С</span><span class="directory-letter-line"></span><span class="directory-letter-count">6</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="служба безопасности президента рф" data-type="При Президенте РФ">
+    <div class="directory-card-top"><span class="directory-type">При Президенте РФ</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Службы безопасности Президента РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Службы безопасности Президента РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="служба внешней разведки рф" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Службы внешней разведки РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Службы внешней разведки РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="совет безопасности" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Совета Безопасности</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Совета Безопасности">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="совет федерации" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Совета Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Совета Федерации">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="судебный департамент при верховном суде российской федерации" data-type="Судебный орган">
+    <div class="directory-card-top"><span class="directory-type">Судебный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Судебного департамента при Верховном Суде РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Судебного департамента при Верховном Суде РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="счетная палата" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Счетной Палаты РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Счетной Палаты РФ">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-У" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">У</span><span class="directory-letter-line"></span><span class="directory-letter-count">1</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="управление делами президента российской федерации" data-type="При Президенте РФ">
+    <div class="directory-card-top"><span class="directory-type">При Президенте РФ</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Управления делами Президента Российской Федерации</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Управления делами Президента Российской Федерации">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-Ф" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">Ф</span><span class="directory-letter-line"></span><span class="directory-letter-count">8</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная антимонопольная служба" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Федеральной антимонопольной службы</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Федеральной антимонопольной службы">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная миграционная служба" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Федеральной миграционной службы (ФМС)</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Федеральной миграционной службы (ФМС)">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная служба безопасности россии" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Федеральной службы безопасности России</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Федеральной службы безопасности России">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная служба войск национальной гвардии российской федерации" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Федеральной службы войск национальной гвардии РФ</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Федеральной службы войск национальной гвардии РФ">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная служба по надзору в сфере защиты прав потребителей и благополучия человека" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Роспотребнадзора</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Роспотребнадзора">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная служба по надзору в сфере природопользования" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Росприроднадзора</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Росприроднадзора">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральная служба судебных приставов" data-type="Федеральная служба">
+    <div class="directory-card-top"><span class="directory-type">Федеральная служба</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Федеральной службы судебных приставов</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Федеральной службы судебных приставов">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="федеральное медико-биологическое агентство" data-type="Федеральное агентство">
+    <div class="directory-card-top"><span class="directory-type">Федеральное агентство</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Федерального медико-биологического агентства</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Федерального медико-биологического агентства">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section>
+<section class="directory-letter-group" id="agencies-letter-Ц" data-letter-group>
+  <div class="directory-letter-head"><span class="directory-letter">Ц</span><span class="directory-letter-line"></span><span class="directory-letter-count">2</span></div>
+  <div class="directory-grid">
+  <article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="центральная избирательная комиссия" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Центральной Избирательной Комиссии</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Центральной Избирательной Комиссии">Уточнить исполнение →</a>
+  </article><article class="directory-card agency-card" data-catalog-card data-kind="agencies" data-agency-card data-name="центральный банк" data-type="Федеральный орган">
+    <div class="directory-card-top"><span class="directory-type">Федеральный орган</span><span class="directory-arrow">↗</span></div>
+    <h3>Эмблема Центрального Банка</h3>
+    <p>Настенное барельефное исполнение ведомственной символики Российской Федерации.</p>
+    <a href="#request" class="directory-link" data-agency-request="Эмблема Центрального Банка">Уточнить исполнение →</a>
+  </article>
+  </div>
+</section></div>
+</section>
+
+<div class="catalog-empty" id="catalogEmpty"><strong>Ничего не найдено</strong><span>Попробуйте изменить запрос или выбрать другой раздел каталога.</span></div>
 </div></section>
+
+<section class="cta" id="request"><div class="container cta-inner"><div><p class="eyebrow eyebrow-light">Индивидуальный заказ</p><h2>Не нашли нужное исполнение?</h2><p id="catalogRequestText">Уточним размер, материал и подготовим предложение.</p></div><a class="button button-gold" id="catalogRequestButton" href="mailto:xxx@xxx.xxx?subject=Запрос%20по%20каталогу">Отправить запрос</a></div></section>
 </main>
-<footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Субъекты и города РФ</a><a href="emblemy-vedomstv-rf.html">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
-<script src="script.js?v=20261117-allcatalog3"></script>
+
+<footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
+
+<script src="script.js?v=20261117-allcatalog4"></script>
 <script>
 (function(){
- const input=document.getElementById('allSearch'),clear=document.getElementById('allClear'),count=document.getElementById('allCount'),empty=document.getElementById('allEmpty');
- const cards=[...document.querySelectorAll('[data-product-card]')],groups=[...document.querySelectorAll('[data-product-group]')],filters=[...document.querySelectorAll('[data-filter]')];
- let active='all';const norm=s=>(s||'').toLocaleLowerCase('ru').replaceAll('ё','е').replace(/\s+/g,' ').trim();
+ const input=document.getElementById('catalogSearch');
+ const clear=document.getElementById('catalogClear');
+ const count=document.getElementById('catalogCount');
+ const empty=document.getElementById('catalogEmpty');
+ const filters=[...document.querySelectorAll('[data-section-filter]')];
+ const sections=[...document.querySelectorAll('[data-catalog-section]')];
+ const popular=[...document.querySelectorAll('[data-popular-card]')];
+ const directory=[...document.querySelectorAll('[data-catalog-card]')];
+ let active='all';
+ const norm=s=>(s||'').toLocaleLowerCase('ru').replaceAll('ё','е').replace(/\s+/g,' ').trim();
+
  function apply(){
-  const q=norm(input.value);let visible=0;
-  cards.forEach(c=>{
-   const matchText=!q || norm(c.dataset.search).includes(q);
-   let matchFilter=true;
+  const q=norm(input.value);
+  let visible=0;
 
-   if(active==='Без щита' || active==='На щите'){
-     matchFilter=c.dataset.location===active;
-   }else if(active==='paint' || active==='metal' || active==='gorelief'){
-     matchFilter=c.dataset.finish===active;
-   }else if(active==='all'){
-     matchFilter=true;
-   }else{
-     matchFilter=false;
-   }
-
-   const show=matchText && matchFilter;
-   c.classList.toggle('catalog-filter-hidden',!show);
-   c.hidden=!show;
+  popular.forEach(card=>{
+   const allowed=active==='all'||active==='popular';
+   const show=allowed && (!q || norm(card.dataset.search+' '+card.textContent).includes(q));
+   card.classList.toggle('catalog-hidden',!show);
+   card.hidden=!show;
    if(show) visible++;
   });
 
-  groups.forEach(g=>{
-   const groupCards=[...g.querySelectorAll('[data-product-card]')];
-   const visibleCards=groupCards.filter(c=>!c.classList.contains('catalog-filter-hidden'));
-   const showGroup=visibleCards.length>0;
-   g.classList.toggle('catalog-filter-hidden',!showGroup);
-   g.hidden=!showGroup;
-   const counter=g.querySelector('[data-group-count]');
-   if(counter) counter.textContent=visibleCards.length;
+  directory.forEach(card=>{
+   const kind=card.dataset.kind;
+   const allowed=active==='all'||active===kind;
+   const hay=card.dataset.name+' '+card.dataset.type+' '+card.textContent;
+   const show=allowed && (!q || norm(hay).includes(q));
+   card.classList.toggle('catalog-hidden',!show);
+   card.hidden=!show;
+   if(show) visible++;
   });
-  count.textContent='Найдено: '+visible;clear.hidden=!input.value;empty.classList.toggle('show',visible===0);
+
+  document.querySelectorAll('.directory-letter-group').forEach(group=>{
+   const has=[...group.querySelectorAll('[data-catalog-card]')].some(card=>!card.classList.contains('catalog-hidden'));
+   group.classList.toggle('catalog-hidden',!has);
+   group.hidden=!has;
+  });
+
+  sections.forEach(section=>{
+   const kind=section.dataset.catalogSection;
+   let has=false;
+   if(kind==='popular') has=popular.some(c=>!c.classList.contains('catalog-hidden'));
+   else has=[...section.querySelectorAll('[data-catalog-card]')].some(c=>!c.classList.contains('catalog-hidden'));
+   section.classList.toggle('catalog-hidden',!has);
+   section.hidden=!has;
+  });
+
+  count.textContent='Найдено: '+visible;
+  clear.hidden=!input.value;
+  empty.classList.toggle('show',visible===0);
  }
- input.addEventListener('input',apply);clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
- filters.forEach(b=>b.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');active=b.dataset.filter;apply()}));
+
+ input.addEventListener('input',apply);
+ clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
+ filters.forEach(btn=>btn.addEventListener('click',()=>{
+  filters.forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  active=btn.dataset.sectionFilter;
+  apply();
+ }));
+
+ document.querySelectorAll('[data-subject-request]').forEach(a=>a.addEventListener('click',()=>{
+   const genitive=a.dataset.subjectGenitive || a.dataset.subjectRequest;
+   document.getElementById('catalogRequestText').textContent='Вы выбрали: герб '+genitive+'. Уточним размер, материал и подготовим предложение.';
+   document.getElementById('catalogRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent('Герб '+genitive);
+ }));
+ document.querySelectorAll('[data-agency-request]').forEach(a=>a.addEventListener('click',()=>{
+   const name=a.dataset.agencyRequest;
+   document.getElementById('catalogRequestText').textContent='Вы выбрали: '+name+'. Уточним размер, материал и подготовим предложение.';
+   document.getElementById('catalogRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent(name);
+ }));
  apply();
 })();
 </script>
