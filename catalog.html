@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Весь каталог | Держава</title>
 <meta name="description" content="Полный каталог Державы: гербы субъектов и городов Российской Федерации, эмблемы ведомств и популярные готовые исполнения с фотографиями.">
-<meta name="theme-color" content="#07182a">
+<meta name="theme-color" content="#07182a">\n<meta name="catalog-search-version" content="20261117-subject-products-generic1">
 <link rel="stylesheet" href="styles.css?v=20261117-catalogsearch3">
 <style>
 .catalog-head-full{padding:58px 0 38px;border-bottom:1px solid var(--line)}
@@ -1680,35 +1680,63 @@
    return qTokens.every(qt=>hTokens.some(ht=>tokenMatches(qt,ht)));
  };
 
- function apply(){
-  const q=input.value || '';
-  const qNorm=normalize(q);
-  // Product cards normally belong to "Popular", but when a user searches
-  // for a subject/city that already has real product photos, show those
-  // products inside the "Subjects and cities" filter instead of the
-  // generic text-only directory card.
-  const moscowCityQuery=(/\bмск\b/.test(qNorm) || /\bмоск(?:в(?:а|ы|е|у|ой)?)?\b/.test(qNorm)) && !/\bобласт/.test(qNorm);
-  let visible=0;
-
-  popular.forEach(card=>{
-   const isMoscowProduct=card.dataset.group==='moscow';
-   const allowed=
-     active==='all' ||
-     active==='popular' ||
-     (active==='subjects' && moscowCityQuery && isMoscowProduct);
+ const cardHay=card=>{
    const title=card.querySelector('h3')?.textContent || '';
    const kicker=card.querySelector('.popular-kicker')?.textContent || '';
    const finish=card.querySelector('.popular-body>p')?.textContent || '';
-   const hay=(card.dataset.search||'')+' '+title+' '+kicker+' '+finish;
-   const show=allowed && queryMatches(q,hay);
+   return (card.dataset.search||'')+' '+title+' '+kicker+' '+finish;
+ };
+
+ const subjectEntities=directory
+   .filter(card=>card.dataset.kind==='subjects')
+   .map(card=>({
+     card,
+     name:card.dataset.name||'',
+     entityTokens:tokens(card.dataset.name||'')
+   }))
+   .filter(entity=>entity.entityTokens.length);
+
+ const productRepresentsEntity=(productCard,entity)=>{
+   const productTokens=tokens(cardHay(productCard)+' '+aliasesFor(cardHay(productCard)));
+   return entity.entityTokens.every(et=>productTokens.some(pt=>tokenMatches(et,pt)));
+ };
+
+ function apply(){
+  const q=input.value || '';
+  const hasQuery=tokens(q).length>0;
+
+  // First resolve which subject/city directory entities the user's query points to.
+  // Then allow any real product card whose text/search data represents one of those
+  // entities. This is generic: no city or region is hard-coded.
+  const matchingSubjectEntities=hasQuery
+   ? subjectEntities.filter(entity=>{
+       const card=entity.card;
+       const title=card.querySelector('h3')?.textContent || '';
+       const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+title;
+       return queryMatches(q,hay);
+     })
+   : [];
+
+  let visible=0;
+
+  popular.forEach(card=>{
+   const belongsToMatchingSubject=
+     active==='subjects' &&
+     hasQuery &&
+     matchingSubjectEntities.some(entity=>productRepresentsEntity(card,entity));
+
+   const allowed=
+     active==='all' ||
+     active==='popular' ||
+     belongsToMatchingSubject;
+
+   const show=allowed && queryMatches(q,cardHay(card));
    card.classList.toggle('catalog-hidden',!show);
    card.hidden=!show;
    if(show) visible++;
   });
 
-  const visiblePopularHay=popular
-   .filter(card=>!card.classList.contains('catalog-hidden'))
-   .map(card=>normalize((card.dataset.search||'')+' '+card.textContent));
+  const visiblePopular=popular.filter(card=>!card.classList.contains('catalog-hidden'));
 
   directory.forEach(card=>{
    const kind=card.dataset.kind;
@@ -1717,14 +1745,13 @@
    const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+title;
    const matchesQuery=allowed && queryMatches(q,hay);
 
-   // A directory card is only a fallback. If matching real product cards
-   // with photos already represent this exact subject/entity, hide the
-   // generic text-only duplicate.
-   const entityName=normalize(card.dataset.name||'');
-   const representedByPhoto=matchesQuery && entityName && visiblePopularHay.some(photoHay=>{
-     if(entityName==='москва') return /(^|\s)москв/.test(photoHay);
-     return photoHay.includes(entityName);
-   });
+   // Directory cards are fallbacks. When real product cards with photos already
+   // represent this exact subject/city, suppress the generic text-only card.
+   const entity=subjectEntities.find(item=>item.card===card);
+   const representedByPhoto=
+     matchesQuery &&
+     !!entity &&
+     visiblePopular.some(product=>productRepresentsEntity(product,entity));
 
    const show=matchesQuery && !representedByPhoto;
    card.classList.toggle('catalog-hidden',!show);
