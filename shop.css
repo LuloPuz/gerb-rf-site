@@ -249,7 +249,7 @@
 .header-inner{min-height:84px!important;gap:28px!important}
 .brand{min-width:272px!important}
 .brand small{font-size:9px!important;letter-spacing:.065em!important;color:#7a838b!important}
-.main-nav{gap:31px!important;font-size:15px!important;font-weight:500!important;letter-spacing:.002em!important}
+.main-nav{gap:26px!important;font-size:15px!important;font-weight:500!important;letter-spacing:.002em!important}
 .main-nav a{
   position:relative!important;
   display:flex!important;
