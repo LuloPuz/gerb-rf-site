@@ -990,7 +990,7 @@ body.lightbox-open{overflow:hidden}
   padding:0 !important;
 }
 .home-search-section>.container{
-  width:min(1180px,calc(100% - 40px)) !important;
+  width:min(1440px,calc(100% - 40px)) !important;
 }
 .home-search-card{
   grid-template-columns:290px minmax(0,1fr) !important;
@@ -1032,7 +1032,7 @@ body.lightbox-open{overflow:hidden}
 }
 @media(max-width:1050px){
   .home-search-section>.container{
-    width:min(860px,calc(100% - 40px)) !important;
+    width:min(1440px,calc(100% - 40px)) !important;
   }
   .home-search-card{
     grid-template-columns:1fr !important;
