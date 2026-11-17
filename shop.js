@@ -81,7 +81,9 @@
     actions.innerHTML='<button class="shop-add-button" type="button">Добавить в корзину</button><a class="shop-go-cart" href="cart.html">Корзина</a>';
     direct.parentNode.insertBefore(actions,direct);
     direct.classList.add('shop-direct-order');
-    direct.textContent='Заказать напрямую у менеджера';
+    direct.textContent='← Продолжить покупки';
+    direct.setAttribute('href','catalog.html');
+    direct.removeAttribute('target');
 
     const add=actions.querySelector('.shop-add-button');
     add.addEventListener('click',()=>{
