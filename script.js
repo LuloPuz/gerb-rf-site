@@ -75,7 +75,7 @@ document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forE
 if (!document.querySelector('link[data-mobile-styles]')) {
   const mobileStyles = document.createElement('link');
   mobileStyles.rel = 'stylesheet';
-  mobileStyles.href = 'mobile.css?v=20261117-mobile4';
+  mobileStyles.href = 'mobile.css?v=20261117-mobile5';
   mobileStyles.dataset.mobileStyles = 'true';
   document.head.appendChild(mobileStyles);
 }
