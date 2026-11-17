@@ -5,7 +5,7 @@
 <title>Весь каталог | Держава</title>
 <meta name="description" content="Полный каталог Державы: гербы субъектов и городов Российской Федерации, эмблемы ведомств и популярные готовые исполнения с фотографиями.">
 <meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261117-allcatalog4">
+<link rel="stylesheet" href="styles.css?v=20261117-catalogsearch1">
 <style>
 .catalog-head-full{padding:58px 0 38px;border-bottom:1px solid var(--line)}
 .catalog-breadcrumb-full{margin:0 0 24px;color:#7a8187;font-size:13px}
@@ -1585,7 +1585,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261117-allcatalog4"></script>
+<script src="script.js?v=20261117-catalogsearch1"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
@@ -1597,15 +1597,93 @@
  const popular=[...document.querySelectorAll('[data-popular-card]')];
  const directory=[...document.querySelectorAll('[data-catalog-card]')];
  let active='all';
- const norm=s=>(s||'').toLocaleLowerCase('ru').replaceAll('ё','е').replace(/\s+/g,' ').trim();
+
+ const normalize=value=>String(value||'')
+   .toLocaleLowerCase('ru-RU')
+   .replace(/ё/g,'е')
+   .replace(/[^a-zа-я0-9]+/gi,' ')
+   .replace(/\s+/g,' ')
+   .trim();
+
+ const stopWords=new Set(['и','в','во','на','по','для','к','ко','с','со','из','от','до','при']);
+
+ const stemRu=raw=>{
+   let word=normalize(raw);
+   if(!word || word.length<=3 || /[a-z]/.test(word)) return word;
+   const suffixes=[
+     'иями','ями','ами','остью','остями','ического','ическая','ические','ический',
+     'ого','его','ому','ему','ыми','ими','иях','ях','ах','иям','ям','ам',
+     'ую','юю','ая','яя','ое','ее','ые','ие','ый','ий','ой','ых','их',
+     'ией','ию','ью','ия','ья','ии','ье','ов','ев','ей','ем','ом',
+     'а','я','ы','и','ь','й','у','ю','е','о'
+   ];
+   for(const suffix of suffixes){
+     if(word.endsWith(suffix) && word.length-suffix.length>=3){
+       word=word.slice(0,-suffix.length);
+       break;
+     }
+   }
+   return word;
+ };
+
+ const tokens=value=>normalize(value)
+   .split(/\s+/)
+   .filter(Boolean)
+   .filter(word=>!stopWords.has(word))
+   .map(stemRu)
+   .filter(Boolean);
+
+ const tokenMatches=(q,t)=>{
+   if(q===t) return true;
+   if(q.length<3 || t.length<3) return false;
+   return t.startsWith(q) || q.startsWith(t);
+ };
+
+ const aliasesFor=value=>{
+   const low=normalize(value);
+   let aliases=' россия российская федерация рф';
+   if(/министерств.*внутренн.*дел|\bмвд\b/.test(low)) aliases+=' мвд полиция';
+   if(/чрезвычайн|\bмчс\b/.test(low)) aliases+=' мчс';
+   if(/федеральн.*служб.*безопасност|\bфсб\b/.test(low)) aliases+=' фсб';
+   if(/судебн.*пристав/.test(low)) aliases+=' фссп приставы';
+   if(/миграционн.*служб/.test(low)) aliases+=' фмс';
+   if(/иностранн.*дел/.test(low)) aliases+=' мид';
+   if(/министерств.*финанс/.test(low)) aliases+=' минфин';
+   if(/министерств.*оборон/.test(low)) aliases+=' минобороны';
+   if(/национальн.*гвард|росгвард/.test(low)) aliases+=' росгвардия фсвнг';
+   if(/медико.*биолог/.test(low)) aliases+=' фмба';
+   if(/защит.*прав.*потребител/.test(low)) aliases+=' роспотребнадзор';
+   if(/антимонопольн/.test(low)) aliases+=' фас';
+   if(/внешн.*развед/.test(low)) aliases+=' свр';
+   if(/центральн.*банк/.test(low)) aliases+=' цб центробанк банк россии';
+   if(/избирательн.*комисс/.test(low)) aliases+=' цик';
+   if(/государственн.*дум/.test(low)) aliases+=' госдума гд';
+   if(/совет.*федерац/.test(low)) aliases+=' совфед сф';
+   if(/генеральн.*прокурат/.test(low)) aliases+=' генпрокуратура прокуратура';
+   if(/бархат/.test(low)) aliases+=' флок';
+   if(/металл/.test(low)) aliases+=' металлический металлическом';
+   if(/пластик/.test(low)) aliases+=' пластиковый пластиковом';
+   if(/металлизац/.test(low)) aliases+=' металлизированный металлизированное';
+   return aliases;
+ };
+
+ const queryMatches=(query,haystack)=>{
+   const qNorm=normalize(query);
+   if(!qNorm) return true;
+   const qTokens=tokens(qNorm);
+   const fullHay=normalize(haystack+' '+aliasesFor(haystack));
+   const hTokens=tokens(fullHay);
+   return qTokens.every(qt=>hTokens.some(ht=>tokenMatches(qt,ht)));
+ };
 
  function apply(){
-  const q=norm(input.value);
+  const q=input.value || '';
   let visible=0;
 
   popular.forEach(card=>{
    const allowed=active==='all'||active==='popular';
-   const show=allowed && (!q || norm(card.dataset.search+' '+card.textContent).includes(q));
+   const hay=(card.dataset.search||'')+' '+card.textContent;
+   const show=allowed && queryMatches(q,hay);
    card.classList.toggle('catalog-hidden',!show);
    card.hidden=!show;
    if(show) visible++;
@@ -1614,8 +1692,8 @@
   directory.forEach(card=>{
    const kind=card.dataset.kind;
    const allowed=active==='all'||active===kind;
-   const hay=card.dataset.name+' '+card.dataset.type+' '+card.textContent;
-   const show=allowed && (!q || norm(hay).includes(q));
+   const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+card.textContent;
+   const show=allowed && queryMatches(q,hay);
    card.classList.toggle('catalog-hidden',!show);
    card.hidden=!show;
    if(show) visible++;
@@ -1639,10 +1717,20 @@
   count.textContent='Найдено: '+visible;
   clear.hidden=!input.value;
   empty.classList.toggle('show',visible===0);
+
+  const url=new URL(window.location.href);
+  const trimmed=input.value.trim();
+  if(trimmed) url.searchParams.set('q',trimmed);
+  else url.searchParams.delete('q');
+  history.replaceState(null,'',url.pathname+(url.search?url.search:'')+url.hash);
  }
+
+ const initialQuery=new URLSearchParams(window.location.search).get('q');
+ if(initialQuery) input.value=initialQuery;
 
  input.addEventListener('input',apply);
  clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
+
  filters.forEach(btn=>btn.addEventListener('click',()=>{
   filters.forEach(x=>x.classList.remove('active'));
   btn.classList.add('active');
@@ -1655,12 +1743,20 @@
    document.getElementById('catalogRequestText').textContent='Вы выбрали: герб '+genitive+'. Уточним размер, материал и подготовим предложение.';
    document.getElementById('catalogRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent('Герб '+genitive);
  }));
+
  document.querySelectorAll('[data-agency-request]').forEach(a=>a.addEventListener('click',()=>{
    const name=a.dataset.agencyRequest;
    document.getElementById('catalogRequestText').textContent='Вы выбрали: '+name+'. Уточним размер, материал и подготовим предложение.';
    document.getElementById('catalogRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent(name);
  }));
+
  apply();
+
+ if(initialQuery){
+   requestAnimationFrame(()=>{
+     document.querySelector('.catalog-tools-full')?.scrollIntoView({behavior:'smooth',block:'start'});
+   });
+ }
 })();
 </script>
 </body>
