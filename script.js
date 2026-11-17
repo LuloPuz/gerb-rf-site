@@ -217,7 +217,7 @@ document.addEventListener('keydown', event => {
     }
 
     results.innerHTML = matches.map(page =>
-      '<a class="home-search-result" href="' + page.url + '">' +
+      '<a class="home-search-result" href="catalog.html?q=' + encodeURIComponent(page.title) + '">' +
         '<span><strong>' + escapeHtml(page.title) + '</strong><small>' + escapeHtml(page.meta) + '</small></span>' +
         '<span aria-hidden="true">→</span>' +
       '</a>'
@@ -233,16 +233,19 @@ document.addEventListener('keydown', event => {
 
   form.addEventListener('submit', event => {
     event.preventDefault();
-    const matches = rankPages(input.value);
-    if (matches.length) window.location.href = matches[0].url;
-    else render(input.value);
+    const query = String(input.value || '').trim();
+    if (!query) {
+      window.location.href = 'catalog.html';
+      return;
+    }
+    window.location.href = 'catalog.html?q=' + encodeURIComponent(query);
   });
 
   hintButtons.forEach(button => {
     button.addEventListener('click', () => {
-      input.value = button.dataset.searchQuery || '';
-      input.focus();
-      render(input.value);
+      const query = button.dataset.searchQuery || '';
+      input.value = query;
+      window.location.href = 'catalog.html?q=' + encodeURIComponent(query);
     });
   });
 
