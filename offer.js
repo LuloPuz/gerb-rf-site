@@ -78,8 +78,7 @@
   form.addEventListener('submit',e=>{
     e.preventDefault();
     const data=new FormData(form);
-    const chosen=String(data.get('custom_heraldry')||'').trim()||String(data.get('heraldry')||'').trim();
-    if(!chosen){heraldry.focus();return}
+    const chosen=String(data.get('custom_heraldry')||'').trim()||String(data.get('heraldry')||'').trim()||'Не указано'
     const methodLabels={phone:'Телефон',telegram:'Telegram',max:'MAX',whatsapp:'WhatsApp',email:'Email'};
     const body=[
       'Запрос на коммерческое предложение',
