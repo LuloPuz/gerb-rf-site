@@ -13,8 +13,13 @@
     {label:'Гербы субъектов РФ',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html'},
     {label:'Гербы городов РФ',href:'gerby-subektov-rf.html',active:false},
     {label:'Ведомства',href:'emblemy-vedomstv-rf.html',active:path==='emblemy-vedomstv-rf.html'},
-    {label:'Производство',href:isHome?'#production':'index.html#production',active:false}
+    {label:'Производство',href:isHome?'#production':'index.html#production',active:false},
+    {label:'Контакты',href:'#contacts',active:false}
   ];
+
+  // Unified contacts anchor
+  const footer=document.querySelector('.site-footer');
+  if(footer && !footer.id) footer.id='contacts';
 
   nav.setAttribute('aria-label','Основная навигация');
   nav.innerHTML=items.map(item =>
@@ -34,7 +39,7 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-header6';
+  shopStyles.href='shop.css?v=20261117-header8';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
