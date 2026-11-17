@@ -1,4 +1,4 @@
-// Unified search-first site header
+// Unified compact site header
 (() => {
   const header=document.querySelector('.header-inner');
   if(!header) return;
@@ -10,9 +10,25 @@
   }
 
   header.querySelector('.nav-toggle')?.remove();
-  header.querySelector('.main-nav')?.remove();
   header.querySelector('.header-cta')?.remove();
   header.querySelector('.shop-header-actions')?.remove();
+
+  let nav=header.querySelector('.main-nav');
+  if(!nav){
+    nav=document.createElement('nav');
+    nav.className='main-nav';
+    header.appendChild(nav);
+  }
+
+  const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const isHome=path===''||path==='index.html';
+  nav.setAttribute('aria-label','Основная навигация');
+  nav.innerHTML=
+    '<a href="'+(isHome?'#production':'index.html#production')+'">Производство</a>'+
+    '<a href="'+(isHome?'#contacts':'index.html#contacts')+'">Контакты</a>';
+
+  const footer=document.querySelector('.site-footer');
+  if(footer && !footer.id) footer.id='contacts';
 
   if(!header.querySelector('[data-header-site-search]')){
     const search=document.createElement('div');
@@ -25,12 +41,12 @@
           '<span class="home-search-icon" aria-hidden="true">'+
             '<svg viewBox="0 0 24 24" width="21" height="21" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>'+
           '</span>'+
-          '<input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Поиск по сайту: Герб России, Москва, область, МВД, металлизация..." aria-label="Поиск по сайту" data-site-search-input>'+
+          '<input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Поиск по сайту: Герб России, Москва, область, МВД..." aria-label="Поиск по сайту" data-site-search-input>'+
           '<button class="home-search-submit" type="submit">Найти</button>'+
         '</form>'+
         '<div class="home-search-results" data-site-search-results hidden></div>'+
       '</div>';
-    header.appendChild(search);
+    header.insertBefore(search,nav);
   }
 })();
 
@@ -38,13 +54,13 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-headersearch1';
+  shopStyles.href='shop.css?v=20261117-headersearch2';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
 if (!document.querySelector('script[data-shop-runtime]')) {
   const shopRuntime=document.createElement('script');
-  shopRuntime.src='shop.js?v=20261117-shop5';
+  shopRuntime.src='shop.js?v=20261117-headersearch2';
   shopRuntime.dataset.shopRuntime='true';
   shopRuntime.async=false;
   document.body.appendChild(shopRuntime);
