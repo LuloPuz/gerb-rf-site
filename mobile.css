@@ -480,3 +480,30 @@
     display:none!important;
   }
 }
+
+
+/* iPhone catalog reset action */
+@media (max-width:430px){
+  .catalog-search-row{
+    grid-template-columns:1fr!important;
+  }
+  .catalog-mobile-reset{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-height:50px!important;
+    padding:0 18px!important;
+    border:1px solid rgba(166,124,50,.55)!important;
+    background:#fffaf0!important;
+    color:var(--navy)!important;
+    font-family:"Manrope",Arial,sans-serif!important;
+    font-size:14px!important;
+    font-weight:600!important;
+    letter-spacing:.005em!important;
+    cursor:pointer!important;
+  }
+  .catalog-mobile-reset[hidden]{
+    display:none!important;
+  }
+}
