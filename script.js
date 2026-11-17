@@ -8,7 +8,7 @@ if (!document.querySelector('link[data-shop-styles]')) {
 }
 if (!document.querySelector('script[data-shop-runtime]')) {
   const shopRuntime=document.createElement('script');
-  shopRuntime.src='shop.js?v=20261117-shop2';
+  shopRuntime.src='shop.js?v=20261117-shop5';
   shopRuntime.dataset.shopRuntime='true';
   shopRuntime.async=false;
   document.body.appendChild(shopRuntime);
