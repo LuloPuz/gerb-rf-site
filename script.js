@@ -2,7 +2,7 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-header2';
+  shopStyles.href='shop.css?v=20261117-header3';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
@@ -278,3 +278,11 @@ document.addEventListener('keydown', event => {
     }
   });
 })();
+
+
+// Compact production nav label
+document.querySelectorAll('.main-nav a').forEach(link => {
+  if ((link.textContent || '').trim() === 'О производстве') {
+    link.textContent = 'Производство';
+  }
+});
