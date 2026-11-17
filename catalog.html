@@ -1791,6 +1791,7 @@
 
  const initialQuery=new URLSearchParams(window.location.search).get('q');
  if(initialQuery) input.value=initialQuery;
+ const mobileReset=document.getElementById('catalogMobileReset');
  input.addEventListener('input',apply);
  clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
  mobileReset?.addEventListener('click',()=>{
