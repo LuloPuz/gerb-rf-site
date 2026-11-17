@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Получить предложение | Держава</title>
+<meta name="description" content="Запросите предложение на изготовление настенного герба по нужному региону, городу или индивидуальному запросу.">
+<meta name="theme-color" content="#07182a">
+<link rel="stylesheet" href="styles.css?v=20261117-offer1">
+<link rel="stylesheet" href="shop.css?v=20261117-headersearch3">
+<link rel="stylesheet" href="offer.css?v=20261117-offer1">
+</head>
+<body>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="index.html"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></a>
+<nav class="main-nav" aria-label="Основная навигация"></nav>
+</div></header>
+
+<main class="offer-page">
+<div class="container">
+<p class="offer-crumbs"><a href="index.html">Главная</a> / Получить предложение</p>
+<div class="offer-head">
+  <div><p class="eyebrow">Индивидуальный запрос</p><h1>Получить предложение</h1></div>
+  <p>Укажите, какой герб вам нужен и примерный размер. Мы подготовим вариант исполнения и свяжемся удобным для вас способом.</p>
+</div>
+
+<form class="offer-form" data-offer-form>
+  <h2 class="offer-section-title">Контактные данные</h2>
+
+  <div class="offer-field">
+    <label>Имя</label>
+    <input name="name" required autocomplete="name" placeholder="Как к вам обращаться">
+  </div>
+
+  <div class="offer-field">
+    <label>Как вам удобнее связаться?</label>
+    <div class="offer-contact-row">
+      <select name="contact_method" required>
+        <option value="phone">По телефону</option>
+        <option value="telegram">Telegram</option>
+        <option value="max">MAX</option>
+        <option value="whatsapp">WhatsApp</option>
+        <option value="email">Email</option>
+      </select>
+      <div>
+        <label data-contact-label style="position:absolute;width:1px;height:1px;overflow:hidden">Номер телефона для связи</label>
+        <input name="contact_value" required type="tel" placeholder="+7 999 999-99-99">
+      </div>
+    </div>
+    <p class="offer-help" data-contact-help></p>
+  </div>
+
+  <h2 class="offer-section-title">Какой герб вам нужен?</h2>
+
+  <div class="offer-field full offer-heraldry-wrap">
+    <label>Поиск по городам и субъектам России</label>
+    <input name="heraldry" type="search" autocomplete="off" spellcheck="false" placeholder="Начните вводить: Москва, Тула, Краснодарский край, Республика Алтай...">
+    <p class="offer-help">Можно выбрать объект, даже если такого товара пока нет в каталоге сайта.</p>
+    <div class="offer-heraldry-results" data-heraldry-results hidden></div>
+  </div>
+
+  <div class="offer-field full">
+    <button class="offer-not-found" type="button" data-custom-toggle>Не нашли нужного? Указать вручную</button>
+  </div>
+
+  <div class="offer-field full offer-custom" data-custom-wrap hidden>
+    <label>Что именно вы ищете?</label>
+    <input name="custom_heraldry" placeholder="Например: герб муниципального округа, района, учреждения или другой символ">
+  </div>
+
+  <h2 class="offer-section-title">Примерный размер</h2>
+  <div class="offer-field full">
+    <div class="offer-size-grid">
+      <div class="offer-field offer-size-input">
+        <label>Ширина</label>
+        <input name="width" type="number" min="1" step="0.5" inputmode="decimal" placeholder="Например, 60">
+        <span class="offer-size-unit">см</span>
+      </div>
+      <div class="offer-field offer-size-input">
+        <label>Высота</label>
+        <input name="height" type="number" min="1" step="0.5" inputmode="decimal" placeholder="Например, 80">
+        <span class="offer-size-unit">см</span>
+      </div>
+    </div>
+    <p class="offer-help">Можно указать ориентировочно — точный размер уточним при согласовании.</p>
+  </div>
+
+  <div class="offer-actions">
+    <button class="offer-submit" type="submit">Отправить запрос</button>
+    <a class="offer-back" href="index.html">Вернуться на главную</a>
+  </div>
+  <p class="offer-note">На этом этапе достаточно общей информации. Дополнительные параметры исполнения можно будет согласовать позже.</p>
+</form>
+</div>
+</main>
+
+<footer class="site-footer" id="contacts"><div class="container footer-grid">
+<div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div>
+<div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a></div>
+<div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div>
+</div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
+
+<script src="offer-data.js?v=20261117-offer1"></script>
+<script src="script.js?v=20261117-headersearch3"></script>
+<script src="offer.js?v=20261117-offer1"></script>
+</body></html>
