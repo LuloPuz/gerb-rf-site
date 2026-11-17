@@ -1325,3 +1325,93 @@ body.lightbox-open{overflow:hidden}
     padding:20px !important;
   }
 }
+
+
+/* Hero-first catalog search */
+.hero-copy{
+  width:min(760px,62%);
+  padding-top:64px;
+}
+.hero-search{
+  position:relative;
+  z-index:8;
+  max-width:700px;
+  margin-top:28px;
+  padding:17px 18px 14px;
+  background:rgba(251,250,246,.97);
+  border:1px solid rgba(225,200,141,.58);
+  box-shadow:0 20px 55px rgba(0,0,0,.24);
+  color:var(--navy);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.hero-search-head{
+  display:flex;
+  align-items:baseline;
+  gap:13px;
+  margin-bottom:11px;
+}
+.hero-search-head span{
+  color:#9A773D;
+  font:700 9px "Golos Text",sans-serif;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.hero-search-head strong{
+  font:400 21px "PT Serif",serif;
+  color:var(--navy);
+}
+.hero-search .home-search-form{
+  min-height:64px!important;
+  border-color:rgba(7,24,42,.18)!important;
+  box-shadow:none;
+}
+.hero-search .home-search-form:focus-within{
+  border-color:#a98546!important;
+  box-shadow:0 0 0 3px rgba(198,161,91,.13)!important;
+}
+.hero-search .home-search-input{
+  height:62px!important;
+  font-size:15px!important;
+}
+.hero-search .home-search-submit{
+  min-width:116px!important;
+  font-size:12px!important;
+}
+.hero-search .home-search-hints{
+  margin-top:11px!important;
+  gap:8px 16px!important;
+}
+.hero-search .home-search-hints button{
+  color:#796640!important;
+  font-size:10px!important;
+}
+.hero-search .home-search-results{
+  top:72px!important;
+  z-index:50;
+}
+.hero-search + .trust-row{
+  margin-top:28px;
+}
+@media(max-width:1050px){
+  .hero-copy{width:min(720px,72%)}
+}
+@media(max-width:720px){
+  .hero-copy{width:100%}
+  .hero-search{
+    margin-top:24px;
+    padding:14px 14px 12px;
+  }
+  .hero-search-head{display:block}
+  .hero-search-head strong{display:block;margin-top:3px;font-size:19px}
+  .hero-search .home-search-form{
+    grid-template-columns:42px minmax(0,1fr)!important;
+  }
+  .hero-search .home-search-submit{
+    grid-column:1/-1;
+    min-height:46px;
+    border-left:0!important;
+    border-top:1px solid #cfbd98!important;
+  }
+  .hero-search .home-search-input{font-size:13px!important}
+}
