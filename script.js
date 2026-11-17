@@ -144,8 +144,10 @@ document.addEventListener('keydown', event => {
 
   const tokenMatches = (queryToken, targetToken) => {
     if (queryToken === targetToken) return true;
+    // Autocomplete should react from two typed letters: "мо" -> "москва".
+    if (queryToken.length >= 2 && targetToken.startsWith(queryToken)) return true;
     if (queryToken.length < 3 || targetToken.length < 3) return false;
-    return targetToken.startsWith(queryToken) || queryToken.startsWith(targetToken);
+    return queryToken.startsWith(targetToken);
   };
 
   const indexedPages = pages.map(page => {
