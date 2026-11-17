@@ -289,31 +289,3 @@
   .brand{min-width:0!important}
 }
 
-/* Subject/city nav chips */
-.main-nav a.nav-chip{
-  min-height:38px!important;
-  padding:0 12px;
-  border:1px solid rgba(154,119,61,.20);
-  background:rgba(154,119,61,.045);
-  color:#3e4953!important;
-  font-size:13px;
-}
-.main-nav a.nav-chip::after{display:none!important}
-.main-nav a.nav-chip:hover,
-.main-nav a.nav-chip.nav-active{
-  border-color:rgba(154,119,61,.48);
-  background:rgba(154,119,61,.10);
-  color:var(--navy)!important;
-}
-.main-nav a.nav-chip-subjects{margin-right:-23px}
-@media(max-width:1050px){
-  .main-nav a.nav-chip{
-    min-height:46px!important;
-    padding:0!important;
-    border:0!important;
-    border-bottom:1px solid rgba(7,24,42,.07)!important;
-    background:transparent!important;
-    font-size:14px;
-  }
-  .main-nav a.nav-chip-subjects{margin-right:0}
-}
