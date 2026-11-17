@@ -57,3 +57,25 @@
   color:#92989d;
   opacity:.95;
 }
+
+
+/* Offer contact vertical layout */
+.offer-contact-stack{
+  grid-column:1/-1;
+  width:min(100%,760px);
+  display:grid;
+  gap:18px;
+}
+.offer-contact-stack .offer-field{
+  width:100%;
+}
+.offer-contact-stack input,
+.offer-contact-stack select{
+  width:100%;
+}
+.offer-contact-stack .offer-help{
+  margin-top:0;
+}
+@media(max-width:800px){
+  .offer-contact-stack{width:100%}
+}
