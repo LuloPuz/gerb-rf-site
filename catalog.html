@@ -1635,8 +1635,10 @@
 
  const tokenMatches=(q,t)=>{
    if(q===t) return true;
+   // Keep catalog filtering consistent with homepage autocomplete.
+   if(q.length>=2 && t.startsWith(q)) return true;
    if(q.length<3 || t.length<3) return false;
-   return t.startsWith(q) || q.startsWith(t);
+   return q.startsWith(t);
  };
 
  const aliasesFor=value=>{
