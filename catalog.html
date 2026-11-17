@@ -1663,6 +1663,7 @@
    if(/совет.*федерац/.test(low)) aliases+=' совфед сф';
    if(/генеральн.*прокурат/.test(low)) aliases+=' генпрокуратура прокуратура';
    if(/герб.*(росси|российск)|росси.*герб|двуглав.*орел/.test(low)) aliases+=' россия россии российская российской федерация рф государственный герб';
+   if(/москв/.test(low) && !/московск.*област/.test(low)) aliases+=' мск';
    if(/бархат/.test(low)) aliases+=' флок';
    if(/металл/.test(low)) aliases+=' металлический металлическом';
    if(/пластик/.test(low)) aliases+=' пластиковый пластиковом';
@@ -1686,7 +1687,7 @@
   // for a subject/city that already has real product photos, show those
   // products inside the "Subjects and cities" filter instead of the
   // generic text-only directory card.
-  const moscowCityQuery=/\bмоскв(?:а|ы|е|у|ой)?\b/.test(qNorm) && !/\bобласт/.test(qNorm);
+  const moscowCityQuery=/\b(?:мск|москв(?:а|ы|е|у|ой)?)\b/.test(qNorm) && !/\bобласт/.test(qNorm);
   let visible=0;
 
   popular.forEach(card=>{
