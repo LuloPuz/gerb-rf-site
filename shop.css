@@ -289,3 +289,11 @@
   .brand{min-width:0!important}
 }
 
+
+
+/* Minimal information header */
+.main-nav{gap:34px!important}
+.main-nav a{font-size:14px!important}
+@media(max-width:1050px){
+  .main-nav{gap:0!important}
+}
