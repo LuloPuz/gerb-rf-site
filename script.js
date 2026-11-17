@@ -2,7 +2,7 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-shop2';
+  shopStyles.href='shop.css?v=20261117-header1';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
