@@ -10,7 +10,8 @@
     {label:'Каталог',href:isHome?'#catalog':'catalog.html',active:path==='catalog.html'},
     {label:'Герб РФ',href:'gerb-rf.html',active:path.startsWith('gerb-rf')},
     {label:'Герб Москвы',href:'gerb-moskvy.html',active:path.startsWith('gerb-moskvy')},
-    {label:'Регионы',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html'},
+    {label:'Гербы субъектов РФ',href:'gerby-subektov-rf.html',active:path==='gerby-subektov-rf.html'},
+    {label:'Гербы городов РФ',href:'gerby-subektov-rf.html',active:false},
     {label:'Ведомства',href:'emblemy-vedomstv-rf.html',active:path==='emblemy-vedomstv-rf.html'},
     {label:'Производство',href:isHome?'#production':'index.html#production',active:false}
   ];
