@@ -30,8 +30,20 @@
   }
 
   function injectHeader(){
-    // Header is intentionally search-only. Cart/account remain available as pages,
-    // but are not injected into the global header.
+    document.querySelectorAll('.header-inner').forEach(header=>{
+      if(header.querySelector('.shop-header-actions')) return;
+      const actions=document.createElement('div');
+      actions.className='shop-header-actions';
+      actions.innerHTML=
+        '<a class="shop-header-link" href="account.html" aria-label="Личный кабинет" title="Личный кабинет">'+
+          '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"></path></svg>'+
+        '</a>'+
+        '<a class="shop-header-link" href="cart.html" aria-label="Корзина" title="Корзина">'+
+          '<svg viewBox="0 0 24 24"><path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20.5 8H6.2"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>'+
+          '<span class="shop-cart-count" data-cart-count data-empty="true">0</span>'+
+        '</a>';
+      header.appendChild(actions);
+    });
     updateHeaderCount();
   }
 
