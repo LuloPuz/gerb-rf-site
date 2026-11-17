@@ -9,7 +9,7 @@
   <meta property="og:title" content="Государственная и муниципальная символика">
   <meta property="og:description" content="Настенные гербы РФ, Москвы, регионов и городов России.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="styles.css?v=20261117-header8">
+  <link rel="stylesheet" href="styles.css?v=20261117-searchhero1">
 
   <style>
     .home-picker-section{padding:58px 0 12px;background:#fbfaf6}
@@ -206,9 +206,28 @@
           <h1>Государственная и муниципальная символика</h1>
           <p class="hero-lead">Настенные гербы Российской Федерации, Москвы, регионов и городов России</p>
           <p class="hero-note">Изготовление и поставка настенных гербов для государственных, муниципальных, образовательных и коммерческих организаций.</p>
-          <div class="hero-actions">
-            <a class="button button-gold" href="#catalog">Перейти в каталог</a>
-            <a class="button button-outline" href="#request">Получить предложение</a>
+          <div class="hero-search" data-site-search>
+            <div class="hero-search-head">
+              <span>Поиск по каталогу</span>
+              <strong>Найдите нужный герб</strong>
+            </div>
+            <div class="home-search-ui">
+              <form class="home-search-form" data-site-search-form role="search">
+                <span class="home-search-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="21" height="21" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>
+                </span>
+                <input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Например: герб Москвы, МВД, Московская область..." aria-label="Поиск по каталогу" data-site-search-input>
+                <button class="home-search-submit" type="submit">Найти</button>
+              </form>
+              <div class="home-search-results" data-site-search-results hidden></div>
+              <div class="home-search-hints" aria-label="Популярные запросы">
+                <button type="button" data-search-query="Герб России">Герб России</button>
+                <button type="button" data-search-query="Герб Москвы">Герб Москвы</button>
+                <button type="button" data-search-query="Московская область">Московская область</button>
+                <button type="button" data-search-query="МВД">МВД</button>
+                <button type="button" data-search-query="Металлизация">Металлизация</button>
+              </div>
+            </div>
           </div>
           <div class="trust-row" aria-label="Преимущества">
             <span>Собственное производство</span>
@@ -232,34 +251,7 @@
     </section>
 
 
-    <section class="home-search-section" aria-label="Поиск по каталогу">
-      <div class="container home-search-container" style="width:min(1440px,calc(100% - 40px)) !important;max-width:none !important;">
-        <div class="home-search-card" data-site-search>
-          <div class="home-search-copy">
-            <p class="eyebrow">Быстрый поиск</p>
-            <h2>Найдите нужный герб</h2>
-            <p>Введите исполнение, покрытие или материал щита.</p>
-          </div>
-          <div class="home-search-ui">
-            <form class="home-search-form" data-site-search-form role="search">
-              <span class="home-search-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="21" height="21" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>
-              </span>
-              <input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Например: МВД, Московская область, металлизация на щите" aria-label="Поиск по каталогу" data-site-search-input>
-              <button class="home-search-submit" type="submit">Найти</button>
-            </form>
-            <div class="home-search-results" data-site-search-results hidden></div>
-            <div class="home-search-hints" aria-label="Популярные запросы">
-              <button type="button" data-search-query="РФ">РФ</button>
-              <button type="button" data-search-query="Московская область">Московская область</button>
-              <button type="button" data-search-query="МВД">МВД</button>
-              <button type="button" data-search-query="Металлизация">Металлизация</button>
-              <button type="button" data-search-query="Бархатный щит">Бархатный щит</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <section class="section home-catalog-section" id="catalog">
       <div class="container">
@@ -589,7 +581,7 @@
       </div>
     </section>
 
-    <section class="section production">
+    <section class="section production" id="production">
       <div class="container">
         <p class="eyebrow">Качество</p>
         <h2>Производство и материалы</h2>
@@ -638,7 +630,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261117-header8"></script>
+  <script src="script.js?v=20261117-searchhero1"></script>
 
   <script>
   (function(){
