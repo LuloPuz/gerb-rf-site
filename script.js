@@ -35,7 +35,7 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261117-header3';
+  shopStyles.href='shop.css?v=20261117-header5';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
