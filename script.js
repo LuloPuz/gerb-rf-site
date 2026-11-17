@@ -1,38 +1,3 @@
-// Internal page back navigation
-(() => {
-  const host = document.querySelector('.catalog-head > .container');
-  if (!host || host.querySelector('[data-page-back]')) return;
-
-  const wrap = document.createElement('div');
-  wrap.className = 'page-back-nav';
-
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'page-back-button';
-  button.dataset.pageBack = '';
-  button.textContent = 'Назад';
-  button.setAttribute('aria-label', 'Вернуться на предыдущую страницу');
-
-  button.addEventListener('click', () => {
-    let canGoBackInsideSite = false;
-    try {
-      canGoBackInsideSite =
-        !!document.referrer &&
-        new URL(document.referrer).origin === window.location.origin &&
-        window.history.length > 1;
-    } catch (_) {}
-
-    if (canGoBackInsideSite) {
-      window.history.back();
-    } else {
-      window.location.href = 'index.html#catalog';
-    }
-  });
-
-  wrap.appendChild(button);
-  host.insertBefore(wrap, host.firstChild);
-})();
-
 // Route Moscow links to the Moscow catalog page.
 document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forEach(link => {
   link.setAttribute('href', 'gerb-moskvy.html');
