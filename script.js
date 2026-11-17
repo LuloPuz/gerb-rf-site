@@ -1,3 +1,19 @@
+// Derzhava commerce assets
+if (!document.querySelector('link[data-shop-styles]')) {
+  const shopStyles=document.createElement('link');
+  shopStyles.rel='stylesheet';
+  shopStyles.href='shop.css?v=20261117-shop2';
+  shopStyles.dataset.shopStyles='true';
+  document.head.appendChild(shopStyles);
+}
+if (!document.querySelector('script[data-shop-runtime]')) {
+  const shopRuntime=document.createElement('script');
+  shopRuntime.src='shop.js?v=20261117-shop2';
+  shopRuntime.dataset.shopRuntime='true';
+  shopRuntime.async=false;
+  document.body.appendChild(shopRuntime);
+}
+
 // Route Moscow links to the Moscow catalog page.
 document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forEach(link => {
   link.setAttribute('href', 'gerb-moskvy.html');
