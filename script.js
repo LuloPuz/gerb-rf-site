@@ -379,63 +379,61 @@ document.addEventListener('keydown', event => {
   });
 })();
 
-// Automatic product-image subject fitting
+// Automatic product-image whitespace trimming
 (() => {
-  const boxes=new WeakMap();
-  let resizeFrame=0;
-
-  function averageCornerBackground(data,w,h){
-    const pts=[];
-    const sample=Math.max(2,Math.round(Math.min(w,h)*0.035));
-    const corners=[[0,0],[w-sample,0],[0,h-sample],[w-sample,h-sample]];
-    corners.forEach(([sx,sy])=>{
+  function cornerBackground(data,w,h){
+    const sample=Math.max(3,Math.round(Math.min(w,h)*0.035));
+    const points=[];
+    const starts=[[0,0],[w-sample,0],[0,h-sample],[w-sample,h-sample]];
+    starts.forEach(([sx,sy])=>{
       for(let y=sy;y<Math.min(h,sy+sample);y+=2){
         for(let x=sx;x<Math.min(w,sx+sample);x+=2){
           const i=(y*w+x)*4;
-          pts.push([data[i],data[i+1],data[i+2],data[i+3]]);
+          points.push([data[i],data[i+1],data[i+2],data[i+3]]);
         }
       }
     });
-    if(!pts.length) return [250,249,245,255];
-    const sum=pts.reduce((a,p)=>[a[0]+p[0],a[1]+p[1],a[2]+p[2],a[3]+p[3]],[0,0,0,0]);
-    return sum.map(v=>v/pts.length);
+    if(!points.length) return [250,249,245,255];
+    const s=points.reduce((a,p)=>[a[0]+p[0],a[1]+p[1],a[2]+p[2],a[3]+p[3]],[0,0,0,0]);
+    return s.map(v=>v/points.length);
   }
 
-  function detectSubject(img){
+  function subjectBox(img){
     const nw=img.naturalWidth, nh=img.naturalHeight;
     if(!nw||!nh) return null;
 
-    const maxDim=360;
-    const ratio=Math.min(1,maxDim/Math.max(nw,nh));
+    const scanMax=420;
+    const ratio=Math.min(1,scanMax/Math.max(nw,nh));
     const w=Math.max(1,Math.round(nw*ratio));
     const h=Math.max(1,Math.round(nh*ratio));
 
-    const canvas=document.createElement('canvas');
-    canvas.width=w; canvas.height=h;
-    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    const scan=document.createElement('canvas');
+    scan.width=w;scan.height=h;
+    const ctx=scan.getContext('2d',{willReadFrequently:true});
     if(!ctx) return null;
     ctx.drawImage(img,0,0,w,h);
 
-    const pixels=ctx.getImageData(0,0,w,h).data;
-    const bg=averageCornerBackground(pixels,w,h);
-    const transparentBg=bg[3]<45;
+    const data=ctx.getImageData(0,0,w,h).data;
+    const bg=cornerBackground(data,w,h);
+    const transparent=bg[3]<45;
 
     let minX=w,minY=h,maxX=-1,maxY=-1;
     for(let y=0;y<h;y++){
       for(let x=0;x<w;x++){
         const i=(y*w+x)*4;
-        const r=pixels[i],g=pixels[i+1],b=pixels[i+2],a=pixels[i+3];
-        if(a<14) continue;
+        const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3];
+        if(a<12) continue;
 
-        let foreground;
-        if(transparentBg){
-          foreground=a>28;
+        let fg=false;
+        if(transparent){
+          fg=a>24;
         }else{
           const dr=r-bg[0],dg=g-bg[1],db=b-bg[2];
           const distance=Math.sqrt(dr*dr+dg*dg+db*db);
-          foreground=distance>34 || Math.abs(a-bg[3])>35;
+          fg=distance>30 || Math.abs(a-bg[3])>30;
         }
-        if(!foreground) continue;
+        if(!fg) continue;
+
         if(x<minX)minX=x;if(x>maxX)maxX=x;
         if(y<minY)minY=y;if(y>maxY)maxY=y;
       }
@@ -443,11 +441,14 @@ document.addEventListener('keydown', event => {
 
     if(maxX<minX||maxY<minY) return null;
 
-    // Add a small safety margin so shadows and thin outlines are never clipped.
-    const padX=Math.max(2,(maxX-minX)*0.018);
-    const padY=Math.max(2,(maxY-minY)*0.018);
-    minX=Math.max(0,minX-padX); maxX=Math.min(w-1,maxX+padX);
-    minY=Math.max(0,minY-padY); maxY=Math.min(h-1,maxY+padY);
+    const bw=maxX-minX+1,bh=maxY-minY+1;
+    const padX=Math.max(3,bw*.025);
+    const padY=Math.max(3,bh*.025);
+
+    minX=Math.max(0,minX-padX);
+    minY=Math.max(0,minY-padY);
+    maxX=Math.min(w-1,maxX+padX);
+    maxY=Math.min(h-1,maxY+padY);
 
     const inv=1/ratio;
     return {
@@ -458,65 +459,42 @@ document.addEventListener('keydown', event => {
     };
   }
 
-  function fitImage(img){
-    const media=img.closest('.popular-media');
-    if(!media||!img.naturalWidth||!img.naturalHeight) return;
+  function trimImage(img){
+    if(img.dataset.catalogTrimmed==='true') return;
+    if(!img.naturalWidth||!img.naturalHeight) return;
 
-    let box=boxes.get(img);
-    if(!box){
-      try{ box=detectSubject(img); }catch(e){ box=null; }
-      if(!box) return;
-      boxes.set(img,box);
-    }
+    let box;
+    try{box=subjectBox(img)}catch(e){return}
+    if(!box) return;
 
-    const mw=media.clientWidth, mh=media.clientHeight;
-    if(!mw||!mh) return;
+    const maxOut=1400;
+    const outScale=Math.min(1,maxOut/Math.max(box.w,box.h));
+    const ow=Math.max(1,Math.round(box.w*outScale));
+    const oh=Math.max(1,Math.round(box.h*outScale));
 
-    // Etalon visual footprint: large, centered, but with consistent breathing room.
-    const targetW=mw*0.84;
-    const targetH=mh*0.74;
-    const scale=Math.min(targetW/box.w,targetH/box.h);
+    const out=document.createElement('canvas');
+    out.width=ow;out.height=oh;
+    const ctx=out.getContext('2d');
+    if(!ctx) return;
 
-    const renderedW=img.naturalWidth*scale;
-    const renderedH=img.naturalHeight*scale;
-    const centerX=box.x+box.w/2;
-    const centerY=box.y+box.h/2;
+    ctx.drawImage(
+      img,
+      box.x,box.y,box.w,box.h,
+      0,0,ow,oh
+    );
 
-    img.style.position='absolute';
-    img.style.width=renderedW+'px';
-    img.style.height=renderedH+'px';
-    img.style.maxWidth='none';
-    img.style.maxHeight='none';
-    img.style.left=(mw/2-centerX*scale)+'px';
-    img.style.top=(mh/2-centerY*scale)+'px';
-    img.style.objectFit='fill';
-    img.style.objectPosition='center';
-    img.style.transform='none';
-    img.dataset.subjectFitted='true';
+    img.dataset.catalogTrimmed='true';
+    img.dataset.originalSrc=img.currentSrc||img.src;
+    img.src=out.toDataURL('image/png');
   }
 
-  function fitAll(){
+  function init(){
     document.querySelectorAll('.popular-media img').forEach(img=>{
-      if(img.complete&&img.naturalWidth) fitImage(img);
-      else img.addEventListener('load',()=>fitImage(img),{once:true});
+      if(img.complete&&img.naturalWidth) trimImage(img);
+      else img.addEventListener('load',()=>trimImage(img),{once:true});
     });
   }
 
-  function refit(){
-    cancelAnimationFrame(resizeFrame);
-    resizeFrame=requestAnimationFrame(()=>{
-      document.querySelectorAll('.popular-media img[data-subject-fitted="true"]').forEach(fitImage);
-    });
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fitAll);
-  else fitAll();
-
-  window.addEventListener('resize',refit,{passive:true});
-  if('ResizeObserver' in window){
-    const observer=new ResizeObserver(refit);
-    document.addEventListener('DOMContentLoaded',()=>{
-      document.querySelectorAll('.popular-media').forEach(el=>observer.observe(el));
-    },{once:true});
-  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
 })();
