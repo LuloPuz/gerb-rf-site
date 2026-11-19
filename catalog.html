@@ -6,7 +6,7 @@
 <meta name="description" content="Полный каталог Державы: гербы субъектов и городов Российской Федерации, эмблемы ведомств и популярные готовые исполнения с фотографиями.">
 <meta name="theme-color" content="#07182a">
 <meta name="catalog-search-version" content="20261117-subject-products-generic1">
-<link rel="stylesheet" href="styles.css?v=20261119-card-image-frame6">
+<link rel="stylesheet" href="styles.css?v=20261119-card-autofit7">
 <style>
 .catalog-head-full{padding:58px 0 38px;border-bottom:1px solid var(--line)}
 .catalog-breadcrumb-full{margin:0 0 24px;color:#7a8187;font-size:13px}
@@ -545,7 +545,6 @@
 }
 
 
-/* UNIFIED PRODUCT IMAGE FRAME v6 */
 /* Etalon from approved card: media ~290×410, visible image area ~243×292.
    All images use one centered frame; intrinsic proportions are never distorted. */
 .popular-media{
@@ -574,6 +573,26 @@
   .popular-media{
     padding:24px!important;
   }
+}
+
+
+/* AUTO SUBJECT FIT FRAME v7 */
+.popular-media{
+  position:relative!important;
+  display:block!important;
+  padding:0!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+.popular-media img{
+  display:block;
+  object-fit:contain;
+  object-position:center center;
+  transform:none!important;
+  transition:none!important;
+}
+.popular-card:hover .popular-media img{
+  transform:none!important;
 }
 
 </style>
@@ -2422,7 +2441,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261119-card-image-frame6"></script>
+<script src="script.js?v=20261119-card-autofit7"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
