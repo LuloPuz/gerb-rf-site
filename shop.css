@@ -530,3 +530,22 @@
     font-size:13px!important;
   }
 }
+
+/* Product detail bottom alignment v2 */
+@media(min-width:901px){
+  .final-product-info .shop-product-actions{
+    margin-top:auto!important;
+    flex:0 0 54px;
+  }
+  .final-product-info .shop-product-actions .shop-add-button,
+  .final-product-info .shop-product-actions .shop-go-cart{
+    min-height:54px!important;
+    height:54px!important;
+    box-sizing:border-box;
+  }
+  .final-product-info .final-order-button.shop-direct-order{
+    margin-top:10px!important;
+    min-height:44px!important;
+    height:44px!important;
+  }
+}
