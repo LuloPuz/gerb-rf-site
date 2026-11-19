@@ -11,7 +11,7 @@
   <meta property="og:title" content="Государственная и муниципальная символика">
   <meta property="og:description" content="Настенные гербы РФ, Москвы, регионов и городов России.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="styles.css?v=20261119-home-card-fix2">
+  <link rel="stylesheet" href="styles.css?v=20261119-card-autofit7">
 
   <style>
     .home-picker-section{padding:58px 0 12px;background:#fbfaf6}
@@ -636,21 +636,6 @@
 
 
 
-/* HOME CATALOG GRID OVERRIDES v1 */
-@media(min-width:901px){
-  .home-catalog-grid.popular-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:20px!important;
-  }
-}
-@media(max-width:900px){
-  .home-catalog-grid.popular-grid{
-    grid-template-columns:1fr!important;
-  }
-}
-
-
-/* UNIFIED PRODUCT IMAGE FRAME v6 */
 /* Etalon from approved card: media ~290×410, visible image area ~243×292.
    All images use one centered frame; intrinsic proportions are never distorted. */
 .popular-media{
@@ -682,63 +667,23 @@
 }
 
 
-/* HOME CARD HEIGHT SAFETY v2 */
-@media(min-width:901px){
-  .home-catalog-section .popular-card{
-    height:410px!important;
-    min-height:410px!important;
-    max-height:410px!important;
-    grid-template-columns:290px minmax(0,1fr)!important;
-    overflow:hidden!important;
-  }
-
-  .home-catalog-section .popular-media{
-    width:290px!important;
-    height:410px!important;
-    min-height:410px!important;
-    max-height:410px!important;
-    padding:24px!important;
-    flex:0 0 290px!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-
-  .home-catalog-section .popular-media img{
-    width:100%!important;
-    height:100%!important;
-    max-width:100%!important;
-    max-height:100%!important;
-    object-fit:contain!important;
-    object-position:center center!important;
-    transform:none!important;
-  }
-
-  .home-catalog-section .popular-body-pro{
-    height:410px!important;
-    min-height:410px!important;
-    max-height:410px!important;
-    overflow:hidden!important;
-    box-sizing:border-box!important;
-  }
+/* AUTO SUBJECT FIT FRAME v7 */
+.popular-media{
+  position:relative!important;
+  display:block!important;
+  padding:0!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
 }
-@media(max-width:900px){
-  .home-catalog-section .popular-card{
-    height:auto!important;
-    min-height:0!important;
-    max-height:none!important;
-  }
-  .home-catalog-section .popular-media{
-    width:100%!important;
-    height:300px!important;
-    min-height:300px!important;
-    max-height:300px!important;
-  }
-  .home-catalog-section .popular-body-pro{
-    height:auto!important;
-    min-height:0!important;
-    max-height:none!important;
-    overflow:visible!important;
-  }
+.popular-media img{
+  display:block;
+  object-fit:contain;
+  object-position:center center;
+  transform:none!important;
+  transition:none!important;
+}
+.popular-card:hover .popular-media img{
+  transform:none!important;
 }
 
 </style>
@@ -1540,7 +1485,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261119-home-card-fix2"></script>
+  <script src="script.js?v=20261119-card-autofit7"></script>
 
   <script>
   (function(){
