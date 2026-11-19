@@ -2188,3 +2188,35 @@ button,input,select,textarea{
     font-size:11px!important;
   }
 }
+
+/* PRODUCT DETAIL EQUAL HEIGHT v3 */
+@media(min-width:901px){
+  .final-product-grid{
+    align-items:start!important;
+  }
+
+  .final-product-gallery,
+  .final-product-info{
+    height:700px!important;
+    min-height:700px!important;
+    max-height:700px!important;
+    box-sizing:border-box!important;
+  }
+
+  .final-product-info{
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:visible!important;
+  }
+
+  .final-product-info .shop-product-actions{
+    margin-top:auto!important;
+  }
+
+  .final-product-info .final-order-button.shop-direct-order{
+    margin-top:10px!important;
+    flex:0 0 44px!important;
+    min-height:44px!important;
+    height:44px!important;
+  }
+}
