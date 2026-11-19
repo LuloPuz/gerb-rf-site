@@ -42,7 +42,7 @@
             '<svg viewBox="0 0 24 24" width="21" height="21" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>'+
           '</span>'+
           '<input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Поиск по сайту: Герб России, Москва, область, МВД..." aria-label="Поиск по сайту" data-site-search-input>'+
-          '<button class="home-search-submit" type="submit">Найти</button>'+
+          '<button class="home-search-submit" type="submit">Поиск</button>'+
         '</form>'+
         '<div class="home-search-results" data-site-search-results hidden></div>'+
       '</div>';
