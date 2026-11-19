@@ -316,6 +316,97 @@
   .popular-size-value{font-size:11px}
 }
 
+
+/* INTERACTIVE CARD SIZE SWITCHER v3 */
+.popular-spec-size{
+  display:block!important;
+  padding:10px 0 11px!important;
+}
+.popular-spec-size dt{
+  padding:0!important;
+  margin:0 0 8px!important;
+  color:#8b9298!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+.popular-spec-size dd{display:block!important}
+.popular-size-switcher{
+  position:relative;
+  z-index:8;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+.popular-size-choice{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+  min-height:34px;
+  padding:7px 8px;
+  border:1px solid #ddd6ca;
+  border-radius:8px;
+  background:#fbfaf7;
+  color:#4b5660;
+  font-family:"Manrope",Arial,sans-serif;
+  cursor:pointer;
+  transition:border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+.popular-size-choice span{
+  font-size:11px;
+  font-weight:600;
+  line-height:1;
+  letter-spacing:.01em;
+  font-variant-numeric:lining-nums tabular-nums;
+  white-space:nowrap;
+}
+.popular-size-choice small{
+  color:#92989d;
+  font-size:8px;
+  font-weight:500;
+  line-height:1;
+}
+.popular-size-choice:hover{
+  border-color:#c7ad76;
+  background:#fffaf0;
+  color:var(--navy);
+}
+.popular-size-choice.active{
+  border-color:#b58a3f;
+  background:#f5eddb;
+  color:#6f531e;
+  box-shadow:inset 0 0 0 1px rgba(181,138,63,.12);
+}
+.popular-size-choice.active small{color:#8a7040}
+.popular-card-price{
+  min-width:88px;
+  transition:opacity .12s ease,transform .12s ease;
+}
+.popular-card-price.price-changing{
+  opacity:.35;
+  transform:translateY(2px);
+}
+@media(min-width:901px){
+  .popular-size-switcher:has(.popular-size-choice:nth-child(5)){
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .popular-size-switcher:has(.popular-size-choice:nth-child(7)){
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+  .popular-size-switcher:has(.popular-size-choice:nth-child(5)) .popular-size-choice{
+    padding-left:5px;
+    padding-right:5px;
+  }
+  .popular-size-switcher:has(.popular-size-choice:nth-child(7)) .popular-size-choice span{
+    font-size:10px;
+  }
+}
+@media(max-width:520px){
+  .popular-size-switcher{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .popular-size-choice{min-height:36px}
+}
+
 </style>
 </head>
 <body>
@@ -368,10 +459,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">18 × 21</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">77 × 89</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">6 стандартных размеров</span></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="4900" aria-pressed="true"><span>18 × 21</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="5900" aria-pressed="false"><span>23 × 26,5</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="8900" aria-pressed="false"><span>28,5 × 33</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="18900" aria-pressed="false"><span>40 × 47</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="54900" aria-pressed="false"><span>65 × 78</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="69900" aria-pressed="false"><span>77 × 89</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">4 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -392,10 +483,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">18 × 21</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">77 × 89</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">6 стандартных размеров</span></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="5900" aria-pressed="true"><span>18 × 21</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="8400" aria-pressed="false"><span>23 × 26,5</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="11900" aria-pressed="false"><span>28,5 × 33</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="21900" aria-pressed="false"><span>40 × 47</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="67900" aria-pressed="false"><span>65 × 78</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="79900" aria-pressed="false"><span>77 × 89</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">5 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -416,10 +507,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="15900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="27900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">15 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -440,10 +531,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="17900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="27900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">17 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -464,10 +555,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="19900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">19 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -488,10 +579,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="17900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">17 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -512,10 +603,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="18900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">18 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -536,10 +627,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="20900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="31900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">20 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -560,10 +651,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">28,5 × 31</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">115 × 125</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">8 стандартных размеров</span></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="4990" aria-pressed="true"><span>28,5 × 31</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="7990" aria-pressed="false"><span>41 × 45</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="24990" aria-pressed="false"><span>46 × 51</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29990" aria-pressed="false"><span>53 × 58</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="39990" aria-pressed="false"><span>58 × 65</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="59990" aria-pressed="false"><span>68 × 75</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="74990" aria-pressed="false"><span>81 × 89</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="249990" aria-pressed="false"><span>115 × 125</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">4 990 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -584,10 +675,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">28,5 × 31</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">115 × 125</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">8 стандартных размеров</span></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="8900" aria-pressed="true"><span>28,5 × 31</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="11990" aria-pressed="false"><span>41 × 45</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29990" aria-pressed="false"><span>46 × 51</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="39990" aria-pressed="false"><span>53 × 58</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="49990" aria-pressed="false"><span>58 × 65</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="74990" aria-pressed="false"><span>68 × 75</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="99990" aria-pressed="false"><span>81 × 89</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="299990" aria-pressed="false"><span>115 × 125</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">8 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -608,10 +699,10 @@
       <div><dt>Рельеф</dt><dd>Горельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">28 × 30</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="24990" aria-pressed="true"><span>28 × 30</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">24 990 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -632,10 +723,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="9900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="17900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">9 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -656,10 +747,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="11900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="18900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">11 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -680,10 +771,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="16900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="21900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">16 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -704,10 +795,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="13900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="21900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">13 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -728,10 +819,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="14900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="22900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">14 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -752,10 +843,10 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="17900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="25900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">17 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -776,10 +867,10 @@
       <div><dt>Рельеф</dt><dd>Горельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span></div></dd></div>
+      <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="29900" aria-pressed="true"><span>42 × 50</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена от</span>
+      <span class="popular-price-caption">Цена</span>
       <strong class="popular-card-price">29 900 ₽</strong>
       <span class="popular-card-more">Подробнее →</span>
     </div>
@@ -2072,7 +2163,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261119-catalog-cards2"></script>
+<script src="script.js?v=20261119-catalog-cards3"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
@@ -2318,5 +2409,39 @@
  }
 })();
 </script>
+
+<script>
+/* Interactive popular-card size pricing */
+(function(){
+  const money=new Intl.NumberFormat('ru-RU');
+  document.querySelectorAll('.popular-card').forEach(function(card){
+    const buttons=[...card.querySelectorAll('[data-card-size]')];
+    const price=card.querySelector('.popular-card-price');
+    if(!buttons.length||!price) return;
+
+    buttons.forEach(function(button){
+      button.addEventListener('click',function(event){
+        event.preventDefault();
+        event.stopPropagation();
+
+        buttons.forEach(function(item){
+          const active=item===button;
+          item.classList.toggle('active',active);
+          item.setAttribute('aria-pressed',active?'true':'false');
+        });
+
+        const value=Number(button.dataset.price||0);
+        if(!value) return;
+        price.classList.add('price-changing');
+        requestAnimationFrame(function(){
+          price.textContent=money.format(value)+' ₽';
+          requestAnimationFrame(function(){price.classList.remove('price-changing')});
+        });
+      });
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
