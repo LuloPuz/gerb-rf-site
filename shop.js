@@ -81,8 +81,15 @@
     direct.parentNode.insertBefore(actions,direct);
     direct.classList.add('shop-direct-order');
     direct.textContent='← Продолжить покупки';
-    direct.setAttribute('href','catalog.html');
+    direct.setAttribute('href','catalog.html#popular');
     direct.removeAttribute('target');
+    direct.addEventListener('click',event=>{
+      const ref=document.referrer||'';
+      if(ref.includes('/catalog.html')){
+        event.preventDefault();
+        history.back();
+      }
+    });
 
     const add=actions.querySelector('.shop-add-button');
     add.addEventListener('click',()=>{
