@@ -251,6 +251,71 @@
   .popular-card-more{grid-column:1/-1;justify-self:start;margin-top:2px}
 }
 
+
+/* SIZE DISPLAY REFINEMENT v2 */
+.popular-spec-size{
+  align-items:start!important;
+  padding-top:9px!important;
+  padding-bottom:10px!important;
+}
+.popular-spec-size dt{
+  padding-top:7px;
+}
+.popular-spec-size dd{
+  display:block!important;
+  min-width:0;
+}
+.popular-size-options,
+.popular-size-range{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+}
+.popular-size-pill{
+  display:inline-flex;
+  align-items:baseline;
+  gap:5px;
+  min-height:30px;
+  padding:6px 9px;
+  border:1px solid #ddd5c6;
+  border-radius:8px;
+  background:#fbfaf7;
+  color:#233241;
+  font-family:"Manrope",Arial,sans-serif;
+  line-height:1;
+  white-space:nowrap;
+}
+.popular-size-value{
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.015em;
+  font-variant-numeric:lining-nums tabular-nums;
+}
+.popular-size-unit{
+  color:#8c9297;
+  font-size:9px;
+  font-weight:500;
+}
+.popular-size-separator{
+  color:#b1a792;
+  font-size:13px;
+  font-weight:500;
+}
+.popular-size-note{
+  display:block;
+  margin-top:6px;
+  color:#9a855d;
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:.025em;
+}
+@media(max-width:520px){
+  .popular-size-pill{padding:6px 8px}
+  .popular-size-value{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -303,7 +368,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>6 размеров · 18×21–77×89 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">18 × 21</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">77 × 89</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">6 стандартных размеров</span></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -327,7 +392,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>6 размеров · 18×21–77×89 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">18 × 21</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">77 × 89</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">6 стандартных размеров</span></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -351,7 +416,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -375,7 +440,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -399,7 +464,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -423,7 +488,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -447,7 +512,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -471,7 +536,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -495,7 +560,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>8 размеров · 28,5×31–115×125 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">28,5 × 31</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">115 × 125</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">8 стандартных размеров</span></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -519,7 +584,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>8 размеров · 28,5×31–115×125 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-range"><span class="popular-size-pill"><span class="popular-size-value">28,5 × 31</span><span class="popular-size-unit">см</span></span><span class="popular-size-separator">—</span><span class="popular-size-pill"><span class="popular-size-value">115 × 125</span><span class="popular-size-unit">см</span></span></div><span class="popular-size-note">8 стандартных размеров</span></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -543,7 +608,7 @@
       <div><dt>Рельеф</dt><dd>Горельеф</dd></div>
       <div><dt>Исполнение</dt><dd>Без щита</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>28×30 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">28 × 30</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -567,7 +632,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -591,7 +656,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -615,7 +680,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -639,7 +704,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Пластик</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -663,7 +728,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Бархат</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -687,7 +752,7 @@
       <div><dt>Рельеф</dt><dd>Барельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>Металл</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 / 52×62 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span><span class="popular-size-pill"><span class="popular-size-value">52 × 62</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -711,7 +776,7 @@
       <div><dt>Рельеф</dt><dd>Горельеф</dd></div>
       <div><dt>Исполнение</dt><dd>На щите</dd></div>
       <div><dt>Материал щита</dt><dd>—</dd></div>
-      <div class="popular-spec-size"><dt>Размеры</dt><dd>42×50 см</dd></div>
+      <div class="popular-spec-size"><dt>Размеры</dt><dd><div class="popular-size-options"><span class="popular-size-pill"><span class="popular-size-value">42 × 50</span><span class="popular-size-unit">см</span></span></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
       <span class="popular-price-caption">Цена от</span>
@@ -2007,7 +2072,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261119-catalog-cards1"></script>
+<script src="script.js?v=20261119-catalog-cards2"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
