@@ -331,4 +331,50 @@ document.addEventListener('keydown', event => {
   });
 })();
 
+// Product detail context navigation
+(() => {
+  const section=document.querySelector('.product-final');
+  const oldBreadcrumb=section?.querySelector('.catalog-breadcrumb');
+  if(!section || !oldBreadcrumb || section.querySelector('.product-context-shell')) return;
 
+  const anchors=[...oldBreadcrumb.querySelectorAll('a')];
+  const rawParts=oldBreadcrumb.textContent
+    .split('/')
+    .map(part=>part.trim())
+    .filter(Boolean);
+
+  const current=rawParts[rawParts.length-1] || document.title.split('|')[0].trim();
+  const crumbs=[];
+
+  crumbs.push('<a href="catalog.html#popular">Весь каталог</a>');
+
+  anchors.forEach(link=>{
+    const label=(link.textContent||'').trim();
+    if(!label || label==='Главная') return;
+    const href=link.getAttribute('href')||'#';
+    crumbs.push('<span class="product-crumb-sep">›</span>');
+    crumbs.push('<a href="'+href.replace(/"/g,'&quot;')+'">'+label.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</a>');
+  });
+
+  crumbs.push('<span class="product-crumb-sep">›</span>');
+  crumbs.push('<span class="product-crumb-current">'+current.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>');
+
+  const shell=document.createElement('div');
+  shell.className='product-context-shell';
+  shell.innerHTML=
+    '<div class="container product-context-inner">'+
+      '<a class="product-back-link" href="catalog.html#popular" data-product-back>Вернуться в каталог</a>'+
+      '<nav class="product-context-crumbs" aria-label="Навигация по товару">'+crumbs.join('')+'</nav>'+
+    '</div>';
+
+  section.insertBefore(shell,section.firstChild);
+
+  const back=shell.querySelector('[data-product-back]');
+  back?.addEventListener('click',event=>{
+    const ref=document.referrer||'';
+    if(ref.includes('/catalog.html')){
+      event.preventDefault();
+      history.back();
+    }
+  });
+})();
