@@ -1872,3 +1872,72 @@ button,input,select,textarea{
     display:none!important;
   }
 }
+
+/* FINAL HEADER SEARCH REDESIGN v2 */
+.site-header .header-site-search .home-search-form{
+  display:grid!important;
+  grid-template-columns:44px minmax(0,1fr) auto!important;
+  align-items:center!important;
+  width:100%!important;
+  min-height:54px!important;
+  padding:0 5px 0 0!important;
+  border:1px solid #d8d2c7!important;
+  border-radius:12px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  box-shadow:0 5px 18px rgba(7,24,42,.045)!important;
+}
+.site-header .header-site-search .home-search-form:focus-within{
+  border-color:#c3a15f!important;
+  box-shadow:0 0 0 3px rgba(198,161,91,.09),0 7px 22px rgba(7,24,42,.055)!important;
+}
+.site-header .header-site-search .home-search-icon{
+  width:44px!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#a28248!important;
+}
+.site-header .header-site-search .home-search-icon svg{
+  width:18px!important;
+  height:18px!important;
+  stroke-width:1.7!important;
+}
+.site-header .header-site-search .home-search-input{
+  height:52px!important;
+  padding:0 16px 0 0!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  color:#253444!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+}
+.site-header .header-site-search .home-search-input::placeholder{
+  color:#969da4!important;
+  font-weight:400!important;
+}
+.site-header .header-site-search .home-search-submit{
+  align-self:center!important;
+  min-width:102px!important;
+  height:42px!important;
+  margin:0!important;
+  padding:0 20px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:#0d2742!important;
+  color:#fff!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:.005em!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+  transition:background .18s ease,transform .18s ease!important;
+}
+.site-header .header-site-search .home-search-submit:hover{
+  background:#183a5a!important;
+  transform:translateY(-1px)!important;
+}
