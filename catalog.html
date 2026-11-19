@@ -407,6 +407,102 @@
   .popular-size-choice{min-height:36px}
 }
 
+
+/* PRODUCT CARD FOOTER REFINEMENT v4 */
+.popular-card-bottom{
+  position:relative!important;
+  z-index:9!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:16px!important;
+  align-items:center!important;
+  margin-top:auto!important;
+  padding-top:16px!important;
+  border-top:1px solid #ece7dd!important;
+}
+.popular-price-block{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-width:0;
+}
+.popular-price-caption{
+  display:block!important;
+  margin:0 0 5px!important;
+  color:#93989d!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:9px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  letter-spacing:.015em!important;
+}
+.popular-card-price{
+  display:block!important;
+  min-width:0!important;
+  color:var(--navy)!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:19px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:-.01em!important;
+  white-space:nowrap!important;
+  font-variant-numeric:lining-nums tabular-nums!important;
+}
+.popular-card-cta{
+  position:relative;
+  z-index:12;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:42px;
+  padding:0 13px 0 17px;
+  border:1px solid #0d2742;
+  border-radius:10px;
+  background:#0d2742;
+  color:#fff;
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:11px;
+  font-weight:600;
+  line-height:1;
+  letter-spacing:.005em;
+  white-space:nowrap;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.popular-card-cta-icon{
+  display:grid;
+  place-items:center;
+  width:24px;
+  height:24px;
+  border-radius:7px;
+  background:rgba(255,255,255,.10);
+  color:#e8cf97;
+  font-size:13px;
+  line-height:1;
+  transition:transform .18s ease,background .18s ease;
+}
+.popular-card-cta:hover{
+  background:#183a5a;
+  border-color:#183a5a;
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(7,24,42,.12);
+}
+.popular-card-cta:hover .popular-card-cta-icon{
+  background:rgba(255,255,255,.16);
+  transform:translate(1px,-1px);
+}
+@media(max-width:520px){
+  .popular-card-bottom{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .popular-card-cta{
+    width:100%;
+    min-height:44px;
+  }
+  .popular-card-price{font-size:18px!important}
+}
+
 </style>
 </head>
 <body>
@@ -462,9 +558,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="4900" aria-pressed="true"><span>18 × 21</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="5900" aria-pressed="false"><span>23 × 26,5</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="8900" aria-pressed="false"><span>28,5 × 33</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="18900" aria-pressed="false"><span>40 × 47</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="54900" aria-pressed="false"><span>65 × 78</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="69900" aria-pressed="false"><span>77 × 89</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">4 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">4 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-bez-shchita-kraska.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="Без щита" data-finish="metal" data-search="герб москвы без щита — металлизация без щита · барельеф металлизация москва без щита барельеф металлизация">
@@ -486,9 +587,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="5900" aria-pressed="true"><span>18 × 21</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="8400" aria-pressed="false"><span>23 × 26,5</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="11900" aria-pressed="false"><span>28,5 × 33</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="21900" aria-pressed="false"><span>40 × 47</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="67900" aria-pressed="false"><span>65 × 78</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="79900" aria-pressed="false"><span>77 × 89</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">5 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">5 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-bez-shchita-metallizaciya.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на пластиковом щите — покрытие краской на щите · барельеф краска · пластик москва на щите барельеф краска пластик пластиковый">
@@ -510,9 +616,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="15900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="27900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">15 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">15 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-na-shchite-kraska-plastik.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на бархатном щите — покрытие краской на щите · барельеф краска · бархат москва на щите барельеф краска бархат флок">
@@ -534,9 +645,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="17900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="27900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">17 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">17 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-na-shchite-kraska-barhat.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="paint" data-search="герб москвы на металлическом щите — покрытие краской на щите · барельеф краска · металл москва на щите барельеф краска металл металлический">
@@ -558,9 +674,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="19900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">19 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">19 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-na-shchite-kraska-metall.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на пластиковом щите — металлизация на щите · барельеф металлизация · пластик москва на щите барельеф металлизация пластик пластиковый">
@@ -582,9 +703,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="17900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">17 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">17 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-na-shchite-metallizaciya-plastik.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на бархатном щите — металлизация на щите · барельеф металлизация · бархат москва на щите барельеф металлизация бархат флок">
@@ -606,9 +732,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="18900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">18 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">18 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-na-shchite-metallizaciya-barhat.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="На щите" data-finish="metal" data-search="герб москвы на металлическом щите — металлизация на щите · барельеф металлизация · металл москва на щите барельеф металлизация металл металлический">
@@ -630,9 +761,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="20900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="31900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">20 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">20 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-moskvy-na-shchite-metallizaciya-metall.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="Без щита" data-finish="paint" data-search="герб россии без щита — покрытие краской без щита · барельеф краска россия рф без щита барельеф краска окрашивание">
@@ -654,9 +790,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="4990" aria-pressed="true"><span>28,5 × 31</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="7990" aria-pressed="false"><span>41 × 45</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="24990" aria-pressed="false"><span>46 × 51</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29990" aria-pressed="false"><span>53 × 58</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="39990" aria-pressed="false"><span>58 × 65</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="59990" aria-pressed="false"><span>68 × 75</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="74990" aria-pressed="false"><span>81 × 89</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="249990" aria-pressed="false"><span>115 × 125</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">4 990 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">4 990 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-barelef-kraska.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="Без щита" data-finish="metal" data-search="герб россии без щита — металлизация без щита · барельеф металлизация россия рф без щита барельеф металлизация">
@@ -678,9 +819,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="8900" aria-pressed="true"><span>28,5 × 31</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="11990" aria-pressed="false"><span>41 × 45</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="29990" aria-pressed="false"><span>46 × 51</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="39990" aria-pressed="false"><span>53 × 58</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="49990" aria-pressed="false"><span>58 × 65</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="74990" aria-pressed="false"><span>68 × 75</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="99990" aria-pressed="false"><span>81 × 89</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="299990" aria-pressed="false"><span>115 × 125</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">8 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">8 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-barelef-metallizaciya.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="Без щита" data-finish="gorelief" data-search="герб россии без щита — горельеф без щита · горельеф горельеф россия рф без щита горельеф">
@@ -702,9 +848,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="24990" aria-pressed="true"><span>28 × 30</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">24 990 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">24 990 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-gorelef.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на пластиковом щите — покрытие краской на щите · барельеф краска · пластик россия рф на щите барельеф краска пластик пластиковый">
@@ -726,9 +877,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="9900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="17900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">9 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">9 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-kraska-plastik.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на бархатном щите — покрытие краской на щите · барельеф краска · бархат россия рф на щите барельеф краска бархат флок">
@@ -750,9 +906,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="11900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="18900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">11 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">11 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-kraska-barhat.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="paint" data-search="герб россии на металлическом щите — покрытие краской на щите · барельеф краска · металл россия рф на щите барельеф краска металл металлический">
@@ -774,9 +935,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="16900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="21900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">16 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">16 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-kraska-metall.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на пластиковом щите — металлизация на щите · барельеф металлизация · пластик россия рф на щите барельеф металлизация пластик пластиковый">
@@ -798,9 +964,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="13900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="21900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">13 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">13 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-metallizaciya-plastik.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на бархатном щите — металлизация на щите · барельеф металлизация · бархат россия рф на щите барельеф металлизация бархат флок">
@@ -822,9 +993,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="14900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="22900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">14 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">14 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-metallizaciya-barhat.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="metal" data-search="герб россии на металлическом щите — металлизация на щите · барельеф металлизация · металл россия рф на щите барельеф металлизация металл металлический">
@@ -846,9 +1022,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="17900" aria-pressed="true"><span>42 × 50</span><small>см</small></button><button class="popular-size-choice" type="button" data-card-size data-price="25900" aria-pressed="false"><span>52 × 62</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">17 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">17 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-metallizaciya-metall.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article>
 <article class="popular-card" data-popular-card data-product-card data-group="rf" data-location="На щите" data-finish="gorelief" data-search="герб россии на щите — горельеф на щите · горельеф горельеф россия рф на щите горельеф">
@@ -870,9 +1051,14 @@
       <div class="popular-spec-size"><dt>Размер</dt><dd><div class="popular-size-switcher" role="group" aria-label="Выберите размер"><button class="popular-size-choice active" type="button" data-card-size data-price="29900" aria-pressed="true"><span>42 × 50</span><small>см</small></button></div></dd></div>
     </dl>
     <div class="popular-card-bottom">
-      <span class="popular-price-caption">Цена</span>
-      <strong class="popular-card-price">29 900 ₽</strong>
-      <span class="popular-card-more">Подробнее →</span>
+      <div class="popular-price-block">
+        <span class="popular-price-caption">Цена выбранного размера</span>
+        <strong class="popular-card-price">29 900 ₽</strong>
+      </div>
+      <a class="popular-card-cta" href="gerb-rf-na-shchite-gorelef.html" aria-label="Смотреть товар">
+        <span>Смотреть товар</span>
+        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div></article></div>
 </section>
@@ -2163,7 +2349,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261119-catalog-cards3"></script>
+<script src="script.js?v=20261119-catalog-cards4"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
