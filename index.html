@@ -11,7 +11,7 @@
   <meta property="og:title" content="Государственная и муниципальная символика">
   <meta property="og:description" content="Настенные гербы РФ, Москвы, регионов и городов России.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="styles.css?v=20261119-exact-catalog-clone1">
+  <link rel="stylesheet" href="styles.css?v=20261119-home-catalog-nav2">
 
   <style>
     .home-picker-section{padding:58px 0 12px;background:#fbfaf6}
@@ -693,6 +693,108 @@
 }
 .popular-card:hover .popular-media img{
   transform:none!important;
+}
+
+
+/* HOMEPAGE CATALOG ENTRY v2 */
+.home-catalog-entry-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:34px;
+  align-items:end;
+  margin-bottom:24px;
+}
+.home-catalog-entry-copy h2{
+  margin:3px 0 8px;
+  font-family:"PT Serif",serif;
+  font-size:46px;
+  font-weight:400;
+  line-height:1.05;
+  letter-spacing:-.015em;
+  color:var(--navy);
+}
+.home-catalog-entry-copy>p:last-child{
+  max-width:720px;
+  margin:0;
+  color:#69737a;
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:13px;
+  line-height:1.6;
+}
+.home-catalog-entry-cta{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 38px;
+  gap:18px;
+  align-items:center;
+  min-width:310px;
+  padding:15px 16px 15px 18px;
+  border:1px solid #ccb77f;
+  border-radius:11px;
+  background:#fffaf0;
+  color:var(--navy);
+  box-shadow:0 7px 20px rgba(7,24,42,.04);
+  transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.home-catalog-entry-cta-copy{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.home-catalog-entry-cta strong{
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.2;
+}
+.home-catalog-entry-cta small{
+  color:#7d858b;
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:10px;
+  font-weight:500;
+  line-height:1.35;
+}
+.home-catalog-entry-cta-icon{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border-radius:9px;
+  background:#0d2742;
+  color:#e8cf97;
+  font-size:18px;
+  line-height:1;
+  transition:transform .18s ease,background .18s ease;
+}
+.home-catalog-entry-cta:hover{
+  background:#fffdf8;
+  border-color:#b99651;
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(7,24,42,.07);
+}
+.home-catalog-entry-cta:hover .home-catalog-entry-cta-icon{
+  background:#183a5a;
+  transform:translateX(2px);
+}
+@media(max-width:820px){
+  .home-catalog-entry-head{
+    grid-template-columns:1fr;
+    gap:16px;
+    align-items:start;
+  }
+  .home-catalog-entry-cta{
+    min-width:0;
+    width:100%;
+    box-sizing:border-box;
+  }
+}
+@media(max-width:520px){
+  .home-catalog-entry-copy h2{
+    font-size:36px;
+  }
+  .home-catalog-entry-cta{
+    padding:13px 14px;
+  }
 }
 
 </style>
@@ -1379,7 +1481,20 @@
 
     <section class="full-catalog" id="catalog"><div class="container">
 <section class="catalog-section" id="popular" data-catalog-section="popular">
-<div class="catalog-section-head"><div><p class="eyebrow">Витрина</p><h2>Популярное</h2><p>Все готовые исполнения, для которых на сайте уже есть реальные фотографии: гербы России и Москвы с разными покрытиями, щитами и без щита.</p></div><span class="catalog-section-count">18 товаров с фото</span></div>
+<div class="home-catalog-entry-head">
+  <div class="home-catalog-entry-copy">
+    <p class="eyebrow">Каталог</p>
+    <h2>Популярные исполнения</h2>
+    <p>Готовые гербы России и Москвы с реальными фотографиями, размерами и ценами.</p>
+  </div>
+  <a class="home-catalog-entry-cta" href="catalog.html" aria-label="Смотреть весь каталог">
+    <span class="home-catalog-entry-cta-copy">
+      <strong>Смотреть весь каталог</strong>
+      <small>Все товары, регионы и ведомства</small>
+    </span>
+    <span class="home-catalog-entry-cta-icon" aria-hidden="true">→</span>
+  </a>
+</div>
 <div class="popular-grid"><article class="popular-card" data-popular-card data-product-card data-group="moscow" data-location="Без щита" data-finish="paint" data-search="герб москвы без щита — покрытие краской без щита · барельеф краска москва без щита барельеф краска окрашивание">
   <a class="popular-hit" href="gerb-moskvy-bez-shchita-kraska.html" aria-label="Открыть Герб Москвы без щита — покрытие краской"></a>
   <div class="popular-media"><img src="assets/Герб Москвы краска без щита.png?v=20261112-moscow-paint1" alt="Герб Москвы без щита — покрытие краской"></div>
@@ -2067,7 +2182,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261119-exact-catalog-clone1"></script>
+  <script src="script.js?v=20261119-home-catalog-nav2"></script>
 
   <script>
   (function(){
