@@ -1532,33 +1532,58 @@ body.lightbox-open{overflow:hidden}
 .header-site-search .home-search-ui{position:relative;width:100%}
 .header-site-search .home-search-form{
   display:grid!important;
-  grid-template-columns:50px minmax(0,1fr) 96px!important;
+  grid-template-columns:46px minmax(0,1fr) 96px!important;
   width:100%!important;
   min-height:52px!important;
-  border:1px solid #d7d0c4!important;
+  border:1px solid #d9d2c5!important;
+  border-radius:8px!important;
+  overflow:hidden!important;
   background:#fff!important;
-  box-shadow:none!important;
+  box-shadow:0 4px 14px rgba(7,24,42,.035)!important;
+  transition:border-color .18s ease,box-shadow .18s ease!important;
 }
 .header-site-search .home-search-form:focus-within{
-  border-color:#B58A3F!important;
-  box-shadow:0 0 0 3px rgba(198,161,91,.10)!important;
+  border-color:#b58a3f!important;
+  box-shadow:0 0 0 3px rgba(198,161,91,.08),0 5px 16px rgba(7,24,42,.045)!important;
 }
-.header-site-search .home-search-icon{width:50px!important;color:#92723d!important}
+.header-site-search .home-search-icon{
+  width:46px!important;
+  color:#9a7b45!important;
+}
+.header-site-search .home-search-icon svg{
+  width:19px!important;
+  height:19px!important;
+  stroke-width:1.6!important;
+}
 .header-site-search .home-search-input{
   height:50px!important;
-  padding-right:12px!important;
-  font-size:13px!important;
-  font-weight:450!important;
+  padding:0 14px 0 0!important;
+  color:#2d3742!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+}
+.header-site-search .home-search-input::placeholder{
+  color:#90969c!important;
+  font-weight:400!important;
 }
 .header-site-search .home-search-submit{
-  min-width:118px!important;
-  padding:0 24px!important;
+  min-width:96px!important;
+  padding:0 18px!important;
+  border:0!important;
+  border-left:1px solid #dcc79a!important;
+  background:#d4af63!important;
   color:#07182a!important;
-  font-family:"PT Serif",serif!important;
-  font-size:15px!important;
-  font-weight:400!important;
+  font-family:"Manrope",Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:600!important;
   line-height:1!important;
-  letter-spacing:.01em!important;
+  letter-spacing:0!important;
+  transition:background .18s ease!important;
+}
+.header-site-search .home-search-submit:hover{
+  background:#e1c27f!important;
 }
 .header-site-search .home-search-results{
   top:58px!important;
