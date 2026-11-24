@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Личный кабинет | Держава</title>
-<meta name="description" content="Личный кабинет покупателя Держава: профиль, корзина и история заказов.">
+<meta name="description" content="Личный кабинет покупателя Держава: вход по одноразовому коду, заказы, статусы и профиль.">
 <meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261117-gold1">
-<link rel="stylesheet" href="shop.css?v=20261117-gold1">
+<link rel="stylesheet" href="styles.css?v=20261124-account-auth1">
+<link rel="stylesheet" href="shop.css?v=20261124-account-auth1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner">
@@ -15,31 +15,117 @@
 <nav class="main-nav"><a href="catalog.html">Каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a><a href="gerby-subektov-rf.html">Регионы</a><a href="emblemy-vedomstv-rf.html">Ведомства</a></nav>
 <a class="button button-gold header-cta" href="catalog.html">В каталог</a>
 </div></header>
-<main class="commerce-page" data-account-page><div class="container">
-<p class="commerce-breadcrumb"><a href="index.html">Главная</a> / Личный кабинет</p>
-<div class="commerce-head"><div><p class="eyebrow">Покупателю</p><h1>Личный кабинет</h1></div><p>Профиль, текущая корзина и история заказов в одном месте.</p></div>
-<div class="account-layout">
-<nav class="account-nav"><button class="active" type="button" data-account-tab="overview">Обзор</button><button type="button" data-account-tab="orders">Заказы</button><button type="button" data-account-tab="profile">Профиль</button></nav>
-<div>
-<section class="account-panel" data-account-panel="overview"><h2>Обзор</h2><p class="account-panel-lead">Основная информация по вашим покупкам.</p>
-<div class="account-stats"><div class="account-stat"><small>Заказов</small><strong data-account-order-count>0</strong></div><div class="account-stat"><small>Сумма заказов</small><strong data-account-order-total>0 ₽</strong></div><div class="account-stat"><small>В корзине</small><strong data-account-cart-count>0</strong></div></div>
-<a class="button button-gold" href="cart.html">Открыть корзину</a>
-<div class="local-note">Сейчас кабинет работает локально на этом устройстве. Для настоящего входа по email/паролю и синхронизации между устройствами потребуется подключить серверную авторизацию.</div>
-</section>
-<section class="account-panel" data-account-panel="orders" hidden><h2>Мои заказы</h2><p class="account-panel-lead">Заказы, оформленные через корзину на этом устройстве.</p><div data-account-orders></div></section>
-<section class="account-panel" data-account-panel="profile" hidden><h2>Профиль</h2><p class="account-panel-lead">Сохраним данные и автоматически подставим их при оформлении.</p>
-<form data-profile-form><div class="checkout-grid">
-<div class="field"><label>Имя / контактное лицо</label><input name="name" autocomplete="name"></div>
-<div class="field"><label>Телефон</label><input name="phone" autocomplete="tel"></div>
-<div class="field"><label>Email</label><input name="email" type="email" autocomplete="email"></div>
-<div class="field"><label>Организация</label><input name="organization"></div>
-<div class="field"><label>ИНН</label><input name="inn"></div>
-<div class="field"><label>Адрес</label><input name="address" autocomplete="street-address"></div>
-</div><button class="profile-save" type="submit">Сохранить профиль</button></form>
-<div class="local-note">Данные хранятся только в браузере на этом устройстве и не отправляются на сервер автоматически.</div>
-</section>
-</div></div>
-</div></main>
+
+<main class="commerce-page account-page-auth" data-account-page>
+  <div class="container">
+    <p class="commerce-breadcrumb"><a href="index.html">Главная</a> / Личный кабинет</p>
+
+    <section class="account-auth-shell" data-auth-gate>
+      <div class="account-auth-copy">
+        <p class="eyebrow">Личный кабинет</p>
+        <h1>Ваши заказы — в одном месте</h1>
+        <p>Войдите по номеру телефона или e-mail. Пароль не нужен — используем одноразовый код.</p>
+        <div class="account-auth-benefits">
+          <span>Статус заказа</span>
+          <span>История покупок</span>
+          <span>Состав и сумма</span>
+          <span>Данные доставки</span>
+        </div>
+      </div>
+
+      <div class="account-login-card">
+        <div data-auth-step="request">
+          <p class="account-login-kicker">Вход без пароля</p>
+          <h2>Телефон или e-mail</h2>
+          <p>Укажите контакт, который использовали при оформлении заказа.</p>
+          <form data-auth-request-form>
+            <label class="account-auth-field">
+              <span>Телефон или e-mail</span>
+              <input name="identifier" autocomplete="username" placeholder="+7 999 000-00-00 или name@mail.ru" required>
+            </label>
+            <button class="account-auth-primary" type="submit">Получить код</button>
+          </form>
+        </div>
+
+        <div data-auth-step="verify" hidden>
+          <button class="account-auth-back" type="button" data-auth-back>← Изменить контакт</button>
+          <p class="account-login-kicker">Подтверждение</p>
+          <h2>Введите код</h2>
+          <p>Код отправлен на <strong data-auth-destination></strong>.</p>
+          <form data-auth-verify-form>
+            <label class="account-auth-field">
+              <span>6-значный код</span>
+              <input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required>
+            </label>
+            <button class="account-auth-primary" type="submit">Войти в кабинет</button>
+          </form>
+          <div class="account-demo-code" data-auth-demo hidden></div>
+          <p class="account-auth-error" data-auth-error hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="account-dashboard" data-account-dashboard hidden>
+      <div class="account-dashboard-head">
+        <div>
+          <p class="eyebrow">Личный кабинет</p>
+          <h1>Мои заказы</h1>
+          <p class="account-dashboard-user">Вы вошли как <strong data-auth-user></strong></p>
+        </div>
+        <button class="account-signout" type="button" data-auth-signout>Выйти</button>
+      </div>
+
+      <div class="account-layout account-layout-v2">
+        <nav class="account-nav">
+          <button class="active" type="button" data-account-tab="orders">Мои заказы</button>
+          <button type="button" data-account-tab="overview">Обзор</button>
+          <button type="button" data-account-tab="profile">Мои данные</button>
+        </nav>
+
+        <div>
+          <section class="account-panel" data-account-panel="orders">
+            <div class="account-panel-heading">
+              <div>
+                <h2>Заказы</h2>
+                <p class="account-panel-lead">Здесь отображаются оформленные заказы и их текущий статус.</p>
+              </div>
+              <a class="account-catalog-link" href="catalog.html">Перейти в каталог →</a>
+            </div>
+            <div data-account-orders></div>
+          </section>
+
+          <section class="account-panel" data-account-panel="overview" hidden>
+            <h2>Обзор</h2>
+            <p class="account-panel-lead">Краткая информация по вашему кабинету.</p>
+            <div class="account-stats">
+              <div class="account-stat"><small>Заказов</small><strong data-account-order-count>0</strong></div>
+              <div class="account-stat"><small>Сумма заказов</small><strong data-account-order-total>0 ₽</strong></div>
+              <div class="account-stat"><small>В корзине</small><strong data-account-cart-count>0</strong></div>
+            </div>
+            <a class="button button-gold" href="cart.html">Открыть корзину</a>
+          </section>
+
+          <section class="account-panel" data-account-panel="profile" hidden>
+            <h2>Мои данные</h2>
+            <p class="account-panel-lead">Эти данные автоматически подставляются при оформлении заказа.</p>
+            <form data-profile-form>
+              <div class="checkout-grid">
+                <div class="field"><label>Имя / контактное лицо</label><input name="name" autocomplete="name"></div>
+                <div class="field"><label>Телефон</label><input name="phone" autocomplete="tel"></div>
+                <div class="field"><label>Email</label><input name="email" type="email" autocomplete="email"></div>
+                <div class="field"><label>Организация</label><input name="organization"></div>
+                <div class="field"><label>ИНН</label><input name="inn"></div>
+                <div class="field"><label>Адрес</label><input name="address" autocomplete="street-address"></div>
+              </div>
+              <button class="profile-save" type="submit">Сохранить данные</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a></div><div><h3>Покупателю</h3><a href="account.html">Личный кабинет</a><a href="cart.html">Корзина</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
-<script src="script.js?v=20261117-gold1"></script><script src="shop.js?v=20261117-shop1"></script>
+<script src="script.js?v=20261124-account-auth1"></script><script src="shop.js?v=20261124-account-auth1"></script>
 </body></html>
