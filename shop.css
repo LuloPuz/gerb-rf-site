@@ -2728,3 +2728,69 @@ body .full-catalog .directory-letter-group[hidden]{
     min-height:46px!important;
   }
 }
+
+
+/* POPULAR CARD FOOTER TYPOGRAPHY v4 */
+.popular-price-block{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:end!important;
+  column-gap:16px!important;
+  row-gap:0!important;
+  width:100%!important;
+}
+.popular-price-caption{
+  align-self:center!important;
+  margin:0!important;
+  color:#7f878d!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  line-height:1.25!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+}
+.popular-card-price{
+  justify-self:end!important;
+  margin:0!important;
+  font-size:23px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:-.025em!important;
+  white-space:nowrap!important;
+}
+.popular-add-cart,
+.popular-card-actions .popular-card-cta{
+  min-height:46px!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+}
+.popular-card-actions .popular-card-cta{
+  gap:6px!important;
+}
+.popular-card-actions .popular-card-cta-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:18px!important;
+  height:18px!important;
+  margin-left:2px!important;
+  color:#8a7245!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+@media(max-width:520px){
+  .popular-price-caption{
+    font-size:9.5px!important;
+    white-space:normal!important;
+  }
+  .popular-card-price{
+    font-size:21px!important;
+  }
+  .popular-add-cart,
+  .popular-card-actions .popular-card-cta{
+    font-size:11.5px!important;
+  }
+}
