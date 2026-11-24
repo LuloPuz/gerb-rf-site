@@ -1248,3 +1248,230 @@
     font-size:10px!important;
   }
 }
+
+
+/* Account mobile polish v3 */
+.account-dashboard-login-state{
+  margin:0;
+  color:#6f7880;
+  font:500 14px/1.5 "Manrope",Arial,sans-serif;
+}
+.account-dashboard-login-state[hidden]{display:none!important}
+
+@media(max-width:620px){
+  .account-page-auth .container,
+  .account-dashboard,
+  .account-layout-v2,
+  .account-layout-v2>div,
+  .account-panel,
+  [data-account-orders]{
+    min-width:0!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  .account-dashboard{
+    padding:10px 0 46px!important;
+    overflow:hidden!important;
+  }
+
+  .account-dashboard-head{
+    gap:12px!important;
+    margin-bottom:22px!important;
+  }
+
+  .account-dashboard-head .eyebrow{
+    margin-bottom:8px!important;
+  }
+
+  .account-dashboard-head h1{
+    margin:0 0 6px!important;
+    max-width:100%!important;
+    font-size:40px!important;
+    line-height:1.04!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  .account-dashboard-login-state{
+    font-size:13px!important;
+    line-height:1.45!important;
+  }
+
+  .account-signout{
+    min-height:38px!important;
+    padding:0 14px!important;
+    font-size:11px!important;
+  }
+
+  .account-layout-v2{
+    gap:14px!important;
+  }
+
+  .account-nav{
+    position:relative!important;
+    top:auto!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:4px!important;
+    width:100%!important;
+    padding:4px!important;
+    overflow:hidden!important;
+  }
+
+  .account-nav button{
+    width:100%!important;
+    min-width:0!important;
+    padding:11px 6px!important;
+    text-align:center!important;
+    white-space:normal!important;
+    font-size:10.5px!important;
+    line-height:1.2!important;
+  }
+
+  .account-panel{
+    width:100%!important;
+    padding:20px 14px 16px!important;
+    overflow:hidden!important;
+  }
+
+  .account-panel-heading{
+    display:block!important;
+    margin-bottom:16px!important;
+  }
+
+  .account-panel h2{
+    margin:0 0 5px!important;
+    font-size:34px!important;
+    line-height:1.05!important;
+  }
+
+  .account-panel-lead{
+    max-width:100%!important;
+    margin:0!important;
+    font-size:11px!important;
+    line-height:1.5!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  .account-catalog-link{
+    display:inline-block!important;
+    margin-top:10px!important;
+    font-size:10px!important;
+  }
+
+  .account-order-v2{
+    width:100%!important;
+    margin-bottom:12px!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+  }
+
+  .account-order-top{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    gap:8px 10px!important;
+    align-items:start!important;
+    padding:15px 14px 12px!important;
+  }
+
+  .account-order-number{
+    font-size:21px!important;
+    line-height:1.05!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  .account-order-meta{
+    margin-top:4px!important;
+    font-size:9.5px!important;
+    line-height:1.45!important;
+  }
+
+  .account-order-status-v2{
+    align-self:start!important;
+    max-width:116px!important;
+    padding:6px 8px!important;
+    font-size:7.5px!important;
+    line-height:1.2!important;
+    white-space:normal!important;
+    text-align:center!important;
+  }
+
+  .account-order-items{
+    gap:7px!important;
+    padding:0 14px 13px!important;
+  }
+
+  .account-order-item{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    gap:10px!important;
+    min-width:0!important;
+    font-size:10.5px!important;
+    line-height:1.4!important;
+  }
+
+  .account-order-item>div{
+    min-width:0!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  .account-order-item>span{
+    align-self:start!important;
+    white-space:nowrap!important;
+    font-size:10px!important;
+  }
+
+  .account-order-item small{
+    font-size:9px!important;
+    line-height:1.35!important;
+  }
+
+  .account-order-total-row{
+    padding:12px 14px!important;
+  }
+
+  .account-order-total-row span{
+    font-size:9.5px!important;
+  }
+
+  .account-order-total-row strong{
+    font-size:17px!important;
+    white-space:nowrap!important;
+  }
+
+  .account-status-track{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:15px 0!important;
+    width:100%!important;
+    padding:15px 10px 16px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+
+  .account-status-step{
+    min-width:0!important;
+    padding:17px 3px 0!important;
+    font-size:8px!important;
+    line-height:1.18!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  .account-status-step::before{
+    top:5px!important;
+  }
+
+  .account-status-step::after{
+    width:10px!important;
+    height:10px!important;
+    margin-left:-5px!important;
+  }
+}
+
+@media(max-width:390px){
+  .account-dashboard-head h1{font-size:36px!important}
+  .account-nav button{font-size:9.5px!important;padding-left:4px!important;padding-right:4px!important}
+  .account-panel{padding-left:11px!important;padding-right:11px!important}
+  .account-order-top,.account-order-items,.account-order-total-row{padding-left:12px!important;padding-right:12px!important}
+  .account-status-track{padding-left:6px!important;padding-right:6px!important}
+  .account-status-step{font-size:7.4px!important}
+}
