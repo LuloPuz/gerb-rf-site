@@ -5,6 +5,8 @@
   const CART_KEY='derzhava_cart_v1';
   const PROFILE_KEY='derzhava_profile_v1';
   const ORDERS_KEY='derzhava_orders_v1';
+  const AUTH_KEY='derzhava_auth_v1';
+  const AUTH_PENDING_KEY='derzhava_auth_pending_v1';
 
   const money=n=>new Intl.NumberFormat('ru-RU').format(Number(n)||0)+' ₽';
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch(_){return fallback}};
@@ -12,6 +14,7 @@
   const cart=()=>read(CART_KEY,[]);
   const profile=()=>read(PROFILE_KEY,{name:'',phone:'',email:'',organization:'',inn:'',address:''});
   const orders=()=>read(ORDERS_KEY,[]);
+  const auth=()=>read(AUTH_KEY,null);
   const cartCount=()=>cart().reduce((sum,item)=>sum+(Number(item.qty)||1),0);
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
   const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -181,7 +184,7 @@
       const success=document.querySelector('[data-order-success]');
       if(success){
         success.hidden=false;
-        success.innerHTML='<h2>Заказ '+esc(number)+' оформлен</h2><p>Он сохранён в вашем кабинете на этом устройстве. Для передачи заказа менеджеру откройте подготовленное письмо.</p><div class="order-success-actions"><a class="button button-gold" href="'+mail+'">Отправить заказ менеджеру</a><a class="button" href="account.html">Открыть личный кабинет</a></div>';
+        success.innerHTML='<h2>Заказ '+esc(number)+' оформлен</h2><p>Заказ уже доступен в личном кабинете по телефону или e-mail, указанному при оформлении. Пока серверная синхронизация не подключена, данные хранятся на этом устройстве.</p><div class="order-success-actions"><a class="button button-gold" href="'+mail+'">Отправить заказ менеджеру</a><a class="button" href="account.html">Открыть личный кабинет</a></div>';
         success.scrollIntoView({behavior:'smooth',block:'center'});
       }
     });
@@ -189,23 +192,221 @@
 
   function renderAccount(){
     const root=document.querySelector('[data-account-page]');if(!root)return;
-    const p=profile(), all=orders();
-    const count=root.querySelector('[data-account-order-count]');if(count)count.textContent=all.length;
-    const total=root.querySelector('[data-account-order-total]');if(total)total.textContent=money(all.reduce((s,o)=>s+(Number(o.total)||0),0));
-    const cartN=root.querySelector('[data-account-cart-count]');if(cartN)cartN.textContent=cartCount();
 
-    const ordersHost=root.querySelector('[data-account-orders]');
-    if(ordersHost){
-      ordersHost.innerHTML=all.length?all.map(o=>'<article class="account-order"><div class="account-order-head"><div><h3>'+esc(o.number)+'</h3><p>'+new Date(o.date).toLocaleString('ru-RU')+' · '+o.items.length+' поз.</p></div><span class="account-order-status">'+esc(o.status)+'</span></div><div class="account-order-head" style="margin-top:12px"><p>'+esc(o.items.map(x=>x.title+' · '+x.size).join(' / '))+'</p><strong class="account-order-total">'+money(o.total)+'</strong></div></article>').join(''):'<div class="cart-empty"><strong>Заказов пока нет</strong><p>Оформленные через корзину заказы появятся здесь.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a></div>';
+    const normalizeIdentifier=value=>{
+      const raw=String(value||'').trim();
+      if(raw.includes('@')) return raw.toLowerCase();
+      return raw.replace(/\D/g,'');
+    };
+    const isValidIdentifier=value=>{
+      const raw=String(value||'').trim();
+      if(raw.includes('@')) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw);
+      return raw.replace(/\D/g,'').length>=10;
+    };
+    const statusSteps=['Заказ принят','Подтверждён','В производстве','Готов','Отправлен','Получен'];
+    const statusIndex=status=>{
+      const raw=String(status||'').toLowerCase();
+      if(raw.includes('получ')) return 5;
+      if(raw.includes('отправ')||raw.includes('достав')) return 4;
+      if(raw.includes('готов')) return 3;
+      if(raw.includes('производ')) return 2;
+      if(raw.includes('подтверж')) return 1;
+      return 0;
+    };
+    const friendlyStatus=status=>statusSteps[statusIndex(status)];
+
+    async function requestCode(identifier){
+      const api=String(window.DERZHAVA_AUTH_API||'').replace(/\/$/,'');
+      if(api){
+        const response=await fetch(api+'/request-code',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({identifier})
+        });
+        if(!response.ok) throw new Error('Не удалось отправить код');
+        sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,createdAt:Date.now(),remote:true}));
+        return {demo:false};
+      }
+
+      const code=String(Math.floor(100000+Math.random()*900000));
+      sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,code,createdAt:Date.now(),remote:false}));
+      return {demo:true,code};
     }
+
+    async function verifyCode(identifier,code){
+      const api=String(window.DERZHAVA_AUTH_API||'').replace(/\/$/,'');
+      if(api){
+        const response=await fetch(api+'/verify-code',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({identifier,code})
+        });
+        if(!response.ok) return false;
+        const payload=await response.json().catch(()=>({}));
+        write(AUTH_KEY,{identifier,verifiedAt:new Date().toISOString(),token:payload.token||''});
+        sessionStorage.removeItem(AUTH_PENDING_KEY);
+        return true;
+      }
+
+      let pending=null;
+      try{pending=JSON.parse(sessionStorage.getItem(AUTH_PENDING_KEY)||'null')}catch(_){}
+      const valid=!!pending &&
+        normalizeIdentifier(pending.identifier)===normalizeIdentifier(identifier) &&
+        String(pending.code||'')===String(code||'').trim() &&
+        Date.now()-Number(pending.createdAt||0)<10*60*1000;
+      if(valid){
+        write(AUTH_KEY,{identifier,verifiedAt:new Date().toISOString(),demo:true});
+        sessionStorage.removeItem(AUTH_PENDING_KEY);
+      }
+      return valid;
+    }
+
+    function visibleOrdersFor(identifier){
+      const key=normalizeIdentifier(identifier);
+      if(!key) return [];
+      return orders().filter(order=>{
+        const customer=order.customer||{};
+        return [customer.phone,customer.email].some(value=>normalizeIdentifier(value)===key);
+      });
+    }
+
+    function renderOrder(order){
+      const active=statusIndex(order.status);
+      const steps=statusSteps.map((label,index)=>{
+        const cls=index<active?' done':index===active?' active':'';
+        return '<div class="account-status-step'+cls+'">'+esc(label)+'</div>';
+      }).join('');
+      const items=(order.items||[]).map(item=>
+        '<div class="account-order-item"><div><strong>'+esc(item.title)+'</strong><br><small>'+esc(item.size)+' · '+(Number(item.qty)||1)+' шт.</small></div><span>'+money((Number(item.price)||0)*(Number(item.qty)||1))+'</span></div>'
+      ).join('');
+      return '<article class="account-order-v2">'+
+        '<div class="account-order-top"><div><h3 class="account-order-number">'+esc(order.number)+'</h3><p class="account-order-meta">'+new Date(order.date).toLocaleString('ru-RU')+' · '+(order.items||[]).length+' поз.</p></div><span class="account-order-status-v2">'+esc(friendlyStatus(order.status))+'</span></div>'+
+        '<div class="account-order-items">'+items+'</div>'+
+        '<div class="account-order-total-row"><span>Итого</span><strong>'+money(order.total)+'</strong></div>'+
+        '<div class="account-status-track">'+steps+'</div>'+
+      '</article>';
+    }
+
+    const gate=root.querySelector('[data-auth-gate]');
+    const dashboard=root.querySelector('[data-account-dashboard]');
+    const requestStep=root.querySelector('[data-auth-step="request"]');
+    const verifyStep=root.querySelector('[data-auth-step="verify"]');
+    const requestForm=root.querySelector('[data-auth-request-form]');
+    const verifyForm=root.querySelector('[data-auth-verify-form]');
+    const destination=root.querySelector('[data-auth-destination]');
+    const demoBox=root.querySelector('[data-auth-demo]');
+    const errorBox=root.querySelector('[data-auth-error]');
+    const p=profile();
+
+    function showDashboard(){
+      const state=auth();
+      if(!state?.identifier) return false;
+      if(gate) gate.hidden=true;
+      if(dashboard) dashboard.hidden=false;
+      const user=root.querySelector('[data-auth-user]');
+      if(user) user.textContent=state.identifier;
+
+      const all=visibleOrdersFor(state.identifier);
+      const count=root.querySelector('[data-account-order-count]');if(count)count.textContent=all.length;
+      const total=root.querySelector('[data-account-order-total]');if(total)total.textContent=money(all.reduce((sum,o)=>sum+(Number(o.total)||0),0));
+      const cartN=root.querySelector('[data-account-cart-count]');if(cartN)cartN.textContent=cartCount();
+
+      const ordersHost=root.querySelector('[data-account-orders]');
+      if(ordersHost){
+        ordersHost.innerHTML=all.length
+          ? all.map(renderOrder).join('')
+          : '<div class="account-empty-v2"><strong>Заказов пока нет</strong><p>Заказы, оформленные на этот телефон или e-mail, появятся здесь.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a></div>';
+      }
+      return true;
+    }
+
+    function showGate(){
+      if(gate) gate.hidden=false;
+      if(dashboard) dashboard.hidden=true;
+      if(requestStep) requestStep.hidden=false;
+      if(verifyStep) verifyStep.hidden=true;
+      if(demoBox) demoBox.hidden=true;
+      if(errorBox) errorBox.hidden=true;
+    }
+
+    if(!showDashboard()){
+      showGate();
+      if(requestForm?.elements.identifier && !requestForm.elements.identifier.value){
+        requestForm.elements.identifier.value=p.phone||p.email||'';
+      }
+    }
+
+    requestForm?.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const identifier=String(new FormData(requestForm).get('identifier')||'').trim();
+      if(!isValidIdentifier(identifier)){
+        toast('<strong>Проверьте контакт</strong><br>Введите корректный телефон или e-mail.');
+        return;
+      }
+      const button=requestForm.querySelector('button[type="submit"]');
+      if(button){button.disabled=true;button.textContent='Отправляем…'}
+      try{
+        const result=await requestCode(identifier);
+        if(requestStep)requestStep.hidden=true;
+        if(verifyStep)verifyStep.hidden=false;
+        if(destination)destination.textContent=identifier;
+        verifyForm.dataset.identifier=identifier;
+        if(errorBox)errorBox.hidden=true;
+        if(demoBox){
+          if(result.demo){
+            demoBox.hidden=false;
+            demoBox.innerHTML='<strong>Тестовый режим:</strong> код для входа — <b>'+esc(result.code)+'</b>. После подключения сервиса этот код будет приходить по SMS или e-mail.';
+          }else{
+            demoBox.hidden=true;
+          }
+        }
+        verifyForm?.elements.code?.focus();
+      }catch(_){
+        toast('<strong>Не удалось отправить код</strong><br>Попробуйте ещё раз.');
+      }finally{
+        if(button){button.disabled=false;button.textContent='Получить код'}
+      }
+    });
+
+    verifyForm?.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const identifier=verifyForm.dataset.identifier||'';
+      const code=String(new FormData(verifyForm).get('code')||'').trim();
+      if(errorBox)errorBox.hidden=true;
+      const ok=await verifyCode(identifier,code);
+      if(!ok){
+        if(errorBox){
+          errorBox.hidden=false;
+          errorBox.textContent='Код неверный или уже истёк. Проверьте цифры и попробуйте ещё раз.';
+        }
+        return;
+      }
+      showDashboard();
+      toast('<strong>Вход выполнен</strong><br>Добро пожаловать в личный кабинет.');
+    });
+
+    root.querySelector('[data-auth-back]')?.addEventListener('click',()=>{
+      if(requestStep)requestStep.hidden=false;
+      if(verifyStep)verifyStep.hidden=true;
+      if(errorBox)errorBox.hidden=true;
+      if(demoBox)demoBox.hidden=true;
+    });
+
+    root.querySelector('[data-auth-signout]')?.addEventListener('click',()=>{
+      localStorage.removeItem(AUTH_KEY);
+      showGate();
+    });
 
     const form=root.querySelector('[data-profile-form]');
     if(form){
       ['name','phone','email','organization','inn','address'].forEach(k=>{if(form.elements[k])form.elements[k].value=p[k]||''});
       form.addEventListener('submit',e=>{
-        e.preventDefault();const fd=new FormData(form);
-        const next={};['name','phone','email','organization','inn','address'].forEach(k=>next[k]=String(fd.get(k)||''));
-        write(PROFILE_KEY,next);toast('<strong>Профиль сохранён</strong><br>Данные будут подставляться при оформлении заказа.');
+        e.preventDefault();
+        const fd=new FormData(form);
+        const next={};
+        ['name','phone','email','organization','inn','address'].forEach(k=>next[k]=String(fd.get(k)||''));
+        write(PROFILE_KEY,next);
+        toast('<strong>Данные сохранены</strong><br>Они будут подставляться при оформлении заказа.');
       });
     }
 
@@ -213,7 +414,7 @@
     const panels=[...root.querySelectorAll('[data-account-panel]')];
     tabs.forEach(btn=>btn.addEventListener('click',()=>{
       tabs.forEach(x=>x.classList.toggle('active',x===btn));
-      panels.forEach(p=>p.hidden=p.dataset.accountPanel!==btn.dataset.accountTab);
+      panels.forEach(panel=>panel.hidden=panel.dataset.accountPanel!==btn.dataset.accountTab);
     }));
   }
 
