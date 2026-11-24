@@ -31,8 +31,15 @@
   }
 
   function updateHeaderCount(){
+    const n=cartCount();
     document.querySelectorAll('[data-cart-count]').forEach(el=>{
-      const n=cartCount();el.textContent=n;el.dataset.empty=String(n===0);
+      el.textContent=n;
+      el.dataset.empty=String(n===0);
+    });
+    document.querySelectorAll('[data-cart-link]').forEach(link=>{
+      link.classList.toggle('has-items',n>0);
+      link.setAttribute('aria-label',n>0?'Корзина, товаров: '+n:'Корзина');
+      link.setAttribute('title',n>0?'Корзина · '+n:'Корзина');
     });
   }
 
@@ -42,11 +49,13 @@
       const actions=document.createElement('div');
       actions.className='shop-header-actions';
       actions.innerHTML=
-        '<a class="shop-header-link" href="account.html" aria-label="Личный кабинет" title="Личный кабинет">'+
+        '<a class="shop-header-link shop-account-link" href="account.html" aria-label="Личный кабинет" title="Личный кабинет">'+
           '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"></path></svg>'+
+          '<span class="shop-header-label">Кабинет</span>'+
         '</a>'+
-        '<a class="shop-header-link" href="cart.html" aria-label="Корзина" title="Корзина">'+
+        '<a class="shop-header-link shop-cart-link" data-cart-link href="cart.html" aria-label="Корзина" title="Корзина">'+
           '<svg viewBox="0 0 24 24"><path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20.5 8H6.2"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>'+
+          '<span class="shop-header-label">Корзина</span>'+
           '<span class="shop-cart-count" data-cart-count data-empty="true">0</span>'+
         '</a>';
       header.appendChild(actions);
@@ -73,6 +82,12 @@
     const existing=items.find(x=>x.id===item.id);
     if(existing) existing.qty=(Number(existing.qty)||1)+1; else items.push(item);
     write(CART_KEY,items);updateHeaderCount();
+    document.querySelectorAll('[data-cart-link]').forEach(link=>{
+      link.classList.remove('cart-attention');
+      void link.offsetWidth;
+      link.classList.add('cart-attention');
+      setTimeout(()=>link.classList.remove('cart-attention'),900);
+    });
     toast('<strong>Добавлено в корзину</strong><br>'+esc(item.title)+' · '+esc(item.size));
     document.dispatchEvent(new CustomEvent('derzhava:cartchange'));
   }
