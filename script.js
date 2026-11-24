@@ -60,7 +60,7 @@ if (!document.querySelector('link[data-shop-styles]')) {
 }
 if (!document.querySelector('script[data-shop-runtime]')) {
   const shopRuntime=document.createElement('script');
-  shopRuntime.src='shop.js?v=20261124-auth-antispam1';
+  shopRuntime.src='shop.js?v=20261124-auth-budget1';
   shopRuntime.dataset.shopRuntime='true';
   shopRuntime.async=false;
   document.body.appendChild(shopRuntime);
