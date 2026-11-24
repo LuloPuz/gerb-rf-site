@@ -116,13 +116,13 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261124-mobile-header-nav1';
+  shopStyles.href='shop.css?v=20261124-product-mobile-compact1';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
 if (!document.querySelector('script[data-shop-runtime]')) {
   const shopRuntime=document.createElement('script');
-  shopRuntime.src='shop.js?v=20261124-mobile-header-nav1';
+  shopRuntime.src='shop.js?v=20261124-product-mobile-compact1';
   shopRuntime.dataset.shopRuntime='true';
   shopRuntime.async=false;
   document.body.appendChild(shopRuntime);
