@@ -845,3 +845,10 @@
   .account-order-top,.account-order-items,.account-order-total-row{padding-left:16px;padding-right:16px}
   .account-status-track{overflow-x:auto;grid-template-columns:repeat(6,112px);padding-left:16px;padding-right:16px}
 }
+
+/* Auth anti-spam states v1 */
+.account-auth-primary:disabled{
+  cursor:not-allowed;
+  opacity:.58;
+  transform:none!important;
+}
