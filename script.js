@@ -541,3 +541,51 @@ document.addEventListener('keydown', event => {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
   else init();
 })();
+
+// Unified popular-card size pricing
+(() => {
+  if(window.__derzhavaPopularPricingInit) return;
+  window.__derzhavaPopularPricingInit=true;
+
+  const money=new Intl.NumberFormat('ru-RU');
+
+  function bindCard(card){
+    if(card.dataset.priceBindingReady==='true') return;
+    const buttons=[...card.querySelectorAll('[data-card-size]')];
+    const price=card.querySelector('.popular-card-price');
+    if(!buttons.length||!price) return;
+
+    card.dataset.priceBindingReady='true';
+
+    buttons.forEach(button=>{
+      button.addEventListener('click',event=>{
+        event.preventDefault();
+        event.stopPropagation();
+
+        buttons.forEach(item=>{
+          const active=item===button;
+          item.classList.toggle('active',active);
+          item.setAttribute('aria-pressed',active?'true':'false');
+        });
+
+        const value=Number(button.dataset.price||0);
+        if(!Number.isFinite(value)||value<=0) return;
+
+        price.classList.add('price-changing');
+        price.textContent=money.format(value)+' ₽';
+        requestAnimationFrame(()=>{
+          requestAnimationFrame(()=>price.classList.remove('price-changing'));
+        });
+      });
+    });
+  }
+
+  function init(){
+    document.querySelectorAll('.popular-card').forEach(bindCard);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+
+  document.addEventListener('derzhava:catalog-render',init);
+})();
