@@ -424,11 +424,16 @@
       if(gate) gate.hidden=true;
       if(dashboard) dashboard.hidden=false;
       const greeting=root.querySelector('[data-account-greeting]');
+      const loginState=root.querySelector('[data-account-login-state]');
       const currentProfile=profile();
       const firstName=String(currentProfile.name||'').trim().split(/\s+/)[0]||'';
       if(greeting){
-        greeting.hidden=!firstName;
-        greeting.textContent=firstName?'Здравствуйте, '+firstName:'';
+        greeting.hidden=false;
+        greeting.textContent=firstName?'Здравствуйте, '+firstName:'Выполнен вход';
+      }
+      if(loginState){
+        loginState.hidden=!firstName;
+        loginState.textContent='Выполнен вход';
       }
 
       const all=visibleOrdersFor(state.identifier);
