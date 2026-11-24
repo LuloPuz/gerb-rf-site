@@ -157,7 +157,7 @@
       add.className='popular-add-cart';
       add.type='button';
       add.dataset.popularAddCart='';
-      add.innerHTML='<span class="popular-add-cart-icon" aria-hidden="true">+</span><span>В корзину</span>';
+      add.innerHTML='<span>В корзину</span>';
       actions.insertBefore(add,open);
 
       add.addEventListener('click',event=>{
