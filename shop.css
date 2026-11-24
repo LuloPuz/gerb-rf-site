@@ -1475,3 +1475,67 @@
   .account-status-track{padding-left:6px!important;padding-right:6px!important}
   .account-status-step{font-size:7.4px!important}
 }
+
+
+/* iOS mobile input zoom + header control alignment v2 */
+@media(max-width:720px){
+  /* iOS Safari zooms focused form controls below 16px. Keep every typing field at 16px. */
+  input,
+  textarea,
+  select,
+  .header-site-search .home-search-input{
+    font-size:16px!important;
+  }
+
+  body .site-header .header-inner{
+    grid-template-columns:minmax(0,1fr) 58px auto!important;
+  }
+
+  body .site-menu-toggle,
+  body .site-header .shop-header-link{
+    width:58px!important;
+    height:52px!important;
+    min-width:58px!important;
+    min-height:52px!important;
+    padding:4px 2px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    box-sizing:border-box!important;
+  }
+
+  body .site-menu-icon{
+    width:19px!important;
+    height:19px!important;
+    margin:0 0 3px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:3px!important;
+    flex:0 0 19px!important;
+  }
+
+  body .site-menu-icon i{
+    width:19px!important;
+    height:1.5px!important;
+    flex:0 0 1.5px!important;
+  }
+
+  body .site-menu-label,
+  body .site-header .shop-header-label{
+    display:block!important;
+    height:8px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:8px!important;
+    line-height:8px!important;
+    text-align:center!important;
+  }
+
+  body .site-header .shop-header-link svg{
+    width:19px!important;
+    height:19px!important;
+    margin:0 0 3px!important;
+    flex:0 0 19px!important;
+  }
+}
