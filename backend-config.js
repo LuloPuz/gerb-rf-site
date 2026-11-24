@@ -1,7 +1,7 @@
-/* Public browser configuration.
-   Publishable keys are intended for browser use when RLS is configured.
-   Never put a Supabase secret/service-role key in this file. */
+/* Production backend configuration.
+   Real customer data must go only to the Russian-hosted production backend.
+   apiBaseUrl intentionally remains empty until the Yandex Cloud Function is deployed. */
 window.DERZHAVA_BACKEND_CONFIG = {
-  supabaseUrl: "https://ffmuypfbosvazwyjuvoi.supabase.co",
-  supabasePublishableKey: "sb_publishable_keBXqk33QXNthDsH_P2I-A_BIXSwHb8"
+  provider: "yandex-cloud",
+  apiBaseUrl: ""
 };
