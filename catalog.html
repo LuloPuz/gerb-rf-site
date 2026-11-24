@@ -3228,13 +3228,13 @@
  document.querySelectorAll('[data-subject-request]').forEach(a=>a.addEventListener('click',()=>{
    const genitive=a.dataset.subjectGenitive || a.dataset.subjectRequest;
    document.getElementById('catalogRequestText').textContent='Вы выбрали: герб '+genitive+'. Уточним размер, материал и подготовим предложение.';
-   document.getElementById('catalogRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent('Герб '+genitive);
+   document.getElementById('catalogRequestButton').href='offer.html';
  }));
 
  document.querySelectorAll('[data-agency-request]').forEach(a=>a.addEventListener('click',()=>{
    const name=a.dataset.agencyRequest;
    document.getElementById('catalogRequestText').textContent='Вы выбрали: '+name+'. Уточним размер, материал и подготовим предложение.';
-   document.getElementById('catalogRequestButton').href='mailto:xxx@xxx.xxx?subject='+encodeURIComponent(name);
+   document.getElementById('catalogRequestButton').href='offer.html';
  }));
 
  apply();
