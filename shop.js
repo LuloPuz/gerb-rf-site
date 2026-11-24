@@ -408,8 +408,13 @@
       if(!state?.identifier) return false;
       if(gate) gate.hidden=true;
       if(dashboard) dashboard.hidden=false;
-      const user=root.querySelector('[data-auth-user]');
-      if(user) user.textContent=state.identifier;
+      const greeting=root.querySelector('[data-account-greeting]');
+      const currentProfile=profile();
+      const firstName=String(currentProfile.name||'').trim().split(/\s+/)[0]||'';
+      if(greeting){
+        greeting.hidden=!firstName;
+        greeting.textContent=firstName?'Здравствуйте, '+firstName:'';
+      }
 
       const all=visibleOrdersFor(state.identifier);
       const count=root.querySelector('[data-account-order-count]');if(count)count.textContent=all.length;
