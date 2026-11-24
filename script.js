@@ -138,7 +138,7 @@
   const loadRuntime=()=>{
     if(document.querySelector('script[data-shop-runtime]')) return;
     const shopRuntime=document.createElement('script');
-    shopRuntime.src='shop.js?v=20261124-account-primary1';
+    shopRuntime.src='shop.js?v=20261124-sku1';
     shopRuntime.dataset.shopRuntime='true';
     shopRuntime.async=false;
     document.body.appendChild(shopRuntime);
@@ -148,7 +148,7 @@
   if(!shopStyles){
     shopStyles=document.createElement('link');
     shopStyles.rel='stylesheet';
-    shopStyles.href='shop.css?v=20261124-cart-head-compose1';
+    shopStyles.href='shop.css?v=20261124-sku1';
     shopStyles.dataset.shopStyles='true';
     shopStyles.addEventListener('load',loadRuntime,{once:true});
     shopStyles.addEventListener('error',loadRuntime,{once:true});
