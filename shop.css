@@ -2849,3 +2849,36 @@ body .full-catalog .directory-letter-group[hidden]{
   .popular-card-sku{font-size:8.5px}
   .product-article{font-size:10px}
 }
+
+
+/* MOBILE CARD PRICE ALIGNMENT v5 */
+.popular-card-cta-icon{
+  display:none!important;
+}
+@media(max-width:720px){
+  .popular-price-block{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:flex-end!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    gap:14px!important;
+  }
+  .popular-price-caption{
+    flex:0 1 auto!important;
+    margin:0!important;
+    max-width:180px!important;
+    white-space:normal!important;
+    text-align:left!important;
+  }
+  .popular-card-price{
+    flex:0 0 auto!important;
+    margin:0 0 0 auto!important;
+    justify-self:auto!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+  }
+  .popular-card-actions .popular-card-cta{
+    gap:0!important;
+  }
+}
