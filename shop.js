@@ -7,6 +7,7 @@
   const ORDERS_KEY='derzhava_orders_v1';
   const AUTH_KEY='derzhava_auth_v1';
   const AUTH_PENDING_KEY='derzhava_auth_pending_v1';
+  const AUTH_RATE_KEY='derzhava_auth_rate_v1';
 
   const money=n=>new Intl.NumberFormat('ru-RU').format(Number(n)||0)+' ₽';
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch(_){return fallback}};
@@ -215,6 +216,41 @@
     };
     const friendlyStatus=status=>statusSteps[statusIndex(status)];
 
+    function contactHasOrder(identifier){
+      const key=normalizeIdentifier(identifier);
+      if(!key) return false;
+      return orders().some(order=>{
+        const customer=order.customer||{};
+        return [customer.phone,customer.email].some(value=>normalizeIdentifier(value)===key);
+      });
+    }
+
+    function checkAndRecordRate(identifier){
+      const now=Date.now();
+      const hour=60*60*1000;
+      const cooldown=60*1000;
+      const key=normalizeIdentifier(identifier);
+      let state=read(AUTH_RATE_KEY,{events:[]});
+      state.events=(Array.isArray(state.events)?state.events:[]).filter(event=>now-Number(event.at||0)<hour);
+
+      const byContact=state.events.filter(event=>event.key===key);
+      const latest=byContact.reduce((max,event)=>Math.max(max,Number(event.at)||0),0);
+
+      if(latest && now-latest<cooldown){
+        return {ok:false,reason:'cooldown',retryMs:cooldown-(now-latest)};
+      }
+      if(byContact.length>=5){
+        return {ok:false,reason:'contact-hour'};
+      }
+      if(state.events.length>=15){
+        return {ok:false,reason:'browser-hour'};
+      }
+
+      state.events.push({key,at:now});
+      write(AUTH_RATE_KEY,state);
+      return {ok:true};
+    }
+
     async function requestCode(identifier){
       const api=String(window.DERZHAVA_AUTH_API||'').replace(/\/$/,'');
       if(api){
@@ -223,9 +259,42 @@
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify({identifier})
         });
-        if(!response.ok) throw new Error('Не удалось отправить код');
+
+        if(response.status===429){
+          const payload=await response.json().catch(()=>({}));
+          const error=new Error(payload.message||'Слишком много запросов. Попробуйте позже.');
+          error.code='rate-limit';
+          throw error;
+        }
+        if(!response.ok){
+          const error=new Error('Если контакт связан с заказом, код будет отправлен.');
+          error.code='request-failed';
+          throw error;
+        }
+
         sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,createdAt:Date.now(),remote:true}));
         return {demo:false};
+      }
+
+      // Local prototype mirrors the rules that must later live on the server.
+      if(!contactHasOrder(identifier)){
+        const error=new Error('Если контакт связан с заказом, код будет отправлен.');
+        error.code='no-order';
+        throw error;
+      }
+
+      const rate=checkAndRecordRate(identifier);
+      if(!rate.ok){
+        const error=new Error(
+          rate.reason==='cooldown'
+            ? 'Повторный код можно запросить примерно через '+Math.max(1,Math.ceil(rate.retryMs/1000))+' сек.'
+            : rate.reason==='contact-hour'
+              ? 'Лимит кодов для этого контакта исчерпан. Попробуйте позже.'
+              : 'Слишком много попыток входа. Попробуйте позже.'
+        );
+        error.code='rate-limit';
+        error.retryMs=rate.retryMs||0;
+        throw error;
       }
 
       const code=String(Math.floor(100000+Math.random()*900000));
@@ -361,10 +430,27 @@
           }
         }
         verifyForm?.elements.code?.focus();
-      }catch(_){
-        toast('<strong>Не удалось отправить код</strong><br>Попробуйте ещё раз.');
+      }catch(error){
+        const message=error?.message||'Не удалось отправить код. Попробуйте ещё раз.';
+        toast('<strong>Вход в кабинет</strong><br>'+esc(message));
+        if(error?.retryMs&&button){
+          let left=Math.max(1,Math.ceil(error.retryMs/1000));
+          button.disabled=true;
+          button.textContent='Повторить через '+left+' сек.';
+          const timer=setInterval(()=>{
+            left--;
+            if(left<=0){
+              clearInterval(timer);
+              button.disabled=false;
+              button.textContent='Получить код';
+            }else{
+              button.textContent='Повторить через '+left+' сек.';
+            }
+          },1000);
+          return;
+        }
       }finally{
-        if(button){button.disabled=false;button.textContent='Получить код'}
+        if(button&&!button.disabled){button.disabled=false;button.textContent='Получить код'}
       }
     });
 
