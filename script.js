@@ -42,8 +42,8 @@
           '<span class="home-search-icon" aria-hidden="true">'+
             '<svg viewBox="0 0 24 24" width="21" height="21" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg>'+
           '</span>'+
-          '<input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Поиск по сайту: Герб России, Москва, область, МВД..." aria-label="Поиск по сайту" data-site-search-input>'+
-          '<button class="home-search-submit" type="submit">Поиск</button>'+
+          '<input class="home-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Поиск: Герб России, Москва, МВД…" aria-label="Поиск по сайту" data-site-search-input>'+
+          '<button class="home-search-submit" type="submit">Найти</button>'+
         '</form>'+
         '<div class="home-search-results" data-site-search-results hidden></div>'+
       '</div>';
@@ -116,7 +116,7 @@
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261124-product-mobile-compact1';
+  shopStyles.href='shop.css?v=20261124-ios-input-header2';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
@@ -137,7 +137,7 @@ document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forE
 if (!document.querySelector('link[data-mobile-styles]')) {
   const mobileStyles = document.createElement('link');
   mobileStyles.rel = 'stylesheet';
-  mobileStyles.href = 'mobile.css?v=20261124-mobile-header-nav1';
+  mobileStyles.href = 'mobile.css?v=20261124-header-search3';
   mobileStyles.dataset.mobileStyles = 'true';
   document.head.appendChild(mobileStyles);
 }
