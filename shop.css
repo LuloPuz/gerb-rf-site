@@ -2378,3 +2378,76 @@ body{
     line-height:1.6!important;
   }
 }
+
+
+/* DESKTOP QUICK MENU READABILITY v2 */
+@media(min-width:901px){
+  body .site-quick-menu{
+    width:420px!important;
+    max-width:92vw!important;
+    padding:28px 30px 26px!important;
+  }
+
+  body .site-quick-head{
+    gap:18px!important;
+    padding-bottom:22px!important;
+  }
+
+  body .site-quick-head small{
+    margin-bottom:6px!important;
+    color:#8b6932!important;
+    font-size:12px!important;
+    font-weight:600!important;
+    line-height:1.35!important;
+    letter-spacing:.10em!important;
+  }
+
+  body .site-quick-head strong{
+    font-size:34px!important;
+    line-height:1.08!important;
+  }
+
+  body .site-quick-close{
+    width:42px!important;
+    height:42px!important;
+    flex:0 0 42px!important;
+    border-radius:11px!important;
+    font-size:25px!important;
+    font-weight:400!important;
+  }
+
+  body .site-quick-links{
+    margin-top:16px!important;
+  }
+
+  body .site-quick-links a{
+    gap:5px!important;
+    min-height:66px!important;
+    padding:15px 5px!important;
+    color:#14283a!important;
+    font-size:15px!important;
+    font-weight:600!important;
+    line-height:1.35!important;
+  }
+
+  body .site-quick-links a small{
+    color:#68737d!important;
+    font-size:12px!important;
+    font-weight:400!important;
+    line-height:1.5!important;
+  }
+
+  body .site-quick-account{
+    gap:10px!important;
+    padding-top:22px!important;
+  }
+
+  body .site-quick-account a{
+    min-height:50px!important;
+    padding:0 12px!important;
+    border-radius:10px!important;
+    font-size:14px!important;
+    font-weight:600!important;
+    line-height:1.25!important;
+  }
+}
