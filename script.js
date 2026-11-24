@@ -676,3 +676,34 @@ if(!document.getElementById('site-search-all-variants-style')){
 
   document.addEventListener('derzhava:catalog-render',init);
 })();
+
+
+/* Unified commercial CTA routing v1 */
+(() => {
+  const offerTextPattern=/(получить\s+предложен|отправить\s+запрос|уточнить\s+(?:исполнен|стоимост|заказ)|запросить\s+(?:предложен|стоимост|расч[её]т)|индивидуальн(?:ый|ого)\s+заказ)/i;
+
+  const isOfferCta=anchor=>{
+    if(!anchor || anchor.tagName!=='A') return false;
+    const text=(anchor.textContent||'').replace(/\s+/g,' ').trim();
+    return offerTextPattern.test(text);
+  };
+
+  const normalizeOfferLinks=()=>{
+    document.querySelectorAll('a').forEach(anchor=>{
+      if(isOfferCta(anchor)) anchor.setAttribute('href','offer.html');
+    });
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',normalizeOfferLinks);
+  }else{
+    normalizeOfferLinks();
+  }
+
+  document.addEventListener('click',event=>{
+    const anchor=event.target.closest?.('a');
+    if(!isOfferCta(anchor)) return;
+    event.preventDefault();
+    window.location.href='offer.html';
+  },true);
+})();
