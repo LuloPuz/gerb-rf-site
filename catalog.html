@@ -6,7 +6,7 @@
 <meta name="description" content="Полный каталог Державы: гербы субъектов и городов Российской Федерации, эмблемы ведомств и популярные готовые исполнения с фотографиями.">
 <meta name="theme-color" content="#07182a">
 <meta name="catalog-search-version" content="20261117-subject-products-generic1">
-<link rel="stylesheet" href="styles.css?v=20261124-mobile-size-swipe3">
+<link rel="stylesheet" href="styles.css?v=20261124-mobile-card-clean4">
 <style>
 .catalog-head-full{padding:58px 0 38px;border-bottom:1px solid var(--line)}
 .catalog-breadcrumb-full{margin:0 0 24px;color:#7a8187;font-size:13px}
@@ -948,6 +948,115 @@
 }
 
 </style>
+<style id="mobile-card-simplification-v4">
+
+/* MOBILE CARD SIMPLIFICATION v4 */
+@media screen and (max-width:760px){
+  /* Chips already communicate these values — remove duplicated spec rows. */
+  body .popular-specs{
+    margin-top:12px!important;
+    border-top:1px solid #eee9df!important;
+  }
+
+  body .popular-specs > div:not(.popular-spec-size){
+    display:none!important;
+  }
+
+  body .popular-spec-size{
+    display:block!important;
+    padding:10px 0 9px!important;
+    border-bottom:0!important;
+  }
+
+  body .popular-spec-size dt{
+    margin:0 0 7px!important;
+    padding:0!important;
+    min-height:0!important;
+    color:#8b9298!important;
+    font-size:9px!important;
+    line-height:1.3!important;
+  }
+
+  /* No text hint over the controls. The clipped next option + fade + chevron show swipe affordance. */
+  body .popular-size-scroll-label{
+    display:none!important;
+  }
+
+  body .popular-size-switcher{
+    padding-right:24px!important;
+    padding-bottom:3px!important;
+  }
+
+  body .popular-size-choice{
+    min-width:92px!important;
+    min-height:38px!important;
+    padding:0 10px!important;
+  }
+
+  body .popular-size-scroll-fade{
+    display:block!important;
+    width:30px!important;
+    height:41px!important;
+    background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.98) 66%)!important;
+  }
+
+  body .popular-size-scroll-fade[hidden],
+  body .popular-spec-size.size-scroll-end .popular-size-scroll-fade{
+    display:none!important;
+  }
+
+  body .popular-size-scroll-fade::after{
+    content:"›";
+    position:absolute;
+    right:2px;
+    top:50%;
+    transform:translateY(-54%);
+    color:#9a773d;
+    font-family:Arial,sans-serif;
+    font-size:20px;
+    font-weight:400;
+    line-height:1;
+  }
+
+  /* Cleaner mobile CTA — no desktop-style arrow block. */
+  body .popular-card-bottom{
+    gap:10px!important;
+    margin-top:9px!important;
+    padding-top:11px!important;
+  }
+
+  body .popular-card-cta{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-height:42px!important;
+    padding:0 12px!important;
+    border:1px solid #d1c7b5!important;
+    border-radius:9px!important;
+    background:#fff!important;
+    color:var(--navy)!important;
+    box-shadow:none!important;
+    font-size:10.5px!important;
+    font-weight:650!important;
+    transform:none!important;
+  }
+
+  body .popular-card-cta:hover,
+  body .popular-card-cta:active{
+    border-color:#b89551!important;
+    background:#fffaf0!important;
+    color:var(--navy)!important;
+    box-shadow:none!important;
+    transform:none!important;
+  }
+
+  body .popular-card-cta-icon{
+    display:none!important;
+  }
+}
+
+</style>
 </head>
 <body>
 <header class="site-header"><div class="container header-inner">
@@ -1007,8 +1116,7 @@
         <strong class="popular-card-price">4 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-bez-shchita-kraska.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1036,8 +1144,7 @@
         <strong class="popular-card-price">5 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-bez-shchita-metallizaciya.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1065,8 +1172,7 @@
         <strong class="popular-card-price">15 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-na-shchite-kraska-plastik.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1094,8 +1200,7 @@
         <strong class="popular-card-price">17 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-na-shchite-kraska-barhat.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1123,8 +1228,7 @@
         <strong class="popular-card-price">19 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-na-shchite-kraska-metall.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1152,8 +1256,7 @@
         <strong class="popular-card-price">17 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-na-shchite-metallizaciya-plastik.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1181,8 +1284,7 @@
         <strong class="popular-card-price">18 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-na-shchite-metallizaciya-barhat.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1210,8 +1312,7 @@
         <strong class="popular-card-price">20 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-moskvy-na-shchite-metallizaciya-metall.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1239,8 +1340,7 @@
         <strong class="popular-card-price">4 990 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-barelef-kraska.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1268,8 +1368,7 @@
         <strong class="popular-card-price">8 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-barelef-metallizaciya.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1297,8 +1396,7 @@
         <strong class="popular-card-price">24 990 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-gorelef.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1326,8 +1424,7 @@
         <strong class="popular-card-price">9 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-kraska-plastik.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1355,8 +1452,7 @@
         <strong class="popular-card-price">11 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-kraska-barhat.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1384,8 +1480,7 @@
         <strong class="popular-card-price">16 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-kraska-metall.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1413,8 +1508,7 @@
         <strong class="popular-card-price">13 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-metallizaciya-plastik.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1442,8 +1536,7 @@
         <strong class="popular-card-price">14 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-metallizaciya-barhat.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1471,8 +1564,7 @@
         <strong class="popular-card-price">17 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-barelef-metallizaciya-metall.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article>
@@ -1500,8 +1592,7 @@
         <strong class="popular-card-price">29 900 ₽</strong>
       </div>
       <a class="popular-card-cta" href="gerb-rf-na-shchite-gorelef.html" aria-label="Смотреть товар">
-        <span>Смотреть товар</span>
-        <span class="popular-card-cta-icon" aria-hidden="true">↗</span>
+        <span>Открыть товар</span><span class="popular-card-cta-icon" aria-hidden="true">↗</span>
       </a>
     </div>
   </div></article></div>
@@ -2793,7 +2884,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261124-mobile-size-swipe3"></script>
+<script src="script.js?v=20261124-mobile-card-clean4"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
