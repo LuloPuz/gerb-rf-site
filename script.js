@@ -348,12 +348,22 @@ document.addEventListener('keydown', event => {
       return matches;
     }
 
-    results.innerHTML = matches.map(page =>
-      '<a class="home-search-result" href="catalog.html?q=' + encodeURIComponent(page.title) + '">' +
-        '<span><strong>' + escapeHtml(page.title) + '</strong><small>' + escapeHtml(page.meta) + '</small></span>' +
-        '<span aria-hidden="true">→</span>' +
-      '</a>'
-    ).join('');
+    const rawQuery=String(query||'').trim();
+    const allMatchesLink=matches.length>1
+      ? '<a class="home-search-result home-search-result-all" href="catalog.html?q=' + encodeURIComponent(rawQuery) + '">' +
+          '<span><strong>Все варианты по запросу «' + escapeHtml(rawQuery) + '»</strong><small>Показать все подходящие товары в каталоге</small></span>' +
+          '<span class="home-search-all-arrow" aria-hidden="true">→</span>' +
+        '</a>'
+      : '';
+
+    results.innerHTML =
+      allMatchesLink +
+      matches.map(page =>
+        '<a class="home-search-result" href="catalog.html?q=' + encodeURIComponent(page.title) + '">' +
+          '<span><strong>' + escapeHtml(page.title) + '</strong><small>' + escapeHtml(page.meta) + '</small></span>' +
+          '<span aria-hidden="true">→</span>' +
+        '</a>'
+      ).join('');
     results.hidden = false;
     return matches;
   };
