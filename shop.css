@@ -2541,3 +2541,32 @@ body .full-catalog .directory-letter-group[hidden]{
 @media(max-width:390px){
   .popular-card-actions{grid-template-columns:1fr}
 }
+
+
+/* EMPTY CART HEIGHT ALIGNMENT v1 */
+@media(min-width:901px){
+  .commerce-shell:has(.cart-empty){
+    align-items:stretch;
+  }
+  .commerce-shell:has(.cart-empty) > div{
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+  .commerce-shell:has(.cart-empty) .cart-list{
+    flex:1 1 auto;
+    display:flex;
+  }
+  .commerce-shell:has(.cart-empty) .cart-empty{
+    flex:1 1 auto;
+    width:100%;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  .commerce-shell:has(.cart-empty) .cart-summary{
+    align-self:start;
+  }
+}
