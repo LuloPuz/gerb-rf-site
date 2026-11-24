@@ -72,9 +72,10 @@
     const size=active?.dataset.size||active?.textContent?.trim()||'Стандартный размер';
     const title=info.querySelector('h1')?.textContent?.trim()||document.title;
     const finish=info.querySelector('.final-finish')?.textContent?.trim()||'';
+    const sku=(info.querySelector('.product-article')?.textContent||'').replace(/[^0-9]/g,'').slice(0,4);
     const image=document.querySelector('[data-gallery-main]')?.getAttribute('src')||document.querySelector('.final-product-main img')?.getAttribute('src')||'';
     const url=location.pathname.split('/').pop()+location.search;
-    return {id:url+'|'+size,title,finish,size,price,image,url,qty:1};
+    return {id:url+'|'+size,title,finish,sku,size,price,image,url,qty:1};
   }
 
   function addProduct(item){
@@ -130,13 +131,14 @@
     const sizeUnit=active?.querySelector('small')?.textContent?.trim()||'';
     const size=[sizeValue,sizeUnit].filter(Boolean).join(' ');
     const title=card.querySelector('.popular-title-block h3, h3')?.textContent?.trim()||'Товар';
+    const sku=(card.querySelector('.popular-card-sku')?.textContent||'').replace(/[^0-9]/g,'').slice(0,4);
     const chips=[...card.querySelectorAll('.popular-chip')].map(el=>el.textContent.trim()).filter(Boolean);
     const finish=chips.join(' · ');
     const image=card.querySelector('.popular-media img')?.getAttribute('src')||'';
     const link=card.querySelector('.popular-card-cta')||card.querySelector('.popular-hit');
     const url=link?.getAttribute('href')||'catalog.html';
     if(!price) return null;
-    return {id:url+'|'+size,title,finish,size,price,image,url,qty:1};
+    return {id:url+'|'+size,title,finish,sku,size,price,image,url,qty:1};
   }
 
   function initCatalogQuickAdd(){
@@ -199,6 +201,7 @@
     list.innerHTML=items.map((item,i)=>'<article class="cart-item" data-cart-index="'+i+'">'+
       '<a class="cart-item-media" href="'+esc(item.url)+'"><img src="'+esc(item.image)+'" alt=""></a>'+
       '<div><div class="cart-item-meta">'+esc(item.finish)+'</div><h3><a href="'+esc(item.url)+'">'+esc(item.title)+'</a></h3>'+
+      (item.sku?'<div class="cart-item-meta">Артикул: '+esc(item.sku)+'</div>':'')+
       '<div class="cart-item-meta">Размер: '+esc(item.size)+'</div><div class="cart-item-price">'+money(item.price)+'</div>'+
       '<div class="cart-item-actions"><div class="qty-control"><button type="button" data-qty="-1">−</button><span>'+item.qty+'</span><button type="button" data-qty="1">+</button></div><button class="cart-remove" type="button" data-remove>Удалить</button></div></div>'+
       '<div class="cart-line-total">'+money(item.price*item.qty)+'</div></article>').join('');
@@ -279,7 +282,7 @@
       const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved};
       const all=orders();all.unshift(order);write(ORDERS_KEY,all);setCart([]);
 
-      const lines=order.items.map(x=>'• '+x.title+' — '+x.size+' × '+x.qty+' = '+money(x.price*x.qty)).join('\n');
+      const lines=order.items.map(x=>'• '+x.title+(x.sku?' · арт. '+x.sku:'')+' — '+x.size+' × '+x.qty+' = '+money(x.price*x.qty)).join('\n');
       const body='Заказ '+number+'\n\n'+lines+'\n\nИтого: '+money(order.total)+'\n\nПокупатель: '+customer.name+'\nТелефон: '+customer.phone+'\nEmail: '+customer.email+'\nОрганизация: '+customer.organization+'\nИНН: '+customer.inn+'\nДоставка: '+order.delivery+'\nАдрес: '+customer.address+'\nКомментарий: '+order.comment;
       const mail='mailto:xxx@xxx.xxx?subject='+encodeURIComponent('Новый заказ '+number)+'&body='+encodeURIComponent(body);
 
