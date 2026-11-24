@@ -22,7 +22,7 @@
   <section class="admin-setup" data-admin-setup hidden>
     <p class="admin-eyebrow">Подключение базы</p>
     <h1>Админка подготовлена</h1>
-    <p>Интерфейс уже работает в режиме локального предпросмотра. Чтобы видеть заказы со всех устройств, подключите Supabase и примените файл <code>supabase-schema.sql</code>.</p>
+    <p>Интерфейс уже работает в режиме локального предпросмотра. Чтобы видеть заказы со всех устройств, подключите российский backend в Yandex Cloud. Код и схема уже подготовлены в папке <code>yandex-backend</code>.</p>
     <div class="admin-setup-note">До подключения базы здесь отображаются только тестовые заказы, сохранённые в этом браузере.</div>
   </section>
 
@@ -30,7 +30,7 @@
     <div class="admin-login-card">
       <p class="admin-eyebrow">Защищённый вход</p>
       <h1>Панель управления</h1>
-      <p>Войдите учётной записью администратора Supabase.</p>
+      <p>Войдите учётной записью администратора «Державы».</p>
       <form data-admin-login-form>
         <label>Email<input type="email" name="email" autocomplete="username" required></label>
         <label>Пароль<input type="password" name="password" autocomplete="current-password" required></label>
@@ -70,9 +70,8 @@
   </section>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="backend-config.js?v=20261124-backend2"></script>
-<script src="backend.js?v=20261124-backend2"></script>
-<script src="admin.js?v=20261124-admin2"></script>
+<script src="backend-config.js?v=20261124-yandex1"></script>
+<script src="backend.js?v=20261124-yandex1"></script>
+<script src="admin.js?v=20261124-yandex1"></script>
 </body>
 </html>
