@@ -143,7 +143,7 @@
       els.modeNote.textContent = "Общая база заказов. Изменения статусов сохраняются для всех устройств.";
     } else {
       orders = localOrders();
-      els.modeNote.textContent = "Локальный предпросмотр: видны только заказы этого браузера. Подключите Supabase для общей базы.";
+      els.modeNote.textContent = "Локальный предпросмотр: видны только заказы этого браузера. Подключите российский backend в Yandex Cloud для общей базы.";
     }
     renderOrders();
   }
