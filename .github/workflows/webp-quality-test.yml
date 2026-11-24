@@ -1,0 +1,24 @@
+name: WebP quality test
+on:
+  push:
+    branches: [optimize-webp-quality95]
+    paths: ['.github/workflows/webp-quality-test.yml']
+permissions:
+  contents: write
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install image encoder
+        run: python3 -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Convert and verify
+        run: python3 tools/optimize-webp.py
+      - name: Commit verified images to test branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html' '*.css' '*.webp' webp-optimization-report.json
+          git commit -m "Generate checked high-quality WebP assets"
+          git push origin HEAD:optimize-webp-quality95
