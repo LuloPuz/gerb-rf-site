@@ -1072,6 +1072,49 @@
   }
 }
 
+
+/* CATALOG FILTER/RESET FIX v1 */
+.catalog-mobile-reset[hidden]{
+  display:none!important;
+}
+.catalog-mobile-reset{
+  min-height:38px;
+  padding:0 16px;
+  border:1px solid #cdbb94;
+  border-radius:8px;
+  background:#fffaf0;
+  color:#6f5525;
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+}
+.catalog-mobile-reset:hover{
+  border-color:#9a773d;
+  background:#f5eddd;
+  color:var(--navy);
+}
+@media(min-width:701px){
+  .catalog-search-row .catalog-mobile-reset{
+    grid-column:2;
+    justify-self:stretch;
+    width:100%;
+  }
+}
+@media(max-width:700px){
+  .catalog-search-row .catalog-mobile-reset{
+    grid-column:1/-1;
+    width:100%;
+  }
+}
+.catalog-filter{
+  transition:border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+.catalog-filter.active{
+  box-shadow:inset 0 0 0 1px rgba(154,119,61,.12);
+}
+
 </style>
 </head>
 <body>
@@ -3133,24 +3176,47 @@
  const initialQuery=new URLSearchParams(window.location.search).get('q');
  if(initialQuery) input.value=initialQuery;
  const mobileReset=document.getElementById('catalogMobileReset');
+
+ const setActiveFilter=next=>{
+   active=next||'all';
+   filters.forEach(x=>{
+     const selected=x.dataset.sectionFilter===active;
+     x.classList.toggle('active',selected);
+     x.setAttribute('aria-pressed',String(selected));
+   });
+ };
+
  input.addEventListener('input',apply);
- clear.addEventListener('click',()=>{input.value='';input.focus();apply()});
+
+ clear.addEventListener('click',()=>{
+   input.value='';
+   input.focus();
+   apply();
+ });
+
  mobileReset?.addEventListener('click',()=>{
    input.value='';
-   active='all';
-   filters.forEach(x=>x.classList.toggle('active',x.dataset.sectionFilter==='all'));
+   setActiveFilter('all');
    apply();
    document.querySelector('.full-catalog')?.scrollIntoView({behavior:'smooth',block:'start'});
  });
 
  filters.forEach(btn=>btn.addEventListener('click',()=>{
-  filters.forEach(x=>x.classList.remove('active'));
-  btn.classList.add('active');
-  active=btn.dataset.sectionFilter;
-  if(btn.dataset.sectionFilter==='all' && window.matchMedia('(max-width:430px)').matches){
-    input.value='';
-  }
-  apply();
+   const next=btn.dataset.sectionFilter||'all';
+
+   // "Весь каталог" is a true reset on every screen size:
+   // clear the search and restore the complete catalogue.
+   if(next==='all'){
+     input.value='';
+   }
+
+   setActiveFilter(next);
+   apply();
+
+   const target=next==='all'
+     ? document.querySelector('.full-catalog')
+     : document.querySelector('[data-catalog-section="'+next+'"]');
+   target?.scrollIntoView({behavior:'smooth',block:'start'});
  }));
 
  document.querySelectorAll('[data-subject-request]').forEach(a=>a.addEventListener('click',()=>{
