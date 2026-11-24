@@ -1,0 +1,404 @@
+{
+  "converted": 39,
+  "skipped": 1,
+  "before": 63400188,
+  "after": 35392280,
+  "images": [
+    {
+      "original": "assets/gerb-rf-barelef-kraska-side.png",
+      "before": 1310224,
+      "webp": "assets/gerb-rf-barelef-kraska-side.png.webp",
+      "after": 175312,
+      "width": 1207,
+      "height": 1303,
+      "psnr": 43.98,
+      "mode": "quality95"
+    },
+    {
+      "original": "assets/gerb-rf-bez-shchita.png",
+      "before": 2227957,
+      "webp": "assets/gerb-rf-bez-shchita.png.webp",
+      "after": 1520010,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/gerb-rf-metallizaciya-profil-chut-chut.png",
+      "before": 744019,
+      "webp": "assets/gerb-rf-metallizaciya-profil-chut-chut.png.webp",
+      "after": 533572,
+      "width": 928,
+      "height": 1000,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/hero-wide.jpg",
+      "before": 305399,
+      "skipped": "quality or savings threshold",
+      "psnr": 43.08
+    },
+    {
+      "original": "assets/Барельеф краска на щите флок (композит) анфас.png",
+      "before": 1847523,
+      "webp": "assets/Барельеф краска на щите флок (композит) анфас.png.webp",
+      "after": 1158932,
+      "width": 1122,
+      "height": 1402,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Барельеф краска на щите флок (композит) близко.png",
+      "before": 2906429,
+      "webp": "assets/Барельеф краска на щите флок (композит) близко.png.webp",
+      "after": 489900,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 42.18,
+      "mode": "quality95"
+    },
+    {
+      "original": "assets/Барельеф краска на щите флок (композит) сбоку.png",
+      "before": 1286040,
+      "webp": "assets/Барельеф краска на щите флок (композит) сбоку.png.webp",
+      "after": 828112,
+      "width": 1122,
+      "height": 1402,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Барельеф краска на щите флок (композит) снизу.png",
+      "before": 1477624,
+      "webp": "assets/Барельеф краска на щите флок (композит) снизу.png.webp",
+      "after": 955352,
+      "width": 1122,
+      "height": 1402,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Герб Москвы краска без щита.png",
+      "before": 1402330,
+      "webp": "assets/Герб Москвы краска без щита.png.webp",
+      "after": 372646,
+      "width": 1207,
+      "height": 1303,
+      "psnr": 44.16,
+      "mode": "quality95"
+    },
+    {
+      "original": "assets/Герб Москвы металлизация на пластиковом щите.png",
+      "before": 1394289,
+      "webp": "assets/Герб Москвы металлизация на пластиковом щите.png.webp",
+      "after": 892778,
+      "width": 1207,
+      "height": 1303,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Герб РФ барельеф краска на метал щите анфас.png",
+      "before": 2318086,
+      "webp": "assets/Герб РФ барельеф краска на метал щите анфас.png.webp",
+      "after": 1494802,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Герб РФ барельеф краска на метал щите близко.png",
+      "before": 3294734,
+      "webp": "assets/Герб РФ барельеф краска на метал щите близко.png.webp",
+      "after": 2068166,
+      "width": 1024,
+      "height": 1536,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Герб РФ барельеф краска на метал щите сбоку.png",
+      "before": 1877932,
+      "webp": "assets/Герб РФ барельеф краска на метал щите сбоку.png.webp",
+      "after": 1204404,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Герб РФ барельеф краска на метал щите снизу.png",
+      "before": 1873807,
+      "webp": "assets/Герб РФ барельеф краска на метал щите снизу.png.webp",
+      "after": 1221504,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Горельеф на щите анфас.png",
+      "before": 1959365,
+      "webp": "assets/Горельеф на щите анфас.png.webp",
+      "after": 1226148,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Горельеф на щите сбоку.png",
+      "before": 2370959,
+      "webp": "assets/Горельеф на щите сбоку.png.webp",
+      "after": 1516626,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Горельеф на щите снизу.png",
+      "before": 2328566,
+      "webp": "assets/Горельеф на щите снизу.png.webp",
+      "after": 1535966,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/Золотой двуглавый орёл России (1).png",
+      "before": 2188670,
+      "webp": "assets/Золотой двуглавый орёл России (1).png.webp",
+      "after": 1602980,
+      "width": 1283,
+      "height": 1226,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/горельеф-вид-сбоку-1.png",
+      "before": 1498179,
+      "webp": "assets/горельеф-вид-сбоку-1.png.webp",
+      "after": 1014472,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/горельеф-вид-сбоку-2.png",
+      "before": 1043157,
+      "webp": "assets/горельеф-вид-сбоку-2.png.webp",
+      "after": 687226,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/горельеф-вид-снизу.png",
+      "before": 1275654,
+      "webp": "assets/горельеф-вид-снизу.png.webp",
+      "after": 830588,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "assets/горельеф-вид-спереди.png",
+      "before": 2481643,
+      "webp": "assets/горельеф-вид-спереди.png.webp",
+      "after": 1621440,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб Москвы краска бархатный щит.png",
+      "before": 402227,
+      "webp": "Герб Москвы краска бархатный щит.png.webp",
+      "after": 262176,
+      "width": 742,
+      "height": 800,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб Москвы краска металл щит.png",
+      "before": 1404474,
+      "webp": "Герб Москвы краска металл щит.png.webp",
+      "after": 210992,
+      "width": 1207,
+      "height": 1303,
+      "psnr": 42.05,
+      "mode": "quality95"
+    },
+    {
+      "original": "Герб Москвы краска пластиковый щит.png",
+      "before": 434945,
+      "webp": "Герб Москвы краска пластиковый щит.png.webp",
+      "after": 281772,
+      "width": 742,
+      "height": 800,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб Москвы металлизация без щита.png",
+      "before": 1474406,
+      "webp": "Герб Москвы металлизация без щита.png.webp",
+      "after": 954572,
+      "width": 1207,
+      "height": 1303,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб Москвы металлизация на бархатном щите.png",
+      "before": 1398386,
+      "webp": "Герб Москвы металлизация на бархатном щите.png.webp",
+      "after": 239276,
+      "width": 1208,
+      "height": 1302,
+      "psnr": 42.18,
+      "mode": "quality95"
+    },
+    {
+      "original": "Герб Москвы металлизация на металлическом щите.png",
+      "before": 1114870,
+      "webp": "Герб Москвы металлизация на металлическом щите.png.webp",
+      "after": 706592,
+      "width": 1207,
+      "height": 1303,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб РФ барельеф краска на пластиковой щите анфас.png",
+      "before": 1882522,
+      "webp": "Герб РФ барельеф краска на пластиковой щите анфас.png.webp",
+      "after": 1239244,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб РФ барельеф краска на пластиковом близко.png",
+      "before": 2847729,
+      "webp": "Герб РФ барельеф краска на пластиковом близко.png.webp",
+      "after": 473634,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 42.26,
+      "mode": "quality95"
+    },
+    {
+      "original": "Герб РФ барельеф краска на пластиковом щите сбоку .png",
+      "before": 1435709,
+      "webp": "Герб РФ барельеф краска на пластиковом щите сбоку .png.webp",
+      "after": 958018,
+      "width": 1086,
+      "height": 1448,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб металлизация щит метал анфас.png",
+      "before": 1587588,
+      "webp": "Герб металлизация щит метал анфас.png.webp",
+      "after": 1024794,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб металлизация щит метал сбоку.png",
+      "before": 1109166,
+      "webp": "Герб металлизация щит метал сбоку.png.webp",
+      "after": 733366,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб металлизация щит метал снизу.png",
+      "before": 1360148,
+      "webp": "Герб металлизация щит метал снизу.png.webp",
+      "after": 881668,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб рф металлизация щит бархат анфас.png",
+      "before": 1351204,
+      "webp": "Герб рф металлизация щит бархат анфас.png.webp",
+      "after": 839490,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб рф металлизация щит бархат сбоку.png",
+      "before": 973799,
+      "webp": "Герб рф металлизация щит бархат сбоку.png.webp",
+      "after": 621322,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб рф металлизация щит бархат снизу.png",
+      "before": 1170362,
+      "webp": "Герб рф металлизация щит бархат снизу.png.webp",
+      "after": 205498,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 42.45,
+      "mode": "quality95"
+    },
+    {
+      "original": "Герб рф металлизация щит пластик анфас.png",
+      "before": 1676837,
+      "webp": "Герб рф металлизация щит пластик анфас.png.webp",
+      "after": 1065252,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб рф металлизация щит пластик сбоку.png",
+      "before": 1002844,
+      "webp": "Герб рф металлизация щит пластик сбоку.png.webp",
+      "after": 656550,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    },
+    {
+      "original": "Герб рф металлизация щит пластик снизу.png",
+      "before": 1665785,
+      "webp": "Герб рф металлизация щит пластик снизу.png.webp",
+      "after": 1087128,
+      "width": 1254,
+      "height": 1254,
+      "psnr": 99.0,
+      "mode": "lossless"
+    }
+  ]
+}
