@@ -1,122 +1,99 @@
 (() => {
   if (window.DerzhavaBackend) return;
 
+  const TOKEN_KEY = "derzhava_admin_token_v1";
   const config = () => window.DERZHAVA_BACKEND_CONFIG || {};
-  let client = null;
 
   function configured() {
-    const cfg = config();
-    return /^https:\/\/.+\.supabase\.co\/?$/i.test(String(cfg.supabaseUrl || "").trim()) &&
-      String(cfg.supabasePublishableKey || "").trim().length > 20 &&
-      !!window.supabase?.createClient;
+    const url = String(config().apiBaseUrl || "").trim();
+    return /^https:\/\//i.test(url);
   }
 
-  function getClient() {
-    if (!configured()) return null;
-    if (!client) {
-      const cfg = config();
-      client = window.supabase.createClient(
-        String(cfg.supabaseUrl).replace(/\/$/, ""),
-        String(cfg.supabasePublishableKey),
-        {
-          auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-          }
-        }
-      );
+  function baseUrl() {
+    return String(config().apiBaseUrl || "").replace(/\/$/, "");
+  }
+
+  function adminToken() {
+    return sessionStorage.getItem(TOKEN_KEY) || "";
+  }
+
+  async function request(action, options = {}) {
+    if (!configured()) throw new Error("Российская база заказов пока не подключена.");
+
+    const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+    if (options.admin) {
+      const token = adminToken();
+      if (!token) throw new Error("Требуется вход администратора.");
+      headers.Authorization = "Bearer " + token;
     }
-    return client;
-  }
 
-  async function createOrder(order) {
-    if (!configured()) throw new Error("База заказов пока не подключена.");
-    const cfg = config();
-    const response = await fetch(
-      String(cfg.supabaseUrl).replace(/\/$/, "") + "/functions/v1/create-order",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": String(cfg.supabasePublishableKey)
-        },
-        body: JSON.stringify({
-          customer: order.customer || {},
-          items: Array.isArray(order.items) ? order.items : [],
-          delivery: String(order.delivery || ""),
-          comment: String(order.comment || "")
-        })
-      }
-    );
+    const response = await fetch(baseUrl() + "?action=" + encodeURIComponent(action), {
+      method: options.method || "POST",
+      headers,
+      body: options.body === undefined ? undefined : JSON.stringify(options.body)
+    });
 
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(payload?.error || "Не удалось сохранить заказ.");
+      if (response.status === 401) sessionStorage.removeItem(TOKEN_KEY);
+      throw new Error(payload?.error || "Ошибка сервера.");
     }
     return payload;
   }
 
-  async function signInAdmin(email, password) {
-    const api = getClient();
-    if (!api) throw new Error("Supabase не подключён.");
-    const { data, error } = await api.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+  async function createOrder(order) {
+    return request("create-order", {
+      body: {
+        customer: order.customer || {},
+        items: Array.isArray(order.items) ? order.items : [],
+        delivery: String(order.delivery || ""),
+        comment: String(order.comment || "")
+      }
+    });
+  }
 
-    const { data: allowed, error: roleError } = await api.rpc("is_admin");
-    if (roleError || allowed !== true) {
-      await api.auth.signOut();
-      throw new Error("У этой учётной записи нет прав администратора.");
-    }
-    return data;
+  async function signInAdmin(email, password) {
+    const result = await request("admin-login", {
+      body: { email: String(email || ""), password: String(password || "") }
+    });
+    if (!result?.token) throw new Error("Сервер не вернул сессию администратора.");
+    sessionStorage.setItem(TOKEN_KEY, result.token);
+    return result;
   }
 
   async function getSession() {
-    const api = getClient();
-    if (!api) return null;
-    const { data } = await api.auth.getSession();
-    return data?.session || null;
+    return adminToken() ? { token: adminToken() } : null;
   }
 
   async function isAdmin() {
-    const api = getClient();
-    if (!api) return false;
-    const { data, error } = await api.rpc("is_admin");
-    return !error && data === true;
+    if (!adminToken()) return false;
+    try {
+      await request("admin-me", { admin: true });
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   async function signOut() {
-    const api = getClient();
-    if (api) await api.auth.signOut();
+    sessionStorage.removeItem(TOKEN_KEY);
   }
 
   async function listOrders() {
-    const api = getClient();
-    if (!api) throw new Error("Supabase не подключён.");
-    const { data, error } = await api
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (error) throw error;
-    return data || [];
+    const result = await request("admin-orders", { admin: true, method: "GET" });
+    return Array.isArray(result?.orders) ? result.orders : [];
   }
 
   async function updateOrderStatus(id, status) {
-    const api = getClient();
-    if (!api) throw new Error("Supabase не подключён.");
-    const { data, error } = await api
-      .from("orders")
-      .update({ status })
-      .eq("id", id)
-      .select("*")
-      .single();
-    if (error) throw error;
-    return data;
+    const result = await request("admin-update-status", {
+      admin: true,
+      body: { id, status }
+    });
+    return result?.order;
   }
 
   window.DerzhavaBackend = {
     configured,
-    getClient,
     createOrder,
     signInAdmin,
     getSession,
