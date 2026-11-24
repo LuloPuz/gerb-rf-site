@@ -359,7 +359,7 @@ document.addEventListener('keydown', event => {
     results.innerHTML =
       allMatchesLink +
       matches.map(page =>
-        '<a class="home-search-result" href="catalog.html?q=' + encodeURIComponent(page.title) + '">' +
+        '<a class="home-search-result" href="' + escapeHtml(page.url) + '">' +
           '<span><strong>' + escapeHtml(page.title) + '</strong><small>' + escapeHtml(page.meta) + '</small></span>' +
           '<span aria-hidden="true">→</span>' +
         '</a>'
@@ -402,6 +402,21 @@ document.addEventListener('keydown', event => {
     }
   });
 })();
+
+
+// Search aggregate result styling
+if(!document.getElementById('site-search-all-variants-style')){
+  const style=document.createElement('style');
+  style.id='site-search-all-variants-style';
+  style.textContent=
+    '.home-search-result-all{margin:0 0 5px;border:1px solid rgba(166,124,50,.34)!important;border-radius:8px;background:#fffaf0!important;padding:14px!important}'+
+    '.home-search-result-all:hover,.home-search-result-all:focus{background:#f7edd8!important;border-color:#b58a3f!important}'+
+    '.home-search-result-all strong{font-family:"Manrope",Arial,sans-serif!important;font-size:13px!important;font-weight:700!important;color:#0d2742!important}'+
+    '.home-search-result-all small{margin-top:4px!important;font-size:10px!important;color:#7d745f!important}'+
+    '.home-search-result-all .home-search-all-arrow{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#0d2742;color:#e7c97f!important;font-size:16px!important}'+
+    '@media(max-width:720px){.home-search-result-all{padding:12px!important}.home-search-result-all strong{font-size:12px!important}.home-search-result-all .home-search-all-arrow{width:28px;height:28px}}';
+  document.head.appendChild(style);
+}
 
 // Product detail context navigation
 (() => {
