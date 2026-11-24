@@ -2900,7 +2900,7 @@
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Контакты</h3><a href="mailto:xxx@xxx.xxx">xxx@xxx.xxx</a><a href="tel:+79999999999">+7 999 999-99-99</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261124-search-all-variants1"></script>
+<script src="script.js?v=20261124-search-entity-fix1"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
@@ -2986,9 +2986,37 @@
    return aliases;
  };
 
- const queryMatches=(query,haystack)=>{
+ const queryIntent=value=>{
+   const low=normalize(value);
+   if(/(^|\s)(рф)(\s|$)|росси|российск.*федерац/.test(low)) return 'rf';
+   if(/москв/.test(low) && !/московск.*област/.test(low)) return 'moscow';
+   return '';
+ };
+
+ const entityAllows=(query,card,haystack='')=>{
+   const intent=queryIntent(query);
+   if(!intent) return true;
+
+   if(card?.matches?.('[data-product-card]')){
+     const group=card.dataset.group||'';
+     if(intent==='rf') return group==='rf';
+     if(intent==='moscow') return group==='moscow';
+   }
+
+   const low=normalize(haystack);
+   if(intent==='rf'){
+     return /(^|\s)(рф)(\s|$)|росси|российск.*федерац|двуглав.*орел/.test(low) && !/москв/.test(low);
+   }
+   if(intent==='moscow'){
+     return /москв/.test(low) && !/московск.*област/.test(low);
+   }
+   return true;
+ };
+
+ const queryMatches=(query,haystack,card=null)=>{
    const qNorm=normalize(query);
    if(!qNorm) return true;
+   if(!entityAllows(query,card,haystack)) return false;
    const qTokens=tokens(qNorm);
    const fullHay=normalize(haystack+' '+aliasesFor(haystack));
    const hTokens=tokens(fullHay);
@@ -3028,7 +3056,7 @@
        const card=entity.card;
        const title=card.querySelector('h3')?.textContent || '';
        const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+title;
-       return queryMatches(q,hay);
+       return queryMatches(q,hay,card);
      })
    : [];
 
@@ -3045,7 +3073,7 @@
      active==='popular' ||
      belongsToMatchingSubject;
 
-   const show=allowed && queryMatches(q,cardHay(card));
+   const show=allowed && queryMatches(q,cardHay(card),card);
    card.classList.toggle('catalog-hidden',!show);
    card.hidden=!show;
    if(show) visible++;
@@ -3058,7 +3086,7 @@
    const allowed=active==='all'||active===kind;
    const title=card.querySelector('h3')?.textContent || '';
    const hay=(card.dataset.name||'')+' '+(card.dataset.type||'')+' '+title;
-   const matchesQuery=allowed && queryMatches(q,hay);
+   const matchesQuery=allowed && queryMatches(q,hay,card);
 
    // Directory cards are fallbacks. When real product cards with photos already
    // represent this exact subject/city, suppress the generic text-only card.
