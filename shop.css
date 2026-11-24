@@ -1857,3 +1857,187 @@
     min-width:66px!important;
   }
 }
+
+
+/* Desktop header controls refinement v2 — search untouched */
+@media(min-width:1051px){
+  body .site-header .header-inner{
+    grid-template-columns:270px minmax(360px,1fr) 84px 180px!important;
+    gap:12px!important;
+    align-items:center!important;
+  }
+
+  body .site-menu-toggle,
+  body .site-header .shop-header-link{
+    width:84px!important;
+    min-width:84px!important;
+    height:68px!important;
+    min-height:68px!important;
+    margin:0!important;
+    padding:9px 6px 8px!important;
+    border:1px solid #d7d0c4!important;
+    border-radius:14px!important;
+    background:#fff!important;
+    color:#14283a!important;
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-rows:26px 14px!important;
+    align-content:center!important;
+    justify-items:center!important;
+    row-gap:5px!important;
+    transform:none!important;
+    box-shadow:0 2px 8px rgba(7,24,42,.025)!important;
+    -webkit-font-smoothing:antialiased!important;
+  }
+
+  body .site-menu-toggle{
+    grid-column:3!important;
+    grid-row:1!important;
+    cursor:pointer!important;
+  }
+
+  body .site-header .shop-header-actions{
+    grid-column:4!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:84px 84px!important;
+    gap:12px!important;
+    align-items:center!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+  }
+
+  body .site-menu-toggle:hover,
+  body .site-header .shop-header-link:hover{
+    border-color:#bd9b5d!important;
+    background:#fffdf8!important;
+    box-shadow:0 5px 14px rgba(7,24,42,.055)!important;
+    color:#07182a!important;
+  }
+
+  body .site-menu-icon{
+    display:flex!important;
+    width:26px!important;
+    height:26px!important;
+    min-width:26px!important;
+    margin:0!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+  }
+
+  body .site-menu-icon i{
+    display:block!important;
+    width:25px!important;
+    height:2px!important;
+    min-height:2px!important;
+    flex:0 0 2px!important;
+    border-radius:2px!important;
+    background:currentColor!important;
+  }
+
+  body .site-header .shop-header-link svg{
+    display:block!important;
+    width:26px!important;
+    height:26px!important;
+    min-width:26px!important;
+    min-height:26px!important;
+    margin:0!important;
+    stroke-width:1.75!important;
+    shape-rendering:geometricPrecision!important;
+  }
+
+  body .site-menu-label,
+  body .site-header .shop-header-label{
+    display:block!important;
+    width:100%!important;
+    height:14px!important;
+    margin:0!important;
+    padding:0!important;
+    color:inherit!important;
+    font-family:"Manrope",Arial,sans-serif!important;
+    font-size:11px!important;
+    font-weight:600!important;
+    line-height:14px!important;
+    letter-spacing:0!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+  }
+
+  body .site-header .shop-cart-link.has-items{
+    border-color:#ad8538!important;
+    background:#dbb65f!important;
+    color:#07182a!important;
+    box-shadow:0 4px 13px rgba(154,119,61,.18)!important;
+  }
+
+  body .site-header .shop-cart-count{
+    right:-6px!important;
+    top:-7px!important;
+    min-width:23px!important;
+    height:23px!important;
+    padding:0 6px!important;
+    border:2px solid #fbfaf6!important;
+    border-radius:12px!important;
+    background:#0d2742!important;
+    color:#fff!important;
+    font-family:"Manrope",Arial,sans-serif!important;
+    font-size:10px!important;
+    font-weight:700!important;
+    line-height:19px!important;
+    box-shadow:0 2px 7px rgba(7,24,42,.16)!important;
+  }
+}
+
+@media(min-width:721px) and (max-width:1050px){
+  body .site-header .header-inner{
+    grid-template-columns:220px minmax(280px,1fr) 76px 164px!important;
+    gap:10px!important;
+  }
+
+  body .site-menu-toggle,
+  body .site-header .shop-header-link{
+    width:76px!important;
+    min-width:76px!important;
+    height:64px!important;
+    min-height:64px!important;
+    display:grid!important;
+    grid-template-rows:24px 14px!important;
+    align-content:center!important;
+    justify-items:center!important;
+    row-gap:4px!important;
+    padding:8px 5px!important;
+    border-radius:13px!important;
+  }
+
+  body .site-header .shop-header-actions{
+    display:grid!important;
+    grid-template-columns:76px 76px!important;
+    gap:10px!important;
+  }
+
+  body .site-menu-icon,
+  body .site-header .shop-header-link svg{
+    width:24px!important;
+    height:24px!important;
+    min-width:24px!important;
+    min-height:24px!important;
+    margin:0!important;
+  }
+
+  body .site-menu-icon i{
+    width:23px!important;
+    height:2px!important;
+    flex:0 0 2px!important;
+  }
+
+  body .site-menu-label,
+  body .site-header .shop-header-label{
+    height:14px!important;
+    font-size:10px!important;
+    font-weight:600!important;
+    line-height:14px!important;
+  }
+}
