@@ -1115,6 +1115,17 @@
   box-shadow:inset 0 0 0 1px rgba(154,119,61,.12);
 }
 
+
+/* CATALOG FILTER VISIBILITY FIX v2
+   Must come after card layout rules so filtered cards stay physically hidden. */
+.full-catalog .catalog-hidden,
+.full-catalog [data-popular-card][hidden],
+.full-catalog [data-catalog-card][hidden],
+.full-catalog [data-catalog-section][hidden],
+.full-catalog .directory-letter-group[hidden]{
+  display:none!important;
+}
+
 </style>
 </head>
 <body>
