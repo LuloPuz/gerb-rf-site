@@ -713,7 +713,7 @@ if(!document.getElementById('site-search-all-variants-style')){
 
 /* Unified commercial CTA routing v1 */
 (() => {
-  const offerTextPattern=/(получить\s+предложен|отправить\s+запрос|уточнить\s+(?:исполнен|стоимост|заказ)|запросить\s+(?:предложен|стоимост|расч[её]т)|индивидуальн(?:ый|ого)\s+заказ)/i;
+  const offerTextPattern=/(получить\s+предложен|отправить\s+запрос|оставить\s+(?:заявк|запрос)|уточнить\s+(?:исполнен|стоимост|заказ)|запросить\s+(?:предложен|стоимост|расч[её]т)|индивидуальн(?:ый|ого)\s+заказ)/i;
 
   const isOfferCta=anchor=>{
     if(!anchor || anchor.tagName!=='A') return false;
