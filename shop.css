@@ -852,3 +852,17 @@
   opacity:.58;
   transform:none!important;
 }
+  
+/* Signed-in account state v2 */
+[data-auth-gate][hidden],
+[data-account-dashboard][hidden]{
+  display:none!important;
+}
+.account-dashboard-greeting{
+  margin:0;
+  color:#6f7880;
+  font:500 14px/1.5 "Manrope",Arial,sans-serif;
+}
+.account-dashboard-greeting[hidden]{
+  display:none!important;
+}
