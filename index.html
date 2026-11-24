@@ -2004,7 +2004,7 @@
       <button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">☰</button>
 
       <nav class="main-nav" aria-label="Основная навигация">
-        <a href="#catalog">Каталог</a>
+        <a href="catalog.html">Каталог</a>
         <a href="gerb-rf.html">Герб РФ</a>
         <a href="gerb-moskvy.html">Герб Москвы</a>
         <a href="gerby-subektov-rf.html">Регионы</a>
@@ -2775,6 +2775,35 @@
   })();
   </script>
 
+
+
+<script>
+(function(){
+  const key='derzhava:index-scroll-y';
+  const navEntry=performance.getEntriesByType?.('navigation')?.[0];
+  const isReload=navEntry?.type==='reload';
+
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+
+  if(isReload){
+    const saved=Number(sessionStorage.getItem(key));
+    if(Number.isFinite(saved) && saved>=0){
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>window.scrollTo({top:saved,left:0,behavior:'auto'}));
+      });
+    }
+  }
+
+  const save=()=>sessionStorage.setItem(key,String(window.scrollY||0));
+  window.addEventListener('pagehide',save);
+  window.addEventListener('beforeunload',save);
+
+  // Remove legacy #catalog from old links without moving the viewport.
+  if(location.hash==='#catalog'){
+    history.replaceState(null,'',location.pathname+location.search);
+  }
+})();
+</script>
 
 </body>
 </html>
