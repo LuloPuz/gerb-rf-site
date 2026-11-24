@@ -2041,3 +2041,340 @@
     line-height:14px!important;
   }
 }
+
+
+/* DESKTOP READABILITY SYSTEM v1
+   Improves legibility across desktop without changing mobile layout or header search. */
+html{
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+body{
+  font-synthesis:none;
+}
+
+@media(min-width:901px){
+  body{
+    font-size:15px!important;
+  }
+
+  /* Global supporting copy */
+  .eyebrow,
+  .product-type,
+  .home-product-kicker,
+  .popular-kicker,
+  .popular-overline,
+  .directory-type{
+    font-size:12px!important;
+    font-weight:600!important;
+    line-height:1.35!important;
+    letter-spacing:.10em!important;
+  }
+
+  .section-heading p,
+  .split-heading>p,
+  .catalog-section-heading>p,
+  .catalog-section-head p,
+  .home-catalog-lead,
+  .card-body p,
+  .benefit-grid p,
+  .home-directory-card p,
+  .catalog-note-inner p{
+    color:#56626d!important;
+    font-size:15px!important;
+    font-weight:400!important;
+    line-height:1.65!important;
+  }
+
+  .text-link,
+  .card-body a,
+  .product-more,
+  .home-directory-card>span,
+  .directory-link{
+    font-size:14px!important;
+    font-weight:600!important;
+    line-height:1.4!important;
+  }
+
+  /* Catalog navigation / utility text */
+  .catalog-breadcrumb,
+  .commerce-breadcrumb{
+    color:#68737d!important;
+    font-size:14px!important;
+    font-weight:400!important;
+    line-height:1.55!important;
+  }
+
+  .catalog-intro{
+    color:#56626d!important;
+    font-size:17px!important;
+    line-height:1.65!important;
+  }
+
+  .catalog-tab span,
+  .catalog-section-count,
+  .directory-letter-count{
+    font-size:12px!important;
+    font-weight:600!important;
+    line-height:1.35!important;
+  }
+
+  .catalog-filter,
+  .catalog-alphabet a{
+    font-family:"Manrope",Arial,sans-serif!important;
+    font-size:13px!important;
+    font-weight:600!important;
+  }
+
+  /* Standard catalog cards */
+  .product-image-placeholder span{
+    font-size:12px!important;
+    font-weight:600!important;
+  }
+
+  .product-info>p:not(.product-type){
+    color:#56626d!important;
+    font-size:15px!important;
+    line-height:1.6!important;
+  }
+
+  .method-note{
+    color:#4f5b65!important;
+    font-size:14px!important;
+    font-weight:400!important;
+    line-height:1.65!important;
+  }
+
+  /* Homepage product cards */
+  .home-product-kicker{
+    height:auto!important;
+    min-height:18px!important;
+  }
+
+  .home-product-body h3{
+    font-size:22px!important;
+    line-height:1.18!important;
+  }
+
+  .home-product-body>p{
+    color:#56626d!important;
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+
+  .home-product-foot{
+    color:#6f6049!important;
+    font-size:13px!important;
+    font-weight:500!important;
+  }
+
+  .home-product-foot strong{
+    font-size:20px!important;
+    font-weight:600!important;
+  }
+
+  /* Professional popular cards */
+  .popular-card{
+    min-height:386px!important;
+  }
+
+  .popular-media{
+    min-height:386px!important;
+  }
+
+  .popular-body-pro{
+    padding:25px 26px 22px!important;
+  }
+
+  .popular-overline{
+    margin-bottom:7px!important;
+    color:#8b6932!important;
+  }
+
+  .popular-body-pro h3{
+    font-size:27px!important;
+    line-height:1.14!important;
+  }
+
+  .popular-chips{
+    gap:7px!important;
+    margin-top:15px!important;
+  }
+
+  .popular-chip{
+    min-height:31px!important;
+    padding:0 11px!important;
+    color:#46535f!important;
+    font-size:12px!important;
+    font-weight:600!important;
+  }
+
+  .popular-specs{
+    margin-top:18px!important;
+  }
+
+  .popular-specs>div{
+    grid-template-columns:126px minmax(0,1fr)!important;
+    gap:14px!important;
+    padding:7px 0!important;
+  }
+
+  .popular-specs dt{
+    color:#68737d!important;
+    font-size:12px!important;
+    font-weight:500!important;
+    line-height:1.45!important;
+  }
+
+  .popular-specs dd{
+    color:#24313d!important;
+    font-size:14px!important;
+    font-weight:500!important;
+    line-height:1.45!important;
+  }
+
+  .popular-price-caption{
+    color:#68737d!important;
+    font-size:12px!important;
+    font-weight:500!important;
+  }
+
+  .popular-card-price{
+    font-size:21px!important;
+    font-weight:600!important;
+  }
+
+  .popular-card-more{
+    font-size:12px!important;
+    font-weight:600!important;
+  }
+
+  /* Directory cards */
+  .directory-type{
+    color:#8b6932!important;
+  }
+
+  .directory-card h3{
+    font-size:22px!important;
+    line-height:1.2!important;
+  }
+
+  .directory-card p{
+    color:#56626d!important;
+    font-size:13px!important;
+    line-height:1.55!important;
+  }
+
+  .directory-link{
+    color:#765b2c!important;
+    font-size:12px!important;
+  }
+
+  /* Product detail */
+  .size-label,
+  .final-product-info .size-label{
+    font-size:13px!important;
+    font-weight:600!important;
+  }
+
+  .production-time span,
+  .custom-size-inline,
+  .custom-size-inline small,
+  .custom-size-inline-copy small{
+    color:#4f5b65!important;
+    font-size:14px!important;
+    line-height:1.6!important;
+  }
+
+  /* Commerce, checkout, account */
+  .commerce-head p:not(.eyebrow),
+  .cart-empty p,
+  .checkout-panel>p,
+  .order-success p,
+  .account-panel-lead{
+    color:#56626d!important;
+    font-size:15px!important;
+    line-height:1.65!important;
+  }
+
+  .cart-item-meta,
+  .summary-row,
+  .summary-total span,
+  .cart-summary-note,
+  .local-note{
+    color:#56626d!important;
+    font-size:14px!important;
+    line-height:1.6!important;
+  }
+
+  .field label,
+  .account-stat small{
+    font-size:12px!important;
+    font-weight:600!important;
+  }
+
+  .field input,
+  .field textarea,
+  .field select{
+    font-size:16px!important;
+    font-weight:400!important;
+    line-height:1.5!important;
+  }
+
+  .account-nav button,
+  .shop-add-button,
+  .shop-go-cart,
+  .cart-checkout-button,
+  .cart-continue-button,
+  .checkout-submit,
+  .checkout-cancel,
+  .profile-save{
+    font-size:14px!important;
+    font-weight:600!important;
+  }
+
+  .account-order-meta{
+    color:#68737d!important;
+    font-size:13px!important;
+    line-height:1.5!important;
+  }
+
+  .account-order-item{
+    color:#3f4c58!important;
+    font-size:14px!important;
+    line-height:1.5!important;
+  }
+
+  .account-order-item small{
+    color:#68737d!important;
+    font-size:12px!important;
+  }
+
+  .account-order-status-v2{
+    font-size:11px!important;
+    font-weight:600!important;
+    letter-spacing:.03em!important;
+  }
+
+  .account-status-step{
+    color:#737b82!important;
+    font-size:11px!important;
+    font-weight:500!important;
+    line-height:1.35!important;
+  }
+
+  .account-status-step.done,
+  .account-status-step.active{
+    color:#6d5220!important;
+    font-weight:600!important;
+  }
+
+  /* Footer */
+  .footer-grid a,
+  .footer-grid p,
+  .legal-line{
+    font-size:14px!important;
+    line-height:1.6!important;
+  }
+}
