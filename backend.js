@@ -31,18 +31,30 @@
   }
 
   async function createOrder(order) {
-    const api = getClient();
-    if (!api) throw new Error("База заказов пока не подключена.");
+    if (!configured()) throw new Error("База заказов пока не подключена.");
+    const cfg = config();
+    const response = await fetch(
+      String(cfg.supabaseUrl).replace(/\/$/, "") + "/functions/v1/create-order",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": String(cfg.supabasePublishableKey)
+        },
+        body: JSON.stringify({
+          customer: order.customer || {},
+          items: Array.isArray(order.items) ? order.items : [],
+          delivery: String(order.delivery || ""),
+          comment: String(order.comment || "")
+        })
+      }
+    );
 
-    const { data, error } = await api.rpc("create_public_order", {
-      p_customer: order.customer || {},
-      p_items: Array.isArray(order.items) ? order.items : [],
-      p_delivery: String(order.delivery || ""),
-      p_comment: String(order.comment || "")
-    });
-
-    if (error) throw error;
-    return data;
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload?.error || "Не удалось сохранить заказ.");
+    }
+    return payload;
   }
 
   async function signInAdmin(email, password) {
