@@ -293,7 +293,7 @@
           : 'Заказ сохранён в личном кабинете на этом устройстве. Общая серверная база пока не подключена.';
         const actions=remoteSaved
           ? '<div class="order-success-actions"><a class="button button-gold" href="account.html">Открыть личный кабинет</a><a class="button" href="catalog.html">Продолжить покупки</a></div>'
-          : '<div class="order-success-actions"><a class="button button-gold" href="'+mail+'">Отправить заказ менеджеру</a><a class="button" href="account.html">Открыть личный кабинет</a></div>';
+          : '<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button" href="'+mail+'">Отправить заказ менеджеру</a></div>';
         success.innerHTML='<h2>Заказ '+esc(number)+' оформлен</h2><p>'+note+'</p>'+actions;
       }
     });
