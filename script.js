@@ -498,3 +498,46 @@ document.addEventListener('keydown', event => {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
   else init();
 })();
+
+// Mobile popular-card size scroller
+(() => {
+  function setupScroller(switcher){
+    if(switcher.dataset.mobileScrollerReady==='true') return;
+    switcher.dataset.mobileScrollerReady='true';
+
+    const host=switcher.closest('.popular-spec-size');
+    const dd=switcher.closest('dd');
+    if(!host||!dd) return;
+
+    const hint=document.createElement('span');
+    hint.className='popular-size-scroll-label';
+    hint.textContent='Листайте →';
+    host.appendChild(hint);
+
+    const fade=document.createElement('span');
+    fade.className='popular-size-scroll-fade';
+    fade.setAttribute('aria-hidden','true');
+    dd.appendChild(fade);
+
+    const update=()=>{
+      const overflow=switcher.scrollWidth-switcher.clientWidth>6;
+      const atEnd=!overflow || switcher.scrollLeft+switcher.clientWidth>=switcher.scrollWidth-6;
+      host.classList.toggle('size-scrollable',overflow);
+      host.classList.toggle('size-scroll-end',atEnd);
+      hint.hidden=!overflow||atEnd;
+      fade.hidden=!overflow||atEnd;
+    };
+
+    switcher.addEventListener('scroll',update,{passive:true});
+    window.addEventListener('resize',update,{passive:true});
+    requestAnimationFrame(update);
+    setTimeout(update,250);
+  }
+
+  function init(){
+    document.querySelectorAll('.popular-size-switcher').forEach(setupScroller);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
