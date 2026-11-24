@@ -134,7 +134,8 @@
     const sku=(card.querySelector('.popular-card-sku')?.textContent||'').replace(/[^0-9]/g,'').slice(0,4);
     const chips=[...card.querySelectorAll('.popular-chip')].map(el=>el.textContent.trim()).filter(Boolean);
     const finish=chips.join(' · ');
-    const image=card.querySelector('.popular-media img')?.getAttribute('src')||'';
+    const photo=card.querySelector('.popular-media img');
+    const image=photo?.dataset.originalSrc||photo?.getAttribute('src')||'';
     const link=card.querySelector('.popular-card-cta')||card.querySelector('.popular-hit');
     const url=link?.getAttribute('href')||'catalog.html';
     if(!price) return null;

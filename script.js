@@ -1,6 +1,6 @@
 // Critical header styles: prevent unstyled menu/account/cart flash before shop.css loads.
 (() => {
-  if (document.getElementById('derzhava-critical-header-css')) return;
+  if (document.querySelector('[data-static-header]') || document.getElementById('derzhava-critical-header-css')) return;
   const style=document.createElement('style');
   style.id='derzhava-critical-header-css';
   style.textContent=`
@@ -30,9 +30,7 @@
   }
 
   header.querySelector('.nav-toggle')?.remove();
-  header.querySelector('.site-menu-toggle')?.remove();
   header.querySelector('.header-cta')?.remove();
-  header.querySelector('.shop-header-actions')?.remove();
 
   let nav=header.querySelector('.main-nav');
   if(!nav){
@@ -44,7 +42,7 @@
   const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
   const isHome=path===''||path==='index.html';
   nav.setAttribute('aria-label','Основная навигация');
-  nav.innerHTML=
+  if(!header.hasAttribute('data-static-header')) nav.innerHTML=
     '<a href="'+(isHome?'#production':'index.html#production')+'">Производство</a>'+
     '<a href="'+(isHome?'#contacts':'index.html#contacts')+'">Контакты</a>';
 
@@ -70,16 +68,17 @@
     header.insertBefore(search,nav);
   }
 
-  const menuButton=document.createElement('button');
+  const menuButton=header.querySelector('.site-menu-toggle')||document.createElement('button');
+  const existingMenu=menuButton.isConnected;
   menuButton.className='site-menu-toggle';
   menuButton.type='button';
   menuButton.setAttribute('aria-label','Открыть меню');
   menuButton.setAttribute('aria-expanded','false');
   menuButton.setAttribute('aria-controls','siteQuickMenu');
-  menuButton.innerHTML=
+  if(!existingMenu) menuButton.innerHTML=
     '<span class="site-menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>'+
     '<span class="site-menu-label">Меню</span>';
-  header.insertBefore(menuButton,header.querySelector('[data-header-site-search]')||nav);
+  if(!existingMenu) header.insertBefore(menuButton,header.querySelector('[data-header-site-search]')||nav);
 
   document.querySelector('.site-quick-overlay')?.remove();
   document.querySelector('.site-quick-menu')?.remove();
@@ -135,10 +134,11 @@
 // Derzhava commerce assets.
 // Important: do not start shop.js until shop.css is ready. This prevents FOUC/giant SVG icons.
 (() => {
+  if(document.querySelector('[data-static-header]')) return;
   const loadRuntime=()=>{
     if(document.querySelector('script[data-shop-runtime]')) return;
     const shopRuntime=document.createElement('script');
-    shopRuntime.src='shop.js?v=20261124-sku1';
+    shopRuntime.src='shop.js?v=20261124-perf1';
     shopRuntime.dataset.shopRuntime='true';
     shopRuntime.async=false;
     document.body.appendChild(shopRuntime);
