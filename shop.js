@@ -169,7 +169,7 @@
     });
 
     summary.querySelector('[data-open-checkout]')?.addEventListener('click',()=>{
-      checkout.hidden=false;fillCheckout();checkout.scrollIntoView({behavior:'smooth',block:'start'});
+      checkout.hidden=false;fillCheckout();
     });
   }
 
