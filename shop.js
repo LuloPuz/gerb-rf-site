@@ -183,15 +183,45 @@
     const form=document.querySelector('[data-checkout-form]');
     if(!form) return;
     document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{document.querySelector('[data-checkout-panel]').hidden=true});
-    form.addEventListener('submit',e=>{
+    form.addEventListener('submit',async e=>{
       e.preventDefault();
       const items=cart();if(!items.length)return;
+      const submit=form.querySelector('.checkout-submit');
+      const originalLabel=submit?.textContent||'Оформить заказ';
+      if(submit){submit.disabled=true;submit.textContent='Оформляем…'}
+
       const fd=new FormData(form);
-      const customer={name:String(fd.get('name')||''),phone:String(fd.get('phone')||''),email:String(fd.get('email')||''),organization:String(fd.get('organization')||''),inn:String(fd.get('inn')||''),address:String(fd.get('address')||'')};
+      const customer={
+        name:String(fd.get('name')||'').trim(),
+        phone:String(fd.get('phone')||'').trim(),
+        email:String(fd.get('email')||'').trim(),
+        organization:String(fd.get('organization')||'').trim(),
+        inn:String(fd.get('inn')||'').trim(),
+        address:String(fd.get('address')||'').trim()
+      };
+      const delivery=String(fd.get('delivery')||'');
+      const comment=String(fd.get('comment')||'');
       write(PROFILE_KEY,customer);
+
+      let number='ДРЖ-'+String(Date.now()).slice(-7);
+      let total=cartTotal();
+      let remoteSaved=false;
+
+      try{
+        if(window.DerzhavaBackend?.configured()){
+          const result=await window.DerzhavaBackend.createOrder({customer,items,delivery,comment});
+          if(result?.number) number=String(result.number);
+          if(Number(result?.total)>0) total=Number(result.total);
+          remoteSaved=true;
+        }
+      }catch(error){
+        toast('<strong>Заказ не отправлен</strong><br>'+esc(error?.message||'Ошибка соединения с базой'));
+        if(submit){submit.disabled=false;submit.textContent=originalLabel}
+        return;
+      }
+
       const now=new Date();
-      const number='ДРЖ-'+String(Date.now()).slice(-7);
-      const order={number,date:now.toISOString(),status:'Новый',items,total:cartTotal(),customer,delivery:String(fd.get('delivery')||''),comment:String(fd.get('comment')||'')};
+      const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved};
       const all=orders();all.unshift(order);write(ORDERS_KEY,all);setCart([]);
 
       const lines=order.items.map(x=>'• '+x.title+' — '+x.size+' × '+x.qty+' = '+money(x.price*x.qty)).join('\n');
@@ -203,8 +233,13 @@
       const success=document.querySelector('[data-order-success]');
       if(success){
         success.hidden=false;
-        success.innerHTML='<h2>Заказ '+esc(number)+' оформлен</h2><p>Заказ уже доступен в личном кабинете по телефону или e-mail, указанному при оформлении. Пока серверная синхронизация не подключена, данные хранятся на этом устройстве.</p><div class="order-success-actions"><a class="button button-gold" href="'+mail+'">Отправить заказ менеджеру</a><a class="button" href="account.html">Открыть личный кабинет</a></div>';
-        success.scrollIntoView({behavior:'smooth',block:'center'});
+        const note=remoteSaved
+          ? 'Заказ сохранён в общей системе и доступен менеджеру. Номер заказа также сохранён в вашем личном кабинете на этом устройстве.'
+          : 'Заказ сохранён в личном кабинете на этом устройстве. Общая серверная база пока не подключена.';
+        const actions=remoteSaved
+          ? '<div class="order-success-actions"><a class="button button-gold" href="account.html">Открыть личный кабинет</a><a class="button" href="catalog.html">Продолжить покупки</a></div>'
+          : '<div class="order-success-actions"><a class="button button-gold" href="'+mail+'">Отправить заказ менеджеру</a><a class="button" href="account.html">Открыть личный кабинет</a></div>';
+        success.innerHTML='<h2>Заказ '+esc(number)+' оформлен</h2><p>'+note+'</p>'+actions;
       }
     });
   }
