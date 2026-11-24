@@ -3209,7 +3209,6 @@
    input.value='';
    setActiveFilter('all');
    apply();
-   document.querySelector('.full-catalog')?.scrollIntoView({behavior:'smooth',block:'start'});
  });
 
  filters.forEach(btn=>btn.addEventListener('click',()=>{
@@ -3221,13 +3220,9 @@
      input.value='';
    }
 
+   // Change content in place. Do not auto-scroll or move the viewport.
    setActiveFilter(next);
    apply();
-
-   const target=next==='all'
-     ? document.querySelector('.full-catalog')
-     : document.querySelector('[data-catalog-section="'+next+'"]');
-   target?.scrollIntoView({behavior:'smooth',block:'start'});
  }));
 
  document.querySelectorAll('[data-subject-request]').forEach(a=>a.addEventListener('click',()=>{
