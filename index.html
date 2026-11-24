@@ -2727,7 +2727,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261124-mobile-card-clean4"></script>
+  <script src="script.js?v=20261124-unified-price1"></script>
 
   <script>
   (function(){
@@ -2759,39 +2759,6 @@
   })();
   </script>
 
-
-<script>
-/* Home interactive catalog card size pricing */
-(function(){
-  const money=new Intl.NumberFormat('ru-RU');
-  document.querySelectorAll('.home-catalog-section .popular-card').forEach(function(card){
-    const buttons=[...card.querySelectorAll('[data-card-size]')];
-    const price=card.querySelector('.popular-card-price');
-    if(!buttons.length||!price) return;
-
-    buttons.forEach(function(button){
-      button.addEventListener('click',function(event){
-        event.preventDefault();
-        event.stopPropagation();
-
-        buttons.forEach(function(item){
-          const active=item===button;
-          item.classList.toggle('active',active);
-          item.setAttribute('aria-pressed',active?'true':'false');
-        });
-
-        const value=Number(button.dataset.price||0);
-        if(!value) return;
-        price.classList.add('price-changing');
-        requestAnimationFrame(function(){
-          price.textContent=money.format(value)+' ₽';
-          requestAnimationFrame(function(){price.classList.remove('price-changing')});
-        });
-      });
-    });
-  });
-})();
-</script>
 
 </body>
 </html>
