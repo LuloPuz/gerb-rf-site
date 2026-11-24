@@ -148,7 +148,7 @@
   if(!shopStyles){
     shopStyles=document.createElement('link');
     shopStyles.rel='stylesheet';
-    shopStyles.href='shop.css?v=20261124-card-footer-type4';
+    shopStyles.href='shop.css?v=20261124-cart-head-compose1';
     shopStyles.dataset.shopStyles='true';
     shopStyles.addEventListener('load',loadRuntime,{once:true});
     shopStyles.addEventListener('error',loadRuntime,{once:true});
