@@ -1,3 +1,23 @@
+// Critical header styles: prevent unstyled menu/account/cart flash before shop.css loads.
+(() => {
+  if (document.getElementById('derzhava-critical-header-css')) return;
+  const style=document.createElement('style');
+  style.id='derzhava-critical-header-css';
+  style.textContent=`
+    .site-menu-toggle,.site-quick-overlay,.site-quick-menu{display:none}
+    .shop-header-actions{display:flex;align-items:center;gap:3px;margin-left:4px;padding-left:17px;border-left:1px solid rgba(7,24,42,.09)}
+    .shop-header-link{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;box-sizing:border-box;border:0;border-radius:50%;background:transparent;color:#273542;text-decoration:none}
+    .shop-header-link svg{display:block;width:21px!important;height:21px!important;max-width:21px!important;max-height:21px!important;fill:none;stroke:currentColor;stroke-width:1.45}
+    .shop-header-label{font-size:0;line-height:0}
+    .shop-cart-count{position:absolute;right:-2px;top:0;display:grid;place-items:center;min-width:19px;height:19px;padding:0 4px;box-sizing:border-box;border:2px solid #fbfaf6;border-radius:9px;background:#c89f51;color:#07182a;font:600 9px/1 Arial,sans-serif}
+    .shop-cart-count[data-empty="true"]{display:none}
+    @media(max-width:720px){
+      .shop-header-actions{margin-left:0;padding-left:0;border-left:0}
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
 // Unified compact site header
 (() => {
   const header=document.querySelector('.header-inner');
@@ -112,21 +132,34 @@
   document.addEventListener('keydown',event=>{if(event.key==='Escape') setMenu(false)});
 })();
 
-// Derzhava commerce assets
-if (!document.querySelector('link[data-shop-styles]')) {
-  const shopStyles=document.createElement('link');
-  shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261124-card-footer-type4';
-  shopStyles.dataset.shopStyles='true';
-  document.head.appendChild(shopStyles);
-}
-if (!document.querySelector('script[data-shop-runtime]')) {
-  const shopRuntime=document.createElement('script');
-  shopRuntime.src='shop.js?v=20261124-card-footer-final3';
-  shopRuntime.dataset.shopRuntime='true';
-  shopRuntime.async=false;
-  document.body.appendChild(shopRuntime);
-}
+// Derzhava commerce assets.
+// Important: do not start shop.js until shop.css is ready. This prevents FOUC/giant SVG icons.
+(() => {
+  const loadRuntime=()=>{
+    if(document.querySelector('script[data-shop-runtime]')) return;
+    const shopRuntime=document.createElement('script');
+    shopRuntime.src='shop.js?v=20261124-header-fouc-fix1';
+    shopRuntime.dataset.shopRuntime='true';
+    shopRuntime.async=false;
+    document.body.appendChild(shopRuntime);
+  };
+
+  let shopStyles=document.querySelector('link[data-shop-styles]');
+  if(!shopStyles){
+    shopStyles=document.createElement('link');
+    shopStyles.rel='stylesheet';
+    shopStyles.href='shop.css?v=20261124-card-footer-type4';
+    shopStyles.dataset.shopStyles='true';
+    shopStyles.addEventListener('load',loadRuntime,{once:true});
+    shopStyles.addEventListener('error',loadRuntime,{once:true});
+    document.head.appendChild(shopStyles);
+  }else if(shopStyles.sheet){
+    loadRuntime();
+  }else{
+    shopStyles.addEventListener('load',loadRuntime,{once:true});
+    shopStyles.addEventListener('error',loadRuntime,{once:true});
+  }
+})();
 
 // Route Moscow links to the Moscow catalog page.
 document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forEach(link => {
