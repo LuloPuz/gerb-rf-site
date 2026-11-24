@@ -2451,3 +2451,17 @@ body{
     line-height:1.25!important;
   }
 }
+
+
+/* CATALOG SEARCH VISIBILITY LOCK v3
+   Loaded last, after all card layout rules. Hidden search/filter results must never reappear. */
+body .full-catalog .popular-card.catalog-hidden,
+body .full-catalog .popular-card[hidden],
+body .full-catalog .directory-card.catalog-hidden,
+body .full-catalog .directory-card[hidden],
+body .full-catalog .catalog-section.catalog-hidden,
+body .full-catalog .catalog-section[hidden],
+body .full-catalog .directory-letter-group.catalog-hidden,
+body .full-catalog .directory-letter-group[hidden]{
+  display:none!important;
+}
