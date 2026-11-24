@@ -8,6 +8,9 @@
   const AUTH_KEY='derzhava_auth_v1';
   const AUTH_PENDING_KEY='derzhava_auth_pending_v1';
   const AUTH_RATE_KEY='derzhava_auth_rate_v1';
+  const AUTH_BUDGET_KEY='derzhava_auth_budget_v1';
+  const AUTH_DAILY_BUDGET_RUB=500;
+  const AUTH_ESTIMATED_COST_RUB=6.29;
 
   const money=n=>new Intl.NumberFormat('ru-RU').format(Number(n)||0)+' ₽';
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch(_){return fallback}};
@@ -251,6 +254,27 @@
       return {ok:true};
     }
 
+    function currentBudgetDay(){
+      const now=new Date();
+      return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+    }
+
+    function checkAndRecordBudget(){
+      const day=currentBudgetDay();
+      let state=read(AUTH_BUDGET_KEY,{day,spent:0,count:0});
+      if(state.day!==day) state={day,spent:0,count:0};
+
+      const projected=(Number(state.spent)||0)+AUTH_ESTIMATED_COST_RUB;
+      if(projected>AUTH_DAILY_BUDGET_RUB){
+        return {ok:false,spent:Number(state.spent)||0,limit:AUTH_DAILY_BUDGET_RUB};
+      }
+
+      state.spent=Number(projected.toFixed(2));
+      state.count=(Number(state.count)||0)+1;
+      write(AUTH_BUDGET_KEY,state);
+      return {ok:true,spent:state.spent,limit:AUTH_DAILY_BUDGET_RUB};
+    }
+
     async function requestCode(identifier){
       const api=String(window.DERZHAVA_AUTH_API||'').replace(/\/$/,'');
       if(api){
@@ -260,10 +284,15 @@
           body:JSON.stringify({identifier})
         });
 
-        if(response.status===429){
+        if(response.status===402 || response.status===429){
           const payload=await response.json().catch(()=>({}));
-          const error=new Error(payload.message||'Слишком много запросов. Попробуйте позже.');
-          error.code='rate-limit';
+          const error=new Error(
+            payload.message ||
+            (response.status===402
+              ? 'Дневной лимит отправки кодов исчерпан. Попробуйте завтра.'
+              : 'Слишком много запросов. Попробуйте позже.')
+          );
+          error.code=response.status===402?'budget-limit':'rate-limit';
           throw error;
         }
         if(!response.ok){
@@ -294,6 +323,13 @@
         );
         error.code='rate-limit';
         error.retryMs=rate.retryMs||0;
+        throw error;
+      }
+
+      const budget=checkAndRecordBudget();
+      if(!budget.ok){
+        const error=new Error('Дневной лимит отправки кодов исчерпан. Попробуйте завтра.');
+        error.code='budget-limit';
         throw error;
       }
 
@@ -503,6 +539,14 @@
       panels.forEach(panel=>panel.hidden=panel.dataset.accountPanel!==btn.dataset.accountTab);
     }));
   }
+
+  window.__derzhavaAuthLimits={
+    dailyBudgetRub:AUTH_DAILY_BUDGET_RUB,
+    estimatedCostRub:AUTH_ESTIMATED_COST_RUB,
+    maxPerContactHour:5,
+    maxPerBrowserHour:15,
+    cooldownSeconds:60
+  };
 
   injectHeader();
   initProductPage();
