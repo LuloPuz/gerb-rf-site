@@ -10,6 +10,7 @@
   }
 
   header.querySelector('.nav-toggle')?.remove();
+  header.querySelector('.site-menu-toggle')?.remove();
   header.querySelector('.header-cta')?.remove();
   header.querySelector('.shop-header-actions')?.remove();
 
@@ -48,19 +49,80 @@
       '</div>';
     header.insertBefore(search,nav);
   }
+
+  const menuButton=document.createElement('button');
+  menuButton.className='site-menu-toggle';
+  menuButton.type='button';
+  menuButton.setAttribute('aria-label','Открыть меню');
+  menuButton.setAttribute('aria-expanded','false');
+  menuButton.setAttribute('aria-controls','siteQuickMenu');
+  menuButton.innerHTML=
+    '<span class="site-menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>'+
+    '<span class="site-menu-label">Меню</span>';
+  header.insertBefore(menuButton,header.querySelector('[data-header-site-search]')||nav);
+
+  document.querySelector('.site-quick-overlay')?.remove();
+  document.querySelector('.site-quick-menu')?.remove();
+
+  const overlay=document.createElement('button');
+  overlay.className='site-quick-overlay';
+  overlay.type='button';
+  overlay.setAttribute('aria-label','Закрыть меню');
+
+  const panel=document.createElement('aside');
+  panel.className='site-quick-menu';
+  panel.id='siteQuickMenu';
+  panel.setAttribute('aria-hidden','true');
+  panel.innerHTML=
+    '<div class="site-quick-head">'+
+      '<div><small>Быстрый переход</small><strong>Разделы сайта</strong></div>'+
+      '<button class="site-quick-close" type="button" aria-label="Закрыть меню">×</button>'+
+    '</div>'+
+    '<nav class="site-quick-links" aria-label="Быстрый переход по сайту">'+
+      '<a href="catalog.html"><span>Весь каталог</span><small>Все товары и разделы</small></a>'+
+      '<a href="catalog.html#popular"><span>Популярное</span><small>Готовые исполнения с фото</small></a>'+
+      '<a href="gerb-rf.html"><span>Герб Российской Федерации</span></a>'+
+      '<a href="gerb-moskvy.html"><span>Герб Москвы</span></a>'+
+      '<a href="gerby-subektov-rf.html"><span>Субъекты и города РФ</span></a>'+
+      '<a href="emblemy-vedomstv-rf.html"><span>Ведомства РФ</span></a>'+
+      '<a href="index.html#production"><span>Производство</span></a>'+
+      '<a href="index.html#contacts"><span>Контакты</span></a>'+
+    '</nav>'+
+    '<div class="site-quick-account">'+
+      '<a href="account.html">Личный кабинет</a>'+
+      '<a href="cart.html">Корзина</a>'+
+    '</div>';
+
+  document.body.appendChild(overlay);
+  document.body.appendChild(panel);
+
+  const setMenu=open=>{
+    menuButton.classList.toggle('open',open);
+    menuButton.setAttribute('aria-expanded',String(open));
+    panel.classList.toggle('open',open);
+    panel.setAttribute('aria-hidden',String(!open));
+    overlay.classList.toggle('open',open);
+    document.body.classList.toggle('site-menu-open',open);
+  };
+
+  menuButton.addEventListener('click',()=>setMenu(!panel.classList.contains('open')));
+  overlay.addEventListener('click',()=>setMenu(false));
+  panel.querySelector('.site-quick-close')?.addEventListener('click',()=>setMenu(false));
+  panel.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>setMenu(false)));
+  document.addEventListener('keydown',event=>{if(event.key==='Escape') setMenu(false)});
 })();
 
 // Derzhava commerce assets
 if (!document.querySelector('link[data-shop-styles]')) {
   const shopStyles=document.createElement('link');
   shopStyles.rel='stylesheet';
-  shopStyles.href='shop.css?v=20261124-account-signedin2';
+  shopStyles.href='shop.css?v=20261124-mobile-header-nav1';
   shopStyles.dataset.shopStyles='true';
   document.head.appendChild(shopStyles);
 }
 if (!document.querySelector('script[data-shop-runtime]')) {
   const shopRuntime=document.createElement('script');
-  shopRuntime.src='shop.js?v=20261124-account-signedin2';
+  shopRuntime.src='shop.js?v=20261124-mobile-header-nav1';
   shopRuntime.dataset.shopRuntime='true';
   shopRuntime.async=false;
   document.body.appendChild(shopRuntime);
@@ -75,7 +137,7 @@ document.querySelectorAll('a[href="index.html#moscow"], a[href="#moscow"]').forE
 if (!document.querySelector('link[data-mobile-styles]')) {
   const mobileStyles = document.createElement('link');
   mobileStyles.rel = 'stylesheet';
-  mobileStyles.href = 'mobile.css?v=20261117-mobile5';
+  mobileStyles.href = 'mobile.css?v=20261124-mobile-header-nav1';
   mobileStyles.dataset.mobileStyles = 'true';
   document.head.appendChild(mobileStyles);
 }
