@@ -1217,3 +1217,34 @@
     display:none;
   }
 }
+
+/* MOBILE PRODUCT COMMERCE COMPACT v3 */
+@media(max-width:620px){
+  body .final-product-info .shop-product-actions{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 108px!important;
+    gap:7px!important;
+    margin-top:2px!important;
+  }
+
+  body .final-product-info .shop-add-button,
+  body .final-product-info .shop-go-cart{
+    min-height:44px!important;
+    height:44px!important;
+    box-sizing:border-box!important;
+    padding:0 10px!important;
+    font-size:11px!important;
+    line-height:1!important;
+  }
+
+  body .final-product-info .shop-go-cart{
+    min-width:0!important;
+  }
+
+  body .final-product-info .final-order-button.shop-direct-order{
+    min-height:38px!important;
+    height:38px!important;
+    margin-top:7px!important;
+    font-size:10px!important;
+  }
+}
