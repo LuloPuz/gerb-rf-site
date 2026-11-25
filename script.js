@@ -99,11 +99,11 @@
     '</div>'+
     '<nav class="site-quick-links" aria-label="Быстрый переход по сайту">'+
       '<a href="catalog.html"><span>Весь каталог</span><small>Все товары и разделы</small></a>'+
-      '<a href="catalog.html#popular"><span>Популярное</span><small>Готовые исполнения с фото</small></a>'+
-      '<a href="gerb-rf.html"><span>Герб Российской Федерации</span></a>'+
-      '<a href="gerb-moskvy.html"><span>Герб Москвы</span></a>'+
-      '<a href="gerby-subektov-rf.html"><span>Субъекты и города РФ</span></a>'+
-      '<a href="emblemy-vedomstv-rf.html"><span>Ведомства РФ</span></a>'+
+      '<a href="catalog.html?section=popular"><span>Популярное</span><small>Готовые исполнения с фото</small></a>'+
+      '<a href="catalog.html?q=%D0%B3%D0%B5%D1%80%D0%B1+%D1%80%D0%BE%D1%81%D1%81%D0%B8%D0%B8"><span>Герб Российской Федерации</span></a>'+
+      '<a href="catalog.html?q=%D0%B3%D0%B5%D1%80%D0%B1+%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D1%8B"><span>Герб Москвы</span></a>'+
+      '<a href="catalog.html?section=subjects"><span>Субъекты и города РФ</span></a>'+
+      '<a href="catalog.html?section=agencies"><span>Ведомства РФ</span></a>'+
       '<a href="index.html#production"><span>Производство</span></a>'+
       '<a href="index.html#contacts"><span>Контакты</span></a>'+
     '</nav>'+
