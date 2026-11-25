@@ -395,14 +395,14 @@
       if(raw.includes('@')) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw);
       return /^7\d{10}$/.test(normalizeContact(raw));
     };
-    const statusSteps=['Заказ принят','Подтверждён','В производстве','Готов','Отправлен','Получен'];
-    const statusKeys=['accepted','confirmed','production','ready','shipped','received'];
+    const statusSteps=['Заказ принят','Подтверждён','Ожидает оплаты','В производстве','Отправлен','Получен'];
+    const statusKeys=['accepted','confirmed','payment','production','shipped','received'];
     const statusIndex=status=>{
       const raw=String(status||'').toLowerCase();
       if(raw.includes('получ')) return 5;
       if(raw.includes('отправ')||raw.includes('достав')) return 4;
-      if(raw.includes('готов')) return 3;
-      if(raw.includes('производ')) return 2;
+      if(raw.includes('готов')||raw.includes('производ')) return 3; // legacy ready stays past payment
+      if(raw.includes('оплат')) return 2;
       if(raw.includes('подтверж')) return 1;
       return 0;
     };

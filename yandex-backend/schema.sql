@@ -17,7 +17,7 @@ create table if not exists orders (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   status text not null default 'Заказ принят'
-    check (status in ('Заказ принят','Подтверждён','В производстве','Готов','Отправлен','Получен','Отменён')),
+    check (status in ('Заказ принят','Подтверждён','Ожидает оплаты','В производстве','Отправлен','Получен','Отменён')),
   total numeric(12,2) not null default 0 check (total >= 0),
   customer_name text not null,
   customer_phone text not null,

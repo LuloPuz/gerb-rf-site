@@ -1,5 +1,5 @@
 (() => {
-  const STATUS = ["Заказ принят","Подтверждён","В производстве","Готов","Отправлен","Получен","Отменён"];
+  const STATUS = ["Заказ принят","Подтверждён","Ожидает оплаты","В производстве","Отправлен","Получен","Отменён"];
   const els = {
     setup: document.querySelector("[data-admin-setup]"),
     login: document.querySelector("[data-admin-login]"),
@@ -34,7 +34,7 @@
         id: "local-"+index,
         order_number: o.number || "Локальный заказ",
         created_at: o.date,
-        status: o.status === "Новый" ? "Заказ принят" : (o.status || "Заказ принят"),
+        status: o.status === "Готов" ? "В производстве" : o.status === "Новый" ? "Заказ принят" : (o.status || "Заказ принят"),
         total: o.total || 0,
         customer_name: o.customer?.name || "",
         customer_phone: o.customer?.phone || "",
@@ -60,7 +60,7 @@
   }
 
   function renderStats(list) {
-    const buckets = ["Заказ принят","Подтверждён","В производстве","Готов","Отправлен","Получен"];
+    const buckets = ["Заказ принят","Подтверждён","Ожидает оплаты","В производстве","Отправлен","Получен"];
     els.stats.innerHTML = buckets.map(status => {
       const count = list.filter(o => o.status === status).length;
       return '<div class="admin-stat"><strong>'+count+'</strong><span>'+esc(status)+'</span></div>';
@@ -139,7 +139,7 @@
 
   async function loadOrders() {
     if (remoteMode) {
-      orders = await window.DerzhavaBackend.listOrders();
+      orders = (await window.DerzhavaBackend.listOrders()).map(o=>({...o,status:o.status==='Готов'?'В производстве':o.status}));
       els.modeNote.textContent = "Общая база заказов. Изменения статусов сохраняются для всех устройств.";
     } else {
       orders = localOrders();
