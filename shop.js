@@ -28,11 +28,23 @@
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
   const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
-  function toast(html){
+  function toast(html,cartLink=false){
     let el=document.querySelector('.shop-toast');
-    if(!el){el=document.createElement('div');el.className='shop-toast';document.body.appendChild(el)}
-    el.innerHTML=html;el.classList.add('show');
-    clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2600);
+    if(!el){el=document.createElement('div');el.className='shop-toast';el.setAttribute('role','status');document.body.appendChild(el)}
+    clearTimeout(toast.t);
+    el.classList.toggle('shop-toast-cart',cartLink);
+    el.innerHTML=cartLink
+      ? '<a class="shop-toast-link" href="cart.html">'+html+'<span class="shop-toast-action">Перейти в корзину <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>'
+      : html;
+    el.classList.add('show');
+    const link=el.querySelector('.shop-toast-link');
+    const hide=()=>{el.classList.remove('show');if(link)link.tabIndex=-1;};
+    const schedule=()=>{clearTimeout(toast.t);toast.t=setTimeout(hide,cartLink?5000:2600);};
+    el.onmouseenter=()=>{if(cartLink)clearTimeout(toast.t);};
+    el.onmouseleave=()=>{if(cartLink&&!el.contains(document.activeElement))schedule();};
+    el.onfocusin=()=>{if(cartLink)clearTimeout(toast.t);};
+    el.onfocusout=()=>{if(cartLink&&!el.matches(':hover'))schedule();};
+    schedule();
   }
 
   function updateHeaderCount(){
@@ -94,7 +106,7 @@
       link.classList.add('cart-attention');
       setTimeout(()=>link.classList.remove('cart-attention'),900);
     });
-    toast('<strong>Добавлено в корзину</strong><br>'+esc(item.title)+' · '+esc(item.size));
+    toast('<strong>Добавлено в корзину</strong><br>'+esc(item.title)+' · '+esc(item.size),true);
     document.dispatchEvent(new CustomEvent('derzhava:cartchange'));
   }
 
