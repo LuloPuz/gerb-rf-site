@@ -523,12 +523,42 @@
       const meta=[item.size,qty+' шт.'].filter(Boolean).join(' · ');
       return '<div class="account-order-item account-order-item-detailed">'+
         '<div class="account-order-item-photo"><span class="account-order-photo-fallback">Нет фото</span>'+
-          (image?'<img src="'+esc(image)+'" alt="'+esc(item.title||'Товар')+'" width="72" height="72" loading="lazy" decoding="async">':'')+'</div>'+
+          (image?'<button type="button" class="account-order-photo-open" aria-label="Увеличить фото: '+esc(item.title||'Товар')+'" title="Увеличить фото"><img src="'+esc(image)+'" alt="'+esc(item.title||'Товар')+'" width="72" height="72" loading="lazy" decoding="async"></button>':'')+'</div>'+
         '<div class="account-order-item-info"><strong class="account-order-item-title">'+esc(item.title||'Товар')+'</strong>'+
           '<small class="account-order-item-sku">'+(sku?'Арт. '+esc(sku):'Артикул не указан')+'</small>'+
           (item.finish?'<small class="account-order-item-finish">'+esc(item.finish)+'</small>':'')+
           '<small class="account-order-item-size">'+esc(meta)+'</small></div>'+
         '<span class="account-order-item-sum">'+money((Number(item.price)||0)*qty)+'</span></div>';
+    }
+
+    // One native modal for every order photo. No navigation away from the account.
+    const photoDialog=document.querySelector('[data-order-photo-dialog]');
+    const photoLarge=photoDialog?.querySelector('[data-order-photo-large]');
+    let photoTrigger=null;
+    if(photoDialog&&photoLarge){
+      photoDialog.querySelector('[data-order-photo-close]')?.addEventListener('click',()=>photoDialog.close());
+      photoDialog.addEventListener('click',event=>{
+        if(event.target===photoDialog){
+          const rect=photoDialog.getBoundingClientRect();
+          if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)photoDialog.close();
+        }
+      });
+      photoDialog.addEventListener('close',()=>{
+        photoLarge.removeAttribute('src');
+        if(photoTrigger?.isConnected)photoTrigger.focus({preventScroll:true});
+        photoTrigger=null;
+      });
+      root.addEventListener('click',event=>{
+        const button=event.target.closest('.account-order-photo-open');
+        if(!button||button.hidden)return;
+        const image=button.querySelector('img');
+        const src=orderImage(image?.getAttribute('src'));
+        if(!src||photoDialog.open)return;
+        photoTrigger=button;
+        photoLarge.alt=image.alt;
+        photoLarge.src=src;
+        photoDialog.showModal();
+      });
     }
 
     function renderOrder(order){
@@ -588,7 +618,7 @@
           ? all.map(renderOrder).join('')
           : '<div class="account-empty-v2"><strong>Заказов пока нет</strong><p>Заказы, оформленные на этот телефон или e-mail, появятся здесь.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a></div>';
         ordersHost.querySelectorAll('.account-order-item-photo img').forEach(img=>{
-          const hideBroken=()=>{img.hidden=true;};
+          const hideBroken=()=>{const button=img.closest('.account-order-photo-open');if(button)button.hidden=true;else img.hidden=true;};
           img.addEventListener('error',hideBroken,{once:true});
           if(img.complete&&!img.naturalWidth)hideBroken();
         });

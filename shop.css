@@ -2955,3 +2955,18 @@ body .full-catalog .directory-letter-group[hidden]{
 .account-order-v2 .account-order-item .account-order-item-sum{font-size:15px!important;font-weight:600;color:var(--navy);text-align:right;align-self:center!important;white-space:nowrap}
 @media(max-width:720px){.account-order-v2 .account-order-item.account-order-item-detailed{grid-template-columns:52px minmax(0,1fr) auto!important;gap:9px!important;padding:10px 0!important;font-size:12px!important}.account-order-item-photo{width:52px;height:52px}.account-order-item-photo img{padding:3px}.account-order-v2 .account-order-item-info small{font-size:10px!important}.account-order-v2 .account-order-item-info .account-order-item-sku{font-size:10px!important}.account-order-v2 .account-order-item .account-order-item-sum{font-size:12px!important}.account-order-photo-fallback{font-size:9px}}
 @media(max-width:360px){.account-order-v2 .account-order-item.account-order-item-detailed{grid-template-columns:44px minmax(0,1fr) auto!important;gap:7px!important}.account-order-item-photo{width:44px;height:44px}}
+
+/* Order image viewer: original photo, no cropping or route change. */
+.account-order-photo-open{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:zoom-in;border-radius:inherit}
+.account-order-photo-open[hidden]{display:none!important}
+.account-order-photo-open:focus-visible{outline:2px solid #a88748;outline-offset:-2px}
+.account-photo-dialog{position:fixed;inset:0;margin:auto;padding:14px;border:0;border-radius:12px;background:#fbfaf7;max-width:calc(100vw - 40px);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:visible;box-shadow:0 18px 70px rgba(0,0,0,.24)}
+.account-photo-dialog::backdrop{background:rgba(7,24,42,.78)}
+.account-photo-dialog:not([open]){display:none!important}
+.account-photo-dialog[open]{display:grid;place-items:center}
+.account-photo-dialog>img{display:block;width:auto;height:auto;max-width:min(920px,calc(100vw - 68px));max-height:calc(100vh - 68px);max-height:calc(100dvh - 68px);object-fit:contain;border-radius:5px}
+.account-photo-close{position:absolute;top:9px;right:9px;z-index:1;display:grid;place-items:center;width:40px;height:40px;padding:0;border:1px solid #ded8ca;border-radius:50%;background:#fff;color:#10243a;cursor:pointer;box-shadow:0 2px 10px #00000012}
+.account-photo-close svg{width:20px;height:20px}
+.account-photo-close:focus-visible{outline:2px solid #a88748;outline-offset:2px}
+html:has(.account-photo-dialog[open]){overflow:hidden}
+@media(max-width:720px){.account-photo-dialog{padding:8px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}.account-photo-dialog>img{max-width:calc(100vw - 40px);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px)}.account-photo-close{top:6px;right:6px}}
