@@ -2921,3 +2921,8 @@ body .full-catalog .directory-letter-group[hidden]{
 .account-order-v2 .account-status-step.active:last-child::before{background:#c9a85e!important}
 .account-status-cancelled{grid-column:1/-1;color:var(--stage);background:var(--stage-bg);padding:10px 14px;border-radius:6px;text-align:center;font-size:13px;font-weight:600}
 @media(max-width:720px){.commerce-page.order-completed .order-success{padding:28px 18px!important}.order-success-actions{flex-direction:column}.order-success-actions .button{width:100%}.account-order-v2 .account-status-track{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px 0!important}.account-order-v2 .account-status-step{font-size:10px!important}.account-order-v2 .account-status-step:nth-child(3)::before{right:50%}.account-order-v2 .account-status-step:nth-child(4)::before{left:50%}.account-order-v2 .account-status-step.active:nth-child(3)::before{background:#c9a85e!important}.account-order-v2 .account-status-step.active:nth-child(4)::before{background:#d7dce0!important}}
+
+/* Keep checkout accessible below the sticky header; JS measures its actual height. */
+[data-cart-page] .checkout-panel{scroll-margin-top:116px;min-width:0}
+[data-cart-page] .commerce-shell>div{min-width:0}
+@media(max-width:720px){[data-cart-page] .checkout-panel{scroll-margin-top:160px}}

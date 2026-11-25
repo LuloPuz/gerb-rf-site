@@ -187,6 +187,17 @@
 
   function setCart(items){write(CART_KEY,items);updateHeaderCount();document.dispatchEvent(new CustomEvent('derzhava:cartchange'))}
 
+  // Sticky header height varies across desktop and mobile. Scroll to a visible
+  // position rather than aligning the target with the covered viewport edge.
+  function scrollCartSection(section){
+    if(!section)return;
+    const header=document.querySelector('.site-header');
+    const headerHeight=header?header.getBoundingClientRect().height:0;
+    const gap=window.innerWidth<=720?14:24;
+    const top=Math.max(0,window.scrollY+section.getBoundingClientRect().top-headerHeight-gap);
+    window.scrollTo({top,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  }
+
   function renderCart(){
     const root=document.querySelector('[data-cart-page]');
     if(!root) return;
@@ -234,7 +245,7 @@
     });
 
     summary.querySelector('[data-open-checkout]')?.addEventListener('click',()=>{
-      if(!checkoutAvailable())return;checkout.hidden=false;fillCheckout();checkout.scrollIntoView({behavior:'smooth',block:'start'});
+      if(!checkoutAvailable())return;checkout.hidden=false;fillCheckout();requestAnimationFrame(()=>scrollCartSection(checkout));
     });
   }
 
@@ -302,7 +313,7 @@
         const actions='<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
         document.querySelector('[data-cart-page]').classList.add('order-completed');
         success.innerHTML='<div class="order-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div><p class="order-success-kicker">ЗАКАЗ ОФОРМЛЕН</p><h2>Заказ '+esc(displayNumber(number))+'</h2><p>'+note+'</p><div class="order-success-total"><span>Сумма заказа</span><strong>'+money(order.total)+'</strong></div>'+actions;
-        success.scrollIntoView({behavior:'smooth',block:'start'});
+        requestAnimationFrame(()=>scrollCartSection(success));
       }
     });
   }
