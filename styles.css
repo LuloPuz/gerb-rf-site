@@ -2370,3 +2370,18 @@ button,input,select,textarea{
     gap:3px!important;
   }
 }
+
+/* Mobile search: match the desktop header selector specificity so iOS never
+   focuses a search input below 16 CSS px. Keep pinch-to-zoom enabled. */
+@media (max-width: 820px) and (hover: none) and (pointer: coarse), (max-width: 720px) {
+  html body .site-header .header-site-search input.home-search-input,
+  html body .hero-search input.home-search-input,
+  html body .top-search-root input.home-search-input,
+  html body input[data-site-search-input],
+  html body input.catalog-search-input,
+  html body input[type="search"] {
+    font-size:16px!important;
+    min-width:0;
+    -webkit-text-size-adjust:100%;
+  }
+}
