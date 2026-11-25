@@ -633,19 +633,41 @@
       });
     }
 
+    const orderImageBySku={
+      '1001':'assets/Герб Москвы краска без щита.png?v=20261112-moscow-paint1',
+      '1002':'Герб Москвы металлизация без щита.png?v=20261112-moscow-metal1',
+      '1003':'Герб Москвы краска пластиковый щит.png?v=20261116-moscow-paint-plastic1',
+      '1004':'Герб Москвы краска бархатный щит.png?v=20261116-moscow-paint-barhat1',
+      '1005':'Герб Москвы краска металл щит.png?v=20261116-moscow-paint-metal1',
+      '1006':'assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal1',
+      '1007':'Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal1',
+      '1008':'Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield1',
+      '1009':'assets/gerb-rf-bez-shchita.png',
+      '1010':'assets/Золотой двуглавый орёл России (1).png',
+      '1011':'assets/горельеф-вид-спереди.png',
+      '1012':'Герб РФ барельеф краска на пластиковой щите анфас.png',
+      '1013':'assets/Барельеф краска на щите флок (композит) анфас.png',
+      '1014':'assets/Герб РФ барельеф краска на метал щите анфас.png',
+      '1015':'Герб рф металлизация щит пластик анфас.png',
+      '1016':'Герб рф металлизация щит бархат анфас.png',
+      '1017':'Герб металлизация щит метал анфас.png',
+      '1018':'assets/Горельеф на щите анфас.png'
+    };
+
     function orderImage(value){
       if(!value)return '';
       try{
         const image=new URL(String(value),location.href);
-        const assets=new URL('assets/',location.href);
-        return image.origin===assets.origin&&image.pathname.startsWith(assets.pathname)&&/\.(png|jpe?g|webp|avif|gif|svg)$/i.test(image.pathname)?image.href:'';
+        const siteRoot=new URL('./',location.href);
+        const sameSite=image.origin===siteRoot.origin&&image.pathname.startsWith(siteRoot.pathname);
+        return sameSite&&/\.(png|jpe?g|webp|avif|gif|svg)$/i.test(image.pathname)?image.href:'';
       }catch(_){return '';}
     }
 
     function renderOrderItem(item){
       const qty=Number(item.qty)||1;
-      const image=orderImage(item.image);
       const sku=String(item.sku||'').trim();
+      const image=orderImage(item.image)||orderImage(orderImageBySku[sku]);
       const meta=[item.size,qty+' шт.'].filter(Boolean).join(' · ');
       return '<div class="account-order-item account-order-item-detailed">'+
         '<div class="account-order-item-photo"><span class="account-order-photo-fallback">Нет фото</span>'+
