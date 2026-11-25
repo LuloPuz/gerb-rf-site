@@ -136,9 +136,14 @@
 (() => {
   if(document.querySelector('[data-static-header]')) return;
   const loadRuntime=()=>{
+    // Wait until the parser has seen any explicit runtime at the end of the page.
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',loadRuntime,{once:true});
+      return;
+    }
     if(document.querySelector('script[data-shop-runtime]')) return;
     const shopRuntime=document.createElement('script');
-    shopRuntime.src='shop.js?v=20261125-cart-toast1';
+    shopRuntime.src='shop.js?v=20261125-cart-toast2';
     shopRuntime.dataset.shopRuntime='true';
     shopRuntime.async=false;
     document.body.appendChild(shopRuntime);
@@ -148,7 +153,7 @@
   if(!shopStyles){
     shopStyles=document.createElement('link');
     shopStyles.rel='stylesheet';
-    shopStyles.href='shop.css?v=20261125-cart-toast1';
+    shopStyles.href='shop.css?v=20261125-cart-toast2';
     shopStyles.dataset.shopStyles='true';
     shopStyles.addEventListener('load',loadRuntime,{once:true});
     shopStyles.addEventListener('error',loadRuntime,{once:true});
