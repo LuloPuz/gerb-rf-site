@@ -2,6 +2,8 @@
 (() => {
   const form=document.querySelector('[data-offer-form]');
   if(!form) return;
+  const preview=()=>localStorage.getItem('derzhava_owner_preview_v1')==='on';
+  if(!preview()){const submit=form.querySelector('[type="submit"]');if(submit){submit.disabled=true;submit.textContent='Приём заявок пока недоступен';}const note=document.createElement('p');note.className='offer-note';note.textContent='Интернет-магазин готовится к запуску.';form.appendChild(note);}
 
   const method=form.elements.contact_method;
   const contactInput=form.elements.contact_value;
@@ -77,10 +79,11 @@
 
   form.addEventListener('submit',e=>{
     e.preventDefault();
+    if(!preview())return;
     const data=new FormData(form);
     const chosen=String(data.get('custom_heraldry')||'').trim()||String(data.get('heraldry')||'').trim()||'Не указано'
     const methodLabels={phone:'Телефон',telegram:'Telegram',max:'MAX',whatsapp:'WhatsApp',email:'Email'};
-    const entry={id:'З-ТЕСТ-'+crypto.randomUUID().slice(0,8).toUpperCase(),customer:String(data.get('name')||'').trim()||'Без имени',subject:chosen,size:[data.get('width'),data.get('height')].some(Boolean)?'Ширина: '+(data.get('width')||'—')+' см · высота: '+(data.get('height')||'—')+' см':'Размер уточняется',contactMethod:methodLabels[data.get('contact_method')]||'',contact:String(data.get('contact_value')||''),status:'Новая',date:new Date().toISOString()};
+    const entry={id:'З-ДРЖ-'+crypto.randomUUID().slice(0,8).toUpperCase(),customer:String(data.get('name')||'').trim()||'Без имени',subject:chosen,size:[data.get('width'),data.get('height')].some(Boolean)?'Ширина: '+(data.get('width')||'—')+' см · высота: '+(data.get('height')||'—')+' см':'Размер уточняется',contactMethod:methodLabels[data.get('contact_method')]||'',contact:String(data.get('contact_value')||''),status:'Новая',date:new Date().toISOString()};
     let note=form.querySelector('[data-test-offer-result]');
     if(!note){note=document.createElement('p');note.dataset.testOfferResult='';note.setAttribute('role','status');note.className='offer-note';form.appendChild(note);}
     try{
@@ -88,8 +91,7 @@
       if(!Array.isArray(list))throw Error('Invalid data');
       list.unshift(entry);localStorage.setItem(key,JSON.stringify(list));
       form.reset();updateContact();results.hidden=true;customWrap.hidden=true;customToggle.textContent='Не нашли нужного? Указать вручную';
-      note.textContent='Тестовая заявка '+entry.id+' сохранена в админке. ';
-      const link=document.createElement('a');link.href='admin-preview.html';link.textContent='Открыть админку';note.appendChild(link);
+      note.textContent='Спасибо! Ваша заявка '+entry.id+' оформлена.';
     }catch(_){note.textContent='Не удалось сохранить заявку в браузере.';}
     note.scrollIntoView({behavior:'smooth',block:'nearest'});
   });
