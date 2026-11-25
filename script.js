@@ -143,7 +143,7 @@
     }
     if(document.querySelector('script[data-shop-runtime]')) return;
     const shopRuntime=document.createElement('script');
-    shopRuntime.src='shop.js?v=20261125-cart-toast2';
+    shopRuntime.src='shop.js?v=20261125-dimensions2';
     shopRuntime.dataset.shopRuntime='true';
     shopRuntime.async=false;
     document.body.appendChild(shopRuntime);
