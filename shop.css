@@ -2936,3 +2936,6 @@ body .full-catalog .directory-letter-group[hidden]{
 .shop-toast-action{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18);color:var(--gold-2);font-size:12px;font-weight:600}
 .shop-toast-action svg{width:15px;height:15px;flex:none}
 @media(max-width:720px){.shop-toast.shop-toast-cart{bottom:max(16px,env(safe-area-inset-bottom));}.shop-toast-link{min-width:0;padding:13px 16px}}
+
+/* Lightweight notice while the server-backed store is not live. */
+.shop-preview-notice{margin:0 0 16px!important;padding:9px 13px;border:1px solid #e6dece;border-radius:6px;background:#faf7ef;color:#736344;font:500 12px/1.5 "Manrope",Arial,sans-serif!important}.order-completed .shop-preview-notice{max-width:820px;margin:0 auto 16px!important}

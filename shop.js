@@ -21,9 +21,7 @@
   const auth=()=>read(AUTH_KEY,null);
   const normalizeContact=value=>{const raw=String(value||'').trim();if(raw.includes('@'))return raw.toLowerCase();let p=raw.replace(/\D/g,'');if(p.length===10)p='7'+p;if(p.length===11&&p[0]==='8')p='7'+p.slice(1);return p;};
   let refreshAccount=()=>{};
-  const ownerPreview=()=>localStorage.getItem('derzhava_owner_preview_v1')==='on';
   const displayNumber=n=>String(n||'').replace(/^ТЕСТ-/,'ДРЖ-');
-  const checkoutAvailable=()=>ownerPreview()||!!window.DerzhavaBackend?.configured();
   const cartCount=()=>cart().reduce((sum,item)=>sum+(Number(item.qty)||1),0);
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
   const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -241,9 +239,9 @@
       '<div class="summary-row"><span>Количество</span><strong>'+cartCount()+'</strong></div>'+
       '<div class="summary-row"><span>Доставка</span><strong>Уточняется</strong></div>'+
       '<div class="summary-total"><span>Итого</span><strong>'+money(cartTotal())+'</strong></div>'+
-      (checkoutAvailable()?'<button class="cart-checkout-button" type="button" data-open-checkout>Перейти к оформлению</button>':'<button class="cart-checkout-button" type="button" disabled>Оформление пока недоступно</button>')+
+      '<button class="cart-checkout-button" type="button" data-open-checkout>Перейти к оформлению</button>'+
       '<a class="cart-continue-button" href="catalog.html">← Продолжить покупки</a>'+
-      '<p class="cart-summary-note">'+(checkoutAvailable()?'Оплата и доставка подтверждаются менеджером.':'Интернет-магазин готовится к запуску.')+'</p>';
+      '<p class="cart-summary-note">Оплата и доставка согласовываются отдельно.</p>';
 
     list.querySelectorAll('[data-cart-index]').forEach(row=>{
       const i=Number(row.dataset.cartIndex);
@@ -257,7 +255,7 @@
     });
 
     summary.querySelector('[data-open-checkout]')?.addEventListener('click',()=>{
-      if(!checkoutAvailable())return;checkout.hidden=false;fillCheckout();requestAnimationFrame(()=>scrollCartSection(checkout));
+      checkout.hidden=false;fillCheckout();requestAnimationFrame(()=>scrollCartSection(checkout));
     });
   }
 
@@ -274,7 +272,6 @@
     document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{document.querySelector('[data-checkout-panel]').hidden=true});
     form.addEventListener('submit',async e=>{
       e.preventDefault();
-      if(!checkoutAvailable())return;
       const items=cart();if(!items.length)return;
       const submit=form.querySelector('.checkout-submit');
       if(submit?.disabled)return;
@@ -321,7 +318,7 @@
       const success=document.querySelector('[data-order-success]');
       if(success){
         success.hidden=false;
-        const note='Спасибо за заказ! Информация о заказе и его текущий статус доступны в личном кабинете.';
+        const note=remoteSaved?'Спасибо за заказ! Информация о заказе и его текущий статус доступны в личном кабинете.':'Спасибо! Заказ сохранён для проверки. Информация о заказе и его текущий статус доступны в личном кабинете.';
         const actions='<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
         document.querySelector('[data-cart-page]').classList.add('order-completed');
         success.innerHTML='<div class="order-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div><p class="order-success-kicker">ЗАКАЗ ОФОРМЛЕН</p><h2>Заказ '+esc(displayNumber(number))+'</h2><p>'+note+'</p><div class="order-success-total"><span>Сумма заказа</span><strong>'+money(order.total)+'</strong></div>'+actions;
@@ -332,7 +329,6 @@
 
   function renderAccount(){
     const root=document.querySelector('[data-account-page]');if(!root)return;
-    if(!ownerPreview()&&!window.DERZHAVA_AUTH_API){const gate=root.querySelector('[data-auth-gate]');if(gate){gate.hidden=false;const card=gate.querySelector('.account-login-card');if(card)card.innerHTML='<h2>Личный кабинет</h2><p>Вход станет доступен после запуска интернет-магазина.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a>';}const dash=root.querySelector('[data-account-dashboard]');if(dash)dash.hidden=true;return;}
 
     const normalizeIdentifier=normalizeContact;
     const isValidIdentifier=value=>{
@@ -440,7 +436,6 @@
       }
 
       // Local prototype mirrors the rules that must later live on the server.
-      if(!ownerPreview())throw new Error('Вход пока недоступен.');
       if(!contactHasOrder(identifier)){
         const error=new Error('Если контакт связан с заказом, код будет отправлен.');
         error.code='no-order';
@@ -609,7 +604,7 @@
         if(errorBox)errorBox.hidden=true;
         if(demoBox){
           if(result.demo){
-            demoBox.hidden=true;demoBox.textContent='';
+            demoBox.hidden=false;demoBox.innerHTML='Код для пробного входа: <strong>'+esc(result.code)+'</strong>';
           }else{
             demoBox.hidden=true;
           }
@@ -706,6 +701,6 @@
   renderCart();
   initCheckout();
   renderAccount();
-  window.addEventListener('storage',event=>{if(event.key==='derzhava_owner_preview_v1'){location.reload();return;}if(event.key===CART_KEY){updateHeaderCount();renderCart();}if(event.key===ORDERS_KEY||event.key===AUTH_KEY)refreshAccount();});
+  window.addEventListener('storage',event=>{if(event.key===CART_KEY){updateHeaderCount();renderCart();}if(event.key===ORDERS_KEY||event.key===AUTH_KEY)refreshAccount();});
   window.addEventListener('pageshow',event=>{if(event.persisted){updateHeaderCount();refreshAccount();}});
 })();

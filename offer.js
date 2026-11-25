@@ -2,8 +2,6 @@
 (() => {
   const form=document.querySelector('[data-offer-form]');
   if(!form) return;
-  const preview=()=>localStorage.getItem('derzhava_owner_preview_v1')==='on';
-  if(!preview()){const submit=form.querySelector('[type="submit"]');if(submit){submit.disabled=true;submit.textContent='Приём заявок пока недоступен';}const note=document.createElement('p');note.className='offer-note';note.textContent='Интернет-магазин готовится к запуску.';form.appendChild(note);}
 
   const method=form.elements.contact_method;
   const contactInput=form.elements.contact_value;
@@ -79,7 +77,6 @@
 
   form.addEventListener('submit',e=>{
     e.preventDefault();
-    if(!preview())return;
     const data=new FormData(form);
     const chosen=String(data.get('custom_heraldry')||'').trim()||String(data.get('heraldry')||'').trim()||'Не указано'
     const methodLabels={phone:'Телефон',telegram:'Telegram',max:'MAX',whatsapp:'WhatsApp',email:'Email'};
@@ -91,7 +88,7 @@
       if(!Array.isArray(list))throw Error('Invalid data');
       list.unshift(entry);localStorage.setItem(key,JSON.stringify(list));
       form.reset();updateContact();results.hidden=true;customWrap.hidden=true;customToggle.textContent='Не нашли нужного? Указать вручную';
-      note.textContent='Спасибо! Ваша заявка '+entry.id+' оформлена.';
+      note.textContent='Спасибо! Пробная заявка '+entry.id+' сохранена.';
     }catch(_){note.textContent='Не удалось сохранить заявку в браузере.';}
     note.scrollIntoView({behavior:'smooth',block:'nearest'});
   });
