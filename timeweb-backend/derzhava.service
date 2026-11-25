@@ -1,0 +1,22 @@
+[Unit]
+Description=Derzhava API
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=derzhava
+Group=derzhava
+WorkingDirectory=/opt/derzhava/timeweb-backend
+EnvironmentFile=/etc/derzhava/backend.env
+ExecStart=/usr/bin/node /opt/derzhava/timeweb-backend/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
