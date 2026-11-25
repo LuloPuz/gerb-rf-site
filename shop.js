@@ -507,6 +507,30 @@
       });
     }
 
+    function orderImage(value){
+      if(!value)return '';
+      try{
+        const image=new URL(String(value),location.href);
+        const assets=new URL('assets/',location.href);
+        return image.origin===assets.origin&&image.pathname.startsWith(assets.pathname)&&/\.(png|jpe?g|webp|avif|gif|svg)$/i.test(image.pathname)?image.href:'';
+      }catch(_){return '';}
+    }
+
+    function renderOrderItem(item){
+      const qty=Number(item.qty)||1;
+      const image=orderImage(item.image);
+      const sku=String(item.sku||'').trim();
+      const meta=[item.size,qty+' шт.'].filter(Boolean).join(' · ');
+      return '<div class="account-order-item account-order-item-detailed">'+
+        '<div class="account-order-item-photo"><span class="account-order-photo-fallback">Нет фото</span>'+
+          (image?'<img src="'+esc(image)+'" alt="'+esc(item.title||'Товар')+'" width="72" height="72" loading="lazy" decoding="async">':'')+'</div>'+
+        '<div class="account-order-item-info"><strong class="account-order-item-title">'+esc(item.title||'Товар')+'</strong>'+
+          '<small class="account-order-item-sku">'+(sku?'Арт. '+esc(sku):'Артикул не указан')+'</small>'+
+          (item.finish?'<small class="account-order-item-finish">'+esc(item.finish)+'</small>':'')+
+          '<small class="account-order-item-size">'+esc(meta)+'</small></div>'+
+        '<span class="account-order-item-sum">'+money((Number(item.price)||0)*qty)+'</span></div>';
+    }
+
     function renderOrder(order){
       const active=statusIndex(order.status);
       const cancelled=order.status==='Отменён';
@@ -515,9 +539,7 @@
         const cls=index<active?' done':index===active?' active':'';
         return '<div class="account-status-step'+cls+'" data-step="'+statusKeys[index]+'"'+(index===active?' aria-current="step"':'')+'>'+esc(label)+'</div>';
       }).join('');
-      const items=(order.items||[]).map(item=>
-        '<div class="account-order-item"><div><strong>'+esc(item.title)+'</strong><br><small>'+esc(item.size)+' · '+(Number(item.qty)||1)+' шт.</small></div><span>'+money((Number(item.price)||0)*(Number(item.qty)||1))+'</span></div>'
-      ).join('');
+      const items=(order.items||[]).map(renderOrderItem).join('');
       return '<article class="account-order-v2" data-status="'+key+'">'+
         '<div class="account-order-top"><div><h3 class="account-order-number">'+esc(displayNumber(order.number))+'</h3><p class="account-order-meta">'+new Date(order.date).toLocaleString('ru-RU')+' · '+(order.items||[]).length+' поз.</p></div><span class="account-order-status-v2">'+esc(friendlyStatus(order.status))+'</span></div>'+
         '<div class="account-order-items">'+items+'</div>'+
@@ -565,6 +587,11 @@
         ordersHost.innerHTML=all.length
           ? all.map(renderOrder).join('')
           : '<div class="account-empty-v2"><strong>Заказов пока нет</strong><p>Заказы, оформленные на этот телефон или e-mail, появятся здесь.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a></div>';
+        ordersHost.querySelectorAll('.account-order-item-photo img').forEach(img=>{
+          const hideBroken=()=>{img.hidden=true;};
+          img.addEventListener('error',hideBroken,{once:true});
+          if(img.complete&&!img.naturalWidth)hideBroken();
+        });
       }
       return true;
     }

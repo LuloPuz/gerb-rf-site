@@ -2939,3 +2939,19 @@ body .full-catalog .directory-letter-group[hidden]{
 
 /* Lightweight notice while the server-backed store is not live. */
 .shop-preview-notice{margin:0 0 16px!important;padding:9px 13px;border:1px solid #e6dece;border-radius:6px;background:#faf7ef;color:#736344;font:500 12px/1.5 "Manrope",Arial,sans-serif!important}.order-completed .shop-preview-notice{max-width:820px;margin:0 auto 16px!important}
+
+/* Customer order lines: photo, SKU and specifications. */
+.account-order-v2 .account-order-items{gap:0!important;padding-top:0!important}
+.account-order-v2 .account-order-item.account-order-item-detailed{display:grid!important;grid-template-columns:72px minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;padding:10px 0!important;font-size:14px!important;line-height:1.4!important}
+.account-order-item-detailed+.account-order-item-detailed{border-top:1px solid #eee9df}
+.account-order-item-photo{position:relative;display:grid;place-items:center;width:72px;height:72px;border-radius:6px;border:1px solid #eee9df;background:#fbfaf7;overflow:hidden}
+.account-order-item-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:5px;background:#fbfaf7}
+.account-order-item-photo img[hidden]{display:none!important}
+.account-order-photo-fallback{font-size:10px;color:#8a9095;text-align:center}
+.account-order-item-info{display:grid;gap:3px;min-width:0}
+.account-order-item-title{font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.account-order-v2 .account-order-item-info small{display:block;font-size:12px!important;line-height:1.35!important;overflow-wrap:anywhere;color:#68737d!important}
+.account-order-v2 .account-order-item-info .account-order-item-sku{font-size:11px!important;color:#7a7f86!important}
+.account-order-v2 .account-order-item .account-order-item-sum{font-size:15px!important;font-weight:600;color:var(--navy);text-align:right;align-self:center!important;white-space:nowrap}
+@media(max-width:720px){.account-order-v2 .account-order-item.account-order-item-detailed{grid-template-columns:52px minmax(0,1fr) auto!important;gap:9px!important;padding:10px 0!important;font-size:12px!important}.account-order-item-photo{width:52px;height:52px}.account-order-item-photo img{padding:3px}.account-order-v2 .account-order-item-info small{font-size:10px!important}.account-order-v2 .account-order-item-info .account-order-item-sku{font-size:10px!important}.account-order-v2 .account-order-item .account-order-item-sum{font-size:12px!important}.account-order-photo-fallback{font-size:9px}}
+@media(max-width:360px){.account-order-v2 .account-order-item.account-order-item-detailed{grid-template-columns:44px minmax(0,1fr) auto!important;gap:7px!important}.account-order-item-photo{width:44px;height:44px}}
