@@ -215,7 +215,8 @@
 
   function initCustomSize(){
     const cards=[...document.querySelectorAll('.popular-card[data-product-card]')].filter(c=>c.querySelector('.popular-size-switcher'));
-    if(!cards.length)return;
+    const productLinks=[...document.querySelectorAll('.final-product-info .custom-size-inline')];
+    if(!cards.length&&!productLinks.length)return;
     const dialog=document.createElement('dialog');
     dialog.className='custom-size-dialog';
     dialog.setAttribute('aria-labelledby','custom-size-title');
@@ -228,18 +229,28 @@
     dialog.querySelector('.custom-size-return').addEventListener('click',close);
     dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}});
     dialog.addEventListener('close',()=>{if(trigger?.isConnected)trigger.focus({preventScroll:true});selected=null;});
+    function openQuote(item,button){
+      if(!item||dialog.open)return;
+      selected=item;trigger=button;form.reset();error.hidden=true;view.hidden=false;success.hidden=true;
+      const p=profile();form.elements.name.value=p.name||'';form.elements.phone.value=p.phone||'';
+      dialog.querySelector('[data-quote-product]').innerHTML='<strong>'+esc(item.title)+'</strong><small>'+esc([item.sku?'Арт. '+item.sku:'',item.finish].filter(Boolean).join(' · '))+'</small>';
+      dialog.showModal();
+    }
     cards.forEach(card=>{
       const sizes=card.querySelector('.popular-size-switcher');
       if(sizes.parentNode.querySelector('.custom-size-link'))return;
       const button=document.createElement('button');button.type='button';button.className='custom-size-link';button.textContent='Нужен другой размер?';
       sizes.insertAdjacentElement('afterend',button);
       button.addEventListener('click',e=>{
-        e.preventDefault();e.stopPropagation();
-        const item=popularCardItem(card,true);if(!item)return;
-        selected=item;trigger=button;form.reset();error.hidden=true;view.hidden=false;success.hidden=true;
-        const p=profile();form.elements.name.value=p.name||'';form.elements.phone.value=p.phone||'';
-        dialog.querySelector('[data-quote-product]').innerHTML='<strong>'+esc(item.title)+'</strong><small>'+esc([item.sku?'Арт. '+item.sku:'',item.finish].filter(Boolean).join(' · '))+'</small>';
-        dialog.showModal();
+        e.preventDefault();e.stopPropagation();openQuote(popularCardItem(card,true),button);
+      });
+    });
+    productLinks.forEach(link=>{
+      link.setAttribute('aria-haspopup','dialog');
+      link.addEventListener('click',e=>{
+        const item=currentProduct();
+        if(!item)return;
+        e.preventDefault();e.stopPropagation();openQuote(item,link);
       });
     });
     form.addEventListener('submit',e=>{

@@ -2972,8 +2972,8 @@ html:has(.account-photo-dialog[open]){overflow:hidden}
 @media(max-width:720px){.account-photo-dialog{padding:8px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}.account-photo-dialog>img{max-width:calc(100vw - 40px);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px)}.account-photo-close{top:6px;right:6px}}
 
 /* Compact custom-size request, shared by storefront catalog cards. */
-.custom-size-link{position:relative;z-index:4;display:block;min-height:30px;width:100%;margin:4px 0 0;padding:3px 0;border:0;background:transparent;color:#80632f;text-align:right;font:600 11px/1.4 "Manrope",Arial,sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.custom-size-link:hover{color:#10243a}.custom-size-link:focus-visible{outline:2px solid #b79a60;outline-offset:2px}
+.custom-size-link{position:relative;z-index:8;display:block;box-sizing:border-box;min-height:30px;width:100%;margin:7px 0 0;padding:5px 8px;border:1px solid #d5c6a8;border-radius:7px;background:#faf8f3;color:#80632f;text-align:center;font:600 11px/1.4 "Manrope",Arial,sans-serif;cursor:pointer;text-decoration:none;transition:background .18s,border-color .18s}
+.custom-size-link:hover{color:#80632f;background:#f2ebdc;border-color:#b99b60}.custom-size-link:focus-visible{outline:2px solid #b79a60;outline-offset:2px}
 .custom-size-dialog{position:fixed;inset:0;margin:auto;width:min(460px,calc(100vw - 28px));max-height:calc(100dvh - 30px);overflow:auto;border:1px solid #ded8ca;border-radius:12px;background:#fff;color:#10243a;padding:24px;box-shadow:0 20px 80px #07182a33}
 .custom-size-dialog:not([open]){display:none!important}.custom-size-dialog::backdrop{background:#07182a99}
 .custom-size-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:16px}.custom-size-head h2{font:400 27px/1.2 "PT Serif",Georgia,serif;margin:4px 0 0}.custom-size-kicker{font-size:10px;letter-spacing:.12em;color:#98763b;margin:0;font-weight:600}
