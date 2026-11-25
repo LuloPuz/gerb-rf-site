@@ -115,13 +115,34 @@
   document.body.appendChild(overlay);
   document.body.appendChild(panel);
 
+  let menuBodyPaddingRight='';
+
   const setMenu=open=>{
+    const isOpen=panel.classList.contains('open');
+    if(open===isOpen) return;
+
+    // Lock page scrolling without changing its visible width.
+    // Without scrollbar compensation the catalogue shifts sideways when
+    // the quick menu opens/closes on pages that have a vertical scrollbar.
+    if(open){
+      menuBodyPaddingRight=document.body.style.paddingRight;
+      const scrollbarWidth=Math.max(0,window.innerWidth-document.documentElement.clientWidth);
+      if(scrollbarWidth>0){
+        const currentPadding=parseFloat(getComputedStyle(document.body).paddingRight)||0;
+        document.body.style.paddingRight=(currentPadding+scrollbarWidth)+'px';
+      }
+    }
+
     menuButton.classList.toggle('open',open);
     menuButton.setAttribute('aria-expanded',String(open));
     panel.classList.toggle('open',open);
     panel.setAttribute('aria-hidden',String(!open));
     overlay.classList.toggle('open',open);
     document.body.classList.toggle('site-menu-open',open);
+
+    if(!open){
+      document.body.style.paddingRight=menuBodyPaddingRight;
+    }
   };
 
   menuButton.addEventListener('click',()=>setMenu(!panel.classList.contains('open')));
