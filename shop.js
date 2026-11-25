@@ -66,22 +66,24 @@
     let pending=null;
     const box=document.createElement('div');
     box.className='checkout-phone-check';box.hidden=true;
-    box.innerHTML='<strong>Подтвердите номер телефона</strong><p>Введите код, чтобы оформить заказ и сразу войти в личный кабинет.</p><label>Код подтверждения<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" data-order-phone-code></label><p class="checkout-demo-code" data-order-demo-code></p><button type="button" class="checkout-code-resend">Запросить новый код</button>';
+    box.innerHTML='<strong>Подтвердите номер телефона</strong><p>Введите шестизначный код и нажмите «Подтвердить и оформить». Вы сразу войдёте в личный кабинет.</p><label>Код подтверждения<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" data-order-phone-code></label><p class="checkout-demo-code" data-order-demo-code></p><button type="button" class="checkout-code-resend">Запросить новый код</button>';
     const submit=form.querySelector('[type="submit"]');
     if(!submit)throw Error('Не найдена кнопка оформления');
+    const initialLabel=submit.textContent.trim();
     const holder=submit.closest('.checkout-actions')||submit;
     holder.parentNode.insertBefore(box,holder);
     const input=box.querySelector('[data-order-phone-code]'),hint=box.querySelector('[data-order-demo-code]');
-    function reset(){pending=null;box.hidden=true;input.value='';hint.textContent='';}
+    function label(){return pending?'Подтвердить и оформить':initialLabel;}
+    function reset(){pending=null;box.hidden=true;input.value='';hint.textContent='';submit.textContent=label();}
     function issue(phone){
       const rate=checkAndRecordRate(phone);
       if(!rate.ok)throw Error(rate.retryMs?'Новый код можно запросить через '+Math.ceil(rate.retryMs/1000)+' сек.':'Лимит кодов исчерпан. Попробуйте позже.');
       const code=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
-      pending={phone,code,at:Date.now(),attempts:0};box.hidden=false;input.value='';hint.textContent='Пробный режим · код: '+code;input.focus();
+      pending={phone,code,at:Date.now(),attempts:0};box.hidden=false;input.value='';hint.textContent='Пробный режим · код: '+code;submit.textContent=label();input.focus();box.scrollIntoView({block:'nearest',behavior:'smooth'});
     }
     box.querySelector('.checkout-code-resend').addEventListener('click',()=>{try{const phone=normalizeContact(form.elements.phone.value);if(!/^7\d{10}$/.test(phone))throw Error('Проверьте номер телефона.');issue(phone);}catch(e){toast('<strong>'+esc(e.message)+'</strong>');}});
     form.elements.phone.addEventListener('input',reset);
-    return {reset,check(phone){
+    return {reset,label,check(phone){
       if(window.DerzhavaBackend?.configured()||window.DERZHAVA_AUTH_API)throw Error('Серверное подтверждение заказа ещё не подключено.');
       const key=normalizeContact(phone);
       if(!/^7\d{10}$/.test(key))throw Error('Проверьте номер телефона.');
@@ -294,7 +296,7 @@
     const dialog=document.createElement('dialog');
     dialog.className='custom-size-dialog';
     dialog.setAttribute('aria-labelledby','custom-size-title');
-    dialog.innerHTML='<div class="custom-size-head"><div><p class="custom-size-kicker">ИНДИВИДУАЛЬНЫЙ РАЗМЕР</p><h2 id="custom-size-title">Запросить расчёт</h2></div><button type="button" class="custom-size-close" aria-label="Закрыть">×</button></div><div data-quote-form-view><div class="custom-size-product" data-quote-product></div><form data-quote-form><p class="custom-size-price">Стоимость рассчитывается индивидуально</p><div class="custom-size-fields"><label>Имя<input name="name" autocomplete="name" maxlength="100" required></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" placeholder="+7 999 000-00-00" required></label><label>Ширина, см<input name="width" inputmode="decimal" placeholder="Например, 50" maxlength="8" required></label><label>Высота, см<input name="height" inputmode="decimal" placeholder="Например, 60" maxlength="8" required></label></div><p class="custom-size-note">Пробный режим: запрос сохранится только в этом браузере. Используйте вымышленные контакты.</p><p data-quote-error role="alert" class="custom-size-error" hidden></p><button class="custom-size-submit" type="submit">Отправить запрос</button></form></div><div data-quote-success hidden class="custom-size-success"><h3>Запрос оформлен</h3><p data-quote-number></p><p>Стоимость рассчитывается. Статус доступен в личном кабинете.</p><a class="custom-size-submit" href="account.html">Перейти в личный кабинет</a><button class="custom-size-return" type="button">Продолжить покупки</button></div>';
+    dialog.innerHTML='<div class="custom-size-head"><div><p class="custom-size-kicker">ИНДИВИДУАЛЬНЫЙ РАЗМЕР</p><h2 id="custom-size-title">Запросить расчёт</h2></div><button type="button" class="custom-size-close" aria-label="Закрыть">×</button></div><div data-quote-form-view><div class="custom-size-product" data-quote-product></div><form data-quote-form><p class="custom-size-price">Стоимость рассчитывается индивидуально</p><div class="custom-size-fields"><label>Имя<input name="name" autocomplete="name" maxlength="100" required></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" placeholder="+7 999 000-00-00" required></label><label>Ширина, см<input name="width" inputmode="decimal" placeholder="Например, 50" maxlength="8" required></label><label>Высота, см<input name="height" inputmode="decimal" placeholder="Например, 60" maxlength="8" required></label></div><p class="custom-size-note">Пробный режим: запрос сохранится только в этом браузере. Используйте вымышленные контакты.</p><p data-quote-error role="alert" class="custom-size-error" hidden></p><button class="custom-size-submit" type="submit">Отправить запрос</button></form></div><div data-quote-success hidden class="custom-size-success"><h3>Запрос оформлен</h3><p data-quote-number></p><p>Стоимость рассчитывается. Вы уже вошли в личный кабинет.</p><a class="custom-size-submit" href="account.html">Перейти в личный кабинет</a><button class="custom-size-return" type="button">Продолжить покупки</button></div>';
     document.body.appendChild(dialog);
     const form=dialog.querySelector('[data-quote-form]'),view=dialog.querySelector('[data-quote-form-view]'),success=dialog.querySelector('[data-quote-success]'),error=dialog.querySelector('[data-quote-error]');
     let selected=null,trigger=null;
@@ -335,6 +337,7 @@
         if(window.DerzhavaBackend?.configured())throw Error('Приём индивидуальных размеров пока не подключён к серверу.');
         const fd=new FormData(form);if(!phoneCheck.check(fd.get('phone')))return;
         const order=createQuoteOrder(selected,{name:fd.get('name'),phone:fd.get('phone'),width:fd.get('width'),height:fd.get('height')});
+        const saved=profile();write(PROFILE_KEY,normalizeContact(saved.phone)===normalizeContact(order.customer.phone)?{...saved,...order.customer}:order.customer);
         signInAfterOrder(order.customer);
         selected=null;view.hidden=true;success.hidden=false;dialog.querySelector('[data-quote-number]').textContent=order.number;
       }catch(e){error.textContent=e.message||'Не удалось сохранить запрос.';error.hidden=false;}
@@ -416,13 +419,13 @@
     const form=document.querySelector('[data-checkout-form]');
     if(!form) return;
     const phoneCheck=createOrderPhoneCheck(form);
-    document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{document.querySelector('[data-checkout-panel]').hidden=true});
+    document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{phoneCheck.reset();document.querySelector('[data-checkout-panel]').hidden=true});
     form.addEventListener('submit',async e=>{
       e.preventDefault();
       const items=cart();if(!items.length)return;
       const submit=form.querySelector('.checkout-submit');
       if(submit?.disabled)return;
-      const originalLabel=submit?.textContent||'Оформить заказ';
+      const originalLabel=()=>phoneCheck.label();
       if(submit){submit.disabled=true;submit.textContent='Оформляем…'}
 
       const fd=new FormData(form);
@@ -436,8 +439,8 @@
       };
       const delivery=String(fd.get('delivery')||'');
       const comment=String(fd.get('comment')||'');
-      if(!customer.name || !/^7\d{10}$/.test(normalizeContact(customer.phone))){toast('<strong>Проверьте данные</strong><br>Укажите имя и корректный телефон +7.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
-      try{if(!phoneCheck.check(customer.phone)){if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}}catch(error){toast('<strong>'+esc(error.message)+'</strong>');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
+      if(!customer.name || !/^7\d{10}$/.test(normalizeContact(customer.phone))){toast('<strong>Проверьте данные</strong><br>Укажите имя и корректный телефон +7.');if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}
+      try{if(!phoneCheck.check(customer.phone)){if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}}catch(error){toast('<strong>'+esc(error.message)+'</strong>');if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}
       let number;do{number='ДРЖ-'+String(1000000+crypto.getRandomValues(new Uint32Array(1))[0]%9000000);}while(orders().some(o=>o.number===number));
       let total=cartTotal();
       let remoteSaved=false;
@@ -451,14 +454,14 @@
         }
       }catch(error){
         toast('<strong>Заказ не отправлен</strong><br>'+esc(error?.message||'Ошибка соединения с базой'));
-        if(submit){submit.disabled=false;submit.textContent=originalLabel}
+        if(submit){submit.disabled=false;submit.textContent=originalLabel()}
         return;
       }
 
       const now=new Date();
       const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved,test:!remoteSaved,history:[{status:'Заказ принят',at:now.toISOString()}]};
-      try{const all=orders();all.unshift(order);write(ORDERS_KEY,all);write(PROFILE_KEY,customer);if(!remoteSaved)signInAfterOrder(customer);setCart([]);}catch(error){toast('<strong>Ошибка локального сохранения</strong><br>Проверьте доступное место в браузере.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
-      if(submit){submit.disabled=false;submit.textContent=originalLabel;}
+      try{const all=orders();all.unshift(order);write(ORDERS_KEY,all);write(PROFILE_KEY,customer);if(!remoteSaved)signInAfterOrder(customer);setCart([]);}catch(error){toast('<strong>Ошибка локального сохранения</strong><br>Проверьте доступное место в браузере.');if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}
+      if(submit){submit.disabled=false;submit.textContent=originalLabel();}
       form.reset();
 
       document.querySelector('[data-checkout-panel]').hidden=true;
@@ -466,7 +469,7 @@
       const success=document.querySelector('[data-order-success]');
       if(success){
         success.hidden=false;
-        const note=remoteSaved?'Спасибо за заказ! Информация о заказе и его текущий статус доступны в личном кабинете.':'Спасибо! Заказ сохранён для проверки. Информация о заказе и его текущий статус доступны в личном кабинете.';
+        const note=remoteSaved?'Спасибо за заказ! Информация о заказе и его текущий статус доступны в личном кабинете.':'Спасибо! Заказ сохранён для проверки. Вы уже вошли в личный кабинет — повторный код не нужен.';
         const actions='<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
         document.querySelector('[data-cart-page]').classList.add('order-completed');
         success.innerHTML='<div class="order-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div><p class="order-success-kicker">ЗАКАЗ ОФОРМЛЕН</p><h2>Заказ '+esc(displayNumber(number))+'</h2><p>'+note+'</p><div class="order-success-total"><span>Сумма заказа</span><strong>'+money(order.total)+'</strong></div>'+actions;
