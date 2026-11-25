@@ -152,9 +152,7 @@
     remoteMode = !!window.DerzhavaBackend?.configured();
 
     if (!remoteMode) {
-      show("dashboard");
-      els.setup.hidden = false;
-      await loadOrders();
+      window.location.replace('admin-preview.html');
       return;
     }
 

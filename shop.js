@@ -19,6 +19,8 @@
   const profile=()=>read(PROFILE_KEY,{name:'',phone:'',email:'',organization:'',inn:'',address:''});
   const orders=()=>read(ORDERS_KEY,[]);
   const auth=()=>read(AUTH_KEY,null);
+  const normalizeContact=value=>{const raw=String(value||'').trim();if(raw.includes('@'))return raw.toLowerCase();let p=raw.replace(/\D/g,'');if(p.length===10)p='7'+p;if(p.length===11&&p[0]==='8')p='7'+p.slice(1);return p;};
+  let refreshAccount=()=>{};
   const cartCount=()=>cart().reduce((sum,item)=>sum+(Number(item.qty)||1),0);
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
   const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -228,7 +230,7 @@
     });
 
     summary.querySelector('[data-open-checkout]')?.addEventListener('click',()=>{
-      checkout.hidden=false;fillCheckout();
+      checkout.hidden=false;fillCheckout();checkout.scrollIntoView({behavior:'smooth',block:'start'});
     });
   }
 
@@ -241,11 +243,13 @@
   function initCheckout(){
     const form=document.querySelector('[data-checkout-form]');
     if(!form) return;
+    form.querySelector('[data-test-fill]')?.addEventListener('click',()=>{const sample={name:'Тестовый покупатель',phone:'+7 900 000-00-00',email:'test@example.invalid',organization:'Тестовая организация',inn:'',address:'Тестовый адрес',comment:'Пробный заказ, без оплаты'};Object.entries(sample).forEach(([k,v])=>{if(form.elements[k])form.elements[k].value=v});});
     document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{document.querySelector('[data-checkout-panel]').hidden=true});
     form.addEventListener('submit',async e=>{
       e.preventDefault();
       const items=cart();if(!items.length)return;
       const submit=form.querySelector('.checkout-submit');
+      if(submit?.disabled)return;
       const originalLabel=submit?.textContent||'Оформить заказ';
       if(submit){submit.disabled=true;submit.textContent='Оформляем…'}
 
@@ -260,9 +264,8 @@
       };
       const delivery=String(fd.get('delivery')||'');
       const comment=String(fd.get('comment')||'');
-      write(PROFILE_KEY,customer);
-
-      let number='ДРЖ-'+String(Date.now()).slice(-7);
+      if(!customer.name || !/^7\d{10}$/.test(normalizeContact(customer.phone))){toast('<strong>Проверьте данные</strong><br>Укажите имя и корректный телефон +7.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
+      let number='ТЕСТ-'+crypto.randomUUID().slice(0,8).toUpperCase();
       let total=cartTotal();
       let remoteSaved=false;
 
@@ -280,12 +283,10 @@
       }
 
       const now=new Date();
-      const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved};
-      const all=orders();all.unshift(order);write(ORDERS_KEY,all);setCart([]);
-
-      const lines=order.items.map(x=>'• '+x.title+(x.sku?' · арт. '+x.sku:'')+' — '+x.size+' × '+x.qty+' = '+money(x.price*x.qty)).join('\n');
-      const body='Заказ '+number+'\n\n'+lines+'\n\nИтого: '+money(order.total)+'\n\nПокупатель: '+customer.name+'\nТелефон: '+customer.phone+'\nEmail: '+customer.email+'\nОрганизация: '+customer.organization+'\nИНН: '+customer.inn+'\nДоставка: '+order.delivery+'\nАдрес: '+customer.address+'\nКомментарий: '+order.comment;
-      const mail='mailto:xxx@xxx.xxx?subject='+encodeURIComponent('Новый заказ '+number)+'&body='+encodeURIComponent(body);
+      const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved,test:!remoteSaved,history:[{status:'Заказ принят',at:now.toISOString()}]};
+      try{const all=orders();all.unshift(order);write(ORDERS_KEY,all);write(PROFILE_KEY,customer);setCart([]);}catch(error){toast('<strong>Ошибка локального сохранения</strong><br>Проверьте доступное место в браузере.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
+      if(submit){submit.disabled=false;submit.textContent=originalLabel;}
+      form.reset();
 
       document.querySelector('[data-checkout-panel]').hidden=true;
       renderCart();
@@ -294,11 +295,12 @@
         success.hidden=false;
         const note=remoteSaved
           ? 'Заказ сохранён в общей системе и доступен менеджеру. Номер заказа также сохранён в вашем личном кабинете на этом устройстве.'
-          : 'Заказ сохранён в личном кабинете на этом устройстве. Общая серверная база пока не подключена.';
+          : 'Тестовый заказ сохранён в этом браузере. Он уже доступен в тестовой админке. Оплата, доставка и SMS не выполняются.';
         const actions=remoteSaved
           ? '<div class="order-success-actions"><a class="button button-gold" href="account.html">Открыть личный кабинет</a><a class="button" href="catalog.html">Продолжить покупки</a></div>'
-          : '<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button" href="'+mail+'">Отправить заказ менеджеру</a></div>';
+          : '<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button" href="admin-preview.html">Открыть тестовую админку</a><a class="button" href="catalog.html">Продолжить покупки</a></div>';
         success.innerHTML='<h2>Заказ '+esc(number)+' оформлен</h2><p>'+note+'</p>'+actions;
+        success.scrollIntoView({behavior:'smooth',block:'start'});
       }
     });
   }
@@ -306,15 +308,11 @@
   function renderAccount(){
     const root=document.querySelector('[data-account-page]');if(!root)return;
 
-    const normalizeIdentifier=value=>{
-      const raw=String(value||'').trim();
-      if(raw.includes('@')) return raw.toLowerCase();
-      return raw.replace(/\D/g,'');
-    };
+    const normalizeIdentifier=normalizeContact;
     const isValidIdentifier=value=>{
       const raw=String(value||'').trim();
       if(raw.includes('@')) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw);
-      return raw.replace(/\D/g,'').length>=10;
+      return /^7\d{10}$/.test(normalizeContact(raw));
     };
     const statusSteps=['Заказ принят','Подтверждён','В производстве','Готов','Отправлен','Получен'];
     const statusIndex=status=>{
@@ -326,7 +324,7 @@
       if(raw.includes('подтверж')) return 1;
       return 0;
     };
-    const friendlyStatus=status=>statusSteps[statusIndex(status)];
+    const friendlyStatus=status=>status==='Отменён'?'Отменён':statusSteps[statusIndex(status)];
 
     function contactHasOrder(identifier){
       const key=normalizeIdentifier(identifier);
@@ -442,7 +440,7 @@
         throw error;
       }
 
-      const code=String(Math.floor(100000+Math.random()*900000));
+      const code=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
       sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,code,createdAt:Date.now(),remote:false}));
       return {demo:true,code};
     }
@@ -486,7 +484,7 @@
 
     function renderOrder(order){
       const active=statusIndex(order.status);
-      const steps=statusSteps.map((label,index)=>{
+      const steps=order.status==='Отменён'?'<div class="account-status-step active">Заказ отменён</div>':statusSteps.map((label,index)=>{
         const cls=index<active?' done':index===active?' active':'';
         return '<div class="account-status-step'+cls+'">'+esc(label)+'</div>';
       }).join('');
@@ -530,7 +528,7 @@
         loginState.textContent='Выполнен вход';
       }
 
-      const all=visibleOrdersFor(state.identifier);
+      const all=visibleOrdersFor(state.identifier).filter(o=>!o.remote);
       const count=root.querySelector('[data-account-order-count]');if(count)count.textContent=all.length;
       const total=root.querySelector('[data-account-order-total]');if(total)total.textContent=money(all.reduce((sum,o)=>sum+(Number(o.total)||0),0));
       const cartN=root.querySelector('[data-account-cart-count]');if(cartN)cartN.textContent=cartCount();
@@ -553,6 +551,7 @@
       if(errorBox) errorBox.hidden=true;
     }
 
+    refreshAccount=()=>{if(!showDashboard())showGate();};
     if(!showDashboard()){
       showGate();
       if(requestForm?.elements.identifier && !requestForm.elements.identifier.value){
@@ -589,6 +588,7 @@
         const message=error?.message||'Не удалось отправить код. Попробуйте ещё раз.';
         toast('<strong>Вход в кабинет</strong><br>'+esc(message));
         if(error?.retryMs&&button){
+          button.dataset.cooldown='true';
           let left=Math.max(1,Math.ceil(error.retryMs/1000));
           button.disabled=true;
           button.textContent='Повторить через '+left+' сек.';
@@ -596,6 +596,7 @@
             left--;
             if(left<=0){
               clearInterval(timer);
+              delete button.dataset.cooldown;
               button.disabled=false;
               button.textContent='Получить код';
             }else{
@@ -605,7 +606,7 @@
           return;
         }
       }finally{
-        if(button&&!button.disabled){button.disabled=false;button.textContent='Получить код'}
+        if(button&&!button.dataset.cooldown){button.disabled=false;button.textContent='Получить код'}
       }
     });
 
@@ -614,7 +615,7 @@
       const identifier=verifyForm.dataset.identifier||'';
       const code=String(new FormData(verifyForm).get('code')||'').trim();
       if(errorBox)errorBox.hidden=true;
-      const ok=await verifyCode(identifier,code);
+      let ok=false;try{ok=await verifyCode(identifier,code)}catch(_){ok=false;}
       if(!ok){
         if(errorBox){
           errorBox.hidden=false;
@@ -673,5 +674,6 @@
   renderCart();
   initCheckout();
   renderAccount();
-  window.addEventListener('storage',()=>{updateHeaderCount();renderCart();renderAccount()});
+  window.addEventListener('storage',event=>{if(event.key===CART_KEY){updateHeaderCount();renderCart();}if(event.key===ORDERS_KEY||event.key===AUTH_KEY)refreshAccount();});
+  window.addEventListener('pageshow',event=>{if(event.persisted){updateHeaderCount();refreshAccount();}});
 })();
