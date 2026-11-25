@@ -26,6 +26,80 @@
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
   const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
+  function checkAndRecordRate(identifier){
+    const now=Date.now();
+    const hour=60*60*1000;
+    const cooldown=60*1000;
+    const key=normalizeContact(identifier);
+    let state=read(AUTH_RATE_KEY,{events:[]});
+    state.events=(Array.isArray(state.events)?state.events:[]).filter(event=>now-Number(event.at||0)<hour);
+
+    const byContact=state.events.filter(event=>event.key===key);
+    const latest=byContact.reduce((max,event)=>Math.max(max,Number(event.at)||0),0);
+
+    if(latest && now-latest<cooldown){
+      return {ok:false,reason:'cooldown',retryMs:cooldown-(now-latest)};
+    }
+    if(byContact.length>=5){
+      return {ok:false,reason:'contact-hour'};
+    }
+    if(state.events.length>=15){
+      return {ok:false,reason:'browser-hour'};
+    }
+
+    state.events.push({key,at:now});
+    write(AUTH_RATE_KEY,state);
+    return {ok:true};
+  }
+
+  // Browser-only prototype; never use this as server authorization.
+  const demoSessionValid=state=>!!state?.demo&&Number.isFinite(Date.parse(state.verifiedAt))&&Date.now()-Date.parse(state.verifiedAt)>=0&&Date.now()-Date.parse(state.verifiedAt)<7*86400000;
+  const demoPhoneVerified=phone=>demoSessionValid(auth())&&normalizeContact(auth().identifier)===normalizeContact(phone);
+  function checkOrderRate(phone){
+    const now=Date.now(),key=normalizeContact(phone);
+    const recent=orders().filter(o=>!o.remote&&now-Date.parse(o.date)>=0&&now-Date.parse(o.date)<3600000);
+    const own=recent.filter(o=>normalizeContact(o.customer?.phone)===key);
+    if(own.some(o=>now-Date.parse(o.date)<30000))throw Error('Подождите 30 секунд после предыдущего заказа.');
+    if(own.length>=5||recent.length>=15)throw Error('Слишком много заказов. Попробуйте позже.');
+  }
+  function createOrderPhoneCheck(form){
+    let pending=null;
+    const box=document.createElement('div');
+    box.className='checkout-phone-check';box.hidden=true;
+    box.innerHTML='<strong>Подтвердите номер телефона</strong><p>Введите код, чтобы оформить заказ и сразу войти в личный кабинет.</p><label>Код подтверждения<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" data-order-phone-code></label><p class="checkout-demo-code" data-order-demo-code></p><button type="button" class="checkout-code-resend">Запросить новый код</button>';
+    const submit=form.querySelector('[type="submit"]');
+    if(!submit)throw Error('Не найдена кнопка оформления');
+    const holder=submit.closest('.checkout-actions')||submit;
+    holder.parentNode.insertBefore(box,holder);
+    const input=box.querySelector('[data-order-phone-code]'),hint=box.querySelector('[data-order-demo-code]');
+    function reset(){pending=null;box.hidden=true;input.value='';hint.textContent='';}
+    function issue(phone){
+      const rate=checkAndRecordRate(phone);
+      if(!rate.ok)throw Error(rate.retryMs?'Новый код можно запросить через '+Math.ceil(rate.retryMs/1000)+' сек.':'Лимит кодов исчерпан. Попробуйте позже.');
+      const code=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
+      pending={phone,code,at:Date.now(),attempts:0};box.hidden=false;input.value='';hint.textContent='Пробный режим · код: '+code;input.focus();
+    }
+    box.querySelector('.checkout-code-resend').addEventListener('click',()=>{try{const phone=normalizeContact(form.elements.phone.value);if(!/^7\d{10}$/.test(phone))throw Error('Проверьте номер телефона.');issue(phone);}catch(e){toast('<strong>'+esc(e.message)+'</strong>');}});
+    form.elements.phone.addEventListener('input',reset);
+    return {reset,check(phone){
+      if(window.DerzhavaBackend?.configured()||window.DERZHAVA_AUTH_API)throw Error('Серверное подтверждение заказа ещё не подключено.');
+      const key=normalizeContact(phone);
+      if(!/^7\d{10}$/.test(key))throw Error('Проверьте номер телефона.');
+      checkOrderRate(key);
+      if(demoPhoneVerified(key)){reset();return true;}
+      if(!pending||pending.phone!==key){issue(key);return false;}
+      if(Date.now()-pending.at>=300000||pending.attempts>=5){reset();throw Error('Код истёк или исчерпаны попытки. Запросите новый код.');}
+      const code=input.value.trim();
+      if(!/^\d{6}$/.test(code))throw Error('Введите шестизначный код.');
+      pending.attempts++;
+      if(code!==pending.code){if(pending.attempts>=5)reset();throw Error('Неверный код.');}
+      reset();return true;
+    }};
+  }
+  function signInAfterOrder(customer){
+    write(AUTH_KEY,{identifier:normalizeContact(customer.phone),verifiedAt:new Date().toISOString(),demo:true});
+  }
+
   function toast(html,cartLink=false){
     let el=document.querySelector('.shop-toast');
     if(!el){el=document.createElement('div');el.className='shop-toast';el.setAttribute('role','status');document.body.appendChild(el)}
@@ -224,6 +298,7 @@
     document.body.appendChild(dialog);
     const form=dialog.querySelector('[data-quote-form]'),view=dialog.querySelector('[data-quote-form-view]'),success=dialog.querySelector('[data-quote-success]'),error=dialog.querySelector('[data-quote-error]');
     let selected=null,trigger=null;
+    const phoneCheck=createOrderPhoneCheck(form);
     const close=()=>dialog.close();
     dialog.querySelector('.custom-size-close').addEventListener('click',close);
     dialog.querySelector('.custom-size-return').addEventListener('click',close);
@@ -231,7 +306,7 @@
     dialog.addEventListener('close',()=>{if(trigger?.isConnected)trigger.focus({preventScroll:true});selected=null;});
     function openQuote(item,button){
       if(!item||dialog.open)return;
-      selected=item;trigger=button;form.reset();error.hidden=true;view.hidden=false;success.hidden=true;
+      selected=item;trigger=button;form.reset();phoneCheck.reset();error.hidden=true;view.hidden=false;success.hidden=true;
       const p=profile();form.elements.name.value=p.name||'';form.elements.phone.value=p.phone||'';
       dialog.querySelector('[data-quote-product]').innerHTML='<strong>'+esc(item.title)+'</strong><small>'+esc([item.sku?'Арт. '+item.sku:'',item.finish].filter(Boolean).join(' · '))+'</small>';
       dialog.showModal();
@@ -258,7 +333,9 @@
       error.hidden=true;const submit=form.querySelector('[type="submit"]');if(submit.disabled)return;submit.disabled=true;
       try{
         if(window.DerzhavaBackend?.configured())throw Error('Приём индивидуальных размеров пока не подключён к серверу.');
-        const fd=new FormData(form);const order=createQuoteOrder(selected,{name:fd.get('name'),phone:fd.get('phone'),width:fd.get('width'),height:fd.get('height')});
+        const fd=new FormData(form);if(!phoneCheck.check(fd.get('phone')))return;
+        const order=createQuoteOrder(selected,{name:fd.get('name'),phone:fd.get('phone'),width:fd.get('width'),height:fd.get('height')});
+        signInAfterOrder(order.customer);
         selected=null;view.hidden=true;success.hidden=false;dialog.querySelector('[data-quote-number]').textContent=order.number;
       }catch(e){error.textContent=e.message||'Не удалось сохранить запрос.';error.hidden=false;}
       finally{submit.disabled=false;}
@@ -338,7 +415,7 @@
   function initCheckout(){
     const form=document.querySelector('[data-checkout-form]');
     if(!form) return;
-    
+    const phoneCheck=createOrderPhoneCheck(form);
     document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{document.querySelector('[data-checkout-panel]').hidden=true});
     form.addEventListener('submit',async e=>{
       e.preventDefault();
@@ -360,6 +437,7 @@
       const delivery=String(fd.get('delivery')||'');
       const comment=String(fd.get('comment')||'');
       if(!customer.name || !/^7\d{10}$/.test(normalizeContact(customer.phone))){toast('<strong>Проверьте данные</strong><br>Укажите имя и корректный телефон +7.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
+      try{if(!phoneCheck.check(customer.phone)){if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}}catch(error){toast('<strong>'+esc(error.message)+'</strong>');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
       let number;do{number='ДРЖ-'+String(1000000+crypto.getRandomValues(new Uint32Array(1))[0]%9000000);}while(orders().some(o=>o.number===number));
       let total=cartTotal();
       let remoteSaved=false;
@@ -379,7 +457,7 @@
 
       const now=new Date();
       const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved,test:!remoteSaved,history:[{status:'Заказ принят',at:now.toISOString()}]};
-      try{const all=orders();all.unshift(order);write(ORDERS_KEY,all);write(PROFILE_KEY,customer);setCart([]);}catch(error){toast('<strong>Ошибка локального сохранения</strong><br>Проверьте доступное место в браузере.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
+      try{const all=orders();all.unshift(order);write(ORDERS_KEY,all);write(PROFILE_KEY,customer);if(!remoteSaved)signInAfterOrder(customer);setCart([]);}catch(error){toast('<strong>Ошибка локального сохранения</strong><br>Проверьте доступное место в браузере.');if(submit){submit.disabled=false;submit.textContent=originalLabel}return;}
       if(submit){submit.disabled=false;submit.textContent=originalLabel;}
       form.reset();
 
@@ -426,32 +504,6 @@
         const customer=order.customer||{};
         return [customer.phone,customer.email].some(value=>normalizeIdentifier(value)===key);
       });
-    }
-
-    function checkAndRecordRate(identifier){
-      const now=Date.now();
-      const hour=60*60*1000;
-      const cooldown=60*1000;
-      const key=normalizeIdentifier(identifier);
-      let state=read(AUTH_RATE_KEY,{events:[]});
-      state.events=(Array.isArray(state.events)?state.events:[]).filter(event=>now-Number(event.at||0)<hour);
-
-      const byContact=state.events.filter(event=>event.key===key);
-      const latest=byContact.reduce((max,event)=>Math.max(max,Number(event.at)||0),0);
-
-      if(latest && now-latest<cooldown){
-        return {ok:false,reason:'cooldown',retryMs:cooldown-(now-latest)};
-      }
-      if(byContact.length>=5){
-        return {ok:false,reason:'contact-hour'};
-      }
-      if(state.events.length>=15){
-        return {ok:false,reason:'browser-hour'};
-      }
-
-      state.events.push({key,at:now});
-      write(AUTH_RATE_KEY,state);
-      return {ok:true};
     }
 
     function currentBudgetDay(){
@@ -534,7 +586,7 @@
       }
 
       const code=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
-      sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,code,createdAt:Date.now(),remote:false}));
+      sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,code,createdAt:Date.now(),remote:false,attempts:0}));
       write('derzhava_owner_code_v1',{code,expiresAt:Date.now()+10*60*1000});
       return {demo:true,code};
     }
@@ -559,12 +611,13 @@
       const valid=!!pending &&
         normalizeIdentifier(pending.identifier)===normalizeIdentifier(identifier) &&
         String(pending.code||'')===String(code||'').trim() &&
-        Date.now()-Number(pending.createdAt||0)<10*60*1000;
+        Date.now()-Number(pending.createdAt||0)<5*60*1000 && Number(pending.attempts||0)<5;
       if(valid){
         write(AUTH_KEY,{identifier,verifiedAt:new Date().toISOString(),demo:true});
         localStorage.removeItem('derzhava_owner_code_v1');
         sessionStorage.removeItem(AUTH_PENDING_KEY);
       }
+      if(!valid&&pending&&!pending.remote){pending.attempts=Number(pending.attempts||0)+1;if(pending.attempts>=5)sessionStorage.removeItem(AUTH_PENDING_KEY);else sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify(pending));}
       return valid;
     }
 
@@ -662,7 +715,7 @@
 
     function showDashboard(){
       const state=auth();
-      if(!state?.identifier) return false;
+      if(!state?.identifier||(state.demo&&!demoSessionValid(state))) return false;
       if(gate) gate.hidden=true;
       if(dashboard) dashboard.hidden=false;
       const greeting=root.querySelector('[data-account-greeting]');

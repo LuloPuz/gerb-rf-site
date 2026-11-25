@@ -143,7 +143,7 @@
     }
     if(document.querySelector('script[data-shop-runtime]')) return;
     const shopRuntime=document.createElement('script');
-    shopRuntime.src='shop.js?v=20261125-quicksize3';
+    shopRuntime.src='shop.js?v=20261125-firstauth1';
     shopRuntime.dataset.shopRuntime='true';
     shopRuntime.async=false;
     document.body.appendChild(shopRuntime);
@@ -153,7 +153,7 @@
   if(!shopStyles){
     shopStyles=document.createElement('link');
     shopStyles.rel='stylesheet';
-    shopStyles.href='shop.css?v=20261125-quicksize3';
+    shopStyles.href='shop.css?v=20261125-firstauth1';
     shopStyles.dataset.shopStyles='true';
     shopStyles.addEventListener('load',loadRuntime,{once:true});
     shopStyles.addEventListener('error',loadRuntime,{once:true});
