@@ -4,3 +4,5 @@
 #dialog{max-height:calc(100dvh - 30px);overflow:auto}.detail-items{border-top:1px solid var(--line);padding-top:10px;font-size:12px;line-height:1.5}.detail-items p{overflow-wrap:anywhere}.info{overflow-wrap:anywhere}
 
 .owner-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.owner-tools button{font-size:12px}.owner-code{flex-basis:100%;font-weight:600;font-variant-numeric:tabular-nums;color:#10243a}.owner-tools button:disabled{opacity:.5;cursor:default}
+
+@media(max-width:720px){.nav-button[data-page="quotes"]{white-space:normal;line-height:1.15;text-align:left}}

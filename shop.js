@@ -138,7 +138,7 @@
     });
   }
 
-  function popularCardItem(card){
+  function popularCardItem(card,allowUnpriced=false){
     if(!card) return null;
     const active=card.querySelector('[data-card-size].active')||card.querySelector('[data-card-size]');
     const price=Number(active?.dataset.price)||Number(String(card.querySelector('.popular-card-price')?.textContent||'').replace(/\D/g,''))||0;
@@ -153,7 +153,7 @@
     const image=photo?.dataset.originalSrc||photo?.getAttribute('src')||'';
     const link=card.querySelector('.popular-card-cta')||card.querySelector('.popular-hit');
     const url=link?.getAttribute('href')||'catalog.html';
-    if(!price) return null;
+    if(!price&&!allowUnpriced) return null;
     return {id:url+'|'+size,title,finish,sku,size,price,image,url,qty:1};
   }
 
@@ -192,6 +192,65 @@
           if(label) label.textContent='В корзину';
         },1400);
       });
+    });
+  }
+
+  // Custom dimensions are a separate quote order, never a zero-price purchase.
+  const QUOTE_PENDING='Расчёт стоимости',QUOTE_READY='Стоимость рассчитана';
+  const quotePending=o=>o.kind==='quote'&&!(Number(o.total)>0);
+  function createQuoteOrder(item,data){
+    const name=String(data.name||'').trim(),phone=String(data.phone||'').trim();
+    const dim=v=>{const s=String(v||'').trim().replace(',','.');return /^\d{1,4}(\.\d{1,2})?$/.test(s)&&Number(s)>0&&Number(s)<=1000?Number(s):null;};
+    const width=dim(data.width),height=dim(data.height);
+    if(!name||name.length>100||!/^7\d{10}$/.test(normalizeContact(phone)))throw Error('Укажите имя и корректный номер телефона.');
+    if(width===null||height===null)throw Error('Укажите ширину и высоту от 0,01 до 1000 см.');
+    if(!item?.title)throw Error('Товар не найден.');
+    const now=new Date().toISOString();
+    const size=[width,height].map(n=>String(n).replace('.',',')).join(' × ')+' см';
+    const all=orders();let number;
+    do{number='ДРЖ-'+String(1000000+crypto.getRandomValues(new Uint32Array(1))[0]%9000000);}while(all.some(o=>o.number===number));
+    const order={number,date:now,kind:'quote',status:QUOTE_PENDING,items:[{...item,id:item.url+'|custom|'+size,size,width,height,qty:1,price:null}],total:null,customer:{name,phone},delivery:'Согласовать с менеджером',comment:'Индивидуальный размер',remote:false,test:true,history:[{status:QUOTE_PENDING,at:now}]};
+    all.unshift(order);write(ORDERS_KEY,all);return order;
+  }
+
+  function initCustomSize(){
+    const cards=[...document.querySelectorAll('.popular-card[data-product-card]')].filter(c=>c.querySelector('.popular-size-switcher'));
+    if(!cards.length)return;
+    const dialog=document.createElement('dialog');
+    dialog.className='custom-size-dialog';
+    dialog.setAttribute('aria-labelledby','custom-size-title');
+    dialog.innerHTML='<div class="custom-size-head"><div><p class="custom-size-kicker">ИНДИВИДУАЛЬНЫЙ РАЗМЕР</p><h2 id="custom-size-title">Запросить расчёт</h2></div><button type="button" class="custom-size-close" aria-label="Закрыть">×</button></div><div data-quote-form-view><div class="custom-size-product" data-quote-product></div><form data-quote-form><p class="custom-size-price">Стоимость рассчитывается индивидуально</p><div class="custom-size-fields"><label>Имя<input name="name" autocomplete="name" maxlength="100" required></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" placeholder="+7 999 000-00-00" required></label><label>Ширина, см<input name="width" inputmode="decimal" placeholder="Например, 50" maxlength="7" required></label><label>Высота, см<input name="height" inputmode="decimal" placeholder="Например, 60" maxlength="7" required></label></div><p class="custom-size-note">Пробный режим: запрос сохранится только в этом браузере. Используйте вымышленные контакты.</p><p data-quote-error role="alert" class="custom-size-error" hidden></p><button class="custom-size-submit" type="submit">Отправить запрос</button></form></div><div data-quote-success hidden class="custom-size-success"><h3>Запрос оформлен</h3><p data-quote-number></p><p>Стоимость рассчитывается. Статус доступен в личном кабинете.</p><a class="custom-size-submit" href="account.html">Перейти в личный кабинет</a><button class="custom-size-return" type="button">Продолжить покупки</button></div>';
+    document.body.appendChild(dialog);
+    const form=dialog.querySelector('[data-quote-form]'),view=dialog.querySelector('[data-quote-form-view]'),success=dialog.querySelector('[data-quote-success]'),error=dialog.querySelector('[data-quote-error]');
+    let selected=null,trigger=null;
+    const close=()=>dialog.close();
+    dialog.querySelector('.custom-size-close').addEventListener('click',close);
+    dialog.querySelector('.custom-size-return').addEventListener('click',close);
+    dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}});
+    dialog.addEventListener('close',()=>{if(trigger?.isConnected)trigger.focus({preventScroll:true});selected=null;});
+    cards.forEach(card=>{
+      const sizes=card.querySelector('.popular-size-switcher');
+      if(sizes.parentNode.querySelector('.custom-size-link'))return;
+      const button=document.createElement('button');button.type='button';button.className='custom-size-link';button.textContent='Нужен другой размер?';
+      sizes.insertAdjacentElement('afterend',button);
+      button.addEventListener('click',e=>{
+        e.preventDefault();e.stopPropagation();
+        const item=popularCardItem(card,true);if(!item)return;
+        selected=item;trigger=button;form.reset();error.hidden=true;view.hidden=false;success.hidden=true;
+        const p=profile();form.elements.name.value=p.name||'';form.elements.phone.value=p.phone||'';
+        dialog.querySelector('[data-quote-product]').innerHTML='<strong>'+esc(item.title)+'</strong><small>'+esc([item.sku?'Арт. '+item.sku:'',item.finish].filter(Boolean).join(' · '))+'</small>';
+        dialog.showModal();
+      });
+    });
+    form.addEventListener('submit',e=>{
+      e.preventDefault();if(!selected)return;
+      error.hidden=true;const submit=form.querySelector('[type="submit"]');if(submit.disabled)return;submit.disabled=true;
+      try{
+        if(window.DerzhavaBackend?.configured())throw Error('Приём индивидуальных размеров пока не подключён к серверу.');
+        const fd=new FormData(form);const order=createQuoteOrder(selected,{name:fd.get('name'),phone:fd.get('phone'),width:fd.get('width'),height:fd.get('height')});
+        selected=null;view.hidden=true;success.hidden=false;dialog.querySelector('[data-quote-number]').textContent=order.number;
+      }catch(e){error.textContent=e.message||'Не удалось сохранить запрос.';error.hidden=false;}
+      finally{submit.disabled=false;}
     });
   }
 
@@ -347,7 +406,7 @@
       if(raw.includes('подтверж')) return 1;
       return 0;
     };
-    const friendlyStatus=status=>status==='Отменён'?'Отменён':statusSteps[statusIndex(status)];
+    const friendlyStatus=status=>['Отменён',QUOTE_PENDING,QUOTE_READY].includes(status)?status:statusSteps[statusIndex(status)];
 
     function contactHasOrder(identifier){
       const key=normalizeIdentifier(identifier);
@@ -528,7 +587,7 @@
           '<small class="account-order-item-sku">'+(sku?'Арт. '+esc(sku):'Артикул не указан')+'</small>'+
           (item.finish?'<small class="account-order-item-finish">'+esc(item.finish)+'</small>':'')+
           '<small class="account-order-item-size">'+esc(meta)+'</small></div>'+
-        '<span class="account-order-item-sum">'+money((Number(item.price)||0)*qty)+'</span></div>';
+        '<span class="account-order-item-sum">'+(item.price==null?'<small class="account-quote-price">Рассчитывается</small>':money((Number(item.price)||0)*qty))+'</span></div>';
     }
 
     // One native modal for every order photo. No navigation away from the account.
@@ -564,16 +623,17 @@
     function renderOrder(order){
       const active=statusIndex(order.status);
       const cancelled=order.status==='Отменён';
-      const key=cancelled?'cancelled':statusKeys[active];
-      const steps=cancelled?'<div class="account-status-cancelled">Заказ отменён</div>':statusSteps.map((label,index)=>{
+      const pending=quotePending(order),quoted=order.status===QUOTE_READY;
+      const key=cancelled?'cancelled':pending?'quote-pending':quoted?'quote-ready':statusKeys[active];
+      const steps=cancelled?'<div class="account-status-cancelled">Заказ отменён</div>':pending?'<div class="account-quote-message">Запрос принят · Стоимость рассчитывается</div>':quoted?'<div class="account-quote-message">Стоимость рассчитана · Ожидается согласование заказа</div>':statusSteps.map((label,index)=>{
         const cls=index<active?' done':index===active?' active':'';
         return '<div class="account-status-step'+cls+'" data-step="'+statusKeys[index]+'"'+(index===active?' aria-current="step"':'')+'>'+esc(label)+'</div>';
       }).join('');
       const items=(order.items||[]).map(renderOrderItem).join('');
       return '<article class="account-order-v2" data-status="'+key+'">'+
-        '<div class="account-order-top"><div><h3 class="account-order-number">'+esc(displayNumber(order.number))+'</h3><p class="account-order-meta">'+new Date(order.date).toLocaleString('ru-RU')+' · '+(order.items||[]).length+' поз.</p></div><span class="account-order-status-v2">'+esc(friendlyStatus(order.status))+'</span></div>'+
+        '<div class="account-order-top"><div><h3 class="account-order-number">'+esc(displayNumber(order.number))+'</h3><p class="account-order-meta">'+new Date(order.date).toLocaleString('ru-RU')+' · '+(order.items||[]).length+' поз.</p></div><span class="account-order-status-v2">'+esc(cancelled?'Отменён':pending?QUOTE_PENDING:friendlyStatus(order.status))+'</span></div>'+
         '<div class="account-order-items">'+items+'</div>'+
-        '<div class="account-order-total-row"><span>Итого</span><strong>'+money(order.total)+'</strong></div>'+
+        '<div class="account-order-total-row"><span>Итого</span><strong>'+(pending?(cancelled?'Не рассчитана':'Стоимость рассчитывается'):money(order.total))+'</strong></div>'+
         '<div class="account-status-track">'+steps+'</div>'+
       '</article>';
     }
@@ -609,7 +669,7 @@
 
       const all=visibleOrdersFor(state.identifier).filter(o=>!o.remote);
       const count=root.querySelector('[data-account-order-count]');if(count)count.textContent=all.length;
-      const total=root.querySelector('[data-account-order-total]');if(total)total.textContent=money(all.reduce((sum,o)=>sum+(Number(o.total)||0),0));
+      const total=root.querySelector('[data-account-order-total]');if(total)total.textContent=money(all.filter(o=>!quotePending(o)&&o.status!=='Отменён').reduce((sum,o)=>sum+(Number(o.total)||0),0));
       const cartN=root.querySelector('[data-account-cart-count]');if(cartN)cartN.textContent=cartCount();
 
       const ordersHost=root.querySelector('[data-account-orders]');
@@ -755,6 +815,7 @@
   injectHeader();
   initProductPage();
   initCatalogQuickAdd();
+  initCustomSize();
   renderCart();
   initCheckout();
   renderAccount();
