@@ -6,3 +6,6 @@
 .owner-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.owner-tools button{font-size:12px}.owner-code{flex-basis:100%;font-weight:600;font-variant-numeric:tabular-nums;color:#10243a}.owner-tools button:disabled{opacity:.5;cursor:default}
 
 @media(max-width:720px){.nav-button[data-page="quotes"]{white-space:normal;line-height:1.15;text-align:left}}
+
+/* Match the customer order status palette. */
+.pill.confirmed{color:#8b641f;background:#fbf0d9}.pill.payment{color:#356da2;background:#eaf2fb}

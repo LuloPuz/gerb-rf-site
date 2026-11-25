@@ -2899,9 +2899,9 @@ body .full-catalog .directory-letter-group[hidden]{
 .order-success-actions .button{min-height:48px}
 .order-success-actions .order-secondary{border:1px solid #d8d2c6;background:white;color:var(--navy)}
 .account-order-v2{--stage:#667684;--stage-bg:#edf1f4}
-.account-order-v2[data-status="confirmed"]{--stage:#356da2;--stage-bg:#eaf2fb}
+.account-order-v2[data-status="confirmed"]{--stage:#8b641f;--stage-bg:#fbf0d9}
 .account-order-v2[data-status="production"]{--stage:#47784f;--stage-bg:#eaf4e9}
-.account-order-v2[data-status="payment"]{--stage:#8b641f;--stage-bg:#fbf0d9}
+.account-order-v2[data-status="payment"]{--stage:#356da2;--stage-bg:#eaf2fb}
 .account-order-v2[data-status="shipped"]{--stage:#60589e;--stage-bg:#f0edf9}
 .account-order-v2[data-status="received"]{--stage:#266748;--stage-bg:#e2f2e8}
 .account-order-v2[data-status="cancelled"]{--stage:#a34545;--stage-bg:#fae9e9}
