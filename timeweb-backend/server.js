@@ -5,6 +5,11 @@ const methods = new Map([
   ['health','GET'], ['admin-login','POST'], ['admin-me','POST'],
   ['admin-orders','GET'], ['admin-update-status','POST']
 ]);
+const customerMethods = new Map([
+ ['customer-request-code','POST'],['customer-verify-code','POST'],
+ ['customer-me','GET'],['customer-orders','GET'],['customer-logout','POST']
+]);
+for (const [action,method] of customerMethods) methods.set(action,method);
 const MAX_BODY = 180000;
 
 function createServer(handler, options = {}) {
@@ -76,6 +81,11 @@ function createServer(handler, options = {}) {
           if (login && (typeof parsed.password !== 'string' || Buffer.byteLength(parsed.password,'utf8') > 72 || typeof parsed.email !== 'string')) return reply(400,{error:'Некорректные данные входа'});
         }
       }
+      if (customerMethods.has(action)) {
+        if (!options.customerAuth) return reply(503,{error:'Авторизация пока не подключена'});
+        const result = await options.customerAuth(action, body ? JSON.parse(body) : {}, {method:req.method,origin,ip,cookie:req.headers.cookie});
+        return reply(result.status,result.data,result.headers);
+      }
       const result = await handler({httpMethod:req.method,headers:{authorization:req.headers.authorization || '',origin},queryStringParameters:{action},body,isBase64Encoded:false});
       reply(result.statusCode, JSON.parse(result.body || '{}'));
     } catch {
@@ -97,7 +107,17 @@ if (require.main === module) {
   const origins = (process.env.ALLOWED_ORIGINS || '').split(',').map(s=>s.trim()).filter(Boolean);
   if (origins.some(s=>!/^https:\/\/[^/]+$/.test(s))) throw new Error('Use explicit HTTPS origins');
   const {handler} = require('../yandex-backend/index.js');
-  const server = createServer(handler,{origins,trustLocalProxy:true});
+  let customerAuth;
+  if (process.env.CUSTOMER_AUTH_ENABLED === 'true') {
+    const {Pool}=require('../yandex-backend/node_modules/pg');
+    const {createCustomerAuth}=require('./customer-auth');
+    const {createSmsSender}=require('./sms-aero');
+    const pool=new Pool({max:2,connectionTimeoutMillis:5000,idleTimeoutMillis:10000});
+    if (!origins.includes(process.env.CUSTOMER_ORIGIN)) throw Error('CUSTOMER_ORIGIN must be an allowed origin');
+    customerAuth=createCustomerAuth({pool,secret:process.env.CUSTOMER_AUTH_SECRET,allowedOrigin:process.env.CUSTOMER_ORIGIN,
+      dailyLimit:Number(process.env.SMS_DAILY_LIMIT || 20),sendSms:createSmsSender({email:process.env.SMS_AERO_EMAIL,key:process.env.SMS_AERO_KEY,sign:process.env.SMS_AERO_SIGN})});
+  }
+  const server = createServer(handler,{origins,trustLocalProxy:true,customerAuth});
   server.listen(Number(process.env.PORT || 3000),'127.0.0.1',()=>console.log('Derzhava API listening on loopback'));
   process.on('SIGTERM',()=>{ server.close(()=>process.exit(0)); setTimeout(()=>process.exit(1),10000).unref(); });
 }
