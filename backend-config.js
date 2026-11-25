@@ -3,5 +3,7 @@
    apiBaseUrl intentionally remains empty until the Timeweb API is deployed and verified. */
 window.DERZHAVA_BACKEND_CONFIG = {
   provider: "timeweb-cloud",
-  apiBaseUrl: ""
+  apiBaseUrl: "",
+  // Future HTTPS proxy endpoint, with server-side quota and abuse protection.
+  addressSuggestUrl: ""
 };

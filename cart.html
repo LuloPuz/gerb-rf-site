@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="styles.css?v=20261125-mobilezoom3">
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
+<link rel="stylesheet" href="address-suggestions.css?v=1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -35,7 +36,7 @@
   <div class="field"><label>Email</label><input name="email" type="email" autocomplete="email" placeholder="Не обязательно"></div>
   <div class="field"><label>ИНН</label><input name="inn" inputmode="numeric" placeholder="Не обязательно"></div>
 </div>
-<div class="field full"><label>Адрес доставки</label><input name="address" autocomplete="street-address"></div>
+<div class="field full address-field"><label for="deliveryAddress">Адрес доставки</label><div class="address-combobox"><input id="deliveryAddress" name="address" autocomplete="off" placeholder="Начните вводить город, улицу и дом" spellcheck="false" maxlength="300" aria-describedby="addressHint"><div class="address-suggestions" id="addressSuggestions" role="listbox" aria-label="Подсказки адресов" hidden></div></div><small id="addressHint" class="address-hint" role="status">Город, улица, дом, квартира или офис. Адрес можно указать вручную.</small></div>
 <div class="field full"><label>Комментарий</label><textarea name="comment" placeholder="Например: нужны счёт и договор на организацию"></textarea></div>
 </div><div class="checkout-actions"><button class="checkout-submit" type="submit">Оформить заказ</button><button class="checkout-cancel" type="button" data-checkout-cancel>Отмена</button></div></form>
 </section>
@@ -43,5 +44,6 @@
 <aside class="cart-summary" data-cart-summary></aside></div>
 </div></main>
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a></div><div><h3>Покупателю</h3><a href="account.html">Личный кабинет</a><a href="cart.html">Корзина</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
-<script src="backend-config.js?v=20261124-yandex1"></script><script src="backend.js?v=20261124-yandex1"></script><script src="script.js?v=20261125-sku-search1"></script><script src="shop.js?v=20261125-order-photo1" data-shop-runtime="true"></script>
+<script src="backend-config.js?v=20261125-address1"></script><script src="backend.js?v=20261124-yandex1"></script><script src="script.js?v=20261125-sku-search1"></script><script src="shop.js?v=20261125-address1" data-shop-runtime="true"></script>
+<script src="address-suggestions.js?v=1" defer></script>
 </body></html>
