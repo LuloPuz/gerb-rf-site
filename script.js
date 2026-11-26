@@ -662,7 +662,13 @@ if(!document.getElementById('site-search-all-variants-style')){
 
     img.dataset.catalogTrimmed='true';
     img.dataset.originalSrc=img.currentSrc||img.src;
-    img.src=out.toDataURL('image/png');
+    const croppedSrc=out.toDataURL('image/png');
+    if(img.style.aspectRatio){
+      img.width=ow;
+      img.height=oh;
+      img.style.aspectRatio=ow+' / '+oh;
+    }
+    img.src=croppedSrc;
   }
 
   function init(){
