@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lulopuz.github.io/gerb-rf-site/sitemap.xml
+Sitemap: https://gerbrf.ru/sitemap.xml
