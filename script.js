@@ -87,11 +87,14 @@
   overlay.className='site-quick-overlay';
   overlay.type='button';
   overlay.setAttribute('aria-label','Закрыть меню');
+  overlay.tabIndex=-1;
+  overlay.inert=true;
 
   const panel=document.createElement('aside');
   panel.className='site-quick-menu';
   panel.id='siteQuickMenu';
   panel.setAttribute('aria-hidden','true');
+  panel.inert=true;
   panel.innerHTML=
     '<div class="site-quick-head">'+
       '<div><small>Быстрый переход</small><strong>Разделы сайта</strong></div>'+
@@ -136,11 +139,18 @@
     menuButton.classList.toggle('open',open);
     menuButton.setAttribute('aria-expanded',String(open));
     panel.classList.toggle('open',open);
+    if(!open && (panel.contains(document.activeElement) || overlay===document.activeElement)){
+      menuButton.focus({preventScroll:true});
+    }
+    panel.inert=!open;
     panel.setAttribute('aria-hidden',String(!open));
+    overlay.inert=!open;
     overlay.classList.toggle('open',open);
     document.body.classList.toggle('site-menu-open',open);
 
-    if(!open){
+    if(open){
+      panel.querySelector('.site-quick-close')?.focus({preventScroll:true});
+    }else{
       document.body.style.paddingRight=menuBodyPaddingRight;
     }
   };

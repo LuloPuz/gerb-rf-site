@@ -2550,14 +2550,14 @@ body .popular-card > .popular-card-sku {
             <p>Выберите символику и базовое исполнение. Дальше мы уже ведём по готовой ветке: покрытие, материал щита, размер и цена.</p>
           </div>
 
-          <div class="home-picker-tabs" role="tablist" aria-label="Выбор раздела">
-            <button class="home-picker-tab active" type="button" role="tab" aria-selected="true" data-picker-tab="rf"><span>01</span>Россия</button>
-            <button class="home-picker-tab" type="button" role="tab" aria-selected="false" data-picker-tab="moscow"><span>02</span>Москва</button>
+          <div class="home-picker-tabs" role="group" aria-label="Выбор раздела">
+            <button class="home-picker-tab active" type="button" aria-pressed="true" aria-controls="home-picker-rf" data-picker-tab="rf"><span>01</span>Россия</button>
+            <button class="home-picker-tab" type="button" aria-pressed="false" aria-controls="home-picker-moscow" data-picker-tab="moscow"><span>02</span>Москва</button>
             <a class="home-picker-tab" href="gerby-subektov-rf.html"><span>03</span>Субъекты и города</a>
             <a class="home-picker-tab" href="emblemy-vedomstv-rf.html"><span>04</span>Ведомства</a>
           </div>
 
-          <div class="home-picker-panel active" data-picker-panel="rf">
+          <div class="home-picker-panel active" id="home-picker-rf" data-picker-panel="rf">
             <div class="home-picker-panel-head">
               <div><p class="eyebrow">Российская Федерация</p><h3>Варианты исполнения</h3></div>
               <p>Сначала выберите основу. На следующем шаге — барельеф или горельеф, покрытие и материал.</p>
@@ -2584,7 +2584,7 @@ body .popular-card > .popular-card-sku {
             </div>
           </div>
 
-          <div class="home-picker-panel" data-picker-panel="moscow" hidden>
+          <div class="home-picker-panel" id="home-picker-moscow" data-picker-panel="moscow" hidden>
             <div class="home-picker-panel-head">
               <div><p class="eyebrow">Герб Москвы · Барельеф</p><h3>Варианты исполнения</h3></div>
               <p>Выберите основу. Затем зададим покрытие — краска или металлизация — и материал щита.</p>
@@ -2701,7 +2701,7 @@ body .popular-card > .popular-card-sku {
     </div>
   </footer>
 
-  <script src="script.js?v=20261126-image-ratio1"></script><script src="shop.js?v=20261125-mobilecards6" data-shop-runtime="true"></script>
+  <script src="script.js?v=20261127-a11y1"></script><script src="shop.js?v=20261125-mobilecards6" data-shop-runtime="true"></script>
 
   <script>
   (function(){
@@ -2710,7 +2710,7 @@ body .popular-card > .popular-card-sku {
     if(!tabs.length||!panels.length) return;
     tabs.forEach(tab=>tab.addEventListener('click',()=>{
       const key=tab.dataset.pickerTab;
-      tabs.forEach(t=>{t.classList.toggle('active',t===tab);t.setAttribute('aria-selected',t===tab?'true':'false')});
+      tabs.forEach(t=>{t.classList.toggle('active',t===tab);t.setAttribute('aria-pressed',t===tab?'true':'false')});
       panels.forEach(p=>{
         const active=p.dataset.pickerPanel===key;
         p.hidden=!active;
