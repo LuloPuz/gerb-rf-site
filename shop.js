@@ -62,6 +62,7 @@
     if(own.some(o=>now-Date.parse(o.date)<30000))throw Error('Подождите 30 секунд после предыдущего заказа.');
     if(own.length>=5||recent.length>=15)throw Error('Слишком много заказов. Попробуйте позже.');
   }
+  let orderPhoneCheckSequence=0;
   function createOrderPhoneCheck(form){
     let pending=null;
     const box=document.createElement('div');
@@ -73,6 +74,7 @@
     const holder=submit.closest('.checkout-actions')||submit;
     holder.parentNode.insertBefore(box,holder);
     const input=box.querySelector('[data-order-phone-code]'),hint=box.querySelector('[data-order-demo-code]');
+    input.id='derzhava-order-phone-code-'+(++orderPhoneCheckSequence);
     function label(){return pending?'Подтвердить и оформить':initialLabel;}
     function reset(){pending=null;box.hidden=true;input.value='';hint.textContent='';submit.textContent=label();}
     function issue(phone){
