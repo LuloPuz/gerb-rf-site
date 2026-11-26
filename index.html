@@ -2740,10 +2740,10 @@ body .home-picker-choice-body > p:not(.product-type) {
     </div>
   </footer>
 
-  <script src="script.js?v=20261127-a11y1"></script><script src="shop.js?v=20261125-mobilecards6" data-shop-runtime="true"></script>
+  <script defer src="script.js?v=20261127-a11y1"></script><script defer src="shop.js?v=20261125-mobilecards6" data-shop-runtime="true"></script>
 
   <script>
-  (function(){
+  document.addEventListener('DOMContentLoaded',function(){
     const tabs=[...document.querySelectorAll('[data-picker-tab]')];
     const panels=[...document.querySelectorAll('[data-picker-panel]')];
     if(!tabs.length||!panels.length) return;
@@ -2756,26 +2756,26 @@ body .home-picker-choice-body > p:not(.product-type) {
         p.classList.toggle('active',active);
       });
     }));
-  })();
+  }, {once:true});
   </script>
 
 
   <button class="back-to-top" id="backToTop" type="button" aria-label="Вернуться наверх">Наверх</button>
   <script>
-  (function(){
+  document.addEventListener('DOMContentLoaded',function(){
     const button=document.getElementById('backToTop');
     if(!button) return;
     const update=()=>button.classList.toggle('show',window.scrollY>520);
     window.addEventListener('scroll',update,{passive:true});
     button.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
     update();
-  })();
+  }, {once:true});
   </script>
 
 
 
 <script>
-(function(){
+document.addEventListener('DOMContentLoaded',function(){
   const key='derzhava:index-scroll-y';
   const navEntry=performance.getEntriesByType?.('navigation')?.[0];
   const isReload=navEntry?.type==='reload';
@@ -2799,7 +2799,7 @@ body .home-picker-choice-body > p:not(.product-type) {
   if(location.hash==='#catalog'){
     history.replaceState(null,'',location.pathname+location.search);
   }
-})();
+}, {once:true});
 </script>
 
 </body>
