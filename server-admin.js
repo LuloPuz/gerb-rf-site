@@ -5,13 +5,15 @@ const gate=$('[data-gate]'),dashboard=$('[data-dashboard]'),message=$('[data-mes
 let generation=0,tab='overview',busy=false,orders=[],variants=[],orderCursor=null,catalogCursor=null,reference='';
 let marker=null,mutationBusy=false;
 const catalogDrafts=new Map(),expandedProducts=new Set();
+const createDialog=$('[data-create-dialog]'),createForm=$('[data-create-form]'),createStatus=$('[data-create-status]');
+let createExisting=false;
 const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
- generation++;busy=false;marker=null;reference='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
+ generation++;busy=false;marker=null;reference='';if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
  for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
@@ -129,6 +131,50 @@ async function editVariant(v,price,active,button){
  }catch{if(current===generation)message.textContent='Не удалось подтвердить сохранение. Обновите данные.';}
  finally{mutationBusy=false;button.disabled=false;}
 }
+function openCreate(existingSku=null){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ createExisting=existingSku!==null;createForm.reset();createStatus.textContent='';
+ $('[data-create-dialog] h2').textContent=createExisting?'Добавить размер':'Новый товар';
+ createForm.elements.sku.value=existingSku||'';
+ createForm.elements.sku.readOnly=createExisting;
+ for(const label of all('[data-create-meta]')){
+  label.hidden=createExisting;
+  const input=label.querySelector('input');input.disabled=createExisting;
+ }
+ createForm.elements.title.required=!createExisting;
+ createDialog.showModal();
+ (createExisting?createForm.elements.size:createForm.elements.sku).focus();
+}
+$('[data-new-product]').addEventListener('click',()=>openCreate());
+all('[data-create-cancel]').forEach(b=>b.addEventListener('click',()=>{if(!mutationBusy)createDialog.close();}));
+createDialog.addEventListener('cancel',e=>{if(mutationBusy)e.preventDefault();});
+createForm.addEventListener('submit',async e=>{
+ e.preventDefault();if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ const value=k=>createForm.elements[k].value.trim();
+ const m=value('size').match(/^([0-9]{1,5}(?:[,.][0-9]{1,2})?)\s*[×хx]\s*([0-9]{1,5}(?:[,.][0-9]{1,2})?)(?:\s*см)?$/iu);
+ if(!m||Number(m[1].replace(',','.'))<=0||Number(m[2].replace(',','.'))<=0){createStatus.textContent='Укажите размер, например 42 × 50 см.';return;}
+ const p={sku:value('sku'),existing:createExisting,title:createExisting?'':value('title'),finish:createExisting?'':value('finish'),size:m[1].replace('.',',')+' × '+m[2].replace('.',',')+' см',price:Number(value('price'))};
+ if(!/^[0-9]{4}$/.test(p.sku)||!Number.isSafeInteger(p.price)||p.price<1||p.price>100000000||(!p.existing&&!p.title)){createStatus.textContent='Проверьте артикул, название и цену.';return;}
+ const current=generation,session=marker,submit=$('[data-create-submit]');
+ mutationBusy=true;submit.disabled=true;createStatus.textContent='Сохраняем черновик…';
+ try{
+  const r=await fetch('/api/admin/catalog/create',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify(p),signal:AbortSignal.timeout(12000)});
+  if(current!==generation)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  const data=await r.json();
+  if(r.status!==201){
+   const errors={duplicate_variant:'Артикул или этот размер уже существует.',sku_not_found:'Товар не найден. Обновите каталог.',invalid_request:'Проверьте заполненные поля.',intake_open:'Закройте приём заказов перед добавлением.',session_changed:'Сессия изменилась. Обновите панель.'};
+   createStatus.textContent=errors[data.error]||'Не удалось подтвердить сохранение. Проверьте каталог перед повтором.';return;
+  }
+  if(data.sku!==p.sku||data.size!==p.size||data.active!==false||data.storefrontReady!==false||typeof data.id!=='string')throw Error();
+  createDialog.close();createForm.reset();
+  // A confirmed new record is displayed immediately, with no duplicate id.
+  variants=variants.filter(v=>v.id!==data.id);variants.push(data);expandedProducts.add(p.sku);
+  $('[data-catalog-search]').value=p.sku;renderCatalog();
+  message.textContent='Черновик сохранён. Публикация отключена.';
+ }catch{if(current===generation)createStatus.textContent='Не удалось подтвердить создание. Обновите список, прежде чем повторять.';}
+ finally{mutationBusy=false;submit.disabled=false;}
+});
 function renderCatalog(){
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
  const list=variants.filter(v=>[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q));
@@ -159,10 +205,10 @@ function renderCatalog(){
   for(const item of rows){
    const tr=node('tr'),priceCell=node('td'),price=node('input'),draft=catalogDrafts.get(item.id);
    price.type='number';price.min='1';price.max='100000000';price.step='1';price.value=draft?.price??String(item.price);price.className='sa-price-input';price.setAttribute('aria-label','Цена '+item.sku+' '+item.size);priceCell.append(price);
-   const activeCell=node('td'),label=node('label',undefined,'sa-active-toggle'),active=node('input');active.type='checkbox';active.checked=draft?.active??item.active;label.append(active,node('span',active.checked?'Активен':'Неактивен'));activeCell.append(label);
+   const activeCell=node('td'),label=node('label',undefined,'sa-active-toggle'),active=node('input');active.type='checkbox';active.checked=draft?.active??item.active;active.disabled=item.storefrontReady!==true;label.append(active,node('span',item.storefrontReady!==true?'Черновик':active.checked?'Активен':'Неактивен'));activeCell.append(label);
    const action=node('td'),save=node('button','Сохранить','sa-status-save');save.type='button';
    function changed(){
-    label.lastChild.textContent=active.checked?'Активен':'Неактивен';
+    label.lastChild.textContent=item.storefrontReady!==true?'Черновик':active.checked?'Активен':'Неактивен';
     const dirty=price.value!==String(item.price)||active.checked!==item.active;
     if(dirty)catalogDrafts.set(item.id,{price:price.value,active:active.checked});else catalogDrafts.delete(item.id);
     save.disabled=!price.checkValidity()||price.value===''||!dirty;
@@ -171,7 +217,8 @@ function renderCatalog(){
    save.addEventListener('click',()=>editVariant(item,Number(price.value),active.checked,save));action.append(save);
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
-  card.append(tableWrap);target.append(card);
+  card.append(tableWrap);
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));addRow.append(addSize);card.append(addRow);target.append(card);
  }
  if(!list.length)target.append(node('p','Нет подходящих вариантов.','sa-empty'));
 }
@@ -191,7 +238,7 @@ async function load(more){
    orders=more?[...orders,...list]:list;orderCursor=data.nextBefore;
    renderOrders();moreButton.hidden=!orderCursor;
   }else{
-   if(!list.every(v=>v&&typeof v.sku==='string'&&typeof v.title==='string'&&Number.isSafeInteger(v.price)&&typeof v.active==='boolean'))throw Error();
+   if(!list.every(v=>v&&typeof v.sku==='string'&&typeof v.title==='string'&&Number.isSafeInteger(v.price)&&typeof v.active==='boolean'&&typeof v.storefrontReady==='boolean'))throw Error();
    variants=more?[...variants,...list]:list;catalogCursor=data.nextAfter;
    renderCatalog();moreButton.hidden=!catalogCursor;
   }message.textContent='';
