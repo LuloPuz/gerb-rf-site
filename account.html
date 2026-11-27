@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
 <style>[data-server-account] [hidden]{display:none!important}.account-login-coming{margin:18px 0 0!important}.account-signout:disabled,.account-auth-primary:disabled{opacity:.6;cursor:wait}[data-server-greeting]{overflow-wrap:anywhere}</style>
-<link rel="stylesheet" href="account-profile.css?v=20261127-profile1">
+<link rel="stylesheet" href="account-profile.css?v=20261127-contacts1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -46,7 +46,7 @@
             <button class="account-auth-primary" type="submit">Войти через Яндекс ID</button>
           </form>
           <a class="button button-gold" data-canonical-login href="https://gerbrf.ru/account.html" hidden>Перейти на gerbrf.ru</a>
-          <p class="account-panel-lead account-login-coming">Вход по телефону и электронной почте будет доступен после подключения.</p>
+          <p class="account-panel-lead account-login-coming">Для связи по заказам после входа потребуется указать контактные данные.</p>
         </div>
       </div>
     </section>
@@ -59,8 +59,8 @@
         </div>
         <button class="account-signout" type="button" data-server-logout>Выйти</button>
       </div>
-      <div class="account-layout account-layout-v2">
-        <nav class="account-nav" aria-label="Разделы личного кабинета">
+      <div class="account-layout account-layout-v2" data-server-layout>
+        <nav class="account-nav" data-server-nav aria-label="Разделы личного кабинета" hidden>
           <button class="active" type="button" data-server-tab="orders" aria-pressed="true">Мои заказы</button>
           <button type="button" data-server-tab="overview" aria-pressed="false">Обзор</button>
           <button type="button" data-server-tab="profile" aria-pressed="false">Мои данные</button>
@@ -78,8 +78,8 @@
             <a class="button button-gold" href="cart.html">Открыть корзину</a>
           </section>
           <section class="account-panel" data-server-panel="profile" hidden>
-            <h2>Мои данные</h2>
-            <p class="account-panel-lead">Личные данные, реквизиты и адреса доставки. В тестовом режиме используйте вымышленные данные.</p>
+            <h2 data-profile-title>Мои данные</h2>
+            <p class="account-panel-lead" data-profile-intro>Личные данные, реквизиты и адреса доставки. В тестовом режиме используйте вымышленные данные.</p>
             <p data-profile-message class="profile-message" role="status"></p>
             <button type="button" class="account-signout" data-profile-retry hidden>Повторить загрузку</button>
             <form data-server-profile autocomplete="off" hidden>
@@ -88,23 +88,24 @@
                   <h3>Личные данные</h3>
                   <div class="profile-grid">
                     <label class="account-auth-field"><span>Имя</span><input name="name" maxlength="150" required placeholder="Введите имя"></label>
-                    <div class="profile-contact"><span>Телефон</span><strong data-profile-phone>Не подтверждён</strong><small>Подтверждение телефона пока недоступно</small></div>
-                    <div class="profile-contact"><span>Электронная почта</span><strong data-profile-email>Не подтверждена</strong><small>Подтверждение почты пока недоступно</small></div>
+                    <label class="account-auth-field"><span>Телефон *</span><input name="contactPhone" type="tel" inputmode="tel" maxlength="30" required placeholder="+7 (___) ___-__-__"></label>
+                    <label class="account-auth-field"><span>Электронная почта (необязательно)</span><input name="contactEmail" type="email" maxlength="254" placeholder="example@mail.ru"></label>
                   </div>
                 </div>
-                <div class="profile-group">
+                <div class="profile-group" data-profile-extra>
                   <h3>Реквизиты организации <small>Необязательно</small></h3>
                   <div class="profile-grid">
                     <label class="account-auth-field"><span>Название организации</span><input name="organization" maxlength="200" placeholder="ООО или ИП"></label>
                     <label class="account-auth-field"><span>ИНН</span><input name="inn" maxlength="12" inputmode="numeric" pattern="[0-9]{10}|[0-9]{12}" placeholder="10 или 12 цифр"></label>
                   </div>
                 </div>
-                <div class="profile-group">
+                <div class="profile-group" data-profile-extra>
                   <div class="profile-group-head"><h3>Адреса доставки</h3><button type="button" class="account-signout" data-profile-add>+ Добавить адрес</button></div>
                   <p class="account-panel-lead">До пяти адресов. Укажите город, улицу, дом и при необходимости квартиру или офис.</p>
                   <div data-profile-addresses></div>
                 </div>
-                <button class="account-auth-primary profile-submit" type="submit">Сохранить изменения</button>
+                <p class="account-panel-lead profile-contact-note">Контакты нужны для связи по заказам. Они не подтверждаются и не используются для входа.</p>
+                <button class="account-auth-primary profile-submit" data-profile-save type="submit">Сохранить изменения</button>
               </fieldset>
             </form>
           </section>
@@ -121,5 +122,5 @@
   <img data-order-photo-large alt="">
 </dialog>
 <script src="script.js?v=20261127-contact-links1"></script><script src="shop.js?v=20261125-order-photo1" data-shop-runtime="true"></script>
-<script src="account-session.js?v=20261127-profile1" defer></script>
+<script src="account-session.js?v=20261127-contacts1" defer></script>
 </body></html>

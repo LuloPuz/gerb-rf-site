@@ -17,8 +17,14 @@
   const profileRetry = find('[data-profile-retry]');
   const addresses = find('[data-profile-addresses]');
   const addAddress = find('[data-profile-add]');
-  const phone = find('[data-profile-phone]');
-  const email = find('[data-profile-email]');
+  const nav = find('[data-server-nav]');
+  const layout = find('[data-server-layout]');
+  const profileTitle = find('[data-profile-title]');
+  const profileIntro = find('[data-profile-intro]');
+  const saveButton = find('[data-profile-save]');
+  const extras = [...root.querySelectorAll('[data-profile-extra]')];
+  let completing = false;
+  let selectedTab = 'orders';
   let profileRequest = 0, profileBusy = false, profileLoaded = false, dirty = false;
   const canonical = location.origin === 'https://gerbrf.ru';
   let generation = 0, loggingOut = false, pending = false;
@@ -87,7 +93,8 @@
 
       dashboard.hidden = false;
       status('');
-      if (!profilePanel.hidden) loadProfile();
+      showProfileLoading();
+      loadProfile();
     } catch {
       if (current === generation) unavailable('Не удалось проверить авторизацию. Повторите проверку.');
     } finally { if (current === generation) pending = false; }
@@ -117,13 +124,35 @@
   });
   const tabs = [...root.querySelectorAll('[data-server-tab]')];
   const panels = [...root.querySelectorAll('[data-server-panel]')];
-  tabs.forEach(tab => tab.addEventListener('click', () => {
+  function selectTab(key) {
+    selectedTab = key;
     tabs.forEach(item => {
-      item.classList.toggle('active', item === tab);
-      item.setAttribute('aria-pressed', String(item === tab));
+      const active = item.dataset.serverTab === key;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-pressed', String(active));
     });
-    panels.forEach(panel => panel.hidden = panel.dataset.serverPanel !== tab.dataset.serverTab);
-    if (tab.dataset.serverTab === 'profile' && !profileLoaded) loadProfile();
+    panels.forEach(panel => panel.hidden = panel.dataset.serverPanel !== key);
+  }
+  function showProfileLoading() {
+    nav.hidden = true;
+    layout.classList.add('profile-completing');
+    panels.forEach(panel => panel.hidden = panel !== profilePanel);
+  }
+  function setCompletion(value) {
+    completing = value;
+    nav.hidden = value;
+    layout.classList.toggle('profile-completing', value);
+    profileTitle.textContent = value ? 'Завершите регистрацию' : 'Мои данные';
+    profileIntro.textContent = value
+      ? 'Укажите имя и телефон для связи по заказам. Пока сайт тестируется, используйте вымышленные данные.'
+      : 'Личные данные, реквизиты и адреса доставки. В тестовом режиме используйте вымышленные данные.';
+    extras.forEach(el => el.hidden = value);
+    saveButton.textContent = value ? 'Завершить регистрацию' : 'Сохранить изменения';
+    selectTab(value ? 'profile' : selectedTab);
+  }
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    if (!profileLoaded || completing) return;
+    selectTab(tab.dataset.serverTab);
   }));
   function profileStatus(text) {
     profileMessage.textContent = text || '';
@@ -139,8 +168,10 @@
     profile.hidden = true;
     profileRetry.hidden = true;
     addresses.replaceChildren();
-    phone.textContent = 'Не подтверждён';
-    email.textContent = 'Не подтверждена';
+    completing = false;
+    nav.hidden = true;
+    profileTitle.textContent = 'Мои данные';
+    extras.forEach(el => el.hidden = false);
     profileStatus('');
     logout.disabled = loggingOut;
   }
@@ -181,7 +212,10 @@
       typeof p.inn === 'string' && Array.isArray(p.addresses) && p.addresses.length <= 5 &&
       p.addresses.every(a => typeof a === 'string') &&
       (p.phone === null || typeof p.phone === 'string') &&
-      (p.email === null || typeof p.email === 'string');
+      (p.email === null || typeof p.email === 'string') &&
+      (p.contactPhone === null || typeof p.contactPhone === 'string') &&
+      (p.contactEmail === null || typeof p.contactEmail === 'string') &&
+      typeof p.registrationComplete === 'boolean';
   }
   async function loadProfile() {
     if (dashboard.hidden || loggingOut || profileBusy || profileLoaded) return;
@@ -204,14 +238,15 @@
       profile.elements.name.value = p.name;
       profile.elements.organization.value = p.organization;
       profile.elements.inn.value = p.inn;
-      phone.textContent = p.phone || 'Не подтверждён';
-      email.textContent = p.email || 'Не подтверждена';
+      profile.elements.contactPhone.value = p.contactPhone || '';
+      profile.elements.contactEmail.value = p.contactEmail || '';
       addresses.replaceChildren();
       p.addresses.forEach(a => appendAddress(a));
       syncAddresses();
       profileLoaded = true;
       dirty = false;
       profile.hidden = false;
+      setCompletion(!p.registrationComplete);
       profileStatus('');
     } catch {
       if (current === profileRequest) {
@@ -223,6 +258,14 @@
   profileRetry.addEventListener('click', loadProfile);
   profile.addEventListener('input', () => { dirty = true; });
   addAddress.addEventListener('click', () => { dirty = true; appendAddress()?.focus(); });
+  function normalizePhone(value) {
+    const raw = value.trim();
+    if (!/^[+0-9 ()-]+$/.test(raw)) return '';
+    let digits = raw.replace(/\D/g,'');
+    if (digits.length === 10 && !raw.startsWith('+')) digits = '7' + digits;
+    if (digits.length === 11 && digits.startsWith('8') && !raw.startsWith('+')) digits = '7' + digits.slice(1);
+    return '+' + digits;
+  }
   profile.addEventListener('submit', async event => {
     event.preventDefault();
     if (!profileLoaded || profileBusy || loggingOut || dashboard.hidden) return;
@@ -230,10 +273,16 @@
       name: profile.elements.name.value.trim(),
       organization: profile.elements.organization.value.trim(),
       inn: profile.elements.inn.value.trim(),
-      addresses: [...addresses.querySelectorAll('input')].map(input => input.value.trim())
+      addresses: [...addresses.querySelectorAll('input')].map(input => input.value.trim()),
+      contactPhone: normalizePhone(profile.elements.contactPhone.value),
+      contactEmail: profile.elements.contactEmail.value.trim() || null
     };
     if (!payload.name || payload.addresses.some(a => !a)) {
       profileStatus('Заполните имя и добавленные адреса или удалите пустые строки.');
+      return;
+    }
+    if (!/^\+[1-9][0-9]{6,14}$/.test(payload.contactPhone)) {
+      profileStatus('Введите корректный номер телефона, например +7 000 000-00-00.');
       return;
     }
     const current = ++profileRequest;
@@ -249,16 +298,20 @@
       });
       if (current !== profileRequest) return;
       if (response.status === 401) { showGate('Сессия завершена. Войдите снова.'); return; }
-      if (response.status === 400) { profileStatus('Проверьте имя, ИНН и длину адресов.'); return; }
+      if (response.status === 400) { profileStatus('Проверьте имя, телефон, почту, ИНН и адреса.'); return; }
       if (!response.ok || (await response.json()).saved !== true) throw Error('Save unavailable');
       if (current !== profileRequest) return;
       profile.elements.name.value = payload.name;
       profile.elements.organization.value = payload.organization;
       profile.elements.inn.value = payload.inn;
       [...addresses.querySelectorAll('input')].forEach((input, i) => input.value = payload.addresses[i]);
+      profile.elements.contactPhone.value = payload.contactPhone;
+      profile.elements.contactEmail.value = payload.contactEmail || '';
       greeting.textContent = 'Здравствуйте, ' + payload.name;
       dirty = false;
-      profileStatus('Изменения сохранены.');
+      const wasCompleting = completing;
+      setCompletion(false);
+      profileStatus(wasCompleting ? 'Регистрация завершена. Контакты сохранены.' : 'Изменения сохранены.');
     } catch {
       if (current === profileRequest) profileStatus('Не удалось подтвердить сохранение. Повторите попытку.');
     } finally {
