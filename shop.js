@@ -3,107 +3,34 @@
   if(window.__derzhavaShopInit) return;
   window.__derzhavaShopInit=true;
   const CART_KEY='derzhava_cart_v1';
-  const PROFILE_KEY='derzhava_profile_v1';
-  const ORDERS_KEY='derzhava_orders_v1';
-  const AUTH_KEY='derzhava_auth_v1';
-  const AUTH_PENDING_KEY='derzhava_auth_pending_v1';
-  const AUTH_RATE_KEY='derzhava_auth_rate_v1';
-  const AUTH_BUDGET_KEY='derzhava_auth_budget_v1';
-  const AUTH_DAILY_BUDGET_RUB=500;
-  const AUTH_ESTIMATED_COST_RUB=6.29;
-
   const money=n=>new Intl.NumberFormat('ru-RU').format(Number(n)||0)+' ₽';
-  const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch(_){return fallback}};
+  const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
   const write=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
-  const cart=()=>read(CART_KEY,[]);
-  const profile=()=>read(PROFILE_KEY,{name:'',phone:'',email:'',organization:'',inn:'',address:''});
-  const orders=()=>read(ORDERS_KEY,[]);
-  const auth=()=>read(AUTH_KEY,null);
-  const normalizeContact=value=>{const raw=String(value||'').trim();if(raw.includes('@'))return raw.toLowerCase();let p=raw.replace(/\D/g,'');if(p.length===10)p='7'+p;if(p.length===11&&p[0]==='8')p='7'+p.slice(1);return p;};
-  let refreshAccount=()=>{};
-  const displayNumber=n=>String(n||'').replace(/^ТЕСТ-/,'ДРЖ-');
+  const cart=()=>{const items=read(CART_KEY,[]);return Array.isArray(items)?items:[];};
   const cartCount=()=>cart().reduce((sum,item)=>sum+(Number(item.qty)||1),0);
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
   const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-
-  function checkAndRecordRate(identifier){
-    const now=Date.now();
-    const hour=60*60*1000;
-    const cooldown=60*1000;
-    const key=normalizeContact(identifier);
-    let state=read(AUTH_RATE_KEY,{events:[]});
-    state.events=(Array.isArray(state.events)?state.events:[]).filter(event=>now-Number(event.at||0)<hour);
-
-    const byContact=state.events.filter(event=>event.key===key);
-    const latest=byContact.reduce((max,event)=>Math.max(max,Number(event.at)||0),0);
-
-    if(latest && now-latest<cooldown){
-      return {ok:false,reason:'cooldown',retryMs:cooldown-(now-latest)};
-    }
-    if(byContact.length>=5){
-      return {ok:false,reason:'contact-hour'};
-    }
-    if(state.events.length>=15){
-      return {ok:false,reason:'browser-hour'};
-    }
-
-    state.events.push({key,at:now});
-    write(AUTH_RATE_KEY,state);
-    return {ok:true};
+  let busy=false,fillGeneration=0;
+  const canonical=location.origin==='https://gerbrf.ru';
+  function normalizePhone(value){
+    const raw=String(value||'').trim();
+    if(!/^\+?[0-9 ()-]+$/.test(raw))return '';
+    let digits=raw.replace(/\D/g,'');
+    if(digits.length===10&&!raw.startsWith('+'))digits='7'+digits;
+    if(digits.length===11&&digits.startsWith('8')&&!raw.startsWith('+'))digits='7'+digits.slice(1);
+    return '+'+digits;
   }
-
-  // Browser-only prototype; never use this as server authorization.
-  const demoSessionValid=state=>!!state?.demo&&Number.isFinite(Date.parse(state.verifiedAt))&&Date.now()-Date.parse(state.verifiedAt)>=0&&Date.now()-Date.parse(state.verifiedAt)<7*86400000;
-  const demoPhoneVerified=phone=>demoSessionValid(auth())&&normalizeContact(auth().identifier)===normalizeContact(phone);
-  function checkOrderRate(phone){
-    const now=Date.now(),key=normalizeContact(phone);
-    const recent=orders().filter(o=>!o.remote&&now-Date.parse(o.date)>=0&&now-Date.parse(o.date)<3600000);
-    const own=recent.filter(o=>normalizeContact(o.customer?.phone)===key);
-    if(own.some(o=>now-Date.parse(o.date)<30000))throw Error('Подождите 30 секунд после предыдущего заказа.');
-    if(own.length>=5||recent.length>=15)throw Error('Слишком много заказов. Попробуйте позже.');
+  function canonicalSize(value){
+    const m=String(value||'').trim().match(/^([0-9]{1,5}(?:[,.][0-9]{1,2})?)\s*[×хx]\s*([0-9]{1,5}(?:[,.][0-9]{1,2})?)\s*см$/iu);
+    return m?m[1].replace('.',',')+' × '+m[2].replace('.',',')+' см':'';
   }
-  let orderPhoneCheckSequence=0;
-  function createOrderPhoneCheck(form){
-    let pending=null;
-    const box=document.createElement('div');
-    box.className='checkout-phone-check';box.hidden=true;
-    box.innerHTML='<strong>Подтвердите номер телефона</strong><p>Введите шестизначный код и нажмите «Подтвердить и оформить». Вы сразу войдёте в личный кабинет.</p><label>Код подтверждения<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" data-order-phone-code></label><p class="checkout-demo-code" data-order-demo-code></p><button type="button" class="checkout-code-resend">Запросить новый код</button>';
-    const submit=form.querySelector('[type="submit"]');
-    if(!submit)throw Error('Не найдена кнопка оформления');
-    const initialLabel=submit.textContent.trim();
-    const holder=submit.closest('.checkout-actions')||submit;
-    holder.parentNode.insertBefore(box,holder);
-    const input=box.querySelector('[data-order-phone-code]'),hint=box.querySelector('[data-order-demo-code]');
-    input.id='derzhava-order-phone-code-'+(++orderPhoneCheckSequence);
-    function label(){return pending?'Подтвердить и оформить':initialLabel;}
-    function reset(){pending=null;box.hidden=true;input.value='';hint.textContent='';submit.textContent=label();}
-    function issue(phone){
-      const rate=checkAndRecordRate(phone);
-      if(!rate.ok)throw Error(rate.retryMs?'Новый код можно запросить через '+Math.ceil(rate.retryMs/1000)+' сек.':'Лимит кодов исчерпан. Попробуйте позже.');
-      const code=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
-      pending={phone,code,at:Date.now(),attempts:0};box.hidden=false;input.value='';hint.textContent='Пробный режим · код: '+code;submit.textContent=label();input.focus();box.scrollIntoView({block:'nearest',behavior:'smooth'});
-    }
-    box.querySelector('.checkout-code-resend').addEventListener('click',()=>{try{const phone=normalizeContact(form.elements.phone.value);if(!/^7\d{10}$/.test(phone))throw Error('Проверьте номер телефона.');issue(phone);}catch(e){toast('<strong>'+esc(e.message)+'</strong>');}});
-    form.elements.phone.addEventListener('input',reset);
-    return {reset,label,check(phone){
-      if(window.DerzhavaBackend?.configured()||window.DERZHAVA_AUTH_API)throw Error('Серверное подтверждение заказа ещё не подключено.');
-      const key=normalizeContact(phone);
-      if(!/^7\d{10}$/.test(key))throw Error('Проверьте номер телефона.');
-      checkOrderRate(key);
-      if(demoPhoneVerified(key)){reset();return true;}
-      if(!pending||pending.phone!==key){issue(key);return false;}
-      if(Date.now()-pending.at>=300000||pending.attempts>=5){reset();throw Error('Код истёк или исчерпаны попытки. Запросите новый код.');}
-      const code=input.value.trim();
-      if(!/^\d{6}$/.test(code))throw Error('Введите шестизначный код.');
-      pending.attempts++;
-      if(code!==pending.code){if(pending.attempts>=5)reset();throw Error('Неверный код.');}
-      reset();return true;
-    }};
+  function safePath(value,product=false){
+    try{const u=new URL(String(value||''),location.href);
+      if(u.origin!==location.origin||!/^https?:$/.test(u.protocol))return product?'catalog.html':'';
+      if(product&&!/\/[a-z0-9-]+\.html$/.test(u.pathname))return 'catalog.html';
+      return u.pathname+u.search;
+    }catch{return product?'catalog.html':'';}
   }
-  function signInAfterOrder(customer){
-    write(AUTH_KEY,{identifier:normalizeContact(customer.phone),verifiedAt:new Date().toISOString(),demo:true});
-  }
-
   function toast(html,cartLink=false){
     let el=document.querySelector('.shop-toast');
     if(!el){el=document.createElement('div');el.className='shop-toast';el.setAttribute('role','status');document.body.appendChild(el)}
@@ -173,8 +100,8 @@
 
   function addProduct(item){
     const items=cart();
-    const existing=items.find(x=>x.id===item.id);
-    if(existing) existing.qty=(Number(existing.qty)||1)+1; else items.push(item);
+    const existing=items.find(x=>x.sku===item.sku&&canonicalSize(x.size)===canonicalSize(item.size));
+    if(existing) existing.qty=Math.min(100,(Number(existing.qty)||1)+1); else items.push(item);
     write(CART_KEY,items);updateHeaderCount();
     document.querySelectorAll('[data-cart-link]').forEach(link=>{
       link.classList.remove('cart-attention');
@@ -273,77 +200,27 @@
     });
   }
 
-  // Custom dimensions are a separate quote order, never a zero-price purchase.
-  const QUOTE_PENDING='Расчёт стоимости',QUOTE_READY='Стоимость рассчитана';
-  const quotePending=o=>o.kind==='quote'&&!(Number(o.total)>0);
-  function createQuoteOrder(item,data){
-    const name=String(data.name||'').trim(),phone=String(data.phone||'').trim();
-    const dim=v=>{const s=String(v||'').trim().replace(',','.');return /^\d{1,5}(\.\d{1,2})?$/.test(s)&&Number(s)>=0.01&&Number(s)<=10000?Number(s):null;};
-    const width=dim(data.width),height=dim(data.height);
-    if(!name||name.length>100||!/^7\d{10}$/.test(normalizeContact(phone)))throw Error('Укажите имя и корректный номер телефона.');
-    if(width===null||height===null)throw Error('Укажите ширину и высоту от 0,01 до 10 000 см.');
-    if(!item?.title)throw Error('Товар не найден.');
-    const now=new Date().toISOString();
-    const size=[width,height].map(n=>String(n).replace('.',',')).join(' × ')+' см';
-    const all=orders();let number;
-    do{number='ДРЖ-'+String(1000000+crypto.getRandomValues(new Uint32Array(1))[0]%9000000);}while(all.some(o=>o.number===number));
-    const order={number,date:now,kind:'quote',status:QUOTE_PENDING,items:[{...item,id:item.url+'|custom|'+size,size,width,height,qty:1,price:null}],total:null,customer:{name,phone},delivery:'Согласовать с менеджером',comment:'Индивидуальный размер',remote:false,test:true,history:[{status:QUOTE_PENDING,at:now}]};
-    all.unshift(order);write(ORDERS_KEY,all);return order;
-  }
-
+  // Individual size requests are not yet connected. Do not simulate acceptance.
   function initCustomSize(){
-    const cards=[...document.querySelectorAll('.popular-card[data-product-card]')].filter(c=>c.querySelector('.popular-size-switcher'));
-    const productLinks=[...document.querySelectorAll('.final-product-info .custom-size-inline')];
-    if(!cards.length&&!productLinks.length)return;
-    const dialog=document.createElement('dialog');
-    dialog.className='custom-size-dialog';
-    dialog.setAttribute('aria-labelledby','custom-size-title');
-    dialog.innerHTML='<div class="custom-size-head"><div><p class="custom-size-kicker">ИНДИВИДУАЛЬНЫЙ РАЗМЕР</p><h2 id="custom-size-title">Запросить расчёт</h2></div><button type="button" class="custom-size-close" aria-label="Закрыть">×</button></div><div data-quote-form-view><div class="custom-size-product" data-quote-product></div><form data-quote-form><p class="custom-size-price">Стоимость рассчитывается индивидуально</p><div class="custom-size-fields"><label>Имя<input name="name" autocomplete="name" maxlength="100" required></label><label>Телефон<input name="phone" type="tel" autocomplete="tel" placeholder="+7 999 000-00-00" required></label><label>Ширина, см<input name="width" inputmode="decimal" placeholder="Например, 50" maxlength="8" required></label><label>Высота, см<input name="height" inputmode="decimal" placeholder="Например, 60" maxlength="8" required></label></div><p class="custom-size-note">Пробный режим: запрос сохранится только в этом браузере. Используйте вымышленные контакты.</p><p data-quote-error role="alert" class="custom-size-error" hidden></p><button class="custom-size-submit" type="submit">Отправить запрос</button></form></div><div data-quote-success hidden class="custom-size-success"><h3>Запрос оформлен</h3><p data-quote-number></p><p>Стоимость рассчитывается. Вы уже вошли в личный кабинет.</p><a class="custom-size-submit" href="account.html">Перейти в личный кабинет</a><button class="custom-size-return" type="button">Продолжить покупки</button></div>';
-    document.body.appendChild(dialog);
-    const form=dialog.querySelector('[data-quote-form]'),view=dialog.querySelector('[data-quote-form-view]'),success=dialog.querySelector('[data-quote-success]'),error=dialog.querySelector('[data-quote-error]');
-    let selected=null,trigger=null;
-    const phoneCheck=createOrderPhoneCheck(form);
-    const close=()=>dialog.close();
-    dialog.querySelector('.custom-size-close').addEventListener('click',close);
-    dialog.querySelector('.custom-size-return').addEventListener('click',close);
-    dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}});
-    dialog.addEventListener('close',()=>{if(trigger?.isConnected)trigger.focus({preventScroll:true});selected=null;});
-    function openQuote(item,button){
-      if(!item||dialog.open)return;
-      selected=item;trigger=button;form.reset();phoneCheck.reset();error.hidden=true;view.hidden=false;success.hidden=true;
-      const p=profile();form.elements.name.value=p.name||'';form.elements.phone.value=p.phone||'';
-      dialog.querySelector('[data-quote-product]').innerHTML='<strong>'+esc(item.title)+'</strong><small>'+esc([item.sku?'Арт. '+item.sku:'',item.finish].filter(Boolean).join(' · '))+'</small>';
-      dialog.showModal();
+    function open(item,trigger){
+      let dialog=document.querySelector('[data-quote-unavailable]');
+      if(!dialog){
+        dialog=document.createElement('dialog');dialog.className='custom-size-dialog';dialog.dataset.quoteUnavailable='';
+        dialog.innerHTML='<div class="custom-size-head"><div><p class="custom-size-kicker">ИНДИВИДУАЛЬНЫЙ РАЗМЕР</p><h2>Запросить расчёт</h2></div><button type="button" class="custom-size-close" aria-label="Закрыть">×</button></div><div class="custom-size-product" data-quote-product></div><p class="custom-size-note">Онлайн-запрос индивидуального размера пока не подключён. Для расчёта обратитесь к менеджеру.</p><a class="custom-size-submit" href="payment-delivery.html#contacts">Контакты менеджера</a>';
+        document.body.append(dialog);dialog.querySelector('.custom-size-close').addEventListener('click',()=>dialog.close());
+      }
+      dialog.querySelector('[data-quote-product]').textContent=[item?.title,item?.sku?'Арт. '+item.sku:'',item?.finish].filter(Boolean).join(' · ');
+      if(!dialog.open){dialog.addEventListener('close',()=>trigger.focus({preventScroll:true}),{once:true});dialog.showModal();}
     }
-    cards.forEach(card=>{
+    document.querySelectorAll('.popular-card[data-product-card]').forEach(card=>{
       const sizes=card.querySelector('.popular-size-switcher');
-      if(sizes.parentNode.querySelector('.custom-size-link'))return;
+      if(!sizes||sizes.parentNode.querySelector('.custom-size-link'))return;
       const button=document.createElement('button');button.type='button';button.className='custom-size-link';button.textContent='Нужен другой размер?';
       sizes.insertAdjacentElement('afterend',button);
-      button.addEventListener('click',e=>{
-        e.preventDefault();e.stopPropagation();openQuote(popularCardItem(card,true),button);
-      });
+      button.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();open(popularCardItem(card,true),button);});
     });
-    productLinks.forEach(link=>{
-      link.setAttribute('aria-haspopup','dialog');
-      link.addEventListener('click',e=>{
-        const item=currentProduct();
-        if(!item)return;
-        e.preventDefault();e.stopPropagation();openQuote(item,link);
-      });
-    });
-    form.addEventListener('submit',e=>{
-      e.preventDefault();if(!selected)return;
-      error.hidden=true;const submit=form.querySelector('[type="submit"]');if(submit.disabled)return;submit.disabled=true;
-      try{
-        if(window.DerzhavaBackend?.configured())throw Error('Приём индивидуальных размеров пока не подключён к серверу.');
-        const fd=new FormData(form);if(!phoneCheck.check(fd.get('phone')))return;
-        const order=createQuoteOrder(selected,{name:fd.get('name'),phone:fd.get('phone'),width:fd.get('width'),height:fd.get('height')});
-        const saved=profile();write(PROFILE_KEY,normalizeContact(saved.phone)===normalizeContact(order.customer.phone)?{...saved,...order.customer}:order.customer);
-        signInAfterOrder(order.customer);
-        selected=null;view.hidden=true;success.hidden=false;dialog.querySelector('[data-quote-number]').textContent=order.number;
-      }catch(e){error.textContent=e.message||'Не удалось сохранить запрос.';error.hidden=false;}
-      finally{submit.disabled=false;}
+    document.querySelectorAll('.final-product-info .custom-size-inline').forEach(link=>{
+      link.setAttribute('aria-haspopup','dialog');link.addEventListener('click',e=>{e.preventDefault();open(currentProduct(),link);});
     });
   }
 
@@ -379,11 +256,11 @@
     }
 
     list.innerHTML=items.map((item,i)=>'<article class="cart-item" data-cart-index="'+i+'">'+
-      '<a class="cart-item-media" href="'+esc(item.url)+'"><img src="'+esc(item.image)+'" alt=""></a>'+
-      '<div><div class="cart-item-meta">'+esc(item.finish)+'</div><h3><a href="'+esc(item.url)+'">'+esc(item.title)+'</a></h3>'+
+      '<a class="cart-item-media" href="'+esc(safePath(item.url,true))+'"><img src="'+esc(safePath(item.image))+'" alt=""></a>'+
+      '<div><div class="cart-item-meta">'+esc(item.finish)+'</div><h3><a href="'+esc(safePath(item.url,true))+'">'+esc(item.title)+'</a></h3>'+
       (item.sku?'<div class="cart-item-meta">Артикул: '+esc(item.sku)+'</div>':'')+
       '<div class="cart-item-meta">Размер: '+esc(item.size)+'</div><div class="cart-item-price">'+money(item.price)+'</div>'+
-      '<div class="cart-item-actions"><div class="qty-control"><button type="button" data-qty="-1">−</button><span>'+item.qty+'</span><button type="button" data-qty="1">+</button></div><button class="cart-remove" type="button" data-remove>Удалить</button></div></div>'+
+      '<div class="cart-item-actions"><div class="qty-control"><button type="button" data-qty="-1">−</button><span>'+esc(item.qty)+'</span><button type="button" data-qty="1">+</button></div><button class="cart-remove" type="button" data-remove>Удалить</button></div></div>'+
       '<div class="cart-line-total">'+money(item.price*item.qty)+'</div></article>').join('');
 
     summary.innerHTML='<h2>Ваш заказ</h2>'+
@@ -399,10 +276,10 @@
       const i=Number(row.dataset.cartIndex);
       row.querySelectorAll('[data-qty]').forEach(btn=>btn.addEventListener('click',()=>{
         const next=cart();const item=next[i];if(!item)return;
-        item.qty=Math.max(1,(Number(item.qty)||1)+Number(btn.dataset.qty));setCart(next);renderCart();
+        if(busy)return;item.qty=Math.min(100,Math.max(1,(Number(item.qty)||1)+Number(btn.dataset.qty)));setCart(next);renderCart();
       }));
       row.querySelector('[data-remove]')?.addEventListener('click',()=>{
-        const next=cart();next.splice(i,1);setCart(next);renderCart();
+        if(busy)return;const next=cart();next.splice(i,1);setCart(next);renderCart();
       });
     });
 
@@ -411,505 +288,101 @@
     });
   }
 
-  function fillCheckout(){
-    const form=document.querySelector('[data-checkout-form]');if(!form)return;
-    const p=profile();
-    ['name','phone','email','organization','inn','address'].forEach(k=>{if(form.elements[k]&&!form.elements[k].value)form.elements[k].value=p[k]||''});
+  function status(value){const el=document.querySelector('[data-checkout-status]');if(el){el.textContent=value;el.hidden=!value;}}
+  async function fillCheckout(){
+    const form=document.querySelector('[data-checkout-form]');if(!form||busy)return;
+    const current=++fillGeneration,note=document.querySelector('[data-checkout-identity]');
+    if(!canonical){note.textContent='Оформление доступно только на gerbrf.ru.';return;}
+    note.textContent='Проверяем личный кабинет…';
+    try{
+      const response=await fetch('/api/account/profile',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
+      if(current!==fillGeneration)return;
+      if(response.status===401){note.textContent='Можно оформить заказ без регистрации.';return;}
+      if(!response.ok)throw Error();
+      const p=await response.json();
+      if(current!==fillGeneration)return;
+      if(typeof p.name!=='string'||!Array.isArray(p.addresses)||typeof p.registrationComplete!=='boolean')throw Error();
+      const values={name:p.name,phone:p.contactPhone,email:p.contactEmail,organization:p.organization,inn:p.inn,address:p.addresses[0]};
+      Object.entries(values).forEach(([k,v])=>{if(typeof v==='string'&&!form.elements[k].value)form.elements[k].value=v;});
+      note.textContent='Вы вошли в личный кабинет. Заказ будет доступен в разделе «Мои заказы».';
+      const saved=document.querySelector('[data-saved-addresses]');
+      saved.replaceChildren(new Option('Выбрать сохранённый адрес',''));
+      p.addresses.filter(x=>typeof x==='string').forEach(x=>saved.add(new Option(x,x)));
+      saved.hidden=p.addresses.length<2;
+    }catch{if(current===fillGeneration)note.textContent='Не удалось загрузить профиль. Можно заполнить данные вручную.';}
   }
-
+  // Same random request key for identical retry; no contact values stored locally.
+  const attemptKey='derzhava_order_attempt_v2';
+  let memoryAttempt=null;
+  async function fingerprint(key,payload){
+    const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(key+'\0'+JSON.stringify(payload)));
+    return Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  async function requestKey(payload){
+    let old=memoryAttempt;
+    try{old=old||JSON.parse(sessionStorage.getItem(attemptKey)||'null');}catch{}
+    if(old&&typeof old.key==='string'&&old.hash===await fingerprint(old.key,payload))return old.key;
+    if(old?.uncertain)throw Error('Результат предыдущей отправки неизвестен. Для безопасного повтора верните прежние данные заказа или свяжитесь с менеджером.');
+    const key=crypto.randomUUID();
+    memoryAttempt={key,hash:await fingerprint(key,payload),uncertain:true};
+    try{sessionStorage.setItem(attemptKey,JSON.stringify(memoryAttempt));}catch{}
+    return key;
+  }
+  function clearAttempt(){memoryAttempt=null;try{sessionStorage.removeItem(attemptKey);}catch{}}
   function initCheckout(){
-    const form=document.querySelector('[data-checkout-form]');
-    if(!form) return;
-    const phoneCheck=createOrderPhoneCheck(form);
-    document.querySelector('[data-checkout-cancel]')?.addEventListener('click',()=>{phoneCheck.reset();document.querySelector('[data-checkout-panel]').hidden=true});
-    form.addEventListener('submit',async e=>{
-      e.preventDefault();
+    const form=document.querySelector('[data-checkout-form]');if(!form)return;
+    const submit=form.querySelector('.checkout-submit'),cancel=document.querySelector('[data-checkout-cancel]'),saved=document.querySelector('[data-saved-addresses]');
+    saved.addEventListener('change',()=>{if(saved.value)form.elements.address.value=saved.value;});
+    cancel.addEventListener('click',()=>{if(busy)return;++fillGeneration;document.querySelector('[data-checkout-panel]').hidden=true;});
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();if(busy)return;
       const items=cart();if(!items.length)return;
-      const submit=form.querySelector('.checkout-submit');
-      if(submit?.disabled)return;
-      const originalLabel=()=>phoneCheck.label();
-      if(submit){submit.disabled=true;submit.textContent='Оформляем…'}
-
-      const fd=new FormData(form);
-      const customer={
-        name:String(fd.get('name')||'').trim(),
-        phone:String(fd.get('phone')||'').trim(),
-        email:String(fd.get('email')||'').trim(),
-        organization:String(fd.get('organization')||'').trim(),
-        inn:String(fd.get('inn')||'').trim(),
-        address:String(fd.get('address')||'').trim()
-      };
-      const delivery=String(fd.get('delivery')||'');
-      const comment=String(fd.get('comment')||'');
-      if(!customer.name || !/^7\d{10}$/.test(normalizeContact(customer.phone))){toast('<strong>Проверьте данные</strong><br>Укажите имя и корректный телефон +7.');if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}
-      try{if(!phoneCheck.check(customer.phone)){if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}}catch(error){toast('<strong>'+esc(error.message)+'</strong>');if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}
-      let number;do{number='ДРЖ-'+String(1000000+crypto.getRandomValues(new Uint32Array(1))[0]%9000000);}while(orders().some(o=>o.number===number));
-      let total=cartTotal();
-      let remoteSaved=false;
-
+      if(!canonical){status('Оформление доступно только на gerbrf.ru.');return;}
+      const fd=new FormData(form),get=k=>String(fd.get(k)||'').trim(),lines=new Map();
+      for(const item of items){
+        const size=canonicalSize(item.size),sku=String(item.sku||''),quantity=Number(item.qty),expectedPrice=Number(item.price);
+        if(!size||!/^[A-Za-z0-9_-]{1,40}$/.test(sku)||!Number.isInteger(quantity)||quantity<1||quantity>100||!Number.isInteger(expectedPrice)||expectedPrice<1){status('Обновите корзину: один из товаров имеет некорректные данные.');return;}
+        const key=sku+'|'+size,old=lines.get(key);
+        if(old){if(old.expectedPrice!==expectedPrice||old.quantity+quantity>100){status('Обновите количество или цену товара в корзине.');return;}old.quantity+=quantity;}
+        else lines.set(key,{sku,size,quantity,expectedPrice});
+      }
+      const payload={name:get('name'),phone:normalizePhone(get('phone')),email:get('email')||null,organization:get('organization'),inn:get('inn'),address:get('address'),delivery:get('delivery'),comment:get('comment').replace(/\r?\n/g,' '),items:[...lines.values()].sort((a,b)=>(a.sku+'|'+a.size).localeCompare(b.sku+'|'+b.size))};
+      if(!payload.name||!/^\+[1-9][0-9]{6,14}$/.test(payload.phone)||!/^(?:[0-9]{10}|[0-9]{12})?$/.test(payload.inn)){status('Проверьте имя, телефон и ИНН.');return;}
+      const snapshot=JSON.stringify(items);
+      busy=true;++fillGeneration;
+      const controls=[...form.querySelectorAll('input,select,textarea,button')];
+      controls.forEach(el=>el.disabled=true);submit.textContent='Отправляем…';status('');
       try{
-        if(window.DerzhavaBackend?.configured()){
-          const result=await window.DerzhavaBackend.createOrder({customer,items,delivery,comment});
-          if(result?.number) number=String(result.number);
-          if(Number(result?.total)>0) total=Number(result.total);
-          remoteSaved=true;
-        }
-      }catch(error){
-        toast('<strong>Заказ не отправлен</strong><br>'+esc(error?.message||'Ошибка соединения с базой'));
-        if(submit){submit.disabled=false;submit.textContent=originalLabel()}
-        return;
-      }
-
-      const now=new Date();
-      const order={number,date:now.toISOString(),status:'Заказ принят',items,total,customer,delivery,comment,remote:remoteSaved,test:!remoteSaved,history:[{status:'Заказ принят',at:now.toISOString()}]};
-      try{const all=orders();all.unshift(order);write(ORDERS_KEY,all);write(PROFILE_KEY,customer);if(!remoteSaved)signInAfterOrder(customer);setCart([]);}catch(error){toast('<strong>Ошибка локального сохранения</strong><br>Проверьте доступное место в браузере.');if(submit){submit.disabled=false;submit.textContent=originalLabel()}return;}
-      if(submit){submit.disabled=false;submit.textContent=originalLabel();}
-      form.reset();
-
-      document.querySelector('[data-checkout-panel]').hidden=true;
-      renderCart();
-      const success=document.querySelector('[data-order-success]');
-      if(success){
-        success.hidden=false;
-        const note=remoteSaved?'Спасибо за заказ! Информация о заказе и его текущий статус доступны в личном кабинете.':'Спасибо! Заказ сохранён для проверки. Вы уже вошли в личный кабинет — повторный код не нужен.';
-        const actions='<div class="order-success-actions"><a class="button button-gold" href="account.html">Перейти в личный кабинет</a><a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
-        document.querySelector('[data-cart-page]').classList.add('order-completed');
-        success.innerHTML='<div class="order-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div><p class="order-success-kicker">ЗАКАЗ ОФОРМЛЕН</p><h2>Заказ '+esc(displayNumber(number))+'</h2><p>'+note+'</p><div class="order-success-total"><span>Сумма заказа</span><strong>'+money(order.total)+'</strong></div>'+actions;
-        requestAnimationFrame(()=>scrollCartSection(success));
-      }
-    });
-  }
-
-  function renderAccount(){
-    const root=document.querySelector('[data-account-page]');if(!root)return;
-
-    const normalizeIdentifier=normalizeContact;
-    const isValidIdentifier=value=>{
-      const raw=String(value||'').trim();
-      if(raw.includes('@')) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw);
-      return /^7\d{10}$/.test(normalizeContact(raw));
-    };
-    const statusSteps=['Заказ принят','Подтверждён','Ожидает оплаты','В производстве','Отправлен','Получен'];
-    const statusKeys=['accepted','confirmed','payment','production','shipped','received'];
-    const statusIndex=status=>{
-      const raw=String(status||'').toLowerCase();
-      if(raw.includes('получ')) return 5;
-      if(raw.includes('отправ')||raw.includes('достав')) return 4;
-      if(raw.includes('готов')||raw.includes('производ')) return 3; // legacy ready stays past payment
-      if(raw.includes('оплат')) return 2;
-      if(raw.includes('подтверж')) return 1;
-      return 0;
-    };
-    const friendlyStatus=status=>['Отменён',QUOTE_PENDING,QUOTE_READY].includes(status)?status:statusSteps[statusIndex(status)];
-
-    function contactHasOrder(identifier){
-      const key=normalizeIdentifier(identifier);
-      if(!key) return false;
-      return orders().some(order=>{
-        const customer=order.customer||{};
-        return [customer.phone,customer.email].some(value=>normalizeIdentifier(value)===key);
-      });
-    }
-
-    function currentBudgetDay(){
-      const now=new Date();
-      return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-    }
-
-    function checkAndRecordBudget(){
-      const day=currentBudgetDay();
-      let state=read(AUTH_BUDGET_KEY,{day,spent:0,count:0});
-      if(state.day!==day) state={day,spent:0,count:0};
-
-      const projected=(Number(state.spent)||0)+AUTH_ESTIMATED_COST_RUB;
-      if(projected>AUTH_DAILY_BUDGET_RUB){
-        return {ok:false,spent:Number(state.spent)||0,limit:AUTH_DAILY_BUDGET_RUB};
-      }
-
-      state.spent=Number(projected.toFixed(2));
-      state.count=(Number(state.count)||0)+1;
-      write(AUTH_BUDGET_KEY,state);
-      return {ok:true,spent:state.spent,limit:AUTH_DAILY_BUDGET_RUB};
-    }
-
-    async function requestCode(identifier){
-      const api=String(window.DERZHAVA_AUTH_API||'').replace(/\/$/,'');
-      if(api){
-        const response=await fetch(api+'/request-code',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({identifier})
-        });
-
-        if(response.status===402 || response.status===429){
-          const payload=await response.json().catch(()=>({}));
-          const error=new Error(
-            payload.message ||
-            (response.status===402
-              ? 'Дневной лимит отправки кодов исчерпан. Попробуйте завтра.'
-              : 'Слишком много запросов. Попробуйте позже.')
-          );
-          error.code=response.status===402?'budget-limit':'rate-limit';
-          throw error;
-        }
+        const key=await requestKey(payload);
+        const response=await fetch('/api/orders',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...payload,requestKey:key}),signal:AbortSignal.timeout(15000)});
+        const result=await response.json();
         if(!response.ok){
-          const error=new Error('Если контакт связан с заказом, код будет отправлен.');
-          error.code='request-failed';
-          throw error;
+          const messages={orders_closed:'Приём заказов пока закрыт. Корзина сохранена.',invalid_order:'Проверьте контактные данные и товары.',price_changed:'Цена изменилась. Обновите карточку товара и добавьте его в корзину заново.',variant_unavailable:'Этот вариант товара пока недоступен.',rate_limited:'Слишком много запросов. Повторите попытку позже.',session_expired:'Сессия завершена. Войдите снова в личный кабинет.',request_conflict:'Не удалось повторить заявку. Свяжитесь с менеджером.'};
+          // Only discard a key after a definite rejection of this attempt.
+          if(['orders_closed','invalid_order','price_changed','variant_unavailable','rate_limited','session_expired'].includes(result.error))clearAttempt();
+          status(messages[result.error]||'Не удалось подтвердить отправку. Повторите с теми же данными.');return;
         }
-
-        sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,createdAt:Date.now(),remote:true}));
-        return {demo:false};
-      }
-
-      // Local prototype mirrors the rules that must later live on the server.
-      if(!contactHasOrder(identifier)){
-        const error=new Error('Если контакт связан с заказом, код будет отправлен.');
-        error.code='no-order';
-        throw error;
-      }
-
-      const rate=checkAndRecordRate(identifier);
-      if(!rate.ok){
-        const error=new Error(
-          rate.reason==='cooldown'
-            ? 'Повторный код можно запросить примерно через '+Math.max(1,Math.ceil(rate.retryMs/1000))+' сек.'
-            : rate.reason==='contact-hour'
-              ? 'Лимит кодов для этого контакта исчерпан. Попробуйте позже.'
-              : 'Слишком много попыток входа. Попробуйте позже.'
-        );
-        error.code='rate-limit';
-        error.retryMs=rate.retryMs||0;
-        throw error;
-      }
-
-      const budget=checkAndRecordBudget();
-      if(!budget.ok){
-        const error=new Error('Дневной лимит отправки кодов исчерпан. Попробуйте завтра.');
-        error.code='budget-limit';
-        throw error;
-      }
-
-      const code=String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
-      sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify({identifier,code,createdAt:Date.now(),remote:false,attempts:0}));
-      write('derzhava_owner_code_v1',{code,expiresAt:Date.now()+10*60*1000});
-      return {demo:true,code};
-    }
-
-    async function verifyCode(identifier,code){
-      const api=String(window.DERZHAVA_AUTH_API||'').replace(/\/$/,'');
-      if(api){
-        const response=await fetch(api+'/verify-code',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({identifier,code})
-        });
-        if(!response.ok) return false;
-        const payload=await response.json().catch(()=>({}));
-        write(AUTH_KEY,{identifier,verifiedAt:new Date().toISOString(),token:payload.token||''});
-        sessionStorage.removeItem(AUTH_PENDING_KEY);
-        return true;
-      }
-
-      let pending=null;
-      try{pending=JSON.parse(sessionStorage.getItem(AUTH_PENDING_KEY)||'null')}catch(_){}
-      const valid=!!pending &&
-        normalizeIdentifier(pending.identifier)===normalizeIdentifier(identifier) &&
-        String(pending.code||'')===String(code||'').trim() &&
-        Date.now()-Number(pending.createdAt||0)<5*60*1000 && Number(pending.attempts||0)<5;
-      if(valid){
-        write(AUTH_KEY,{identifier,verifiedAt:new Date().toISOString(),demo:true});
-        localStorage.removeItem('derzhava_owner_code_v1');
-        sessionStorage.removeItem(AUTH_PENDING_KEY);
-      }
-      if(!valid&&pending&&!pending.remote){pending.attempts=Number(pending.attempts||0)+1;if(pending.attempts>=5)sessionStorage.removeItem(AUTH_PENDING_KEY);else sessionStorage.setItem(AUTH_PENDING_KEY,JSON.stringify(pending));}
-      return valid;
-    }
-
-    function visibleOrdersFor(identifier){
-      const key=normalizeIdentifier(identifier);
-      if(!key) return [];
-      return orders().filter(order=>{
-        const customer=order.customer||{};
-        return [customer.phone,customer.email].some(value=>normalizeIdentifier(value)===key);
-      });
-    }
-
-    const orderImageBySku={
-      '1001':'assets/Герб Москвы краска без щита.png?v=20261112-moscow-paint1',
-      '1002':'Герб Москвы металлизация без щита.png?v=20261112-moscow-metal1',
-      '1003':'Герб Москвы краска пластиковый щит.png?v=20261116-moscow-paint-plastic1',
-      '1004':'Герб Москвы краска бархатный щит.png?v=20261116-moscow-paint-barhat1',
-      '1005':'Герб Москвы краска металл щит.png?v=20261116-moscow-paint-metal1',
-      '1006':'assets/Герб Москвы металлизация на пластиковом щите.png?v=20261116-moscow-plastic-metal1',
-      '1007':'Герб Москвы металлизация на бархатном щите.png?v=20261116-moscow-barhat-metal1',
-      '1008':'Герб Москвы металлизация на металлическом щите.png?v=20261116-moscow-metal-shield1',
-      '1009':'assets/gerb-rf-bez-shchita.png',
-      '1010':'assets/Золотой двуглавый орёл России (1).png',
-      '1011':'assets/горельеф-вид-спереди.png',
-      '1012':'Герб РФ барельеф краска на пластиковой щите анфас.png',
-      '1013':'assets/Барельеф краска на щите флок (композит) анфас.png',
-      '1014':'assets/Герб РФ барельеф краска на метал щите анфас.png',
-      '1015':'Герб рф металлизация щит пластик анфас.png',
-      '1016':'Герб рф металлизация щит бархат анфас.png',
-      '1017':'Герб металлизация щит метал анфас.png',
-      '1018':'assets/Горельеф на щите анфас.png'
-    };
-
-    function orderImage(value){
-      if(!value)return '';
-      try{
-        const image=new URL(String(value),location.href);
-        const siteRoot=new URL('./',location.href);
-        const sameSite=image.origin===siteRoot.origin&&image.pathname.startsWith(siteRoot.pathname);
-        return sameSite&&/\.(png|jpe?g|webp|avif|gif|svg)$/i.test(image.pathname)?image.href:'';
-      }catch(_){return '';}
-    }
-
-    function renderOrderItem(item){
-      const qty=Number(item.qty)||1;
-      const sku=String(item.sku||'').trim();
-      const image=orderImage(item.image)||orderImage(orderImageBySku[sku]);
-      const meta=[item.size,qty+' шт.'].filter(Boolean).join(' · ');
-      return '<div class="account-order-item account-order-item-detailed">'+
-        '<div class="account-order-item-photo"><span class="account-order-photo-fallback">Нет фото</span>'+
-          (image?'<button type="button" class="account-order-photo-open" aria-label="Увеличить фото: '+esc(item.title||'Товар')+'" title="Увеличить фото"><img src="'+esc(image)+'" alt="'+esc(item.title||'Товар')+'" width="72" height="72" loading="lazy" decoding="async"></button>':'')+'</div>'+
-        '<div class="account-order-item-info"><strong class="account-order-item-title">'+esc(item.title||'Товар')+'</strong>'+
-          '<small class="account-order-item-sku">'+(sku?'Арт. '+esc(sku):'Артикул не указан')+'</small>'+
-          (item.finish?'<small class="account-order-item-finish">'+esc(item.finish)+'</small>':'')+
-          '<small class="account-order-item-size">'+esc(meta)+'</small></div>'+
-        '<span class="account-order-item-sum">'+(item.price==null?'<small class="account-quote-price">Рассчитывается</small>':money((Number(item.price)||0)*qty))+'</span></div>';
-    }
-
-    // One native modal for every order photo. No navigation away from the account.
-    const photoDialog=document.querySelector('[data-order-photo-dialog]');
-    const photoLarge=photoDialog?.querySelector('[data-order-photo-large]');
-    let photoTrigger=null;
-    if(photoDialog&&photoLarge){
-      photoDialog.querySelector('[data-order-photo-close]')?.addEventListener('click',()=>photoDialog.close());
-      photoDialog.addEventListener('click',event=>{
-        if(event.target===photoDialog){
-          const rect=photoDialog.getBoundingClientRect();
-          if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)photoDialog.close();
-        }
-      });
-      photoDialog.addEventListener('close',()=>{
-        photoLarge.removeAttribute('src');
-        if(photoTrigger?.isConnected)photoTrigger.focus({preventScroll:true});
-        photoTrigger=null;
-      });
-      root.addEventListener('click',event=>{
-        const button=event.target.closest('.account-order-photo-open');
-        if(!button||button.hidden)return;
-        const image=button.querySelector('img');
-        const src=orderImage(image?.getAttribute('src'));
-        if(!src||photoDialog.open)return;
-        photoTrigger=button;
-        photoLarge.alt=image.alt;
-        photoLarge.src=src;
-        photoDialog.showModal();
-      });
-    }
-
-    function renderOrder(order){
-      const active=statusIndex(order.status);
-      const cancelled=order.status==='Отменён';
-      const pending=quotePending(order),quoted=order.status===QUOTE_READY;
-      const key=cancelled?'cancelled':pending?'quote-pending':quoted?'quote-ready':statusKeys[active];
-      const steps=cancelled?'<div class="account-status-cancelled">Заказ отменён</div>':pending?'<div class="account-quote-message">Запрос принят · Стоимость рассчитывается</div>':quoted?'<div class="account-quote-message">Стоимость рассчитана · Ожидается согласование заказа</div>':statusSteps.map((label,index)=>{
-        const cls=index<active?' done':index===active?' active':'';
-        return '<div class="account-status-step'+cls+'" data-step="'+statusKeys[index]+'"'+(index===active?' aria-current="step"':'')+'>'+esc(label)+'</div>';
-      }).join('');
-      const items=(order.items||[]).map(renderOrderItem).join('');
-      return '<article class="account-order-v2" data-status="'+key+'">'+
-        '<div class="account-order-top"><div><h3 class="account-order-number">'+esc(displayNumber(order.number))+'</h3><p class="account-order-meta">'+new Date(order.date).toLocaleString('ru-RU')+' · '+(order.items||[]).length+' поз.</p></div><span class="account-order-status-v2">'+esc(cancelled?'Отменён':pending?QUOTE_PENDING:friendlyStatus(order.status))+'</span></div>'+
-        '<div class="account-order-items">'+items+'</div>'+
-        '<div class="account-order-total-row"><span>Итого</span><strong>'+(pending?(cancelled?'Не рассчитана':'Стоимость рассчитывается'):money(order.total))+'</strong></div>'+
-        '<div class="account-status-track">'+steps+'</div>'+
-      '</article>';
-    }
-
-    const gate=root.querySelector('[data-auth-gate]');
-    const dashboard=root.querySelector('[data-account-dashboard]');
-    const requestStep=root.querySelector('[data-auth-step="request"]');
-    const verifyStep=root.querySelector('[data-auth-step="verify"]');
-    const requestForm=root.querySelector('[data-auth-request-form]');
-    const verifyForm=root.querySelector('[data-auth-verify-form]');
-    const destination=root.querySelector('[data-auth-destination]');
-    const demoBox=root.querySelector('[data-auth-demo]');
-    const errorBox=root.querySelector('[data-auth-error]');
-    const p=profile();
-
-    function showDashboard(){
-      const state=auth();
-      if(!state?.identifier||(state.demo&&!demoSessionValid(state))) return false;
-      if(gate) gate.hidden=true;
-      if(dashboard) dashboard.hidden=false;
-      const greeting=root.querySelector('[data-account-greeting]');
-      const loginState=root.querySelector('[data-account-login-state]');
-      const currentProfile=profile();
-      const firstName=String(currentProfile.name||'').trim().split(/\s+/)[0]||'';
-      if(greeting){
-        greeting.hidden=false;
-        greeting.textContent=firstName?'Здравствуйте, '+firstName:'Выполнен вход';
-      }
-      if(loginState){
-        loginState.hidden=!firstName;
-        loginState.textContent='Выполнен вход';
-      }
-
-      const all=visibleOrdersFor(state.identifier).filter(o=>!o.remote);
-      const count=root.querySelector('[data-account-order-count]');if(count)count.textContent=all.length;
-      const total=root.querySelector('[data-account-order-total]');if(total)total.textContent=money(all.filter(o=>!quotePending(o)&&o.status!=='Отменён').reduce((sum,o)=>sum+(Number(o.total)||0),0));
-      const cartN=root.querySelector('[data-account-cart-count]');if(cartN)cartN.textContent=cartCount();
-
-      const ordersHost=root.querySelector('[data-account-orders]');
-      if(ordersHost){
-        ordersHost.innerHTML=all.length
-          ? all.map(renderOrder).join('')
-          : '<div class="account-empty-v2"><strong>Заказов пока нет</strong><p>Заказы, оформленные на этот телефон или e-mail, появятся здесь.</p><a class="button button-gold" href="catalog.html">Перейти в каталог</a></div>';
-        ordersHost.querySelectorAll('.account-order-item-photo img').forEach(img=>{
-          const hideBroken=()=>{const button=img.closest('.account-order-photo-open');if(button)button.hidden=true;else img.hidden=true;};
-          img.addEventListener('error',hideBroken,{once:true});
-          if(img.complete&&!img.naturalWidth)hideBroken();
-        });
-      }
-      return true;
-    }
-
-    function showGate(){
-      if(gate) gate.hidden=false;
-      if(dashboard) dashboard.hidden=true;
-      if(requestStep) requestStep.hidden=false;
-      if(verifyStep) verifyStep.hidden=true;
-      if(demoBox) demoBox.hidden=true;
-      if(errorBox) errorBox.hidden=true;
-    }
-
-    refreshAccount=()=>{if(!showDashboard())showGate();};
-    if(!showDashboard()){
-      showGate();
-      if(requestForm?.elements.identifier && !requestForm.elements.identifier.value){
-        requestForm.elements.identifier.value=p.phone||p.email||'';
-      }
-    }
-
-    requestForm?.addEventListener('submit',async e=>{
-      e.preventDefault();
-      const identifier=String(new FormData(requestForm).get('identifier')||'').trim();
-      if(!isValidIdentifier(identifier)){
-        toast('<strong>Проверьте контакт</strong><br>Введите корректный телефон или e-mail.');
-        return;
-      }
-      const button=requestForm.querySelector('button[type="submit"]');
-      if(button){button.disabled=true;button.textContent='Отправляем…'}
-      try{
-        const result=await requestCode(identifier);
-        if(requestStep)requestStep.hidden=true;
-        if(verifyStep)verifyStep.hidden=false;
-        if(destination)destination.textContent=identifier;
-        verifyForm.dataset.identifier=identifier;
-        if(errorBox)errorBox.hidden=true;
-        if(demoBox){
-          if(result.demo){
-            demoBox.hidden=false;demoBox.innerHTML='Код для пробного входа: <strong>'+esc(result.code)+'</strong>';
-          }else{
-            demoBox.hidden=true;
-          }
-        }
-        verifyForm?.elements.code?.focus();
-      }catch(error){
-        const message=error?.message||'Не удалось отправить код. Попробуйте ещё раз.';
-        toast('<strong>Вход в кабинет</strong><br>'+esc(message));
-        if(error?.retryMs&&button){
-          button.dataset.cooldown='true';
-          let left=Math.max(1,Math.ceil(error.retryMs/1000));
-          button.disabled=true;
-          button.textContent='Повторить через '+left+' сек.';
-          const timer=setInterval(()=>{
-            left--;
-            if(left<=0){
-              clearInterval(timer);
-              delete button.dataset.cooldown;
-              button.disabled=false;
-              button.textContent='Получить код';
-            }else{
-              button.textContent='Повторить через '+left+' сек.';
-            }
-          },1000);
-          return;
-        }
-      }finally{
-        if(button&&!button.dataset.cooldown){button.disabled=false;button.textContent='Получить код'}
-      }
+        if(!/^[1-9][0-9]*$/.test(result.number)||!Number.isSafeInteger(result.total)||result.total<1||typeof result.linked!=='boolean')throw Error();
+        let cleared=false;
+        if(JSON.stringify(cart())===snapshot){try{setCart([]);cleared=true;}catch{}}
+        if(cleared)clearAttempt();
+        form.reset();saved.replaceChildren();saved.hidden=true;
+        document.querySelector('[data-checkout-panel]').hidden=true;renderCart();
+        const success=document.querySelector('[data-order-success]');success.hidden=false;
+        const note=result.linked?'Заявка сохранена. Статус доступен в личном кабинете.':'Заявка сохранена. Менеджер свяжется с вами по указанным контактам.';
+        const warning=cleared?'':'<p>Корзина не очищена. Не отправляйте этот заказ повторно.</p>';
+        const link=result.linked?'<a class="button button-gold" href="account.html">Перейти в личный кабинет</a>':'';
+        if(cleared)document.querySelector('[data-cart-page]').classList.add('order-completed');
+        success.innerHTML='<p class="order-success-kicker">ЗАЯВКА ПРИНЯТА</p><h2>Заказ ДРЖ-'+esc(result.number)+'</h2><p>'+note+'</p>'+warning+'<div class="order-success-total"><span>Стоимость товаров</span><strong>'+money(result.total)+'</strong></div><div class="order-success-actions">'+link+'<a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
+        requestAnimationFrame(()=>scrollCartSection(success));
+      }catch(error){status(error?.message?.startsWith('Результат предыдущей')?error.message:'Не удалось подтвердить отправку. Корзина сохранена; повторите с теми же данными.');}
+      finally{busy=false;controls.forEach(el=>el.disabled=false);submit.textContent='Оформить заказ';}
     });
-
-    verifyForm?.addEventListener('submit',async e=>{
-      e.preventDefault();
-      const identifier=verifyForm.dataset.identifier||'';
-      const code=String(new FormData(verifyForm).get('code')||'').trim();
-      if(errorBox)errorBox.hidden=true;
-      let ok=false;try{ok=await verifyCode(identifier,code)}catch(_){ok=false;}
-      if(!ok){
-        if(errorBox){
-          errorBox.hidden=false;
-          errorBox.textContent='Код неверный или уже истёк. Проверьте цифры и попробуйте ещё раз.';
-        }
-        return;
-      }
-      showDashboard();
-      toast('<strong>Вход выполнен</strong><br>Добро пожаловать в личный кабинет.');
-    });
-
-    root.querySelector('[data-auth-back]')?.addEventListener('click',()=>{
-      if(requestStep)requestStep.hidden=false;
-      if(verifyStep)verifyStep.hidden=true;
-      if(errorBox)errorBox.hidden=true;
-      if(demoBox)demoBox.hidden=true;
-    });
-
-    root.querySelector('[data-auth-signout]')?.addEventListener('click',()=>{
-      localStorage.removeItem(AUTH_KEY);
-      localStorage.removeItem('derzhava_owner_code_v1');
-      showGate();
-    });
-
-    const form=root.querySelector('[data-profile-form]');
-    if(form){
-      ['name','phone','email','organization','inn','address'].forEach(k=>{if(form.elements[k])form.elements[k].value=p[k]||''});
-      form.addEventListener('submit',e=>{
-        e.preventDefault();
-        const fd=new FormData(form);
-        const next={};
-        ['name','phone','email','organization','inn','address'].forEach(k=>next[k]=String(fd.get(k)||''));
-        write(PROFILE_KEY,next);
-        toast('<strong>Данные сохранены</strong><br>Они будут подставляться при оформлении заказа.');
-      });
-    }
-
-    const tabs=[...root.querySelectorAll('[data-account-tab]')];
-    const panels=[...root.querySelectorAll('[data-account-panel]')];
-    tabs.forEach(btn=>btn.addEventListener('click',()=>{
-      tabs.forEach(x=>x.classList.toggle('active',x===btn));
-      panels.forEach(panel=>panel.hidden=panel.dataset.accountPanel!==btn.dataset.accountTab);
-    }));
+    window.addEventListener('pagehide',()=>{++fillGeneration;form.reset();saved.replaceChildren();saved.hidden=true;});
+    window.addEventListener('pageshow',event=>{if(event.persisted&&!document.querySelector('[data-checkout-panel]').hidden)fillCheckout();});
   }
 
-  window.__derzhavaAuthLimits={
-    dailyBudgetRub:AUTH_DAILY_BUDGET_RUB,
-    estimatedCostRub:AUTH_ESTIMATED_COST_RUB,
-    maxPerContactHour:5,
-    maxPerBrowserHour:15,
-    cooldownSeconds:60
-  };
-
-  injectHeader();
-  initProductPage();
-  initCatalogQuickAdd();
-  initCustomSize();
-  renderCart();
-  initCheckout();
-  renderAccount();
-  window.addEventListener('storage',event=>{if(event.key===CART_KEY){updateHeaderCount();renderCart();}if(event.key===ORDERS_KEY||event.key===AUTH_KEY)refreshAccount();});
-  window.addEventListener('pageshow',event=>{if(event.persisted){updateHeaderCount();refreshAccount();}});
+  injectHeader();initProductPage();initCatalogQuickAdd();initCustomSize();renderCart();initCheckout();
+  window.addEventListener('storage',e=>{if(e.key===CART_KEY){updateHeaderCount();if(!busy)renderCart();}});
+  window.addEventListener('pageshow',e=>{if(e.persisted){updateHeaderCount();if(!busy)renderCart();}});
 })();
