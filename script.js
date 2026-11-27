@@ -44,7 +44,7 @@
   nav.setAttribute('aria-label','Основная навигация');
   if(!header.hasAttribute('data-static-header')) nav.innerHTML=
     '<a href="'+(isHome?'#production':'index.html#production')+'">Производство</a>'+
-    '<a href="'+(isHome?'#contacts':'index.html#contacts')+'">Контакты</a>';
+    '<a href="payment-delivery.html#contacts">Контакты</a>';
 
   const footer=document.querySelector('.site-footer');
   if(footer && !footer.id) footer.id='contacts';
@@ -108,7 +108,7 @@
       '<a href="catalog.html?section=subjects"><span>Субъекты и города РФ</span></a>'+
       '<a href="catalog.html?section=agencies"><span>Ведомства РФ</span></a>'+
       '<a href="index.html#production"><span>Производство</span></a>'+
-      '<a href="index.html#contacts"><span>Контакты</span></a>'+
+      '<a href="payment-delivery.html#contacts"><span>Контакты</span></a>'+
     '</nav>'+
     '<div class="site-quick-account">'+
       '<a href="account.html">Личный кабинет</a>'+
