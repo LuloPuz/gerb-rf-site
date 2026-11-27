@@ -34,3 +34,18 @@
 .server-order-price{white-space:nowrap;font-size:14px}
 .server-order-total{border-top:1px solid #ece9e2;padding-top:14px}
 @media(max-width:720px){.server-order-card{padding:12px}.server-order-item{flex-wrap:wrap}.server-order-image{width:48px;height:48px}.server-order-price{margin-left:auto}.server-order-head{align-items:flex-start}}
+
+/* Provider controls remain independent of the shop's navy/gold palette. */
+[data-server-account] .account-login-card .account-login-title{font:600 27px/1.25 "Manrope",Arial,sans-serif;letter-spacing:-.035em;text-align:center;margin:0 0 8px}
+[data-server-account] .account-login-card .account-login-description{font-size:13px;text-align:center;margin:0 0 25px}
+.account-login-providers{display:grid;gap:12px}
+.account-login-providers form{margin:0;min-width:0}
+.account-provider-yandex{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;height:56px;padding:0 18px;border:0;border-radius:12px;background:#212121;color:#fff;font:500 16px/1.2 Arial,sans-serif;cursor:pointer;transition:background .15s}
+.account-provider-yandex:hover{background:#343434}
+.account-provider-yandex:focus-visible{outline:2px solid #555;outline-offset:3px}
+.account-provider-yandex:disabled{opacity:.65;cursor:wait}
+.account-provider-mark{display:block;flex:none}
+.account-login-legal{border-top:1px solid #e7e9eb;margin-top:25px;padding-top:18px;color:#66717a;font:400 12px/1.65 "Manrope",Arial,sans-serif}
+.account-login-legal p{margin:0}
+.account-login-legal .account-login-legal-title{font-weight:600;color:#344759;margin-bottom:5px}
+@media(max-width:720px){[data-server-account] .account-login-card .account-login-title{font-size:24px}.account-login-legal{margin-top:20px;padding-top:16px}.account-provider-yandex{height:56px}}
