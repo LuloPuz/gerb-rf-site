@@ -24,6 +24,16 @@
   <div class="container">
     <p class="commerce-breadcrumb"><a href="index.html">Главная</a> / Личный кабинет</p>
 
+    <section class="account-login-card" id="yandex-oauth-test" aria-labelledby="yandex-oauth-test-title" hidden>
+      <div>
+        <p class="account-login-kicker">Техническое тестирование</p>
+        <h2 id="yandex-oauth-test-title">Вход через Яндекс ID</h2>
+        <p id="yandex-oauth-test-status" role="status">Проверка серверной авторизации. Используйте только отдельную тестовую учётную запись. Заказы и профиль пока не подключены к серверной сессии.</p>
+        <form action="/api/auth/yandex/start" method="post">
+          <button class="account-auth-primary" type="submit">Войти через Яндекс</button>
+        </form>
+      </div>
+    </section>
     <p class="shop-preview-notice" role="note">Пробный режим · Данные остаются в этом браузере. SMS не отправляются.</p><section class="account-auth-shell" data-auth-gate>
       <div class="account-auth-copy">
         <p class="eyebrow">Личный кабинет</p>
@@ -136,4 +146,21 @@
   <img data-order-photo-large alt="">
 </dialog>
 <script src="script.js?v=20261127-contact-links1"></script><script src="shop.js?v=20261125-order-photo1" data-shop-runtime="true"></script>
+<script>
+(function () {
+  if (location.origin !== 'https://gerbrf.ru') return;
+  const params = new URLSearchParams(location.search);
+  const result = params.get('auth');
+  if (params.get('test') !== 'yandex' && result !== 'yandex_success' && result !== 'yandex_error') return;
+  const section = document.getElementById('yandex-oauth-test');
+  const status = document.getElementById('yandex-oauth-test-status');
+  if (!section || !status) return;
+  section.hidden = false;
+  if (result === 'yandex_success') {
+    status.textContent = 'Получен ответ о завершении OAuth. Подлинность и наличие серверной сессии необходимо проверить отдельно. Данные кабинета пока не подключены.';
+  } else if (result === 'yandex_error') {
+    status.textContent = 'Авторизация не завершена. Для повторной проверки используйте отдельную тестовую учётную запись.';
+  }
+})();
+</script>
 </body></html>
