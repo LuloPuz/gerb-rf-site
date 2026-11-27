@@ -14,13 +14,15 @@ const detailsKeys=['title','finish','category','description','material','specs',
 let detailsSku=null,detailsRevision=null,detailsGeneration=0;
 const previewDialog=$('[data-preview-dialog]'),previewBody=$('[data-preview-body]'),previewStatus=$('[data-preview-status]');
 let previewGeneration=0;
+const reviewDialog=$('[data-review-dialog]'),reviewBody=$('[data-review-body]'),reviewStatus=$('[data-review-status]');
+let reviewGeneration=0;
 const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
- generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();clearPreview();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
+ generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();clearPreview();clearReview();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
  for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
@@ -350,6 +352,74 @@ async function openPreview(sku){
 }
 all('[data-preview-close]').forEach(b=>b.addEventListener('click',clearPreview));
 previewDialog.addEventListener('cancel',e=>{e.preventDefault();clearPreview();});
+function clearReview(){
+ reviewGeneration++;reviewBody.replaceChildren();reviewStatus.textContent='';
+ if(reviewDialog.open)reviewDialog.close();
+}
+const reviewNames={draft:'Черновик',ready:'Готов к публикации',stale:'Требуется повторная проверка',archived:'В архиве'};
+const issueNames={category:'Выберите категорию',description:'Заполните описание',photos:'Загрузите хотя бы одну фотографию',sizes:'Добавьте размер'};
+function renderReview(data){
+ reviewBody.replaceChildren();
+ reviewBody.append(node('h3',reviewNames[data.state]),node('p','Проверьте фотографии, описание и реальные цены поставщика в предпросмотре.','sa-note'));
+ const checklist=node('div',undefined,'sa-review-checklist');
+ if(data.issues.length)for(const issue of data.issues)checklist.append(node('p',issueNames[issue]||'Проверьте карточку'));
+ else checklist.append(node('p','Обязательные поля заполнены.','sa-note'));
+ reviewBody.append(checklist);
+ const list=node('div',undefined,'sa-review-sizes'),checks=[];
+ if(data.state!=='archived'){
+  reviewBody.append(node('h3','Размеры для будущей публикации'));
+  for(const v of [...data.variants].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))){
+   const label=node('label',undefined,'sa-review-size'),check=node('input');check.type='checkbox';check.value=v.id;
+   check.checked=data.selected.includes(v.id);
+   const txt=node('span',v.size);label.append(check,txt,node('strong',money(v.price)));list.append(label);checks.push(check);
+  }
+  reviewBody.append(list);
+ }
+ const actions=node('div',undefined,'sa-review-actions');
+ const button=(name,cls,fn)=>{const b=node('button',name,cls);b.type='button';b.addEventListener('click',fn);actions.append(b);return b;};
+ const selected=()=>checks.filter(c=>c.checked).map(c=>c.value);
+ if(data.state!=='archived'){
+  const ready=button('Подтвердить готовность','sa-status-save',()=>{if(window.confirm('Подтвердить выбранные размеры и текущие цены? Товар пока не публикуется.'))saveReview(data,'ready',selected());});
+  const update=()=>ready.disabled=data.issues.length>0||selected().length===0||selected().length>100;
+  checks.forEach(c=>c.addEventListener('change',update));update();
+  if(data.state!=='draft')button('Вернуть в черновик','',()=>saveReview(data,'draft',[]));
+  button('В архив','',()=>{if(window.confirm('Переместить товар в архив? Все размеры будут отключены, данные и фотографии сохранятся.'))saveReview(data,'archived',[]);});
+ }else button('Восстановить черновик','sa-status-save',()=>saveReview(data,'draft',[]));
+ reviewBody.append(actions);
+}
+function validReview(d,sku){
+ return d?.sku===sku&&Object.hasOwn(reviewNames,d.state)&&typeof d.revision==='string'&&/^[a-f0-9]{64}$/.test(d.revision)&&Array.isArray(d.issues)&&Array.isArray(d.selected)&&Array.isArray(d.variants)&&d.variants.every(v=>typeof v.id==='string'&&typeof v.size==='string'&&Number.isSafeInteger(v.price));
+}
+async function openReview(sku){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ clearReview();const current=reviewGeneration,session=marker;$('[data-review-sku]').textContent='Артикул '+sku;
+ reviewDialog.showModal();reviewStatus.textContent='Проверяем карточку…';
+ try{
+  const r=await fetch('/api/admin/catalog/review?sku='+encodeURIComponent(sku),{credentials:'same-origin',cache:'no-store',redirect:'error',headers:{Accept:'application/json','X-Session-Marker':session},signal:AbortSignal.timeout(12000)});
+  if(current!==reviewGeneration||session!==marker)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!r.ok)throw Error();const data=await r.json();
+  if(current!==reviewGeneration||session!==marker)return;
+  if(!validReview(data,sku))throw Error();renderReview(data);reviewStatus.textContent='';
+ }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось проверить карточку. Обновите панель.';}
+}
+async function saveReview(data,next,selected){
+ if(mutationBusy||!marker||!reviewDialog.open||dashboard.hidden)return;
+ const current=reviewGeneration,session=marker;mutationBusy=true;reviewStatus.textContent='Сохраняем состояние…';
+ try{
+  const r=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({sku:data.sku,expected:data.revision,state:data.state,next,selected}),signal:AbortSignal.timeout(12000)});
+  if(current!==reviewGeneration||session!==marker)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!r.ok){reviewStatus.textContent='Изменение отклонено. Закройте и откройте проверку заново.';return;}
+  const result=await r.json();if(current!==reviewGeneration||session!==marker)return;
+  if(!validReview(result,data.sku)||result.state!==next)throw Error();
+  if(next==='archived'){catalogDrafts.clear();expandedProducts.add(data.sku);$('[data-catalog-search]').value=data.sku;await select('catalog');}
+  if(current===reviewGeneration){renderReview(result);reviewStatus.textContent='Состояние сохранено. Публикация закрыта.';}
+ }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить изменение. Откройте проверку заново.';}
+ finally{mutationBusy=false;}
+}
+all('[data-review-close]').forEach(b=>b.addEventListener('click',()=>{if(!mutationBusy)clearReview();}));
+reviewDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy)clearReview();});
 function renderCatalog(){
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
  const list=variants.filter(v=>[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q));
@@ -393,7 +463,7 @@ function renderCatalog(){
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
-  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));addRow.append(preview,edit,gallery,addSize);card.append(addRow);target.append(card);
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));const review=node('button','Готовность и архив');review.type='button';review.addEventListener('click',()=>openReview(sku));addRow.append(preview,edit,gallery,addSize,review);card.append(addRow);target.append(card);
  }
  if(!list.length)target.append(node('p','Нет подходящих вариантов.','sa-empty'));
 }
