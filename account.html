@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
 <style>[data-server-account] [hidden]{display:none!important}.account-login-coming{margin:18px 0 0!important}.account-signout:disabled,.account-auth-primary:disabled{opacity:.6;cursor:wait}[data-server-greeting]{overflow-wrap:anywhere}</style>
-<link rel="stylesheet" href="account-profile.css?v=20261127-consent-ui1">
+<link rel="stylesheet" href="account-profile.css?v=20261127-withdrawal1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -122,6 +122,12 @@
                 <button class="account-auth-primary profile-submit" data-profile-save type="submit">Сохранить изменения</button>
               </fieldset>
             </form>
+            <section class="account-withdrawal" data-withdrawal-panel hidden>
+              <h3>Персональные данные</h3>
+              <p>Вы можете отозвать согласие на обработку данных для личного кабинета.</p>
+              <button class="account-withdrawal-link" type="button" data-withdrawal-open>Отозвать согласие</button>
+              <p data-withdrawal-status role="status" hidden></p>
+            </section>
           </section>
         </div>
       </div>
@@ -131,10 +137,20 @@
 </main>
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a></div><div><h3>Покупателям</h3><a href="payment-delivery.html#payment">Оплата</a><a href="payment-delivery.html#delivery">Доставка</a><a href="payment-delivery.html#contacts">Контакты</a><a href="account.html">Личный кабинет</a><a href="cart.html">Корзина</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
+<dialog class="account-withdrawal-dialog" data-withdrawal-dialog aria-labelledby="withdrawal-title">
+  <h2 id="withdrawal-title">Отозвать согласие?</h2>
+  <p>Доступ к личному кабинету будет закрыт на всех устройствах. Оператор обработает запрос и прекратит обработку данных на основании согласия. Данные, необходимые по договору или закону, могут сохраняться.</p>
+  <p>Несохранённые изменения профиля будут потеряны.</p>
+  <div class="account-withdrawal-actions">
+    <button type="button" class="account-signout" data-withdrawal-cancel autofocus>Отмена</button>
+    <button type="button" class="account-withdrawal-confirm" data-withdrawal-confirm>Отозвать согласие</button>
+  </div>
+  <p data-withdrawal-dialog-status role="alert" hidden></p>
+</dialog>
 <dialog class="account-photo-dialog" data-order-photo-dialog aria-label="Фотография товара">
   <button type="button" class="account-photo-close" data-order-photo-close aria-label="Закрыть фотографию" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <img data-order-photo-large alt="">
 </dialog>
 <script src="script.js?v=20261127-orders1"></script><script src="shop.js?v=20261127-orders1" data-shop-runtime="true"></script>
-<script src="account-session.js?v=20261127-consent-ui1" defer></script>
+<script src="account-session.js?v=20261127-withdrawal1" defer></script>
 </body></html>

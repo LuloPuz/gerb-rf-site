@@ -58,3 +58,15 @@
 .account-legal-links a{color:#53697e;text-decoration:underline;text-underline-offset:3px}
 .account-consent-error{color:#9b3b34;font-size:12px;margin-top:12px!important}
 .account-consent-retry{padding:0;border:0;background:none;color:#0d2742;font:600 12px/1.5 Manrope,Arial,sans-serif;text-decoration:underline;cursor:pointer;margin-top:10px}
+
+.account-withdrawal{border-top:1px solid #e5e0d6;margin-top:28px;padding-top:22px}
+.account-withdrawal h3{font:600 15px/1.4 Manrope,Arial,sans-serif;color:#0d2742;margin:0 0 8px}
+.account-withdrawal p,.account-withdrawal-dialog p{font:400 13px/1.7 Manrope,Arial,sans-serif;color:#68727b;margin:0 0 12px}
+.account-withdrawal-link{border:0;background:none;padding:0;color:#8b3933;text-decoration:underline;text-underline-offset:3px;font:600 13px/1.5 Manrope,Arial,sans-serif;cursor:pointer}
+.account-withdrawal-dialog{box-sizing:border-box;border:1px solid #ddd8ce;border-radius:16px;padding:26px;width:min(460px,calc(100% - 32px));max-height:90vh;overflow:auto;background:white;color:#0d2742}
+.account-withdrawal-dialog::backdrop{background:rgba(7,24,42,.45)}
+.account-withdrawal-dialog h2{font:600 23px/1.3 Manrope,Arial,sans-serif;margin:0 0 15px}
+.account-withdrawal-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px}
+.account-withdrawal-confirm{border:1px solid #9b3b34;background:#9b3b34;color:#fff;border-radius:8px;padding:10px 16px;font:600 12px/1.5 Manrope,Arial,sans-serif;cursor:pointer}
+.account-withdrawal-confirm:disabled,.account-withdrawal-actions button:disabled{opacity:.6;cursor:wait}
+.account-withdrawal-dialog [data-withdrawal-dialog-status]{color:#9b3b34;margin-top:12px}

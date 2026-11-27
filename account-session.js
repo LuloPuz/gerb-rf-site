@@ -17,6 +17,59 @@
   const consentRetry=find('[data-consent-retry]');
   let consentReady=false,consentRequired=false,consentGeneration=0;
   const logout = find('[data-server-logout]');
+  const withdrawalPanel=find('[data-withdrawal-panel]');
+  const withdrawalOpen=find('[data-withdrawal-open]');
+  const withdrawalStatus=find('[data-withdrawal-status]');
+  const withdrawalDialog=document.querySelector('[data-withdrawal-dialog]');
+  const withdrawalConfirm=withdrawalDialog.querySelector('[data-withdrawal-confirm]');
+  const withdrawalCancel=withdrawalDialog.querySelector('[data-withdrawal-cancel]');
+  const withdrawalDialogStatus=withdrawalDialog.querySelector('[data-withdrawal-dialog-status]');
+  let activeSessionMarker=null,withdrawalBusy=false,withdrawalReady=false;
+  function clearWithdrawal(){
+    activeSessionMarker=null;withdrawalReady=false;withdrawalPanel.hidden=true;
+    withdrawalStatus.hidden=true;withdrawalStatus.textContent='';
+    if(!withdrawalBusy&&withdrawalDialog.open)withdrawalDialog.close();
+  }
+  async function loadWithdrawal(marker,current){
+    if(typeof marker!=='string'||!/^[a-f0-9]{64}$/.test(marker))return;
+    try{
+      const r=await fetch('/api/auth/consent',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(12000)});
+      if(!r.ok)return;
+      const p=await r.json();
+      if(current!==generation||dashboard.hidden||p.enforced!==true)return;
+      activeSessionMarker=marker;withdrawalReady=true;withdrawalPanel.hidden=false;
+    }catch{}
+  }
+  withdrawalOpen.addEventListener('click',()=>{
+    if(!withdrawalReady||!activeSessionMarker||withdrawalBusy||dashboard.hidden||profileBusy)return;
+    withdrawalDialogStatus.hidden=true;withdrawalDialogStatus.textContent='';
+    withdrawalDialog.showModal();
+  });
+  withdrawalCancel.addEventListener('click',()=>{if(!withdrawalBusy)withdrawalDialog.close()});
+  withdrawalDialog.addEventListener('cancel',e=>{if(withdrawalBusy)e.preventDefault()});
+  withdrawalConfirm.addEventListener('click',async()=>{
+    if(!withdrawalReady||!activeSessionMarker||withdrawalBusy||dashboard.hidden)return;
+    const marker=activeSessionMarker;
+    withdrawalBusy=true;withdrawalConfirm.disabled=true;withdrawalCancel.disabled=true;
+    withdrawalDialogStatus.hidden=true;
+    try{
+      const r=await fetch('/api/auth/consent/withdraw',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',
+        headers:{'X-Session-Marker':marker,'X-Confirm-Withdrawal':'yes'},signal:AbortSignal.timeout(15000)});
+      if(r.status===409||r.status===401){
+        withdrawalDialog.close();
+        withdrawalBusy=false;
+        await refresh();
+        status('Не удалось подтвердить запрос. Проверьте текущую учётную запись.');
+        return;
+      }
+      if(r.status!==204)throw Error();
+      dirty=false;withdrawalDialog.close();generation++;pending=false;
+      showGate('Запрос на отзыв согласия принят. Доступ к личному кабинету закрыт. Для вопросов: primesandal@yandex.ru.');
+    }catch{
+      withdrawalDialogStatus.textContent='Не удалось подтвердить приём запроса. Проверьте состояние аккаунта или обратитесь по адресу primesandal@yandex.ru.';
+      withdrawalDialogStatus.hidden=false;
+    }finally{withdrawalBusy=false;withdrawalConfirm.disabled=false;withdrawalCancel.disabled=false;}
+  });
   const greeting = find('[data-server-greeting]');
   const profile = find('[data-server-profile]');
   const fields = find('[data-profile-fields]');
@@ -54,6 +107,7 @@
     message.hidden = !text;
   }
   function hideAccount() {
+    clearWithdrawal();
     dashboard.hidden = true;
     greeting.textContent = '';
     clearProfile();
@@ -125,7 +179,7 @@
   }
   async function refresh(initial = false) {
     if (!canonical) { showGate('Для входа используйте основной защищённый домен.'); return; }
-    if (loggingOut || pending) return;
+    if (loggingOut || pending || withdrawalBusy) return;
     pending = true;
     const current = ++generation;
     gate.hidden = true;
@@ -157,6 +211,7 @@
       greeting.textContent = displayName ? 'Здравствуйте, ' + displayName : 'Добро пожаловать';
 
       dashboard.hidden = false;
+      loadWithdrawal(data.sessionMarker,current);
       status('');
       showProfileLoading();
       loadProfile();
