@@ -1,3 +1,4 @@
+import {renderProductCard} from './storefront-product.js?v=20261128-shared1';
 import {productKeys} from './dynamic-search.js?v=20261128-search1';
 import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-home1';
 const $=s=>document.querySelector(s);
@@ -35,44 +36,7 @@ function bindCart(button,sku,selected,label){
 }
 function renderProduct(p){
  document.title=p.title+' | Держава';$('[data-ds-crumb]').textContent=p.title;
- const layout=node('div',undefined,'final-product-grid ds-product-grid'),gallery=node('div',undefined,'final-product-gallery'),main=node('button',undefined,'final-product-main ds-image-main'),thumbs=node('div',undefined,'final-product-thumbs ds-thumbs');
- main.type='button';main.setAttribute('aria-label','Увеличить изображение');
- let selectedPhoto=p.photos[0].id;
- const makePhoto=(id,alt)=>layoutCheck?legacyImage(id,alt):image(id,alt);
- const show=id=>{selectedPhoto=id;main.replaceChildren(makePhoto(id,p.title),node('span','Увеличить','image-zoom-hint'));};
- show(selectedPhoto);
- main.addEventListener('click',()=>{
-  const dialog=node('dialog',undefined,'ds-zoom'),close=node('button','×','ds-zoom-close');close.type='button';close.setAttribute('aria-label','Закрыть');close.onclick=()=>dialog.close();
-  dialog.append(close,makePhoto(selectedPhoto,p.title));document.body.append(dialog);dialog.addEventListener('close',()=>dialog.remove(),{once:true});dialog.showModal();
- });
- gallery.append(main);
- if(p.photos.length>1){
-  for(const [i,ph] of p.photos.entries()){
-   const b=node('button',undefined,'gallery-thumb');b.type='button';b.setAttribute('aria-label','Фото '+(i+1));b.append(makePhoto(ph.id,''));b.addEventListener('click',()=>{show(ph.id);for(const t of thumbs.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);thumbs.append(b);
-  }
-  gallery.append(thumbs);
- }
- const info=node('div',undefined,'final-product-info');
- info.append(node('p',p.eyebrow||categories[p.category],'eyebrow'),node('h1',p.productTitle||p.title),node('p',p.productFinish||p.finish,'final-finish'),node('p','Артикул: '+p.sku,'product-article'));
- const sizes=[...p.variants];let selectedVariant=sizes[0];
- const price=node('div',money(sizes[0].price),'final-price'),options=node('div',undefined,'size-options');
- options.setAttribute('role','group');options.setAttribute('aria-label','Выберите размер');
- info.append(price,node('p','Выберите размер','size-label'),options);
- for(const [i,v] of sizes.entries()){
-  const b=node('button',v.size,'size-option');b.type='button';b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);
-  b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of options.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});options.append(b);
- }
- const custom=node('a',undefined,'custom-size-inline'),copy=node('span',undefined,'custom-size-inline-copy');
- custom.href='offer.html';copy.append(node('strong','Не нашли нужного размера?'),node('small','Возможно изготовление герба под индивидуальный запрос'));custom.append(copy,node('span','Уточнить размер'));info.append(custom);
- if(p.material)info.append(node('p','Материал: '+p.material,'ds-detail'));
- if(p.leadTime){const time=node('div',undefined,'production-time');time.append(node('strong','Срок изготовления'),node('span',p.leadTime));info.append(time);}
- const actions=node('div',undefined,'shop-product-actions'),buy=node('button','Добавить в корзину','shop-add-button'),cart=node('a','Корзина','shop-go-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';cart.href='cart.html';bindCart(buy,p.sku,()=>selectedVariant,'Добавить в корзину');actions.append(buy,cart);info.append(actions);
- const back=node('a','← Продолжить покупки','button final-order-button shop-direct-order');back.href='products.html'+(layoutCheck?'?layout=check':'');info.append(back);
- layout.append(gallery,info);content.replaceChildren(layout);
- for(const [heading,value] of [['Описание товара',p.description],['Характеристики',p.specs]]){
-  if(!value)continue;
-  const section=node('section',undefined,'ds-text');section.append(node('h2',heading),node('p',value));content.append(section);
- }
+ renderProductCard(p,{target:content,makePhoto:(id,alt)=>layoutCheck?legacyImage(id,alt):image(id,alt),bindPurchase:bindCart,backHref:'products.html'+(layoutCheck?'?layout=check':'')});
  showContent();
 }
 function validProduct(p,sku){

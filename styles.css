@@ -1,6 +1,6 @@
 @import url('./assets/fonts/fonts.css?v=20261126-localfonts1');
 
-:root{
+:root,:host{
   --navy:#07182a;
   --navy-2:#0d2742;
   --blue:#183a5a;
