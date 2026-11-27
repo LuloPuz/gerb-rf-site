@@ -1,0 +1,19 @@
+/* Profile styles are scoped to the server account. */
+[data-server-profile] fieldset{border:0;margin:0;padding:0;min-width:0}
+[data-server-profile] .profile-group{padding:22px 0;border-bottom:1px solid #e5e0d6}
+[data-server-profile] .profile-group:first-child{padding-top:12px}
+[data-server-profile] h3{font:600 15px/1.4 Manrope,Arial,sans-serif;color:#0d2742;margin:0 0 15px}
+[data-server-profile] h3 small{font:400 11px/1.4 Manrope,Arial,sans-serif;color:#737d86;margin-left:8px}
+[data-server-profile] .profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+[data-server-profile] .profile-contact{min-width:0;display:grid;gap:6px;align-content:start;padding:0}
+[data-server-profile] .profile-contact span{font:600 12px Manrope,Arial,sans-serif;color:#6d747a}
+[data-server-profile] .profile-contact strong{font:600 14px/1.5 Manrope,Arial,sans-serif;color:#0d2742;overflow-wrap:anywhere}
+[data-server-profile] .profile-contact small{font:400 11px/1.5 Manrope,Arial,sans-serif;color:#737d86}
+[data-server-profile] .profile-group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+[data-server-profile] .profile-group-head h3{margin:0}
+[data-server-profile] .profile-address{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:10px;margin-top:12px}
+[data-server-profile] .profile-address button{margin-bottom:6px}
+[data-server-profile] .profile-submit{width:auto;min-width:220px;padding:0 20px;margin-top:22px}
+[data-server-account] .profile-message{font:500 13px/1.6 Manrope,Arial,sans-serif;color:#53626f;margin:12px 0}
+[data-server-profile] button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:720px){[data-server-profile] .profile-grid{grid-template-columns:1fr;gap:16px}[data-server-profile] .profile-submit{width:100%;min-width:0}[data-server-profile] .profile-address{gap:6px}[data-server-profile] .profile-group-head{flex-wrap:wrap}}
