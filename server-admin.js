@@ -12,13 +12,15 @@ let photoSku=null,photoGeneration=0,photoRecords=[];
 const detailsDialog=$('[data-details-dialog]'),detailsForm=$('[data-details-form]'),detailsStatus=$('[data-details-status]');
 const detailsKeys=['title','finish','category','description','material','specs','leadTime'];
 let detailsSku=null,detailsRevision=null,detailsGeneration=0;
+const previewDialog=$('[data-preview-dialog]'),previewBody=$('[data-preview-body]'),previewStatus=$('[data-preview-status]');
+let previewGeneration=0;
 const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
- generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
+ generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();clearPreview();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
  for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
@@ -300,6 +302,54 @@ detailsForm.addEventListener('submit',async e=>{
  }catch{if(current===detailsGeneration)detailsStatus.textContent='Не удалось подтвердить сохранение. Проверьте карточку перед повтором.';}
  finally{mutationBusy=false;if(current===detailsGeneration)submit.disabled=false;}
 });
+function clearPreview(){
+ previewGeneration++;previewBody.replaceChildren();previewStatus.textContent='';
+ if(previewDialog.open)previewDialog.close();
+}
+const categoryNames={rf:'Гербы РФ',region:'Гербы субъектов РФ',city:'Гербы городов РФ',department:'Эмблемы ведомств',other:'Категория не выбрана'};
+function renderPreview(data){
+ const f=data.fields;
+ const layout=node('div',undefined,'sa-preview-grid'),media=node('section',undefined,'sa-preview-media'),info=node('section',undefined,'sa-preview-info');
+ const main=node('div',undefined,'sa-preview-main'),thumbs=node('div',undefined,'sa-preview-thumbs');
+ const photos=data.photos.map(p=>'/api/admin/catalog/photo?id='+encodeURIComponent(p.id));
+ if(!photos.length&&data.legacyImage){
+  try{const u=new URL(data.legacyImage,location.href);if(u.origin===location.origin&&/\.(png|jpe?g|webp)$/i.test(u.pathname)&&!u.pathname.startsWith('/api/'))photos.push(u.pathname+u.search);}catch{}
+ }
+ const show=(url)=>{main.replaceChildren();const im=node('img');im.alt=f.title;im.addEventListener('error',()=>main.replaceChildren(node('span','Фото недоступно','sa-note')),{once:true});im.src=url;main.append(im);};
+ if(photos.length){show(photos[0]);for(const [i,url] of photos.entries()){const button=node('button');button.type='button';button.setAttribute('aria-label','Фото '+(i+1));const img=node('img');img.alt='';img.loading='lazy';img.src=url;button.append(img);button.addEventListener('click',()=>show(url));thumbs.append(button);}}
+ else main.append(node('span','Добавьте фотографию','sa-note'));
+ media.append(main,thumbs);
+ info.append(node('p',categoryNames[f.category]||'Категория не выбрана','sa-eyebrow'),node('h3',f.title),node('p','Арт. '+data.sku,'sa-note'),node('p',f.finish,'sa-note'));
+ const sizes=[...data.variants].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}));
+ const price=node('strong',money(sizes[0].price),'sa-preview-price'),state=node('p','','sa-note'),choices=node('div',undefined,'sa-preview-sizes');
+ const choose=(v,b)=>{price.textContent=money(v.price);state.textContent=v.active?'Размер активен в каталоге':v.storefrontReady?'Размер неактивен':'Размер — черновик';for(const c of choices.children)c.setAttribute('aria-pressed',String(c===b));};
+ for(const v of sizes){const b=node('button',v.size);b.type='button';b.addEventListener('click',()=>choose(v,b));choices.append(b);}
+ info.append(price,node('p','Размер','sa-preview-label'),choices,state);
+ choose(sizes[0],choices.firstElementChild);
+ if(f.material)info.append(node('p','Материал: '+f.material,'sa-note'));
+ if(f.leadTime)info.append(node('p','Срок изготовления: '+f.leadTime,'sa-note'));
+ const disabled=node('button','Покупка отключена в предпросмотре','sa-status-save');disabled.type='button';disabled.disabled=true;info.append(disabled);
+ layout.append(media,info);previewBody.replaceChildren(layout);
+ for(const [label,value] of [['Описание',f.description],['Характеристики',f.specs]]){
+  const section=node('section',undefined,'sa-preview-text');section.append(node('h3',label),node('p',value||'Пока не заполнено',value?'':'sa-note'));previewBody.append(section);
+ }
+}
+async function openPreview(sku){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ clearPreview();const current=previewGeneration,session=marker;previewDialog.showModal();previewStatus.textContent='Загружаем сохранённые данные…';
+ try{
+  const r=await fetch('/api/admin/catalog/preview?sku='+encodeURIComponent(sku),{credentials:'same-origin',cache:'no-store',redirect:'error',headers:{Accept:'application/json','X-Session-Marker':session},signal:AbortSignal.timeout(12000)});
+  if(current!==previewGeneration||session!==marker)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!r.ok)throw Error();
+  const data=await r.json();
+  if(current!==previewGeneration||session!==marker)return;
+  if(data.sku!==sku||!detailsKeys.every(k=>typeof data.fields?.[k]==='string')||!Array.isArray(data.variants)||!data.variants.length||!data.variants.every(v=>typeof v.size==='string'&&Number.isSafeInteger(v.price)&&v.price>0&&typeof v.active==='boolean'&&typeof v.storefrontReady==='boolean')||!Array.isArray(data.photos)||data.photos.length>8||!data.photos.every(p=>p.sku===sku&&/^[0-9a-f-]{36}$/.test(p.id)))throw Error();
+  renderPreview(data);previewStatus.textContent='';
+ }catch{if(current===previewGeneration)previewStatus.textContent='Не удалось открыть предпросмотр. Обновите панель.';}
+}
+all('[data-preview-close]').forEach(b=>b.addEventListener('click',clearPreview));
+previewDialog.addEventListener('cancel',e=>{e.preventDefault();clearPreview();});
 function renderCatalog(){
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
  const list=variants.filter(v=>[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q));
@@ -343,7 +393,7 @@ function renderCatalog(){
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
-  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));addRow.append(edit,gallery,addSize);card.append(addRow);target.append(card);
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));addRow.append(preview,edit,gallery,addSize);card.append(addRow);target.append(card);
  }
  if(!list.length)target.append(node('p','Нет подходящих вариантов.','sa-empty'));
 }
