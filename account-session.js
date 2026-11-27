@@ -8,6 +8,14 @@
   const message = find('[data-session-message]');
   const retry = find('[data-session-retry]');
   const login = find('[data-server-login]');
+  const loginButton=login.querySelector('button');
+  const consentControls=find('[data-consent-controls]');
+  const consentPreview=find('[data-consent-preview]');
+  const consentCheck=find('#account-consent-check');
+  const consentVersion=find('[data-consent-version]');
+  const consentError=find('[data-consent-error]');
+  const consentRetry=find('[data-consent-retry]');
+  let consentReady=false,consentRequired=false,consentGeneration=0;
   const logout = find('[data-server-logout]');
   const greeting = find('[data-server-greeting]');
   const profile = find('[data-server-profile]');
@@ -51,6 +59,54 @@
     clearProfile();
     clearOrders();
   }
+  function consentStatus(text) {
+    consentError.textContent=text||'';
+    consentError.hidden=!text;
+  }
+  function resetConsent(){
+    consentGeneration++;
+    consentReady=false;consentRequired=false;
+    loginButton.disabled=true;
+    consentControls.hidden=true;
+    consentCheck.checked=false;consentCheck.disabled=true;
+    consentCheck.removeAttribute('aria-invalid');
+    consentVersion.disabled=true;consentVersion.value='';
+    consentRetry.hidden=true;
+    consentStatus('');
+  }
+  async function loadConsent(){
+    resetConsent();
+    const current=consentGeneration;
+    if(!canonical)return;
+    consentPreview.hidden=false;
+    try{
+      const response=await fetch('/api/auth/consent',{credentials:'omit',cache:'no-store',redirect:'error',headers:{Accept:'application/json'},signal:AbortSignal.timeout(12000)});
+      if(!response.ok)throw Error();
+      const p=await response.json();
+      if(current!==consentGeneration||gate.hidden)return;
+      if(p.enforced===false&&p.version===null&&p.sha256===null){
+        consentReady=true;loginButton.disabled=false;return;
+      }
+      if(p.enforced!==true||typeof p.version!=='string'||!p.version||
+         typeof p.sha256!=='string'||!/^[a-f0-9]{64}$/.test(p.sha256)||
+         p.version!==consentControls.dataset.documentVersion||
+         p.sha256!==consentControls.dataset.documentSha256)throw Error();
+      // Only an explicitly released, matching local document may be accepted.
+      consentRequired=true;consentReady=true;consentVersion.value=p.version;
+      consentCheck.disabled=false;consentVersion.disabled=false;
+      consentControls.hidden=false;consentPreview.hidden=true;loginButton.disabled=false;
+    }catch{
+      if(current!==consentGeneration||gate.hidden)return;
+      consentPreview.hidden=true;
+      consentStatus('Не удалось проверить актуальную версию условий входа. Повторите проверку.');
+      consentRetry.hidden=false;
+    }
+  }
+  consentRetry.addEventListener('click',loadConsent);
+  consentCheck.addEventListener('change',()=>{
+    consentCheck.removeAttribute('aria-invalid');
+    consentStatus('');
+  });
   function showGate(text) {
     hideAccount();
     gate.hidden = false;
@@ -58,10 +114,12 @@
     find('[data-canonical-login]').hidden = canonical;
     retry.hidden = true;
     status(text);
+    loadConsent();
   }
   function unavailable(text) {
     hideAccount();
     gate.hidden = true;
+    resetConsent();
     retry.hidden = false;
     status(text);
   }
@@ -71,6 +129,7 @@
     pending = true;
     const current = ++generation;
     gate.hidden = true;
+    resetConsent();
     hideAccount();
     retry.hidden = true;
     status('Проверяем авторизацию…');
@@ -106,8 +165,17 @@
     } finally { if (current === generation) pending = false; }
   }
   retry.addEventListener('click', () => refresh());
-  login.addEventListener('submit', () => {
-    login.querySelector('button').disabled = true;
+  login.addEventListener('submit', event => {
+    if(!consentReady || (consentRequired && !consentCheck.checked)){
+      event.preventDefault();
+      if(consentRequired){
+        consentCheck.setAttribute('aria-invalid','true');
+        consentStatus('Подтвердите согласие, чтобы продолжить вход.');
+        consentCheck.focus();
+      }
+      return;
+    }
+    loginButton.disabled=true;
   });
   logout.addEventListener('click', async () => {
     if (loggingOut || profileBusy && profileLoaded) return;
@@ -394,10 +462,9 @@
     if (dirty) { event.preventDefault(); event.returnValue = ''; }
   });
   // Do not retain a visible identity in back/forward cache.
-  window.addEventListener('pagehide', () => { generation++; pending = false; hideAccount(); });
+  window.addEventListener('pagehide', () => { generation++; pending = false; resetConsent(); hideAccount(); });
   window.addEventListener('pageshow', event => {
-    login.querySelector('button').disabled = false;
-    if (event.persisted) refresh();
+    if(event.persisted)refresh();
   });
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && !loggingOut && !profileBusy) {

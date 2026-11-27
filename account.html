@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
 <style>[data-server-account] [hidden]{display:none!important}.account-login-coming{margin:18px 0 0!important}.account-signout:disabled,.account-auth-primary:disabled{opacity:.6;cursor:wait}[data-server-greeting]{overflow-wrap:anywhere}</style>
-<link rel="stylesheet" href="account-profile.css?v=20261127-yandex-official1">
+<link rel="stylesheet" href="account-profile.css?v=20261127-consent-ui1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -42,14 +42,24 @@
           <h2 class="account-login-title">Войти в аккаунт</h2>
           <p class="account-login-description">Выберите удобный способ входа</p>
           <div class="account-login-providers">
-            <form action="/api/auth/yandex/start" method="post" data-server-login hidden>
-              <button class="account-provider-yandex" type="submit" aria-label="Войти с Яндекс ID"><img src="yandex-id-login-l.svg" width="260" height="56" alt="" aria-hidden="true"></button>
+            <form action="/api/auth/yandex/start" method="post" id="server-yandex-login" data-server-login hidden>
+              <button class="account-provider-yandex" type="submit" disabled aria-label="Войти с Яндекс ID"><img src="yandex-id-login-l.svg" width="260" height="56" alt="" aria-hidden="true"></button>
             </form>
             <a class="button button-gold" data-canonical-login href="https://gerbrf.ru/account.html" hidden>Перейти на gerbrf.ru</a>
           </div>
           <div class="account-login-legal" aria-label="Юридическая информация">
             <p class="account-login-legal-title">Обработка персональных данных</p>
-            <p>Политика и отдельное согласие будут доступны перед запуском магазина. Сейчас доступен только тестовый вход.</p>
+            <p data-consent-preview>Политика и отдельное согласие будут доступны перед запуском магазина. Сейчас доступен только тестовый вход.</p>
+            <div data-consent-controls hidden data-document-version="" data-document-sha256="">
+              <div class="account-consent-row">
+                <input type="checkbox" id="account-consent-check" name="acceptConsent" value="yes" form="server-yandex-login" autocomplete="off" disabled>
+                <label for="account-consent-check">Даю согласие на обработку персональных данных для личного кабинета.</label>
+              </div>
+              <input type="hidden" name="consentVersion" form="server-yandex-login" data-consent-version disabled>
+              <p class="account-legal-links"><a href="account-consent.html">Текст согласия</a><a href="privacy.html">Политика обработки персональных данных</a></p>
+            </div>
+            <p class="account-consent-error" data-consent-error role="alert" hidden></p>
+            <button class="account-consent-retry" type="button" data-consent-retry hidden>Повторить проверку</button>
           </div>
         </div>
       </div>
@@ -126,5 +136,5 @@
   <img data-order-photo-large alt="">
 </dialog>
 <script src="script.js?v=20261127-orders1"></script><script src="shop.js?v=20261127-orders1" data-shop-runtime="true"></script>
-<script src="account-session.js?v=20261127-orders1" defer></script>
+<script src="account-session.js?v=20261127-consent-ui1" defer></script>
 </body></html>

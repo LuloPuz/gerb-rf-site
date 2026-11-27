@@ -48,3 +48,13 @@
 .account-login-legal p{margin:0}
 .account-login-legal .account-login-legal-title{font-weight:600;color:#344759;margin-bottom:5px}
 @media(max-width:720px){[data-server-account] .account-login-card .account-login-title{font-size:24px}.account-login-legal{margin-top:20px;padding-top:16px}.account-provider-yandex{height:56px}}
+
+/* Separate, independently actionable consent below the original provider button. */
+.account-consent-row{display:grid;grid-template-columns:19px minmax(0,1fr);align-items:start;gap:10px;margin-top:4px}
+.account-consent-row input{width:18px;height:18px;margin:2px 0 0;accent-color:#0d2742;cursor:pointer}
+.account-consent-row input[aria-invalid=true]{outline:2px solid #a33a32;outline-offset:2px}
+.account-consent-row label{cursor:pointer;color:#344759;font-size:12px;line-height:1.65}
+.account-legal-links{display:flex;flex-wrap:wrap;gap:5px 14px;padding-left:29px;margin-top:8px!important}
+.account-legal-links a{color:#53697e;text-decoration:underline;text-underline-offset:3px}
+.account-consent-error{color:#9b3b34;font-size:12px;margin-top:12px!important}
+.account-consent-retry{padding:0;border:0;background:none;color:#0d2742;font:600 12px/1.5 Manrope,Arial,sans-serif;text-decoration:underline;cursor:pointer;margin-top:10px}
