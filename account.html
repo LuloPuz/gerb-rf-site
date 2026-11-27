@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
 <style>[data-server-account] [hidden]{display:none!important}.account-login-coming{margin:18px 0 0!important}.account-signout:disabled,.account-auth-primary:disabled{opacity:.6;cursor:wait}[data-server-greeting]{overflow-wrap:anywhere}</style>
-<link rel="stylesheet" href="account-profile.css?v=20261127-contacts1">
+<link rel="stylesheet" href="account-profile.css?v=20261127-orders1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -25,7 +25,7 @@
 <main class="commerce-page account-page-auth" data-server-account>
   <div class="container">
     <p class="commerce-breadcrumb"><a href="index.html">Главная</a> / Личный кабинет</p>
-    <p class="shop-preview-notice" role="note">Тестовый режим сайта. Используйте отдельную тестовую учётную запись. Серверные заказы пока не подключены.</p>
+    <p class="shop-preview-notice" role="note">Тестовый режим сайта. Используйте отдельную тестовую учётную запись. Приём заказов пока закрыт.</p>
     <p class="account-panel-lead" data-session-message role="status">Проверяем авторизацию…</p>
     <noscript><p>Для проверки защищённой сессии необходимо включить JavaScript.</p></noscript>
     <section class="account-auth-shell" data-server-gate hidden>
@@ -71,10 +71,10 @@
               <div><h2>Заказы</h2><p class="account-panel-lead">История и статусы заказов.</p></div>
               <a class="account-catalog-link" href="catalog.html">Перейти в каталог →</a>
             </div>
-            <div class="account-empty-v2"><strong>Раздел подключается</strong><p>Серверная история заказов пока недоступна. Прежние демонстрационные заказы здесь не отображаются.</p></div>
+            <p data-orders-status class="account-panel-lead" role="status">Загружаем заказы…</p><div data-orders-list></div><button type="button" class="account-signout" data-orders-more hidden>Показать ещё</button><button type="button" class="account-signout" data-orders-retry hidden>Повторить загрузку</button>
           </section>
           <section class="account-panel" data-server-panel="overview" hidden>
-            <h2>Обзор</h2><p class="account-panel-lead">Вы вошли в личный кабинет. Информация о покупках появится после подключения серверной системы заказов.</p>
+            <h2>Обзор</h2><p class="account-panel-lead">Вы вошли в личный кабинет. История покупок доступна в разделе «Мои заказы».</p>
             <a class="button button-gold" href="cart.html">Открыть корзину</a>
           </section>
           <section class="account-panel" data-server-panel="profile" hidden>
@@ -121,6 +121,6 @@
   <button type="button" class="account-photo-close" data-order-photo-close aria-label="Закрыть фотографию" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <img data-order-photo-large alt="">
 </dialog>
-<script src="script.js?v=20261127-contact-links1"></script><script src="shop.js?v=20261125-order-photo1" data-shop-runtime="true"></script>
-<script src="account-session.js?v=20261127-contacts1" defer></script>
+<script src="script.js?v=20261127-contact-links1"></script><script src="shop.js?v=20261127-orders1" data-shop-runtime="true"></script>
+<script src="account-session.js?v=20261127-orders1" defer></script>
 </body></html>

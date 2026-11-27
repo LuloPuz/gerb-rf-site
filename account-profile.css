@@ -22,3 +22,15 @@
 [data-server-layout].profile-completing [data-server-profile] .profile-grid{grid-template-columns:1fr;gap:14px}
 [data-server-layout].profile-completing [data-server-profile] .profile-submit{width:100%}
 [data-server-profile] .profile-contact-note{margin-top:16px!important}
+
+.server-order-card{border:1px solid #e4dfd5;border-radius:14px;padding:18px;margin:14px 0;color:#0d2742}
+.server-order-head,.server-order-total{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.server-order-head h3{font-size:16px;margin:0 0 5px}
+.server-order-meta{font-size:12px!important;line-height:1.5!important;color:#64748b;margin:4px 0!important;overflow-wrap:anywhere}
+.server-order-status{font-size:12px;font-weight:600;background:#f2eee6;color:#705b34;padding:6px 10px;border-radius:7px}
+.server-order-item{display:flex;align-items:center;gap:12px;border-top:1px solid #ece9e2;padding:14px 0;margin-top:10px}
+.server-order-item>div{min-width:0;flex:1}
+.server-order-image{width:64px;height:64px;object-fit:contain;background:#f8f8f8;border-radius:8px}
+.server-order-price{white-space:nowrap;font-size:14px}
+.server-order-total{border-top:1px solid #ece9e2;padding-top:14px}
+@media(max-width:720px){.server-order-card{padding:12px}.server-order-item{flex-wrap:wrap}.server-order-image{width:48px;height:48px}.server-order-price{margin-left:auto}.server-order-head{align-items:flex-start}}

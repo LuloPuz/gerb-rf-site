@@ -23,6 +23,11 @@
   const profileIntro = find('[data-profile-intro]');
   const saveButton = find('[data-profile-save]');
   const extras = [...root.querySelectorAll('[data-profile-extra]')];
+  const ordersList=find('[data-orders-list]');
+  const ordersStatus=find('[data-orders-status]');
+  const ordersMore=find('[data-orders-more]');
+  const ordersRetry=find('[data-orders-retry]');
+  let orderGeneration=0, ordersBusy=false, ordersLoaded=false, nextBefore=null;
   let completing = false;
   let selectedTab = 'orders';
   let profileRequest = 0, profileBusy = false, profileLoaded = false, dirty = false;
@@ -44,6 +49,7 @@
     dashboard.hidden = true;
     greeting.textContent = '';
     clearProfile();
+    clearOrders();
   }
   function showGate(text) {
     hideAccount();
@@ -106,6 +112,7 @@
   logout.addEventListener('click', async () => {
     if (loggingOut || profileBusy && profileLoaded) return;
     loggingOut = true;
+    clearOrders();
     clearProfile();
     generation++;
     pending = false;
@@ -132,6 +139,7 @@
       item.setAttribute('aria-pressed', String(active));
     });
     panels.forEach(panel => panel.hidden = panel.dataset.serverPanel !== key);
+    if(key==='orders'&&profileLoaded&&!completing&&!ordersLoaded)loadOrders();
   }
   function showProfileLoading() {
     nav.hidden = true;
@@ -323,6 +331,65 @@
       }
     }
   });
+  function clearOrders(){
+    orderGeneration++;ordersBusy=false;ordersLoaded=false;nextBefore=null;
+    ordersList.replaceChildren();ordersMore.hidden=true;ordersRetry.hidden=true;
+    ordersStatus.textContent='Загружаем заказы…';
+  }
+  function node(tag,cls,text){
+    const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;
+  }
+  const rub=value=>new Intl.NumberFormat('ru-RU').format(value)+' ₽';
+  function validOrder(o){
+    return o&&typeof o.number==='string'&&/^[1-9]\d*$/.test(o.number)&&typeof o.status==='string'&&
+      Number.isSafeInteger(o.total)&&o.total>0&&Number.isFinite(Date.parse(o.createdAt))&&Array.isArray(o.items)&&
+      o.items.length<=50&&o.items.every(i=>i&&typeof i.title==='string'&&typeof i.sku==='string'&&
+        typeof i.size==='string'&&typeof i.finish==='string'&&Number.isInteger(i.quantity)&&i.quantity>0&&Number.isSafeInteger(i.price)&&i.price>0);
+  }
+  function renderOrder(o){
+    const card=node('article','server-order-card'),head=node('div','server-order-head'),info=node('div','');
+    info.append(node('h3','','Заказ ДРЖ-'+o.number),node('p','server-order-meta',new Date(o.createdAt).toLocaleDateString('ru-RU')));
+    head.append(info,node('span','server-order-status',o.status));card.append(head);
+    o.items.forEach(i=>{
+      const row=node('div','server-order-item'),details=node('div','');
+      details.append(node('strong','',i.title),node('p','server-order-meta',[i.sku?'Арт. '+i.sku:'',i.size,i.finish].filter(Boolean).join(' · ')),node('p','server-order-meta',i.quantity+' шт. × '+rub(i.price)));
+      try{
+        const url=new URL(i.image,location.href);
+        if(i.image&&url.origin===location.origin&&/\.(png|jpe?g|webp)$/i.test(url.pathname)){
+          const img=node('img','server-order-image');img.src=url.pathname+url.search;img.alt='';img.loading='lazy';row.append(img);
+        }
+      }catch{}
+      row.append(details,node('strong','server-order-price',rub(i.quantity*i.price)));card.append(row);
+    });
+    const total=node('div','server-order-total');total.append(node('span','','Стоимость товаров'),node('strong','',rub(o.total)));card.append(total);
+    return card;
+  }
+  async function loadOrders(more=false){
+    if(ordersBusy||loggingOut||dashboard.hidden||completing||!profileLoaded)return;
+    if(more&&!nextBefore)return;
+    const current=++orderGeneration;ordersBusy=true;ordersMore.hidden=true;ordersRetry.hidden=true;
+    ordersStatus.textContent='Загружаем заказы…';
+    try{
+      const path='/api/account/orders'+(more?'?before='+encodeURIComponent(nextBefore):'');
+      const response=await fetch(path,{credentials:'same-origin',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(12000)});
+      if(current!==orderGeneration)return;
+      if(response.status===401){showGate('Сессия завершена. Войдите снова.');return;}
+      if(!response.ok)throw Error();
+      const data=await response.json();
+      if(current!==orderGeneration)return;
+      if(data.authenticated!==true||!Array.isArray(data.orders)||data.orders.length>20||
+         !data.orders.every(validOrder)||!(data.nextBefore===null||typeof data.nextBefore==='string'&&/^[1-9]\d*$/.test(data.nextBefore)))throw Error();
+      if(!more)ordersList.replaceChildren();
+      data.orders.forEach(o=>ordersList.append(renderOrder(o)));
+      nextBefore=data.nextBefore;ordersLoaded=true;
+      ordersMore.hidden=!nextBefore;
+      ordersStatus.textContent=ordersList.children.length?'':'У вас пока нет заказов. Выберите товар в каталоге.';
+    }catch{
+      if(current===orderGeneration){ordersStatus.textContent='Не удалось загрузить заказы. Повторите попытку.';ordersRetry.hidden=false;}
+    }finally{if(current===orderGeneration)ordersBusy=false;}
+  }
+  ordersMore.addEventListener('click',()=>loadOrders(true));
+  ordersRetry.addEventListener('click',()=>loadOrders(ordersLoaded&&!!nextBefore));
   window.addEventListener('beforeunload', event => {
     if (dirty) { event.preventDefault(); event.returnValue = ''; }
   });
