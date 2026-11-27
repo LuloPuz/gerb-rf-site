@@ -248,7 +248,9 @@ photoForm.addEventListener('submit',async e=>{
  try{
   bitmap=await createImageBitmap(file);
   if(bitmap.width*bitmap.height>50000000)throw Error('dimensions');
-  const scale=Math.min(1,2400/Math.max(bitmap.width,bitmap.height)),canvas=document.createElement('canvas');
+  const scale=Math.min(1,2400/Math.max(bitmap.width,bitmap.height));
+  if(scale<1&&!window.confirm('Исходный размер '+bitmap.width+' × '+bitmap.height+' px. Для галереи будет создана копия '+Math.max(1,Math.round(bitmap.width*scale))+' × '+Math.max(1,Math.round(bitmap.height*scale))+' px. Оригинал на вашем компьютере останется без изменений. Продолжить?')){photoStatus.textContent='Загрузка отменена. Оригинал не изменён.';return;}
+  const canvas=document.createElement('canvas');
   canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
   const ctx=canvas.getContext('2d');if(!ctx)throw Error();
   ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
