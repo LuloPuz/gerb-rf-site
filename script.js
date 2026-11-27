@@ -174,7 +174,7 @@
     }
     if(document.querySelector('script[data-shop-runtime]')) return;
     const shopRuntime=document.createElement('script');
-    shopRuntime.src='shop.js?v=20261125-firstauth2';
+    shopRuntime.src='shop.js?v=20261127-orders1';
     shopRuntime.dataset.shopRuntime='true';
     shopRuntime.async=false;
     document.body.appendChild(shopRuntime);
