@@ -7,13 +7,15 @@ let marker=null,mutationBusy=false;
 const catalogDrafts=new Map(),expandedProducts=new Set();
 const createDialog=$('[data-create-dialog]'),createForm=$('[data-create-form]'),createStatus=$('[data-create-status]');
 let createExisting=false;
+const photoDialog=$('[data-photo-dialog]'),photoForm=$('[data-photo-form]'),photoList=$('[data-photo-list]'),photoStatus=$('[data-photo-status]');
+let photoSku=null,photoGeneration=0;
 const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
- generation++;busy=false;marker=null;reference='';if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
+ generation++;busy=false;marker=null;reference='';clearPhotos();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
  for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
@@ -175,6 +177,61 @@ createForm.addEventListener('submit',async e=>{
  }catch{if(current===generation)createStatus.textContent='Не удалось подтвердить создание. Обновите список, прежде чем повторять.';}
  finally{mutationBusy=false;submit.disabled=false;}
 });
+function clearPhotos(){
+ photoGeneration++;photoSku=null;photoList.replaceChildren();photoForm.reset();photoStatus.textContent='';
+ if(photoDialog.open)photoDialog.close();
+}
+async function loadPhotos(sku,current){
+ photoStatus.textContent='Загружаем галерею…';
+ try{
+  const data=await get('/api/admin/catalog/photos?sku='+encodeURIComponent(sku));
+  if(current!==photoGeneration||!photoDialog.open)return;
+  if(!Array.isArray(data.photos)||data.photos.length>8||!data.photos.every(p=>p.sku===sku&&/^[0-9a-f-]{36}$/.test(p.id)&&Number.isInteger(p.width)&&Number.isInteger(p.height)))throw Error();
+  photoList.replaceChildren();
+  for(const p of data.photos){
+   const fig=node('figure',undefined,'sa-photo-item'),im=node('img');im.alt='Фото товара';im.loading='lazy';im.src='/api/admin/catalog/photo?id='+encodeURIComponent(p.id);
+   fig.append(im,node('figcaption',p.width+' × '+p.height+' px','sa-note'));photoList.append(fig);
+  }
+  if(!data.photos.length)photoList.append(node('p','Загруженных фотографий пока нет.','sa-note'));
+  photoStatus.textContent=data.photos.length+' из 8 фотографий';
+  $('[data-photo-submit]').disabled=data.photos.length>=8;
+ }catch(e){if(current===photoGeneration){photoStatus.textContent='Не удалось загрузить галерею. Закройте и откройте её заново.';if(e.status===401||e.status===403)deny('Доступ закрыт. Войдите заново.',true);}}
+}
+function openPhotos(sku){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ clearPhotos();photoSku=sku;$('[data-photo-title]').textContent='Артикул '+sku;photoDialog.showModal();$('[data-photo-submit]').disabled=true;loadPhotos(sku,photoGeneration);
+}
+$('[data-photo-close]').addEventListener('click',()=>{if(!mutationBusy)clearPhotos();});
+photoDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy)clearPhotos();});
+photoForm.addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(mutationBusy||!marker||!photoSku||!photoDialog.open||dashboard.hidden)return;
+ const file=photoForm.elements.image.files[0],sku=photoSku,current=photoGeneration,session=marker,submit=$('[data-photo-submit]');
+ if(!file||!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>30*1024*1024){photoStatus.textContent='Выберите JPG, PNG или WebP до 30 МБ.';return;}
+ mutationBusy=true;submit.disabled=true;photoStatus.textContent='Подготавливаем изображение…';
+ let bitmap;
+ try{
+  bitmap=await createImageBitmap(file);
+  if(bitmap.width*bitmap.height>50000000)throw Error('dimensions');
+  const scale=Math.min(1,2400/Math.max(bitmap.width,bitmap.height)),canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d');if(!ctx)throw Error();
+  ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+  canvas.width=canvas.height=1;
+  if(!blob||blob.size>8*1024*1024){if(current===photoGeneration)photoStatus.textContent='PNG-копия превышает 8 МБ. Выберите изображение меньшего размера.';return;}
+  if(current!==photoGeneration||session!==marker)return;
+  photoStatus.textContent='Загружаем фотографию…';
+  const r=await fetch('/api/admin/catalog/photo/upload?sku='+encodeURIComponent(sku),{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'image/png','X-Session-Marker':session},body:blob,signal:AbortSignal.timeout(30000)});
+  if(current!==photoGeneration)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  const data=await r.json();
+  if(r.status!==201){photoStatus.textContent=data.error==='photo_quota'?'Лимит галереи или хранилища исчерпан.':data.error==='session_changed'?'Сессия изменилась. Обновите панель.':'Не удалось загрузить фото. Проверьте формат и размер.';return;}
+  if(data.sku!==sku||typeof data.id!=='string')throw Error();
+  photoForm.reset();await loadPhotos(sku,current);
+ }catch{if(current===photoGeneration)photoStatus.textContent='Не удалось подтвердить загрузку. Проверьте галерею перед повтором.';}
+ finally{bitmap?.close();mutationBusy=false;if(current===photoGeneration&&photoList.querySelectorAll('figure').length<8)submit.disabled=false;}
+});
 function renderCatalog(){
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
  const list=variants.filter(v=>[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q));
@@ -218,7 +275,7 @@ function renderCatalog(){
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
-  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));addRow.append(addSize);card.append(addRow);target.append(card);
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));addRow.append(gallery,addSize);card.append(addRow);target.append(card);
  }
  if(!list.length)target.append(node('p','Нет подходящих вариантов.','sa-empty'));
 }
