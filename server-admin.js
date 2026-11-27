@@ -3,12 +3,14 @@
 const $=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)];
 const gate=$('[data-gate]'),dashboard=$('[data-dashboard]'),message=$('[data-message]');
 let generation=0,tab='overview',busy=false,orders=[],variants=[],orderCursor=null,catalogCursor=null,reference='';
+let marker=null,mutationBusy=false;
+const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
- generation++;busy=false;reference='';orders=[];variants=[];orderCursor=null;catalogCursor=null;
+ generation++;busy=false;marker=null;reference='';orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
  for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
@@ -34,7 +36,8 @@ async function boot(){
  $('[data-gate-status]').textContent='Проверяем права доступа…';
  try{
  const r=await get('/api/admin/session');if(current!==generation)return;
- if(r.authorized!==true)throw Error();
+ if(r.authorized!==true||typeof r.sessionMarker!=='string'||!/^[a-f0-9]{64}$/.test(r.sessionMarker))throw Error();
+ marker=r.sessionMarker;
  gate.hidden=true;dashboard.hidden=false;$('[data-logout]').hidden=false;
  await select(tab);
  }catch(err){if(current!==generation)return;deny(err.status===401?'Войдите в личный кабинет.':err.status===403?'У аккаунта нет действующих административных полномочий.':'Не удалось проверить доступ. Повторите попытку.',err.status===401||err.status===403,err.status===403);}
@@ -60,6 +63,23 @@ async function select(key){
   }catch(err){failure(err,current);}
  }else await load(false);
 }
+async function changeStatus(o,next,button,selectControl){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='orders'||!transitions[o.status]?.includes(next))return;
+ if(!window.confirm('Изменить статус заказа ДРЖ-'+o.number+' на «'+next+'»?'))return;
+ const current=generation,session=marker;mutationBusy=true;button.disabled=true;selectControl.disabled=true;
+ try{
+  const r=await fetch('/api/admin/orders/status',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',
+   headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({number:o.number,expected:o.status,next}),signal:AbortSignal.timeout(12000)});
+  if(current!==generation)return;
+  if(r.status===401||r.status===403){deny('Доступ к панели закрыт. Войдите заново.',true);return;}
+  if(r.status===409){await select('orders');message.textContent='Заказ или сессия изменились. Проверьте актуальные данные.';return;}
+  if(!r.ok)throw Error();
+  const data=await r.json();
+  if(data.number!==o.number||data.status!==next)throw Error();
+  await select('orders');message.textContent='Статус заказа обновлён.';
+ }catch{if(current===generation)message.textContent='Не удалось подтвердить изменение. Обновите список перед повтором.';}
+ finally{mutationBusy=false;button.disabled=false;selectControl.disabled=false;}
+}
 function renderOrders(){
  const q=$('[data-order-search]').value.trim().toLowerCase(),status=$('[data-order-filter]').value;
  const list=orders.filter(o=>(!status||o.status===status)&&(!q||[o.number,o.customer?.name,o.customer?.phone,o.customer?.organization].join(' ').toLowerCase().includes(q)));
@@ -75,7 +95,19 @@ function renderOrders(){
   details.append(contact,node('h3','Состав заказа'));
   for(const i of o.items||[]){const item=node('div',undefined,'sa-item');item.append(node('strong',i.title),node('p',[i.sku,i.size,i.finish].filter(Boolean).join(' · '),'sa-note'),node('p',i.quantity+' шт. × '+money(i.price)));details.append(item);}
   if(o.history?.length){details.append(node('h3','История статусов'));for(const h of o.history)details.append(node('p',date(h.at)+' · '+h.status,'sa-note'));}
-  card.append(details);target.append(card);
+  card.append(details);
+  const available=transitions[o.status]||[];
+  if(available.length){
+   const action=node('div',undefined,'sa-status-action'),selectControl=node('select');
+   selectControl.setAttribute('aria-label','Новый статус заказа '+o.number);
+   const placeholder=node('option','Выберите статус');placeholder.value='';placeholder.disabled=true;placeholder.selected=true;selectControl.append(placeholder);
+   for(const value of available){const option=node('option',value);option.value=value;selectControl.append(option);}
+   const button=node('button','Изменить статус','sa-status-save');button.type='button';button.disabled=true;
+   selectControl.addEventListener('change',()=>button.disabled=!selectControl.value);
+   button.addEventListener('click',()=>changeStatus(o,selectControl.value,button,selectControl));
+   action.append(selectControl,button);card.append(action);
+  }
+  target.append(card);
  }
 }
 function renderCatalog(){
