@@ -1,77 +1,10 @@
 <!doctype html>
-<html lang="ru">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>Администрирование | Держава</title>
-<meta name="theme-color" content="#07182a">
-<link rel="stylesheet" href="styles.css?v=20261126-localfonts1">
-<link rel="stylesheet" href="admin.css?v=20261124-admin2">
-</head>
-<body class="admin-page">
-<header class="admin-topbar">
-  <a class="admin-brand" href="index.html"><strong>ДЕРЖАВА</strong><span>Администрирование</span></a>
-  <div class="admin-top-actions">
-    <a href="index.html">Открыть сайт</a>
-    <button type="button" data-admin-signout hidden>Выйти</button>
-  </div>
-</header>
-
-<main class="admin-main">
-  <section class="admin-setup" data-admin-setup hidden>
-    <p class="admin-eyebrow">Подключение базы</p>
-    <h1>Админка подготовлена</h1>
-    <p>Интерфейс уже работает в режиме локального предпросмотра. Чтобы видеть заказы со всех устройств, подключите российский backend в Yandex Cloud. Код и схема уже подготовлены в папке <code>yandex-backend</code>.</p>
-    <div class="admin-setup-note">До подключения базы здесь отображаются только тестовые заказы, сохранённые в этом браузере.</div>
-  </section>
-
-  <section class="admin-login" data-admin-login hidden>
-    <div class="admin-login-card">
-      <p class="admin-eyebrow">Защищённый вход</p>
-      <h1>Панель управления</h1>
-      <p>Войдите учётной записью администратора «Державы».</p>
-      <form data-admin-login-form>
-        <label>Email<input type="email" name="email" autocomplete="username" required></label>
-        <label>Пароль<input type="password" name="password" autocomplete="current-password" required></label>
-        <button type="submit">Войти</button>
-        <p class="admin-form-message" data-admin-login-message></p>
-      </form>
-    </div>
-  </section>
-
-  <section class="admin-dashboard" data-admin-dashboard hidden>
-    <div class="admin-heading">
-      <div>
-        <p class="admin-eyebrow">Управление заказами</p>
-        <h1>Заказы</h1>
-        <p data-admin-mode-note></p>
-      </div>
-      <button class="admin-refresh" type="button" data-admin-refresh>Обновить</button>
-    </div>
-
-    <div class="admin-stats" data-admin-stats></div>
-
-    <div class="admin-toolbar">
-      <input type="search" data-admin-search placeholder="Поиск: номер, имя, телефон, организация">
-      <select data-admin-status-filter>
-        <option value="">Все статусы</option>
-        <option>Заказ принят</option>
-        <option>Подтверждён</option>
-        <option>Ожидает оплаты</option>
-        <option>В производстве</option>
-        <option>Отправлен</option>
-        <option>Получен</option>
-        <option>Отменён</option>
-      </select>
-    </div>
-
-    <div class="admin-orders" data-admin-orders></div>
-  </section>
-</main>
-
-<script src="backend-config.js?v=20261124-yandex1"></script>
-<script src="backend.js?v=20261124-yandex1"></script>
-<script src="admin.js?v=20261125-payment1"></script>
-</body>
-</html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Управление магазином | Держава</title><link rel="stylesheet" href="server-admin.css?v=20261127-admin1"></head>
+<body><header class="sa-header"><a class="sa-brand" href="index.html">ДЕРЖАВА <small>Управление магазином</small></a><div class="sa-header-actions"><a href="index.html">На сайт</a><button type="button" data-logout hidden>Выйти</button></div></header>
+<main class="sa-main"><section class="sa-gate" data-gate><p class="sa-eyebrow">Защищённый доступ</p><h1>Панель управления</h1><p data-gate-status role="status">Проверяем права доступа…</p><a class="sa-primary" href="account.html" data-login hidden>Войти через Яндекс ID</a><button type="button" data-retry hidden>Проверить снова</button><div data-enroll hidden><hr><h2>Первичная настройка</h2><p>Только для владельца магазина. Войдите в свой аккаунт заново, затем получите код и введите его в локальном терминале сервера. Код не даёт доступа сам по себе.</p><button type="button" data-reference>Получить код для назначения</button><output data-code hidden></output><button type="button" data-copy hidden>Скопировать код</button><p data-enroll-status role="status"></p></div></section>
+<section data-dashboard hidden><div class="sa-layout"><aside class="sa-sidebar"><p class="sa-eyebrow">Магазин</p><nav aria-label="Управление"><button data-tab="overview" type="button" aria-pressed="true">Обзор</button><button data-tab="orders" type="button" aria-pressed="false">Заказы</button><button data-tab="catalog" type="button" aria-pressed="false">Товары</button></nav><p class="sa-note">Режим просмотра. Редактирование будет подключено отдельно.</p></aside><div class="sa-content">
+<div class="sa-heading"><div><p class="sa-eyebrow">Администрирование</p><h1 data-title>Обзор</h1></div><button type="button" data-refresh>Обновить</button></div><p data-message role="status" class="sa-message"></p>
+<section data-panel="overview"><div data-stats class="sa-stats"></div><div data-intake class="sa-intake"></div></section>
+<section data-panel="orders" hidden><div class="sa-toolbar"><input type="search" data-order-search placeholder="Поиск среди загруженных заказов" aria-label="Поиск среди загруженных заказов"><select data-order-filter aria-label="Статус"><option value="">Все статусы</option><option>Новая заявка</option><option>Подтверждён</option><option>Ожидает оплаты</option><option>В производстве</option><option>Отправлен</option><option>Получен</option><option>Отменён</option></select></div><div data-orders></div><button type="button" data-orders-more hidden>Загрузить ещё</button></section>
+<section data-panel="catalog" hidden><div class="sa-toolbar"><input type="search" data-catalog-search placeholder="Поиск по артикулу и названию" aria-label="Поиск среди загруженных товаров"></div><p class="sa-note">Цены и варианты из серверного каталога. Неактивные варианты пока нельзя заказать.</p><div class="sa-table-wrap"><table><thead><tr><th>Товар</th><th>Размер</th><th>Цена</th><th>Доступность</th></tr></thead><tbody data-catalog></tbody></table></div><button type="button" data-catalog-more hidden>Загрузить ещё</button></section>
+</div></div></section></main><script src="server-admin.js?v=20261127-admin1" defer></script></body></html>
