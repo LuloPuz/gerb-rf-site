@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="service-info-page">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -17,20 +17,27 @@
 .service-crumbs a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .service-page h1{font:400 clamp(32px,5vw,54px)/1.12 "PT Serif",serif;margin:0 0 12px}
 .service-intro{font-size:15px;line-height:1.7;color:#52606b;margin:0 0 28px}
-.service-nav{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 24px}
+.service-info-page{--service-header-height:90px;--service-nav-height:62px}
+html.service-info-page,body.service-info-body{overflow-x:clip;overflow-y:visible}
+.service-nav-slot{margin:0 0 16px}
+.service-nav{display:flex;gap:12px;flex-wrap:nowrap;margin:0;padding:8px 0;background:#fbfaf6}
+.service-nav.is-pinned{position:fixed;top:var(--service-header-height);left:var(--service-nav-left);width:var(--service-nav-width);z-index:45;box-shadow:0 5px 10px rgba(7,24,42,.06)}
+.service-nav-slot.is-pinned{height:var(--service-nav-height)}
+.service-nav a{white-space:nowrap}
+.service-nav a:focus-visible,.service-email:focus-visible{outline:2px solid #98763d;outline-offset:3px}
 .service-nav a{border:1px solid #c9b58c;padding:10px 24px;color:#07182a;text-decoration:none;font-weight:500;font-size:14px}
 .service-nav a:hover,.service-nav a:focus-visible{background:#07182a;color:#fff}
-.service-section{scroll-margin-top:150px;background:#fff;border:1px solid #e3dfd6;padding:clamp(22px,4vw,38px);margin-bottom:20px}
+.service-section{scroll-margin-top:calc(var(--service-header-height) + var(--service-nav-height) + 14px);background:#fff;border:1px solid #e3dfd6;padding:clamp(22px,4vw,38px);margin-bottom:20px}
 .service-section h2{font:400 32px/1.2 "PT Serif",serif;margin:0 0 18px}
 .service-section h3{font-size:15px;line-height:1.5;margin:20px 0 6px}
 .service-section p{font-size:15px;line-height:1.75;color:#45535e;margin:0 0 12px;overflow-wrap:anywhere}
 .service-section p:last-child{margin-bottom:0}
 .service-section:target{border-color:#b69a61}
-.service-email{color:#07182a;font-size:clamp(16px,2.5vw,21px);font-weight:500;text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere}.service-email:hover{color:#98763d}@media(max-width:420px){.service-nav{gap:6px}.service-nav a{padding:10px 6px;font-size:13px;min-width:0}}
-@media(max-width:720px){.service-page{padding:24px 0 44px}.service-section{scroll-margin-top:180px}.service-section h2{font-size:27px}.service-nav a{flex:1;text-align:center}}
+.service-email{color:#07182a;font-size:clamp(16px,2.5vw,21px);font-weight:500;text-decoration:none!important;overflow-wrap:anywhere}.service-email:hover{color:#98763d}@media(max-width:420px){.service-nav{gap:6px}.service-nav a{padding:10px 6px;font-size:13px;min-width:0}}
+@media(max-width:720px){.service-page{padding:24px 0 44px}.service-info-page{--service-header-height:145px}.service-section h2{font-size:27px}.service-nav a{flex:1;text-align:center}}
 </style>
 </head>
-<body>
+<body class="service-info-body">
 <header class="site-header"><div class="container header-inner" data-static-header>
 <a class="brand" href="index.html"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></a>
 <button class="site-menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="siteQuickMenu"><span class="site-menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="site-menu-label">Меню</span></button>
@@ -43,7 +50,7 @@
 <p class="eyebrow">Информация покупателям</p>
 <h1>Контакты, оплата и доставка</h1>
 <p class="service-intro">Всё необходимое для связи с нами, оплаты и получения заказа.</p>
-<nav class="service-nav" aria-label="Разделы страницы"><a href="#contacts">Контакты</a><a href="#payment">Оплата</a><a href="#delivery">Доставка</a></nav>
+<div class="service-nav-slot"><nav class="service-nav" aria-label="Разделы страницы"><a href="#contacts">Контакты</a><a href="#payment">Оплата</a><a href="#delivery">Доставка</a></nav></div>
 <section class="service-section" id="contacts" aria-labelledby="contacts-title">
 <h2 id="contacts-title">Контакты</h2>
 <p>Электронная почта</p>
@@ -75,5 +82,42 @@
 </div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 <script src="script.js?v=20261127-contact-links1"></script>
 <script src="shop.js?v=20261125-order-photo1" data-shop-runtime="true"></script>
+<script>
+(() => {
+  const root = document.documentElement;
+  const header = document.querySelector('.site-header');
+  const slot = document.querySelector('.service-nav-slot');
+  const nav = slot.querySelector('.service-nav');
+  let frame = 0;
+  function update() {
+    frame = 0;
+    const headerHeight = Math.ceil(header.getBoundingClientRect().height);
+    const bounds = slot.getBoundingClientRect();
+    root.style.setProperty('--service-header-height', headerHeight + 'px');
+    root.style.setProperty('--service-nav-left', bounds.left + 'px');
+    root.style.setProperty('--service-nav-width', bounds.width + 'px');
+    root.style.setProperty('--service-nav-height', Math.ceil(nav.getBoundingClientRect().height) + 'px');
+    const pinned = bounds.top <= headerHeight;
+    slot.classList.toggle('is-pinned', pinned);
+    nav.classList.toggle('is-pinned', pinned);
+  }
+  function schedule() { if (!frame) frame = requestAnimationFrame(update); }
+  window.addEventListener('scroll', schedule, {passive:true});
+  window.addEventListener('resize', schedule, {passive:true});
+  if ('ResizeObserver' in window) {
+    const observer = new ResizeObserver(schedule);
+    observer.observe(header);
+    observer.observe(nav);
+  }
+  update();
+  const initialId = location.hash.slice(1);
+  if (['contacts','payment','delivery'].includes(initialId)) {
+    requestAnimationFrame(() => {
+      update();
+      if (location.hash.slice(1) === initialId) document.getElementById(initialId).scrollIntoView({block:'start',behavior:'instant'});
+    });
+  }
+})();
+</script>
 </body>
 </html>
