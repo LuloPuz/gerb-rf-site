@@ -90,8 +90,8 @@ function renderList(products,preview=false){
  const render=()=>{
   content.replaceChildren();const q=search.value.trim().toLowerCase(),cat=category.value;
   const filtered=products.filter(p=>(!cat||p.category===cat)&&(!q||(typeof window.derzhavaProductMatches==='function'?window.derzhavaProductMatches(q,productKeys(p)):productKeys(p).toLowerCase().includes(q))));
-  if(!filtered.length){content.append(node   content.append(renderCard(p,preview));t,node('span','арт. '+p.sku,'popular-card-sku'),media,body);content.append(card);
-  }
+  if(!filtered.length){content.append(node('p','Нет подходящих товаров.','ds-empty'));return;}
+  for(const p of filtered)content.append(renderCard(p,preview));
  };
  search.oninput=render;category.onchange=render;$('[data-ds-filters]').hidden=false;render();showContent();
 }
