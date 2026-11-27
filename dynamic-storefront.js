@@ -1,3 +1,4 @@
+import {productKeys} from './dynamic-search.js?v=20261128-search1';
 const $=s=>document.querySelector(s);
 const content=$('[data-ds-content]'),status=$('[data-ds-status]'),kind=document.body.dataset.dynamicPage;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
@@ -84,9 +85,10 @@ async function loadProduct(){
 }
 function renderList(products,preview=false){
  const search=$('[data-ds-search]'),category=$('[data-ds-category]');
+ search.value=new URLSearchParams(location.search).get('q')||'';
  const render=()=>{
   content.replaceChildren();const q=search.value.trim().toLowerCase(),cat=category.value;
-  const filtered=products.filter(p=>(!cat||p.category===cat)&&(!q||[p.sku,p.title,p.finish,categories[p.category]].join(' ').toLowerCase().includes(q)));
+  const filtered=products.filter(p=>(!cat||p.category===cat)&&(!q||(typeof window.derzhavaProductMatches==='function'?window.derzhavaProductMatches(q,productKeys(p)):productKeys(p).toLowerCase().includes(q))));
   if(!filtered.length){content.append(node('p','Нет подходящих товаров.','ds-empty'));return;}
   for(const p of filtered){
    const href=productUrl(p.sku)+(preview?'&layout=check':'');

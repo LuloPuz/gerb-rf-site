@@ -363,7 +363,7 @@ document.addEventListener('keydown', event => {
     return queryToken.startsWith(targetToken);
   };
 
-  const indexedPages = pages.map(page => {
+  const indexPages = source => source.map(page => {
     const titleNorm = normalize(page.title);
     const hayNorm = normalize(page.title + ' ' + page.meta + ' ' + page.keys);
     return {
@@ -375,6 +375,11 @@ document.addEventListener('keydown', event => {
     };
   });
 
+  let indexedPages=indexPages(pages), publishedSearch=false, searchLoading=null;
+  window.derzhavaProductMatches=(query,keys)=>{
+    const q=tokens(query),target=tokens(keys);
+    return q.every(qt=>target.some(tt=>tokenMatches(qt,tt)));
+  };
   const rankPages = query => {
     const qNorm = normalize(query);
     const qTokens = tokens(query);
@@ -406,7 +411,7 @@ document.addEventListener('keydown', event => {
       return {page, score};
     })
     .filter(item => item.score > 0)
-    .sort((a,b) => b.score - a.score || a.page.title.localeCompare(b.page.title,'ru'))
+    .sort((a,b) => (Number(!!b.page.dynamic)-Number(!!a.page.dynamic)) || b.score - a.score || a.page.title.localeCompare(b.page.title,'ru'))
     .slice(0,10)
     .map(item => item.page);
   };
@@ -417,6 +422,10 @@ document.addEventListener('keydown', event => {
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;');
 
+  const searchDestination=query=>{
+    const dynamic=publishedSearch&&rankPages(query).some(p=>p.dynamic);
+    return (dynamic?'products.html':'catalog.html')+(query?'?q='+encodeURIComponent(query):'');
+  };
   const render = query => {
     const matches = rankPages(query);
     if (!normalize(query)) {
@@ -433,7 +442,7 @@ document.addEventListener('keydown', event => {
 
     const rawQuery=String(query||'').trim();
     const allMatchesLink=matches.length>1
-      ? '<a class="home-search-result home-search-result-all" href="catalog.html?q=' + encodeURIComponent(rawQuery) + '">' +
+      ? '<a class="home-search-result home-search-result-all" href="' + escapeHtml(searchDestination(rawQuery)) + '">' +
           '<span><strong>Все варианты по запросу «' + escapeHtml(rawQuery) + '»</strong><small>Показать все подходящие товары в каталоге</small></span>' +
           '<span class="home-search-all-arrow" aria-hidden="true">→</span>' +
         '</a>'
@@ -443,7 +452,7 @@ document.addEventListener('keydown', event => {
       allMatchesLink +
       matches.map(page =>
         '<a class="home-search-result" href="' + escapeHtml(page.url) + '">' +
-          '<span><strong>' + escapeHtml(page.title) + '</strong><small>' + escapeHtml(page.meta) + '</small></span>' +
+          '<span class="site-search-result-copy">'+(page.photo?'<img class="site-search-product-photo" src="'+escapeHtml(page.photo)+'" alt="" loading="lazy">':'')+'<span><strong>' + escapeHtml(page.title) + '</strong><small>' + escapeHtml(page.meta) + '</small></span></span>' +
           '<span aria-hidden="true">→</span>' +
         '</a>'
       ).join('');
@@ -451,29 +460,49 @@ document.addEventListener('keydown', event => {
     return matches;
   };
 
+  async function refreshSearch(){
+    if(location.origin!=='https://gerbrf.ru'||searchLoading)return searchLoading;
+    searchLoading=(async()=>{
+      try{
+        const module=await import('./dynamic-search.js?v=20261128-search1');
+        const response=await fetch('/api/catalog/products',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(8000)});
+        if(!response.ok)throw Error();
+        const snapshot=module.publicSearchPages(await response.json());
+        indexedPages=indexPages(module.mergeSearchPages(pages,skuByUrl,snapshot));publishedSearch=snapshot.published;
+      }catch{
+        // A network error must not keep previously published product links cached.
+        indexedPages=indexPages(publishedSearch?pages.filter(p=>!Object.hasOwn(skuByUrl,p.url.split(/[?#]/)[0])):pages);
+      }finally{searchLoading=null;if(document.activeElement===input&&normalize(input.value))render(input.value);}
+    })();
+    return searchLoading;
+  }
   input.addEventListener('input', () => render(input.value));
   input.addEventListener('focus', () => {
     if (normalize(input.value)) render(input.value);
+    refreshSearch();
   });
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     const query = String(input.value || '').trim();
+    await refreshSearch();
     if (!query) {
       window.location.href = 'catalog.html';
       return;
     }
-    window.location.href = 'catalog.html?q=' + encodeURIComponent(query);
+    window.location.href = searchDestination(query);
   });
 
   hintButtons.forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const query = button.dataset.searchQuery || '';
       input.value = query;
-      window.location.href = 'catalog.html?q=' + encodeURIComponent(query);
+      await refreshSearch();window.location.href = searchDestination(query);
     });
   });
 
+  refreshSearch();
+  window.addEventListener('pageshow',e=>{if(e.persisted)refreshSearch();});
   document.addEventListener('click', event => {
     if (!root.contains(event.target)) results.hidden = true;
   });
@@ -492,6 +521,7 @@ if(!document.getElementById('site-search-all-variants-style')){
   const style=document.createElement('style');
   style.id='site-search-all-variants-style';
   style.textContent=
+    '.site-search-result-copy{display:flex;align-items:center;gap:10px;min-width:0}.site-search-product-photo{width:44px;height:44px;flex:none;object-fit:contain;object-position:center;border-radius:5px;background:#f8f8ff}'+
     '.home-search-result-all{margin:0 0 5px;border:1px solid rgba(166,124,50,.34)!important;border-radius:8px;background:#fffaf0!important;padding:14px!important}'+
     '.home-search-result-all:hover,.home-search-result-all:focus{background:#f7edd8!important;border-color:#b58a3f!important}'+
     '.home-search-result-all strong{font-family:"Manrope",Arial,sans-serif!important;font-size:13px!important;font-weight:700!important;color:#0d2742!important}'+
