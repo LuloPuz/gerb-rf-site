@@ -19,6 +19,18 @@ async function get(path){
  if(!r.ok){const e=Error('HTTP '+r.status);e.status=r.status;throw e;}
  return r.json();
 }
+function bindCart(button,sku,selected,label){
+ if(layoutCheck||typeof window.derzhavaDynamicCartAdd!=='function')return;
+ button.disabled=false;button.removeAttribute('title');
+ button.addEventListener('click',async()=>{
+  if(button.disabled)return;
+  const v=selected();button.disabled=true;
+  try{if(await window.derzhavaDynamicCartAdd({sku,size:v.size,price:v.price})){
+   button.textContent='Добавлено ✓';
+   setTimeout(()=>{button.textContent=label;},1500);
+  }}finally{button.disabled=false;}
+ });
+}
 function renderProduct(p){
  document.title=p.title+' | Держава';$('[data-ds-crumb]').textContent=p.title;
  const layout=node('div',undefined,'final-product-grid ds-product-grid'),gallery=node('div',undefined,'final-product-gallery'),main=node('button',undefined,'final-product-main ds-image-main'),thumbs=node('div',undefined,'final-product-thumbs ds-thumbs');
@@ -40,19 +52,19 @@ function renderProduct(p){
  }
  const info=node('div',undefined,'final-product-info');
  info.append(node('p',p.eyebrow||categories[p.category],'eyebrow'),node('h1',p.productTitle||p.title),node('p',p.productFinish||p.finish,'final-finish'),node('p','Артикул: '+p.sku,'product-article'));
- const sizes=[...p.variants];
+ const sizes=[...p.variants];let selectedVariant=sizes[0];
  const price=node('div',money(sizes[0].price),'final-price'),options=node('div',undefined,'size-options');
  options.setAttribute('role','group');options.setAttribute('aria-label','Выберите размер');
  info.append(price,node('p','Выберите размер','size-label'),options);
  for(const [i,v] of sizes.entries()){
   const b=node('button',v.size,'size-option');b.type='button';b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);
-  b.addEventListener('click',()=>{price.textContent=money(v.price);for(const t of options.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});options.append(b);
+  b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of options.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});options.append(b);
  }
  const custom=node('a',undefined,'custom-size-inline'),copy=node('span',undefined,'custom-size-inline-copy');
  custom.href='offer.html';copy.append(node('strong','Не нашли нужного размера?'),node('small','Возможно изготовление герба под индивидуальный запрос'));custom.append(copy,node('span','Уточнить размер'));info.append(custom);
  if(p.material)info.append(node('p','Материал: '+p.material,'ds-detail'));
  if(p.leadTime){const time=node('div',undefined,'production-time');time.append(node('strong','Срок изготовления'),node('span',p.leadTime));info.append(time);}
- const actions=node('div',undefined,'shop-product-actions'),buy=node('button','Добавить в корзину','shop-add-button'),cart=node('a','Корзина','shop-go-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';cart.href='cart.html';actions.append(buy,cart);info.append(actions);
+ const actions=node('div',undefined,'shop-product-actions'),buy=node('button','Добавить в корзину','shop-add-button'),cart=node('a','Корзина','shop-go-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';cart.href='cart.html';bindCart(buy,p.sku,()=>selectedVariant,'Добавить в корзину');actions.append(buy,cart);info.append(actions);
  const back=node('a','← Продолжить покупки','button final-order-button shop-direct-order');back.href='products.html'+(layoutCheck?'?layout=check':'');info.append(back);
  layout.append(gallery,info);content.replaceChildren(layout);
  for(const [heading,value] of [['Описание товара',p.description],['Характеристики',p.specs]]){
@@ -89,16 +101,16 @@ function renderList(products,preview=false){
    const fields=p.fields||[['Исполнение',p.finish||'—']];
    for(const [k,v] of fields){const row=node('div');row.append(node('dt',k),node('dd',v));specs.append(row);}
    const sizeRow=node('div',undefined,'popular-spec-size'),dd=node('dd'),sizes=node('div',undefined,'popular-size-switcher');sizes.setAttribute('role','group');sizes.setAttribute('aria-label','Выберите размер');
-   const price=node('strong',money(p.variants[0].price),'popular-card-price');
+   const price=node('strong',money(p.variants[0].price),'popular-card-price');let selectedVariant=p.variants[0];
    for(const [i,v] of p.variants.entries()){
     const b=node('button',undefined,'popular-size-choice'+(i===0?' active':''));b.type='button';b.setAttribute('aria-pressed',String(i===0));
     b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
-    b.addEventListener('click',()=>{price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
+    b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
    }
    const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';dd.append(sizes,custom);sizeRow.append(node('dt','Размер'),dd);specs.append(sizeRow);
    const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
    priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
-   const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));
+   const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));bindCart(buy,p.sku,()=>selectedVariant,'В корзину');
    const open=node('a',undefined,'popular-card-cta');open.href=href;open.append(node('span','Открыть товар'));actions.append(buy,open);bottom.append(priceBlock,actions);
    body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);content.append(card);
   }

@@ -264,13 +264,16 @@
       return;
     }
 
-    list.innerHTML=items.map((item,i)=>'<article class="cart-item" data-cart-index="'+i+'">'+
+    list.innerHTML=items.map((stored,i)=>{
+      const current=catalogState==='published'?catalogSnapshot.byKey.get(catalogModel.variantKey(stored.sku,stored.size)):null;
+      const item=current?{...stored,url:current.url,image:current.image}:stored;
+      return '<article class="cart-item" data-cart-index="'+i+'">'+
       '<a class="cart-item-media" href="'+esc(safePath(item.url,true))+'"><img src="'+esc(safePath(item.image))+'" alt=""></a>'+
       '<div><div class="cart-item-meta">'+esc(item.finish)+'</div><h3><a href="'+esc(safePath(item.url,true))+'">'+esc(item.title)+'</a></h3>'+
       (item.sku?'<div class="cart-item-meta">Артикул: '+esc(item.sku)+'</div>':'')+
       '<div class="cart-item-meta">Размер: '+esc(item.size)+'</div><div class="cart-item-price">'+money(item.price)+'</div>'+
       '<div class="cart-item-actions"><div class="qty-control"><button type="button" data-qty="-1">−</button><span>'+esc(item.qty)+'</span><button type="button" data-qty="1">+</button></div><button class="cart-remove" type="button" data-remove>Удалить</button></div></div>'+
-      '<div class="cart-line-total">'+money(item.price*item.qty)+'</div></article>').join('');
+      '<div class="cart-line-total">'+money(item.price*item.qty)+'</div></article>';}).join('');
 
     summary.innerHTML='<h2>Ваш заказ</h2>'+
       '<div class="summary-row"><span>Позиций</span><strong>'+items.length+'</strong></div>'+
@@ -478,7 +481,7 @@
     const current=++catalogGeneration;
     catalogPromise=(async()=>{
       try{
-        catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261127-catalog1');
+        catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261128-cart2');
         const r=await fetch('/api/catalog/variants',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
         if(!r.ok)throw Error();
         const snapshot=catalogModel.parseCatalog(await r.json());
@@ -492,6 +495,30 @@
 
   injectHeader();
   if(document.body.hasAttribute('data-dynamic-page')){
+    let adding=false;
+    // Layout samples never write to the actual cart. Only a current published
+    // server variant can be added, and only at the price shown to the buyer.
+    if(canonical&&new URLSearchParams(location.search).get('layout')!=='check'){
+      window.derzhavaDynamicCartAdd=async ({sku,size,price})=>{
+        if(adding)return false;
+        if(typeof sku!=='string'||!/^[0-9]{4}$/.test(sku)||!canonicalSize(size)||!Number.isSafeInteger(price)||price<1)return false;
+        adding=true;
+        try{
+          catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261128-cart2');
+          const response=await fetch('/api/catalog/variants',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
+          if(!response.ok)throw Error();
+          const snapshot=catalogModel.parseCatalog(await response.json());
+          const v=snapshot.byKey.get(catalogModel.variantKey(sku,size));
+          if(!snapshot.published||!v?.dynamicImageId){toast('Этот размер сейчас недоступен.');return false;}
+          if(v.price!==price){toast('Цена изменилась. Обновите страницу товара.');return false;}
+          const existing=cart().find(x=>x.sku===sku&&canonicalSize(x.size)===canonicalSize(size));
+          if(existing&&Number(existing.price)!==v.price){toast('Цена товара изменилась. Проверьте корзину.',true);return false;}
+          catalogSnapshot=snapshot;catalogState='published';
+          return addProduct({id:sku+'|'+v.size,sku,size:v.size,price:v.price,title:v.title,finish:v.finish,image:v.image,url:v.url,qty:1});
+        }catch{toast('Не удалось добавить товар. Проверьте корзину или обновите страницу.');return false;}
+        finally{adding=false;}
+      };
+    }
     window.addEventListener('storage',e=>{if(e.key===CART_KEY)updateHeaderCount();});
     window.addEventListener('pageshow',updateHeaderCount);
     return;

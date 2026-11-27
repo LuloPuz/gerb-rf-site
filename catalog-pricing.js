@@ -13,8 +13,13 @@ export function parseCatalog(p){
      !Number.isSafeInteger(v.price)||v.price<1||v.price>100000000||
      typeof v.title!=='string'||!v.title||typeof v.finish!=='string'||typeof v.url!=='string'||!/^[a-z0-9-]+\.html$/.test(v.url)||
      typeof v.image!=='string'||v.image.length>300)throw Error('Invalid catalog variant');
+  let resolved=v;
+  if(Object.hasOwn(v,'dynamicImageId')){
+   if(!/^[0-9]{4}$/.test(v.sku)||typeof v.dynamicImageId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v.dynamicImageId))throw Error('Invalid dynamic image');
+   resolved={...v,url:'product.html?sku='+encodeURIComponent(v.sku),image:'/api/catalog/photo?id='+encodeURIComponent(v.dynamicImageId)};
+  }
   const key=variantKey(v.sku,v.size);if(byKey.has(key))throw Error('Duplicate variant');
-  byKey.set(key,v);if(!bySku.has(v.sku))bySku.set(v.sku,[]);bySku.get(v.sku).push(v);
+  byKey.set(key,resolved);if(!bySku.has(v.sku))bySku.set(v.sku,[]);bySku.get(v.sku).push(resolved);
  }
  return {published:p.published,intakeEnabled:p.intakeEnabled,byKey,bySku};
 }
