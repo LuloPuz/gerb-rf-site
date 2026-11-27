@@ -8,7 +8,7 @@ const catalogDrafts=new Map(),expandedProducts=new Set();
 const createDialog=$('[data-create-dialog]'),createForm=$('[data-create-form]'),createStatus=$('[data-create-status]');
 let createExisting=false;
 const photoDialog=$('[data-photo-dialog]'),photoForm=$('[data-photo-form]'),photoList=$('[data-photo-list]'),photoStatus=$('[data-photo-status]');
-let photoSku=null,photoGeneration=0;
+let photoSku=null,photoGeneration=0,photoRecords=[];
 const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
@@ -178,7 +178,7 @@ createForm.addEventListener('submit',async e=>{
  finally{mutationBusy=false;submit.disabled=false;}
 });
 function clearPhotos(){
- photoGeneration++;photoSku=null;photoList.replaceChildren();photoForm.reset();photoStatus.textContent='';
+ photoGeneration++;photoSku=null;photoRecords=[];photoList.replaceChildren();photoForm.reset();photoStatus.textContent='';
  if(photoDialog.open)photoDialog.close();
 }
 async function loadPhotos(sku,current){
@@ -187,15 +187,43 @@ async function loadPhotos(sku,current){
   const data=await get('/api/admin/catalog/photos?sku='+encodeURIComponent(sku));
   if(current!==photoGeneration||!photoDialog.open)return;
   if(!Array.isArray(data.photos)||data.photos.length>8||!data.photos.every(p=>p.sku===sku&&/^[0-9a-f-]{36}$/.test(p.id)&&Number.isInteger(p.width)&&Number.isInteger(p.height)))throw Error();
-  photoList.replaceChildren();
-  for(const p of data.photos){
-   const fig=node('figure',undefined,'sa-photo-item'),im=node('img');im.alt='Фото товара';im.loading='lazy';im.src='/api/admin/catalog/photo?id='+encodeURIComponent(p.id);
-   fig.append(im,node('figcaption',p.width+' × '+p.height+' px','sa-note'));photoList.append(fig);
-  }
-  if(!data.photos.length)photoList.append(node('p','Загруженных фотографий пока нет.','sa-note'));
+  photoRecords=data.photos;
+  renderPhotoRecords();
   photoStatus.textContent=data.photos.length+' из 8 фотографий';
   $('[data-photo-submit]').disabled=data.photos.length>=8;
  }catch(e){if(current===photoGeneration){photoStatus.textContent='Не удалось загрузить галерею. Закройте и откройте её заново.';if(e.status===401||e.status===403)deny('Доступ закрыт. Войдите заново.',true);}}
+}
+function renderPhotoRecords(){
+  photoList.replaceChildren();
+  for(const [index,p] of photoRecords.entries()){
+   const fig=node('figure',undefined,'sa-photo-item'),im=node('img');im.alt='Фото товара';im.loading='lazy';im.src='/api/admin/catalog/photo?id='+encodeURIComponent(p.id);
+   fig.append(im,node('figcaption',p.width+' × '+p.height+' px','sa-note'));
+   const main=node('button',index===0?'Главное фото':'Сделать главным','sa-photo-main');main.type='button';main.disabled=index===0;
+   main.addEventListener('click',()=>changeGallery([p.id,...photoRecords.filter(x=>x.id!==p.id).map(x=>x.id)]));
+   const actions=node('div',undefined,'sa-photo-actions');
+   const move=(delta,label,aria)=>{const b=node('button',label);b.type='button';b.setAttribute('aria-label',aria);b.disabled=index+delta<0||index+delta>=photoRecords.length;
+    b.addEventListener('click',()=>{const next=photoRecords.map(x=>x.id);[next[index],next[index+delta]]=[next[index+delta],next[index]];changeGallery(next);});return b;};
+   const remove=node('button','Удалить','sa-photo-delete');remove.type='button';
+   remove.addEventListener('click',()=>{if(window.confirm('Удалить эту фотографию из галереи?'))changeGallery(photoRecords.filter(x=>x.id!==p.id).map(x=>x.id));});
+   actions.append(move(-1,'←','Переместить фото раньше'),move(1,'→','Переместить фото позже'),remove);
+   fig.append(main,actions);photoList.append(fig);
+  }
+  if(!photoRecords.length)photoList.append(node('p','Загруженных фотографий пока нет.','sa-note'));
+}
+async function changeGallery(next){
+ if(mutationBusy||!marker||!photoSku||!photoDialog.open||dashboard.hidden)return;
+ const current=photoGeneration,session=marker,sku=photoSku,expected=photoRecords.map(x=>x.id);
+ mutationBusy=true;photoStatus.textContent='Сохраняем галерею…';
+ try{
+  const r=await fetch('/api/admin/catalog/photos/manage',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({sku,expected,next}),signal:AbortSignal.timeout(12000)});
+  if(current!==photoGeneration)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!r.ok){await loadPhotos(sku,current);if(current===photoGeneration)photoStatus.textContent='Не удалось изменить галерею. Проверьте актуальный список.';return;}
+  const result=await r.json();
+  if(!Array.isArray(result.photos)||result.photos.map(x=>x.id).join(',')!==next.join(','))throw Error();
+  await loadPhotos(sku,current);
+ }catch{if(current===photoGeneration)photoStatus.textContent='Не удалось подтвердить изменение. Закройте и откройте галерею перед повтором.';}
+ finally{mutationBusy=false;}
 }
 function openPhotos(sku){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
