@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Личный кабинет | Держава</title>
-<meta name="description" content="Личный кабинет покупателя Держава: вход по одноразовому коду, заказы, статусы и профиль.">
+<meta name="description" content="Личный кабинет покупателя Держава: защищённый вход через Яндекс ID.">
 <meta name="theme-color" content="#07182a">
 
 
 <link rel="stylesheet" href="styles.css?v=20261126-localfonts1">
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
+<style>[data-server-account] [hidden]{display:none!important}.account-login-coming{margin:18px 0 0!important}.account-signout:disabled,.account-auth-primary:disabled{opacity:.6;cursor:wait}[data-server-greeting]{overflow-wrap:anywhere}</style>
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -20,123 +21,69 @@
 <div class="shop-header-actions"><a class="shop-header-link shop-account-link" href="account.html" aria-label="Личный кабинет" title="Личный кабинет"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"></path></svg><span class="shop-header-label">Кабинет</span></a><a class="shop-header-link shop-cart-link" data-cart-link href="cart.html" aria-label="Корзина" title="Корзина"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20.5 8H6.2"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg><span class="shop-header-label">Корзина</span><span class="shop-cart-count" data-cart-count data-empty="true">0</span></a></div>
 </div></header>
 
-<main class="commerce-page account-page-auth" data-account-page>
+<main class="commerce-page account-page-auth" data-server-account>
   <div class="container">
     <p class="commerce-breadcrumb"><a href="index.html">Главная</a> / Личный кабинет</p>
-
-    <section class="account-login-card" id="yandex-oauth-test" aria-labelledby="yandex-oauth-test-title" hidden>
-      <div>
-        <p class="account-login-kicker">Техническое тестирование</p>
-        <h2 id="yandex-oauth-test-title">Вход через Яндекс ID</h2>
-        <p id="yandex-oauth-test-status" role="status">Проверка серверной авторизации. Используйте только отдельную тестовую учётную запись. Заказы и профиль пока не подключены к серверной сессии.</p>
-        <form action="/api/auth/yandex/start" method="post">
-          <button class="account-auth-primary" type="submit">Войти через Яндекс</button>
-        </form>
-      </div>
-    </section>
-    <p class="shop-preview-notice" role="note">Пробный режим · Данные остаются в этом браузере. SMS не отправляются.</p><section class="account-auth-shell" data-auth-gate>
+    <p class="shop-preview-notice" role="note">Тестовый режим сайта. Используйте отдельную тестовую учётную запись. Заказы и редактирование профиля пока не подключены.</p>
+    <p class="account-panel-lead" data-session-message role="status">Проверяем авторизацию…</p>
+    <noscript><p>Для проверки защищённой сессии необходимо включить JavaScript.</p></noscript>
+    <section class="account-auth-shell" data-server-gate hidden>
       <div class="account-auth-copy">
         <p class="eyebrow">Личный кабинет</p>
         <h1>Ваши заказы — в одном месте</h1>
-        <p>Войдите по номеру телефона или e-mail, который указывали при оформлении заказа. Пароль не нужен — используем одноразовый код.</p>
+        <p>Войдите через Яндекс ID. Пароль от Яндекса остаётся у сервиса авторизации.</p>
         <div class="account-auth-benefits">
-          <span>Статус заказа</span>
-          <span>История покупок</span>
-          <span>Состав и сумма</span>
-          <span>Данные доставки</span>
+          <span>Статус заказа</span><span>История покупок</span><span>Данные доставки</span>
         </div>
       </div>
-
       <div class="account-login-card">
-        <div data-auth-step="request">
-          <p class="account-login-kicker">Вход без пароля</p>
-          <h2>Телефон или e-mail</h2>
-          <p>Укажите телефон или e-mail, который вы использовали при оформлении заказа.</p>
-          <form data-auth-request-form>
-            <label class="account-auth-field">
-              <span>Телефон или e-mail</span>
-              <input name="identifier" autocomplete="username" placeholder="+7 999 000-00-00 или name@mail.ru" required>
-            </label>
-            <button class="account-auth-primary" type="submit">Получить код</button>
+        <div>
+          <p class="account-login-kicker">Вход в личный кабинет</p>
+          <h2>Добро пожаловать</h2>
+          <p>Воспользуйтесь Яндекс ID для безопасного входа.</p>
+          <form action="/api/auth/yandex/start" method="post" data-server-login hidden>
+            <button class="account-auth-primary" type="submit">Войти через Яндекс ID</button>
           </form>
-        </div>
-
-        <div data-auth-step="verify" hidden>
-          <button class="account-auth-back" type="button" data-auth-back>← Изменить контакт</button>
-          <p class="account-login-kicker">Подтверждение</p>
-          <h2>Введите код</h2>
-          <p>Введите шестизначный код для подтверждения контакта <strong data-auth-destination></strong>.</p>
-          <form data-auth-verify-form>
-            <label class="account-auth-field">
-              <span>6-значный код</span>
-              <input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required>
-            </label>
-            <button class="account-auth-primary" type="submit">Войти в кабинет</button>
-          </form>
-          <div class="account-demo-code" data-auth-demo hidden></div>
-          <p class="account-auth-error" data-auth-error hidden></p>
+          <a class="button button-gold" data-canonical-login href="https://gerbrf.ru/account.html" hidden>Перейти на gerbrf.ru</a>
+          <p class="account-panel-lead account-login-coming">Вход по телефону и электронной почте будет доступен после подключения.</p>
         </div>
       </div>
     </section>
-
-    <section class="account-dashboard" data-account-dashboard hidden>
+    <section class="account-dashboard" data-server-dashboard hidden>
       <div class="account-dashboard-head">
         <div>
           <p class="eyebrow">Личный кабинет</p>
-          <h1 data-account-greeting>Выполнен вход</h1>
-          <p class="account-dashboard-login-state" data-account-login-state hidden>Выполнен вход</p>
+          <h1 data-server-greeting></h1>
+          <p class="account-dashboard-login-state">Вход выполнен через защищённую серверную сессию</p>
         </div>
-        <button class="account-signout" type="button" data-auth-signout>Выйти</button>
+        <button class="account-signout" type="button" data-server-logout>Выйти</button>
       </div>
-
       <div class="account-layout account-layout-v2">
-        <nav class="account-nav">
-          <button class="active" type="button" data-account-tab="orders">Мои заказы</button>
-          <button type="button" data-account-tab="overview">Обзор</button>
-          <button type="button" data-account-tab="profile">Мои данные</button>
+        <nav class="account-nav" aria-label="Разделы личного кабинета">
+          <button class="active" type="button" data-server-tab="orders" aria-pressed="true">Мои заказы</button>
+          <button type="button" data-server-tab="overview" aria-pressed="false">Обзор</button>
+          <button type="button" data-server-tab="profile" aria-pressed="false">Мои данные</button>
         </nav>
-
         <div>
-          <section class="account-panel" data-account-panel="orders">
+          <section class="account-panel" data-server-panel="orders">
             <div class="account-panel-heading">
-              <div>
-                <h2>Заказы</h2>
-                <p class="account-panel-lead">Здесь отображаются оформленные заказы и их текущий статус.</p>
-              </div>
+              <div><h2>Заказы</h2><p class="account-panel-lead">История и статусы заказов.</p></div>
               <a class="account-catalog-link" href="catalog.html">Перейти в каталог →</a>
             </div>
-            <div data-account-orders></div>
+            <div class="account-empty-v2"><strong>Раздел подключается</strong><p>Серверная история заказов пока недоступна. Прежние демонстрационные заказы здесь не отображаются.</p></div>
           </section>
-
-          <section class="account-panel" data-account-panel="overview" hidden>
-            <h2>Обзор</h2>
-            <p class="account-panel-lead">Краткая информация по вашему кабинету.</p>
-            <div class="account-stats">
-              <div class="account-stat"><small>Заказов</small><strong data-account-order-count>0</strong></div>
-              <div class="account-stat"><small>Сумма заказов</small><strong data-account-order-total>0 ₽</strong></div>
-              <div class="account-stat"><small>В корзине</small><strong data-account-cart-count>0</strong></div>
-            </div>
+          <section class="account-panel" data-server-panel="overview" hidden>
+            <h2>Обзор</h2><p class="account-panel-lead">Вы вошли в личный кабинет. Информация о покупках появится после подключения серверной системы заказов.</p>
             <a class="button button-gold" href="cart.html">Открыть корзину</a>
           </section>
-
-          <section class="account-panel" data-account-panel="profile" hidden>
-            <h2>Мои данные</h2>
-            <p class="account-panel-lead">Эти данные автоматически подставляются при оформлении заказа.</p>
-            <form data-profile-form>
-              <div class="checkout-grid">
-                <div class="field"><label>Имя / контактное лицо</label><input name="name" autocomplete="name"></div>
-                <div class="field"><label>Телефон</label><input name="phone" autocomplete="tel"></div>
-                <div class="field"><label>Email</label><input name="email" type="email" autocomplete="email"></div>
-                <div class="field"><label>Организация</label><input name="organization"></div>
-                <div class="field"><label>ИНН</label><input name="inn"></div>
-                <div class="field"><label>Адрес</label><input name="address" autocomplete="street-address"></div>
-              </div>
-              <button class="profile-save" type="submit">Сохранить данные</button>
-            </form>
+          <section class="account-panel" data-server-panel="profile" hidden>
+            <h2>Мои данные</h2><p class="account-panel-lead">Имя получено из подтверждённой серверной сессии. Редактирование остальных данных пока недоступно.</p>
+            <div class="account-empty-v2"><strong>Имя</strong><p data-server-name>Не указано</p></div>
           </section>
         </div>
       </div>
     </section>
+    <button class="account-signout" data-session-retry type="button" hidden>Повторить проверку</button>
   </div>
 </main>
 
@@ -146,21 +93,5 @@
   <img data-order-photo-large alt="">
 </dialog>
 <script src="script.js?v=20261127-contact-links1"></script><script src="shop.js?v=20261125-order-photo1" data-shop-runtime="true"></script>
-<script>
-(function () {
-  if (location.origin !== 'https://gerbrf.ru') return;
-  const params = new URLSearchParams(location.search);
-  const result = params.get('auth');
-  if (params.get('test') !== 'yandex' && result !== 'yandex_success' && result !== 'yandex_error') return;
-  const section = document.getElementById('yandex-oauth-test');
-  const status = document.getElementById('yandex-oauth-test-status');
-  if (!section || !status) return;
-  section.hidden = false;
-  if (result === 'yandex_success') {
-    status.textContent = 'Получен ответ о завершении OAuth. Подлинность и наличие серверной сессии необходимо проверить отдельно. Данные кабинета пока не подключены.';
-  } else if (result === 'yandex_error') {
-    status.textContent = 'Авторизация не завершена. Для повторной проверки используйте отдельную тестовую учётную запись.';
-  }
-})();
-</script>
+<script src="account-session.js?v=20261127-session1" defer></script>
 </body></html>
