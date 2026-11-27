@@ -9,13 +9,16 @@ const createDialog=$('[data-create-dialog]'),createForm=$('[data-create-form]'),
 let createExisting=false;
 const photoDialog=$('[data-photo-dialog]'),photoForm=$('[data-photo-form]'),photoList=$('[data-photo-list]'),photoStatus=$('[data-photo-status]');
 let photoSku=null,photoGeneration=0,photoRecords=[];
+const detailsDialog=$('[data-details-dialog]'),detailsForm=$('[data-details-form]'),detailsStatus=$('[data-details-status]');
+const detailsKeys=['title','finish','category','description','material','specs','leadTime'];
+let detailsSku=null,detailsRevision=null,detailsGeneration=0;
 const transitions={'Новая заявка':['Подтверждён','Отменён'],'Подтверждён':['Ожидает оплаты','В производстве','Отменён'],'Ожидает оплаты':['В производстве','Отменён'],'В производстве':['Отправлен','Отменён'],'Отправлен':['Получен']};
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
- generation++;busy=false;marker=null;reference='';clearPhotos();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
+ generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
  for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
@@ -260,6 +263,43 @@ photoForm.addEventListener('submit',async e=>{
  }catch{if(current===photoGeneration)photoStatus.textContent='Не удалось подтвердить загрузку. Проверьте галерею перед повтором.';}
  finally{bitmap?.close();mutationBusy=false;if(current===photoGeneration&&photoList.querySelectorAll('figure').length<8)submit.disabled=false;}
 });
+function clearDetails(){
+ detailsGeneration++;detailsSku=null;detailsRevision=null;detailsForm.reset();detailsStatus.textContent='';$('[data-details-submit]').disabled=true;
+ if(detailsDialog.open)detailsDialog.close();
+}
+async function openDetails(sku){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ clearDetails();detailsSku=sku;const current=detailsGeneration;
+ $('[data-details-sku]').textContent='Артикул '+sku;detailsDialog.showModal();detailsStatus.textContent='Загружаем карточку…';
+ try{
+  const data=await get('/api/admin/catalog/product?sku='+encodeURIComponent(sku));
+  if(current!==detailsGeneration||!detailsDialog.open)return;
+  if(data.sku!==sku||typeof data.revision!=='string'||!/^[a-f0-9]{64}$/.test(data.revision)||!detailsKeys.every(k=>typeof data.fields?.[k]==='string'))throw Error();
+  for(const k of detailsKeys)detailsForm.elements[k].value=data.fields[k];
+  detailsRevision=data.revision;detailsStatus.textContent='';$('[data-details-submit]').disabled=false;
+ }catch(e){if(current===detailsGeneration){detailsStatus.textContent='Не удалось загрузить карточку.';if(e.status===401||e.status===403)deny('Доступ закрыт. Войдите заново.',true);}}
+}
+all('[data-details-close]').forEach(b=>b.addEventListener('click',()=>{if(!mutationBusy)clearDetails();}));
+detailsDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy)clearDetails();});
+detailsForm.addEventListener('submit',async e=>{
+ e.preventDefault();if(mutationBusy||!marker||!detailsSku||!detailsRevision||dashboard.hidden||!detailsDialog.open)return;
+ const sku=detailsSku,current=detailsGeneration,session=marker,submit=$('[data-details-submit]');
+ const fields=Object.fromEntries(detailsKeys.map(k=>[k,detailsForm.elements[k].value.trim()]));
+ if(!fields.title){detailsStatus.textContent='Укажите название.';return;}
+ if(!window.confirm('Сохранить карточку артикула '+sku+'? При изменении все его размеры перейдут в черновик.'))return;
+ mutationBusy=true;submit.disabled=true;detailsStatus.textContent='Сохраняем…';
+ try{
+  const r=await fetch('/api/admin/catalog/product/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({sku,expected:detailsRevision,fields}),signal:AbortSignal.timeout(12000)});
+  if(current!==detailsGeneration)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  const data=await r.json();
+  if(!r.ok){detailsStatus.textContent=data.error==='details_changed'?'Карточка изменилась. Закройте и откройте редактор заново.':data.error==='publication_open'?'Перед изменением закройте публикацию и приём заказов.':'Не удалось сохранить. Проверьте поля.';return;}
+  if(data.sku!==sku||typeof data.revision!=='string')throw Error();
+  clearDetails();catalogDrafts.clear();expandedProducts.add(sku);$('[data-catalog-search]').value=sku;
+  await select('catalog');message.textContent='Карточка сохранена в серверном каталоге.';
+ }catch{if(current===detailsGeneration)detailsStatus.textContent='Не удалось подтвердить сохранение. Проверьте карточку перед повтором.';}
+ finally{mutationBusy=false;if(current===detailsGeneration)submit.disabled=false;}
+});
 function renderCatalog(){
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
  const list=variants.filter(v=>[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q));
@@ -303,7 +343,7 @@ function renderCatalog(){
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
-  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));addRow.append(gallery,addSize);card.append(addRow);target.append(card);
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));addRow.append(edit,gallery,addSize);card.append(addRow);target.append(card);
  }
  if(!list.length)target.append(node('p','Нет подходящих вариантов.','sa-empty'));
 }

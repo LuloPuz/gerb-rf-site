@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Управление магазином | Держава</title><link rel="stylesheet" href="server-admin.css?v=20261128-admin7"></head>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Управление магазином | Держава</title><link rel="stylesheet" href="server-admin.css?v=20261128-admin8"></head>
 <body><header class="sa-header"><a class="sa-brand" href="index.html">ДЕРЖАВА <small>Управление магазином</small></a><div class="sa-header-actions"><a href="index.html">На сайт</a><button type="button" data-logout hidden>Выйти</button></div></header>
 <main class="sa-main"><section class="sa-gate" data-gate><p class="sa-eyebrow">Защищённый доступ</p><h1>Панель управления</h1><p data-gate-status role="status">Проверяем права доступа…</p><a class="sa-primary" href="account.html" data-login hidden>Войти через Яндекс ID</a><button type="button" data-retry hidden>Проверить снова</button><div data-enroll hidden><hr><h2>Первичная настройка</h2><p>Только для владельца магазина. Войдите в свой аккаунт заново, затем получите код и введите его в локальном терминале сервера. Код не даёт доступа сам по себе.</p><button type="button" data-reference>Получить код для назначения</button><output data-code hidden></output><button type="button" data-copy hidden>Скопировать код</button><p data-enroll-status role="status"></p></div></section>
 <section data-dashboard hidden><div class="sa-layout"><aside class="sa-sidebar"><p class="sa-eyebrow">Магазин</p><nav aria-label="Управление"><button data-tab="overview" type="button" aria-pressed="true">Обзор</button><button data-tab="orders" type="button" aria-pressed="false">Заказы</button><button data-tab="catalog" type="button" aria-pressed="false">Товары</button></nav><p class="sa-note">Управление заказами и подготовка каталога.</p></aside><div class="sa-content">
@@ -29,4 +29,21 @@
  <div data-photo-list class="sa-photo-list"></div>
  <form data-photo-form><label class="sa-photo-picker">Выберите изображение<input type="file" name="image" accept="image/jpeg,image/png,image/webp" required></label><p data-photo-status role="status"></p><div class="sa-dialog-actions"><button type="submit" class="sa-status-save" data-photo-submit>Загрузить фото</button></div></form>
 </dialog>
-<script src="server-admin.js?v=20261128-admin7" defer></script></body></html>
+<dialog class="sa-create-dialog sa-details-dialog" data-details-dialog aria-labelledby="sa-details-title">
+<form data-details-form autocomplete="off">
+ <div class="sa-dialog-head"><div><p class="sa-eyebrow" data-details-sku>Артикул</p><h2 id="sa-details-title">Редактировать товар</h2></div><button type="button" data-details-close aria-label="Закрыть">×</button></div>
+ <p class="sa-note">Изменения относятся ко всем размерам артикула. После изменения карточка станет черновиком до подготовки витрины.</p>
+ <div class="sa-form-grid">
+ <label class="sa-form-wide">Название<input name="title" required maxlength="200"></label>
+ <label class="sa-form-wide">Исполнение<input name="finish" maxlength="200"></label>
+ <label>Категория<select name="category"><option value="rf">Гербы РФ</option><option value="region">Гербы субъектов РФ</option><option value="city">Гербы городов РФ</option><option value="department">Эмблемы ведомств</option><option value="other">Прочие / не выбрана</option></select></label>
+ <label>Материал<input name="material" maxlength="200"></label>
+ <label class="sa-form-wide">Описание<textarea name="description" maxlength="4000" rows="5" placeholder="Описание товара"></textarea></label>
+ <label class="sa-form-wide">Характеристики<textarea name="specs" maxlength="2000" rows="4" placeholder="Каждая характеристика с новой строки"></textarea></label>
+ <label class="sa-form-wide">Срок изготовления<input name="leadTime" maxlength="200"></label>
+ </div>
+ <p data-details-status role="status" class="sa-create-status"></p>
+ <div class="sa-dialog-actions"><button type="button" data-details-close>Отмена</button><button type="submit" class="sa-status-save" data-details-submit disabled>Сохранить карточку</button></div>
+</form>
+</dialog>
+<script src="server-admin.js?v=20261128-admin8" defer></script></body></html>
