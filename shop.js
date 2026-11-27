@@ -172,7 +172,7 @@
   }
 
   function initCatalogQuickAdd(){
-    document.querySelectorAll('.popular-card[data-product-card]').forEach(card=>{
+    document.querySelectorAll('.popular-card[data-product-card]:not([data-dynamic-card])').forEach(card=>{
       const bottom=card.querySelector('.popular-card-bottom');
       const open=bottom?.querySelector('.popular-card-cta');
       if(!bottom||!open||bottom.querySelector('[data-popular-add-cart]')) return;
@@ -221,7 +221,7 @@
       dialog.querySelector('[data-quote-product]').textContent=[item?.title,item?.sku?'Арт. '+item.sku:'',item?.finish].filter(Boolean).join(' · ');
       if(!dialog.open){dialog.addEventListener('close',()=>trigger.focus({preventScroll:true}),{once:true});dialog.showModal();}
     }
-    document.querySelectorAll('.popular-card[data-product-card]').forEach(card=>{
+    document.querySelectorAll('.popular-card[data-product-card]:not([data-dynamic-card])').forEach(card=>{
       const sizes=card.querySelector('.popular-size-switcher');
       if(!sizes||sizes.parentNode.querySelector('.custom-size-link'))return;
       const button=document.createElement('button');button.type='button';button.className='custom-size-link';button.textContent='Нужен другой размер?';
@@ -443,7 +443,7 @@
     if(catalogState==='draft'&&!active)price.textContent=fallback.text;
   }
   function applyCatalogPrices(){
-    document.querySelectorAll('.popular-card[data-product-card]').forEach(card=>updatePriceGroup(card,true));
+    document.querySelectorAll('.popular-card[data-product-card]:not([data-dynamic-card])').forEach(card=>updatePriceGroup(card,true));
     document.querySelectorAll('.final-product-info').forEach(info=>updatePriceGroup(info,false));
   }
   function applyCartPolicy(root,items,summary){
@@ -494,7 +494,7 @@
   }
 
   injectHeader();
-  if(document.body.hasAttribute('data-dynamic-page')){
+  {
     let adding=false;
     // Layout samples never write to the actual cart. Only a current published
     // server variant can be added, and only at the price shown to the buyer.
@@ -519,6 +519,8 @@
         finally{adding=false;}
       };
     }
+  }
+  if(document.body.hasAttribute('data-dynamic-page')){
     window.addEventListener('storage',e=>{if(e.key===CART_KEY)updateHeaderCount();});
     window.addEventListener('pageshow',updateHeaderCount);
     return;

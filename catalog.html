@@ -2940,7 +2940,7 @@ body .popular-card[data-product-card] .popular-size-choice.active small {
 
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="#popular">Популярное</a><a href="#subjects">Субъекты и города РФ</a><a href="#agencies">Ведомства РФ</a></div><div><h3>Покупателям</h3><a href="payment-delivery.html#payment">Оплата</a><a href="payment-delivery.html#delivery">Доставка</a><a href="payment-delivery.html#contacts">Контакты</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 
-<script src="script.js?v=20261128-search1"></script><script src="shop.js?v=20261127-catalog1" data-shop-runtime="true"></script>
+<script src="script.js?v=20261128-search1"></script><script src="shop.js?v=20261128-home1" data-shop-runtime="true"></script>
 <script>
 (function(){
  const input=document.getElementById('catalogSearch');
@@ -2949,7 +2949,7 @@ body .popular-card[data-product-card] .popular-size-choice.active small {
  const empty=document.getElementById('catalogEmpty');
  const filters=[...document.querySelectorAll('[data-section-filter]')];
  const sections=[...document.querySelectorAll('[data-catalog-section]')];
- const popular=[...document.querySelectorAll('[data-popular-card]')];
+ let popular=[...document.querySelectorAll('[data-popular-card]')];
  const directory=[...document.querySelectorAll('[data-catalog-card]')];
  let active='all';
 
@@ -3112,9 +3112,10 @@ body .popular-card[data-product-card] .popular-size-choice.active small {
    const allowed=
      active==='all' ||
      active==='popular' ||
-     belongsToMatchingSubject;
+     belongsToMatchingSubject ||
+     (card.hasAttribute('data-dynamic-card')&&((active==='subjects'&&['city','region'].includes(card.dataset.category))||(active==='agencies'&&card.dataset.category==='department')));
 
-   const show=allowed && queryMatches(q,cardHay(card),card);
+   const show=allowed && (card.hasAttribute('data-dynamic-card')&&typeof window.derzhavaProductMatches==='function'?window.derzhavaProductMatches(q,cardHay(card)):queryMatches(q,cardHay(card),card));
    card.classList.toggle('catalog-hidden',!show);
    card.hidden=!show;
    if(show) visible++;
@@ -3190,6 +3191,7 @@ body .popular-card[data-product-card] .popular-size-choice.active small {
    });
  };
 
+ document.addEventListener('derzhava:storefront-render',()=>{popular=[...document.querySelectorAll('[data-popular-card]')];apply();});
  setActiveFilter(initialSection||'all');
 
  input.addEventListener('input',apply);
@@ -3242,5 +3244,6 @@ body .popular-card[data-product-card] .popular-size-choice.active small {
 })();
 </script>
 
+<script type="module" src="storefront-main.js?v=20261128-home1"></script>
 </body>
 </html>

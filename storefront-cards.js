@@ -1,0 +1,74 @@
+import {productKeys,publicSearchPages} from './dynamic-search.js?v=20261128-search1';
+import {parseCatalog} from './catalog-pricing.js?v=20261128-cart2';
+const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
+const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
+const productUrl=sku=>'product.html?sku='+encodeURIComponent(sku);
+const layoutCheck=new URLSearchParams(location.search).get('layout')==='check';
+function image(id,alt){const im=node('img');im.src='/api/catalog/photo?id='+encodeURIComponent(id);im.alt=alt;im.decoding='async';return im;}
+function legacyImage(src,alt){const u=new URL(src,location.origin);if(u.origin!==location.origin||!/\.(png|jpe?g|webp)$/i.test(u.pathname))throw Error('Invalid image');const im=node('img');im.src=u.pathname+u.search;im.alt=alt;im.decoding='async';return im;}
+export function finishFields(finish){
+ const parts=String(finish||'').split(' · ').filter(Boolean);
+ const coating=parts.find(x=>/краск|металлизац/i.test(x)),relief=parts.find(x=>/^(?:барельеф|горельеф)$/i.test(x)),shield=parts.find(x=>/щит/i.test(x));
+ const material=shield?.match(/щит\s+(пластик|бархат|металл)$/i)?.[1];
+ if(!coating&&!relief&&!shield)return [['Исполнение',finish||'—']];
+ const rows=[];
+ if(coating)rows.push(['Покрытие',coating]);
+ if(relief)rows.push(['Рельеф',relief]);
+ if(shield)rows.push(['Исполнение',shield==='Без щита'?'Без щита':material?'На щите':shield]);
+ if(material)rows.push(['Материал щита',material[0].toUpperCase()+material.slice(1)]);
+ else if(shield==='Без щита')rows.push(['Материал щита','—']);
+ return rows;
+}
+export function projectProducts(data,variants){
+ const list=publicSearchPages(data),snapshot=parseCatalog(variants);
+ if(list.published!==snapshot.published)throw Error('Catalog policy mismatch');
+ if(!list.published)return {published:false,products:[]};
+ const products=data.products.map(p=>{
+  const rows=snapshot.bySku.get(p.sku)||[];
+  if(!rows.length||rows.some(v=>v.dynamicImageId!==p.imageId||v.title!==p.title||v.finish!==p.finish)||Math.min(...rows.map(v=>v.price))!==p.priceFrom)throw Error('Catalog projection mismatch');
+  return {...p,variants:[...rows].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))};
+ });
+ if(snapshot.bySku.size!==products.length)throw Error('Unexpected variants');
+ return {published:true,products};
+}
+async function get(path){const r=await fetch(path,{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}
+export async function fetchProducts(){const [data,variants]=await Promise.all([get('/api/catalog/products'),get('/api/catalog/variants')]);return projectProducts(data,variants);}
+function bindCart(button,sku,selected,label){
+ if(layoutCheck||typeof window.derzhavaDynamicCartAdd!=='function')return;
+ button.disabled=false;button.removeAttribute('title');
+ button.addEventListener('click',async()=>{
+  if(button.disabled)return;
+  const v=selected();button.disabled=true;
+  try{if(await window.derzhavaDynamicCartAdd({sku,size:v.size,price:v.price})){
+   button.textContent='Добавлено ✓';
+   setTimeout(()=>{button.textContent=label;},1500);
+  }}finally{button.disabled=false;}
+ });
+}
+
+export function renderCard(p,preview=false){
+const href=productUrl(p.sku)+(preview?'&layout=check':'');
+   const card=node('article',undefined,'popular-card');card.dataset.productCard='';card.dataset.popularCard='';card.dataset.dynamicCard='';card.dataset.category=p.category;card.dataset.group=p.category==='rf'?'rf':p.category==='city'&&/москв/i.test(p.title)?'moscow':p.category;card.dataset.search=productKeys(p);
+   const hit=node('a',undefined,'popular-hit');hit.href=href;hit.setAttribute('aria-label','Открыть '+p.title);
+   const media=node('div',undefined,'popular-media'),im=preview?legacyImage(p.image,p.title):image(p.imageId,p.title);im.loading='lazy';media.append(im);
+   const body=node('div',undefined,'popular-body popular-body-pro'),title=node('div',undefined,'popular-title-block');
+   title.append(node('p','Настенное исполнение','popular-overline'),node('h3',p.title));
+   const chips=node('div',undefined,'popular-chips');
+   for(const [i,chip] of p.finish.split(' · ').filter(Boolean).entries())chips.append(node('span',chip,'popular-chip'+(i===0?' popular-chip-accent':'')));
+   const specs=node('dl',undefined,'popular-specs');
+   const fields=p.fields||finishFields(p.finish);
+   for(const [k,v] of fields){const row=node('div');row.append(node('dt',k),node('dd',v));specs.append(row);}
+   const sizeRow=node('div',undefined,'popular-spec-size'),dd=node('dd'),sizes=node('div',undefined,'popular-size-switcher');sizes.setAttribute('role','group');sizes.setAttribute('aria-label','Выберите размер');
+   const price=node('strong',money(p.variants[0].price),'popular-card-price');let selectedVariant=p.variants[0];
+   for(const [i,v] of p.variants.entries()){
+    const b=node('button',undefined,'popular-size-choice'+(i===0?' active':''));b.type='button';b.setAttribute('aria-pressed',String(i===0));
+    b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
+    b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
+   }
+   const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';dd.append(sizes,custom);sizeRow.append(node('dt','Размер'),dd);specs.append(sizeRow);
+   const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
+   priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
+   const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));if(!preview)bindCart(buy,p.sku,()=>selectedVariant,'В корзину');
+   const open=node('a',undefined,'popular-card-cta');open.href=href;open.append(node('span','Открыть товар'));actions.append(buy,open);bottom.append(priceBlock,actions);
+   body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);return card;
+}

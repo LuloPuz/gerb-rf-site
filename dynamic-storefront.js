@@ -1,4 +1,5 @@
 import {productKeys} from './dynamic-search.js?v=20261128-search1';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-home1';
 const $=s=>document.querySelector(s);
 const content=$('[data-ds-content]'),status=$('[data-ds-status]'),kind=document.body.dataset.dynamicPage;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
@@ -89,45 +90,16 @@ function renderList(products,preview=false){
  const render=()=>{
   content.replaceChildren();const q=search.value.trim().toLowerCase(),cat=category.value;
   const filtered=products.filter(p=>(!cat||p.category===cat)&&(!q||(typeof window.derzhavaProductMatches==='function'?window.derzhavaProductMatches(q,productKeys(p)):productKeys(p).toLowerCase().includes(q))));
-  if(!filtered.length){content.append(node('p','Нет подходящих товаров.','ds-empty'));return;}
-  for(const p of filtered){
-   const href=productUrl(p.sku)+(preview?'&layout=check':'');
-   const card=node('article',undefined,'popular-card');card.dataset.productCard='';card.dataset.dynamicCard='';
-   const hit=node('a',undefined,'popular-hit');hit.href=href;hit.setAttribute('aria-label','Открыть '+p.title);
-   const media=node('div',undefined,'popular-media'),im=preview?legacyImage(p.image,p.title):image(p.imageId,p.title);im.loading='lazy';media.append(im);
-   const body=node('div',undefined,'popular-body popular-body-pro'),title=node('div',undefined,'popular-title-block');
-   title.append(node('p','Настенное исполнение','popular-overline'),node('h3',p.title));
-   const chips=node('div',undefined,'popular-chips');
-   for(const [i,chip] of p.finish.split(' · ').filter(Boolean).entries())chips.append(node('span',chip,'popular-chip'+(i===0?' popular-chip-accent':'')));
-   const specs=node('dl',undefined,'popular-specs');
-   const fields=p.fields||[['Исполнение',p.finish||'—']];
-   for(const [k,v] of fields){const row=node('div');row.append(node('dt',k),node('dd',v));specs.append(row);}
-   const sizeRow=node('div',undefined,'popular-spec-size'),dd=node('dd'),sizes=node('div',undefined,'popular-size-switcher');sizes.setAttribute('role','group');sizes.setAttribute('aria-label','Выберите размер');
-   const price=node('strong',money(p.variants[0].price),'popular-card-price');let selectedVariant=p.variants[0];
-   for(const [i,v] of p.variants.entries()){
-    const b=node('button',undefined,'popular-size-choice'+(i===0?' active':''));b.type='button';b.setAttribute('aria-pressed',String(i===0));
-    b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
-    b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
-   }
-   const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';dd.append(sizes,custom);sizeRow.append(node('dt','Размер'),dd);specs.append(sizeRow);
-   const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
-   priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
-   const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));bindCart(buy,p.sku,()=>selectedVariant,'В корзину');
-   const open=node('a',undefined,'popular-card-cta');open.href=href;open.append(node('span','Открыть товар'));actions.append(buy,open);bottom.append(priceBlock,actions);
-   body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);content.append(card);
+  if(!filtered.length){content.append(node   content.append(renderCard(p,preview));t,node('span','арт. '+p.sku,'popular-card-sku'),media,body);content.append(card);
   }
  };
  search.oninput=render;category.onchange=render;$('[data-ds-filters]').hidden=false;render();showContent();
 }
 async function loadList(){
  try{
-  const [data,variants]=await Promise.all([get('/api/catalog/products'),get('/api/catalog/variants')]);
-  if(typeof data.published!=='boolean'||!Array.isArray(data.products)||!data.products.every(p=>skuOK(p.sku)&&typeof p.title==='string'&&typeof p.finish==='string'&&Object.hasOwn(categories,p.category)&&priceOK(p.priceFrom)&&uuidOK(p.imageId)))throw Error();
-  if(!data.published){showStatus('Динамический каталог пока не опубликован.');return;}
-  if(variants.published!==true||!Array.isArray(variants.variants))throw Error('Invalid variants');
-  const products=data.products.map(p=>({...p,variants:variants.variants.filter(v=>v.sku===p.sku&&typeof v.size==='string'&&priceOK(v.price))}));
-  if(products.some(p=>!p.variants.length))throw Error('Missing variant');
-  renderList(products);
+  const snapshot=await fetchProducts();
+  if(!snapshot.published){showStatus('Динамический каталог пока не опубликован.');return;}
+  renderList(snapshot.products);
  }catch{showStatus('Не удалось загрузить каталог. Обновите страницу.');}
 }
 // Layout verification only: read existing public static pages. No draft API,
