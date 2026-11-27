@@ -33,18 +33,18 @@
   </div>
 </div>
 
-<form class="offer-form" data-offer-form><p class="shop-preview-notice" role="note">Пробный режим · Заявка сохраняется в браузере. Используйте вымышленные контакты.</p>
+<form class="offer-form" data-offer-form autocomplete="off" onsubmit="return false"><p class="shop-preview-notice" role="note">Приём запросов через сайт пока закрыт. Форму можно посмотреть, но отправка и сохранение данных отключены.</p>
   <h2 class="offer-section-title">Контактные данные</h2>
 
   <div class="offer-contact-stack">
     <div class="offer-field">
       <label>Имя</label>
-      <input name="name" autocomplete="name" placeholder="Как к вам обращаться">
+      <input name="name" disabled autocomplete="off" placeholder="Как к вам обращаться">
     </div>
 
     <div class="offer-field">
       <label>Как вам удобнее связаться?</label>
-      <select name="contact_method">
+      <select name="contact_method" disabled>
         <option value="phone">По телефону</option>
         <option value="telegram">Telegram</option>
         <option value="max">MAX</option>
@@ -55,7 +55,7 @@
 
     <div class="offer-field">
       <label data-contact-label>Номер телефона для связи</label>
-      <input name="contact_value" type="tel" placeholder="+7 999 999-99-99">
+      <input name="contact_value" disabled type="tel" placeholder="+7 999 999-99-99">
       <p class="offer-help" data-contact-help></p>
     </div>
   </div>
@@ -96,10 +96,10 @@
   </div>
 
   <div class="offer-actions">
-    <button class="offer-submit" type="submit">Отправить запрос</button>
+    <button class="offer-submit" type="button" disabled aria-disabled="true">Приём запросов закрыт</button>
     <a class="offer-back" href="index.html">Вернуться на главную</a>
   </div>
-  <p class="offer-note">На этом этапе достаточно общей информации. Дополнительные параметры исполнения можно будет согласовать позже.</p>
+  <p class="offer-note">Запросы не отправляются и не сохраняются.</p>
 </form>
 </div>
 </main>
@@ -112,5 +112,5 @@
 
 <script src="offer-data.js?v=20261117-offer1"></script>
 <script src="script.js?v=20261127-orders1"></script><script src="shop.js?v=20261127-orders1" data-shop-runtime="true"></script>
-<script src="offer.js?v=20261125-direct1"></script>
+<script src="offer.js?v=20261127-no-demo1"></script>
 </body></html>

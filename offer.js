@@ -77,19 +77,7 @@
 
   form.addEventListener('submit',e=>{
     e.preventDefault();
-    const data=new FormData(form);
-    const chosen=String(data.get('custom_heraldry')||'').trim()||String(data.get('heraldry')||'').trim()||'Не указано'
-    const methodLabels={phone:'Телефон',telegram:'Telegram',max:'MAX',whatsapp:'WhatsApp',email:'Email'};
-    const entry={id:'З-ДРЖ-'+crypto.randomUUID().slice(0,8).toUpperCase(),customer:String(data.get('name')||'').trim()||'Без имени',subject:chosen,size:[data.get('width'),data.get('height')].some(Boolean)?'Ширина: '+(data.get('width')||'—')+' см · высота: '+(data.get('height')||'—')+' см':'Размер уточняется',contactMethod:methodLabels[data.get('contact_method')]||'',contact:String(data.get('contact_value')||''),status:'Новая',date:new Date().toISOString()};
-    let note=form.querySelector('[data-test-offer-result]');
-    if(!note){note=document.createElement('p');note.dataset.testOfferResult='';note.setAttribute('role','status');note.className='offer-note';form.appendChild(note);}
-    try{
-      const key='derzhava_test_requests_v1', list=JSON.parse(localStorage.getItem(key)||'[]');
-      if(!Array.isArray(list))throw Error('Invalid data');
-      list.unshift(entry);localStorage.setItem(key,JSON.stringify(list));
-      form.reset();updateContact();results.hidden=true;customWrap.hidden=true;customToggle.textContent='Не нашли нужного? Указать вручную';
-      note.textContent='Спасибо! Пробная заявка '+entry.id+' сохранена.';
-    }catch(_){note.textContent='Не удалось сохранить заявку в браузере.';}
-    note.scrollIntoView({behavior:'smooth',block:'nearest'});
   });
+  // Remove only the obsolete request-store key, never read or transmit its data.
+  try{localStorage.removeItem('derzhava_test_requests_v1')}catch{}
 })();
