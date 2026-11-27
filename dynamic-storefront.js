@@ -21,25 +21,39 @@ async function get(path){
 }
 function renderProduct(p){
  document.title=p.title+' | Держава';$('[data-ds-crumb]').textContent=p.title;
- const layout=node('div',undefined,'final-product-grid ds-product-grid'),gallery=node('div',undefined,'final-product-gallery'),main=node('div',undefined,'ds-image-main'),thumbs=node('div',undefined,'ds-thumbs');
- const show=(id)=>{main.replaceChildren(layoutCheck?legacyImage(id,p.title):image(id,p.title));};
- show(p.photos[0].id);
- for(const [i,ph] of p.photos.entries()){
-  const b=node('button');b.type='button';b.setAttribute('aria-label','Фото '+(i+1));b.append(layoutCheck?legacyImage(ph.id,''):image(ph.id,''));b.addEventListener('click',()=>{show(ph.id);for(const t of thumbs.children)t.setAttribute('aria-pressed',String(t===b));});b.setAttribute('aria-pressed',String(i===0));thumbs.append(b);
+ const layout=node('div',undefined,'final-product-grid ds-product-grid'),gallery=node('div',undefined,'final-product-gallery'),main=node('button',undefined,'final-product-main ds-image-main'),thumbs=node('div',undefined,'final-product-thumbs ds-thumbs');
+ main.type='button';main.setAttribute('aria-label','Увеличить изображение');
+ let selectedPhoto=p.photos[0].id;
+ const makePhoto=(id,alt)=>layoutCheck?legacyImage(id,alt):image(id,alt);
+ const show=id=>{selectedPhoto=id;main.replaceChildren(makePhoto(id,p.title),node('span','Увеличить','image-zoom-hint'));};
+ show(selectedPhoto);
+ main.addEventListener('click',()=>{
+  const dialog=node('dialog',undefined,'ds-zoom'),close=node('button','×','ds-zoom-close');close.type='button';close.setAttribute('aria-label','Закрыть');close.onclick=()=>dialog.close();
+  dialog.append(close,makePhoto(selectedPhoto,p.title));document.body.append(dialog);dialog.addEventListener('close',()=>dialog.remove(),{once:true});dialog.showModal();
+ });
+ gallery.append(main);
+ if(p.photos.length>1){
+  for(const [i,ph] of p.photos.entries()){
+   const b=node('button',undefined,'gallery-thumb');b.type='button';b.setAttribute('aria-label','Фото '+(i+1));b.append(makePhoto(ph.id,''));b.addEventListener('click',()=>{show(ph.id);for(const t of thumbs.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);thumbs.append(b);
+  }
+  gallery.append(thumbs);
  }
- gallery.append(main,thumbs);
  const info=node('div',undefined,'final-product-info');
- info.append(node('p',categories[p.category],'eyebrow'),node('h1',p.title),node('p',p.finish,'final-finish'),node('p','Артикул: '+p.sku,'product-article'));
- const sizes=[...p.variants].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}));
- const price=node('div',money(sizes[0].price),'final-price'),options=node('div',undefined,'ds-sizes');
+ info.append(node('p',p.eyebrow||categories[p.category],'eyebrow'),node('h1',p.productTitle||p.title),node('p',p.productFinish||p.finish,'final-finish'),node('p','Артикул: '+p.sku,'product-article'));
+ const sizes=[...p.variants];
+ const price=node('div',money(sizes[0].price),'final-price'),options=node('div',undefined,'size-options');
+ options.setAttribute('role','group');options.setAttribute('aria-label','Выберите размер');
  info.append(price,node('p','Выберите размер','size-label'),options);
  for(const [i,v] of sizes.entries()){
-  const b=node('button',v.size);b.type='button';b.setAttribute('aria-pressed',String(i===0));
-  b.addEventListener('click',()=>{price.textContent=money(v.price);for(const t of options.children)t.setAttribute('aria-pressed',String(t===b));});options.append(b);
+  const b=node('button',v.size,'size-option');b.type='button';b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);
+  b.addEventListener('click',()=>{price.textContent=money(v.price);for(const t of options.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});options.append(b);
  }
+ const custom=node('a',undefined,'custom-size-inline'),copy=node('span',undefined,'custom-size-inline-copy');
+ custom.href='offer.html';copy.append(node('strong','Не нашли нужного размера?'),node('small','Возможно изготовление герба под индивидуальный запрос'));custom.append(copy,node('span','Уточнить размер'));info.append(custom);
  if(p.material)info.append(node('p','Материал: '+p.material,'ds-detail'));
- if(p.leadTime)info.append(node('p','Срок изготовления: '+p.leadTime,'ds-detail'));
- const buy=node('button','Приём заказов пока закрыт','button button-gold ds-disabled');buy.type='button';buy.disabled=true;info.append(buy);
+ if(p.leadTime){const time=node('div',undefined,'production-time');time.append(node('strong','Срок изготовления'),node('span',p.leadTime));info.append(time);}
+ const actions=node('div',undefined,'shop-product-actions'),buy=node('button','Добавить в корзину','shop-add-button'),cart=node('a','Корзина','shop-go-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';cart.href='cart.html';actions.append(buy,cart);info.append(actions);
+ const back=node('a','← Продолжить покупки','button final-order-button shop-direct-order');back.href='products.html'+(layoutCheck?'?layout=check':'');info.append(back);
  layout.append(gallery,info);content.replaceChildren(layout);
  for(const [heading,value] of [['Описание товара',p.description],['Характеристики',p.specs]]){
   if(!value)continue;
@@ -60,23 +74,46 @@ function renderList(products,preview=false){
  const search=$('[data-ds-search]'),category=$('[data-ds-category]');
  const render=()=>{
   content.replaceChildren();const q=search.value.trim().toLowerCase(),cat=category.value;
-  const list=products.filter(p=>(!cat||p.category===cat)&&(!q||[p.sku,p.title,p.finish,categories[p.category]].join(' ').toLowerCase().includes(q)));
-  if(!list.length){content.append(node('p','Нет подходящих товаров.','ds-empty'));return;}
-  for(const p of list){
-   const card=node('a',undefined,'ds-card');card.href=productUrl(p.sku)+(preview?'&layout=check':'');
-   const media=node('div',undefined,'ds-card-media'),im=preview?legacyImage(p.image,p.title):image(p.imageId,p.title);im.loading='lazy';media.append(im);
-   const text=node('div',undefined,'ds-card-copy');text.append(node('p','арт. '+p.sku,'ds-sku'),node('h2',p.title),node('p',p.finish,'ds-finish'),node('strong','от '+money(p.priceFrom),'ds-card-price'));
-   card.append(media,text);content.append(card);
+  const filtered=products.filter(p=>(!cat||p.category===cat)&&(!q||[p.sku,p.title,p.finish,categories[p.category]].join(' ').toLowerCase().includes(q)));
+  if(!filtered.length){content.append(node('p','Нет подходящих товаров.','ds-empty'));return;}
+  for(const p of filtered){
+   const href=productUrl(p.sku)+(preview?'&layout=check':'');
+   const card=node('article',undefined,'popular-card');card.dataset.productCard='';card.dataset.dynamicCard='';
+   const hit=node('a',undefined,'popular-hit');hit.href=href;hit.setAttribute('aria-label','Открыть '+p.title);
+   const media=node('div',undefined,'popular-media'),im=preview?legacyImage(p.image,p.title):image(p.imageId,p.title);im.loading='lazy';media.append(im);
+   const body=node('div',undefined,'popular-body popular-body-pro'),title=node('div',undefined,'popular-title-block');
+   title.append(node('p','Настенное исполнение','popular-overline'),node('h3',p.title));
+   const chips=node('div',undefined,'popular-chips');
+   for(const [i,chip] of p.finish.split(' · ').filter(Boolean).entries())chips.append(node('span',chip,'popular-chip'+(i===0?' popular-chip-accent':'')));
+   const specs=node('dl',undefined,'popular-specs');
+   const fields=p.fields||[['Исполнение',p.finish||'—']];
+   for(const [k,v] of fields){const row=node('div');row.append(node('dt',k),node('dd',v));specs.append(row);}
+   const sizeRow=node('div',undefined,'popular-spec-size'),dd=node('dd'),sizes=node('div',undefined,'popular-size-switcher');sizes.setAttribute('role','group');sizes.setAttribute('aria-label','Выберите размер');
+   const price=node('strong',money(p.variants[0].price),'popular-card-price');
+   for(const [i,v] of p.variants.entries()){
+    const b=node('button',undefined,'popular-size-choice'+(i===0?' active':''));b.type='button';b.setAttribute('aria-pressed',String(i===0));
+    b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
+    b.addEventListener('click',()=>{price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
+   }
+   const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';dd.append(sizes,custom);sizeRow.append(node('dt','Размер'),dd);specs.append(sizeRow);
+   const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
+   priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
+   const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));
+   const open=node('a',undefined,'popular-card-cta');open.href=href;open.append(node('span','Открыть товар'));actions.append(buy,open);bottom.append(priceBlock,actions);
+   body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);content.append(card);
   }
  };
  search.oninput=render;category.onchange=render;$('[data-ds-filters]').hidden=false;render();showContent();
 }
 async function loadList(){
  try{
-  const data=await get('/api/catalog/products');
+  const [data,variants]=await Promise.all([get('/api/catalog/products'),get('/api/catalog/variants')]);
   if(typeof data.published!=='boolean'||!Array.isArray(data.products)||!data.products.every(p=>skuOK(p.sku)&&typeof p.title==='string'&&typeof p.finish==='string'&&Object.hasOwn(categories,p.category)&&priceOK(p.priceFrom)&&uuidOK(p.imageId)))throw Error();
   if(!data.published){showStatus('Динамический каталог пока не опубликован.');return;}
-  renderList(data.products);
+  if(variants.published!==true||!Array.isArray(variants.variants))throw Error('Invalid variants');
+  const products=data.products.map(p=>({...p,variants:variants.variants.filter(v=>v.sku===p.sku&&typeof v.size==='string'&&priceOK(v.price))}));
+  if(products.some(p=>!p.variants.length))throw Error('Missing variant');
+  renderList(products);
  }catch{showStatus('Не удалось загрузить каталог. Обновите страницу.');}
 }
 // Layout verification only: read existing public static pages. No draft API,
@@ -108,6 +145,7 @@ async function loadLayoutCheck(){
    if(!skuOK(sku))throw Error();
    return {sku,title:card.querySelector('h3').textContent.trim(),finish:[...card.querySelectorAll('.popular-chip')].map(x=>x.textContent.trim()).join(' · '),
     category:card.dataset.group==='moscow'?'city':'rf',priceFrom:Math.min(...[...card.querySelectorAll('[data-card-size]')].map(b=>staticPrice(b.dataset.price))),
+    fields:[...card.querySelectorAll('.popular-specs > div:not(.popular-spec-size)')].map(row=>[row.querySelector('dt').textContent.trim(),row.querySelector('dd').textContent.trim()]),
     image:legacyUrl(card.querySelector('.popular-media img').getAttribute('src')),path:legacyUrl(card.querySelector('.popular-hit').getAttribute('href'),true),
     variants:[...card.querySelectorAll('[data-card-size]')].map(b=>({size:[b.querySelector('span')?.textContent,b.querySelector('small')?.textContent].filter(Boolean).join(' ').trim(),price:staticPrice(b.dataset.price)}))};
   });
@@ -120,7 +158,8 @@ async function loadLayoutCheck(){
   const thumbs=[...page.querySelectorAll('.gallery-thumb[data-src]')].map(x=>x.dataset.src);
   p.photos=[...new Set([main,...thumbs].map(x=>legacyUrl(x)))].map(id=>({id}));
   p.description=[...page.querySelectorAll('.about-copy p')].map(x=>x.textContent.trim()).join('\n\n');
-  p.specs='';p.material='';p.leadTime='';
+  p.specs='';p.material='';p.leadTime=page.querySelector('.production-time span')?.textContent.trim()||'';
+  p.productTitle=page.querySelector('.final-product-info h1')?.textContent.trim();p.productFinish=page.querySelector('.final-finish')?.textContent.trim();p.eyebrow=page.querySelector('.final-product-info .eyebrow')?.textContent.trim();
   previewNotice(p.path);renderProduct(p);
  }catch{showStatus('Не удалось загрузить образцы оформления. Обновите страницу.');}
 }

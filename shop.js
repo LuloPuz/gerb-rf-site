@@ -490,7 +490,13 @@
     return catalogPromise;
   }
 
-  injectHeader();initProductPage();initCatalogQuickAdd();initCustomSize();renderCart();initCheckout();
+  injectHeader();
+  if(document.body.hasAttribute('data-dynamic-page')){
+    window.addEventListener('storage',e=>{if(e.key===CART_KEY)updateHeaderCount();});
+    window.addEventListener('pageshow',updateHeaderCount);
+    return;
+  }
+  initProductPage();initCatalogQuickAdd();initCustomSize();renderCart();initCheckout();
   applyCatalogPrices();refreshCatalog();
   document.addEventListener('derzhava:catalog-render',()=>{initCatalogQuickAdd();applyCatalogPrices();});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!busy)refreshCatalog();});
