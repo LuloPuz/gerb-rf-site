@@ -63,7 +63,16 @@ const href=productUrl(p.sku)+(preview?'&layout=check':'');
    for(const [i,v] of p.variants.entries()){
     const b=node('button',undefined,'popular-size-choice'+(i===0?' active':''));b.type='button';b.setAttribute('aria-pressed',String(i===0));
     b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
-    b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
+    b.addEventListener('click',()=>{
+     selectedVariant=v;price.textContent=money(v.price);
+     for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}
+     // Scroll only this horizontal size strip, never the page.
+     if(sizes.scrollWidth>sizes.clientWidth+2){
+      const item=b.getBoundingClientRect(),strip=sizes.getBoundingClientRect();
+      const target=sizes.scrollLeft+item.left-strip.left-sizes.clientLeft-(sizes.clientWidth-item.width)/2;
+      sizes.scrollTo({left:Math.max(0,Math.min(target,sizes.scrollWidth-sizes.clientWidth)),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+     }
+    });sizes.append(b);
    }
    const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';const scroll=node('div',undefined,'ds-size-scroll');
    if(p.variants.length>1){

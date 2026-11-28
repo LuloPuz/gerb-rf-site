@@ -1,6 +1,6 @@
 import {renderProductCard} from './storefront-product.js?v=20261128-shared1';
 import {productKeys} from './dynamic-search.js?v=20261128-search1';
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-sizes3';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-sizes4';
 const $=s=>document.querySelector(s);
 const content=$('[data-ds-content]'),status=$('[data-ds-status]'),kind=document.body.dataset.dynamicPage;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
