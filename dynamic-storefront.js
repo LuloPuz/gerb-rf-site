@@ -1,6 +1,6 @@
 import {renderProductCard} from './storefront-product.js?v=20261128-shared1';
 import {productKeys} from './dynamic-search.js?v=20261128-search1';
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-home1';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-layout2';
 const $=s=>document.querySelector(s);
 const content=$('[data-ds-content]'),status=$('[data-ds-status]'),kind=document.body.dataset.dynamicPage;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
@@ -108,7 +108,7 @@ async function loadLayoutCheck(){
   const thumbs=[...page.querySelectorAll('.gallery-thumb[data-src]')].map(x=>x.dataset.src);
   p.photos=[...new Set([main,...thumbs].map(x=>legacyUrl(x)))].map(id=>({id}));
   p.description=[...page.querySelectorAll('.about-copy p')].map(x=>x.textContent.trim()).join('\n\n');
-  p.specs='';p.material='';p.leadTime=page.querySelector('.production-time span')?.textContent.trim()||'';
+  p.specs='';p.material='';p.leadTime='';
   p.productTitle=page.querySelector('.final-product-info h1')?.textContent.trim();p.productFinish=page.querySelector('.final-finish')?.textContent.trim();p.eyebrow=page.querySelector('.final-product-info .eyebrow')?.textContent.trim();
   previewNotice(p.path);renderProduct(p);
  }catch{showStatus('Не удалось загрузить образцы оформления. Обновите страницу.');}

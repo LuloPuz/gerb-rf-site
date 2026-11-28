@@ -69,6 +69,6 @@ const href=productUrl(p.sku)+(preview?'&layout=check':'');
    const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
    priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
    const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));if(!preview)bindCart(buy,p.sku,()=>selectedVariant,'В корзину');
-   const open=node('a',undefined,'popular-card-cta');open.href=href;open.append(node('span','Открыть товар'));actions.append(buy,open);bottom.append(priceBlock,actions);
-   body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);return card;
+   actions.append(buy);actions.style.gridTemplateColumns='minmax(0,1fr)';bottom.append(priceBlock,actions);
+   card.addEventListener('click',e=>{if(!e.defaultPrevented&&e.button===0&&!e.target.closest('a,button,input,select,textarea,label')&&!window.getSelection()?.toString()){if(e.metaKey||e.ctrlKey)window.open(href,'_blank','noopener');else location.assign(href);}});body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);return card;
 }

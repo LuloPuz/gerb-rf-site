@@ -56,3 +56,21 @@
  [data-dynamic-page="product"] .ds-product-grid{grid-template-columns:minmax(0,1fr)!important}
  [data-dynamic-page="product"] .ds-product-grid .final-product-gallery{height:clamp(360px,65vw,580px)!important}
 }
+
+/* Keep the fixed header clear of the list title. */
+body[data-dynamic-page="list"]>main.ds-main{padding-top:clamp(105px,9vw,150px)!important}
+body[data-dynamic-page="list"] .ds-list-head{margin:12px 0 22px}
+.popular-card[data-dynamic-card]{cursor:pointer}
+.popular-card[data-dynamic-card] .popular-card-actions{grid-template-columns:minmax(0,1fr)!important}
+.popular-card[data-dynamic-card] .popular-add-cart{width:100%!important}
+@media(max-width:760px){
+ body[data-dynamic-page="list"]>main.ds-main{padding-top:120px!important}
+ body[data-dynamic-page="list"] .ds-products.popular-grid{grid-template-columns:minmax(0,1fr)!important}
+ body[data-dynamic-page="list"] .ds-products>.popular-card[data-dynamic-card]{display:grid!important;grid-template-columns:minmax(0,36%) minmax(0,64%)!important;align-items:stretch}
+ body[data-dynamic-page="list"] .ds-products>.popular-card[data-dynamic-card]>.popular-media{height:auto!important;min-height:0!important;width:100%!important;align-self:stretch;position:relative!important;padding:8px!important;border-right:1px solid #e7e1d7!important;border-bottom:0!important}
+ body[data-dynamic-page="list"] .ds-products>.popular-card[data-dynamic-card]>.popular-media img{position:absolute!important;inset:8px!important;width:calc(100% - 16px)!important;height:calc(100% - 16px)!important;object-fit:contain!important}
+ body[data-dynamic-page="list"] .ds-products>.popular-card[data-dynamic-card]>.popular-body-pro{min-width:0!important;padding:12px!important}
+ body[data-dynamic-page="list"] .popular-card[data-dynamic-card] .popular-overline{padding-right:48px!important}
+ body[data-dynamic-page="list"] .popular-card[data-dynamic-card] .popular-size-switcher{display:flex!important;overflow-x:auto!important;max-width:100%;scrollbar-width:thin;padding-right:0!important}
+ body[data-dynamic-page="list"] .popular-card[data-dynamic-card] .popular-size-choice{flex:0 0 auto!important;min-width:92px!important}
+}
