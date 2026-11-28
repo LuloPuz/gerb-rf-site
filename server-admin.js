@@ -615,33 +615,34 @@ async function openPromotion(sku){
   const rows=source.review.variants;
   if(!rows.length||!rows.every(v=>Number.isSafeInteger(v.price)&&v.price>=1&&(!Object.hasOwn(v,'oldPrice')||Number.isSafeInteger(v.oldPrice)&&v.oldPrice>v.price)))throw Error();
   reviewStatus.textContent='';
-  const form=node('form',undefined,'sa-bulk-form'),note=node('p','Скидка применяется ко всем существующим размерам от их обычной цены. Новые размеры добавляются без акции. Для изменения обычных цен сначала снимите акцию.','sa-note');
-  const label=node('label',undefined,'sa-copy-sku'),amount=node('input');amount.type='number';amount.min='0';amount.max='90';amount.step='1';amount.required=true;amount.value='10';label.append(node('span','Скидка, %'),amount,node('small','От 1 до 90%. Значение 0 снимает акцию.','sa-note'));
+  const form=node('form',undefined,'sa-bulk-form'),note=node('p','Выберите размеры для акции. Скидка рассчитывается от обычной цены; цены и скидки остальных размеров не изменятся.','sa-note');
+  const label=node('label',undefined,'sa-copy-sku'),amount=node('input');amount.type='number';amount.min='0';amount.max='90';amount.step='1';amount.required=true;amount.value='0';label.append(node('span','Скидка, %'),amount,node('small','От 1 до 90%. Значение 0 снимает акцию.','sa-note'));
   const wrap=node('div',undefined,'sa-variant-wrap'),table=node('table',undefined,'sa-bulk-table'),head=node('thead'),tr=node('tr'),body=node('tbody');
-  for(const title of ['Размер','Обычная цена','Цена по акции'])tr.append(node('th',title));head.append(tr);table.append(head,body);wrap.append(table);
-  const fields=rows.map(v=>{const line=node('tr'),next=node('td');line.append(node('td',v.size),node('td',money(v.oldPrice??v.price)),next);body.append(line);return{v,next};});
-  const hint=node('p',undefined,'sa-note'),actions=node('div',undefined,'sa-review-actions'),remove=node('button','Снять акцию'),save=node('button','Сохранить акцию','sa-status-save');remove.type='button';save.type='submit';actions.append(remove,save);form.append(note,label,wrap,hint,actions);reviewBody.append(form);
+  const allCheck=node('input');allCheck.type='checkbox';allCheck.setAttribute('aria-label','Выбрать все размеры');const selectTh=node('th');selectTh.append(allCheck);tr.append(selectTh);for(const title of ['Размер','Обычная цена','Новая цена'])tr.append(node('th',title));head.append(tr);table.append(head,body);wrap.append(table);
+  const fields=rows.map(v=>{const line=node('tr'),next=node('td'),check=node('input'),cell=node('td'),size=node('td',v.size);check.type='checkbox';check.setAttribute('aria-label','Выбрать размер '+v.size);cell.append(check);if(v.oldPrice)size.append(node('small','Сейчас: '+money(v.price),'sa-promo-current'));line.append(cell,size,node('td',money(v.oldPrice??v.price)),next);body.append(line);return{v,next,check};});
+  const hint=node('p',undefined,'sa-note'),actions=node('div',undefined,'sa-review-actions'),remove=node('button','Снять акцию'),save=node('button','Сохранить акцию','sa-status-save');remove.type='button';save.type='submit';actions.append(remove,save);const selectAll=node('label',undefined,'sa-promo-select-all'),toggle=node('input');toggle.type='checkbox';selectAll.append(toggle,node('span','Выбрать все размеры'));form.append(note,label,selectAll,wrap,hint,actions);reviewBody.append(form);
   function refresh(){
-   const p=Number(amount.value);let valid=amount.value!==''&&Number.isInteger(p)&&p>=0&&p<=90;
-   for(const {v,next} of fields){const base=v.oldPrice??v.price,n=Math.round(base*(100-p)/100),ok=Number.isSafeInteger(n)&&n>=1&&(p===0||n<base);next.textContent=ok?money(n):'Некорректно';next.classList.toggle('sa-bulk-changed',ok&&p>0);valid=valid&&ok;}
-   hint.textContent=valid?(p===0?'Будут восстановлены обычные цены.':'Скидка от обычной цены, без накопления скидок.'):'Проверьте процент и минимальную цену.';
-   save.textContent=p===0?'Снять акцию':'Сохранить акцию';save.disabled=!valid||mutationBusy;
+   const p=Number(amount.value);let valid=amount.value!==''&&Number.isInteger(p)&&p>=0&&p<=90;const count=fields.filter(f=>f.check.checked).length;
+   for(const {v,next,check} of fields){const base=v.oldPrice??v.price,n=check.checked?Math.round(base*(100-p)/100):v.price,ok=Number.isSafeInteger(n)&&n>=1&&(!check.checked||p===0||n<base);next.textContent=ok?money(n):'Некорректно';next.classList.toggle('sa-bulk-changed',ok&&check.checked&&n!==v.price);if(check.checked)valid=valid&&ok;}
+   toggle.checked=allCheck.checked=count===fields.length;toggle.indeterminate=allCheck.indeterminate=count>0&&count<fields.length;
+   hint.textContent=!count?'Выберите размеры для изменения.':!valid?'Проверьте процент и минимальную цену.':'Выбрано: '+count+' из '+fields.length+'. '+(p===0?'Будут восстановлены обычные цены выбранных размеров.':'Скидка от обычной цены, без накопления скидок.');
+   save.textContent=p===0?'Снять акцию':'Сохранить акцию';save.disabled=!valid||!count||count>100||mutationBusy;
   }
-  amount.addEventListener('input',refresh);remove.addEventListener('click',()=>{amount.value='0';refresh();});remove.hidden=!rows.some(v=>v.oldPrice);refresh();
+  for(const f of fields)f.check.addEventListener('change',refresh);for(const el of [allCheck,toggle])el.addEventListener('change',()=>{for(const f of fields)f.check.checked=el.checked;refresh();});amount.addEventListener('input',refresh);remove.addEventListener('click',()=>{amount.value='0';refresh();});remove.hidden=!rows.some(v=>v.oldPrice);refresh();
   form.addEventListener('submit',async e=>{
    e.preventDefault();if(mutationBusy||current!==reviewGeneration||session!==marker)return;refresh();if(save.disabled)return;
-   const percent=Number(amount.value);if(!window.confirm(percent===0?'Снять акцию и восстановить обычные цены?':'Применить скидку '+percent+'% ко всем размерам артикула '+sku+'?'))return;
-   mutationBusy=true;amount.disabled=remove.disabled=save.disabled=true;reviewStatus.textContent='Сохраняем…';
+   const percent=Number(amount.value),selected=fields.filter(f=>f.check.checked).map(f=>f.v.id);if(!window.confirm(percent===0?'Снять акцию у выбранных размеров ('+selected.length+')?':'Применить скидку '+percent+'% к выбранным размерам ('+selected.length+') артикула '+sku+'?'))return;
+   mutationBusy=true;amount.disabled=remove.disabled=save.disabled=true;for(const el of [allCheck,toggle,...fields.map(f=>f.check)])el.disabled=true;reviewStatus.textContent='Сохраняем…';
    try{
-    const r=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action:'promotion',sku,expected:source.review.revision,percent}),signal:AbortSignal.timeout(35000)});
+    const r=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action:'promotion',sku,expected:source.review.revision,percent,selected}),signal:AbortSignal.timeout(35000)});
     if(current!==reviewGeneration||session!==marker)return;
     if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
     if(!r.ok){reviewStatus.textContent=r.status===409?'Акция не сохранена: данные изменились или товар опубликован. Обновите каталог.':'Не удалось сохранить акцию.';return;}
     const result=await r.json();if(current!==reviewGeneration||session!==marker)return;if(!validReview(result,sku))throw Error();
-    for(const item of result.variants){const v=variants.find(x=>x.id===item.id);if(v){delete v.oldPrice;Object.assign(v,item);catalogDrafts.delete(v.id);}}
+    for(const item of result.variants){const v=variants.find(x=>x.id===item.id);if(v){delete v.oldPrice;Object.assign(v,item);if(selected.includes(item.id))catalogDrafts.delete(v.id);}}
     clearReview();renderCatalog();message.textContent=percent===0?'Акция снята. Обычные цены восстановлены.':'Акция сохранена. Проверьте готовность карточки к публикации.';
    }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Обновите каталог перед повтором.';}
-   finally{mutationBusy=false;amount.disabled=remove.disabled=false;if(current===reviewGeneration)refresh();}
+   finally{mutationBusy=false;amount.disabled=remove.disabled=false;for(const el of [allCheck,toggle,...fields.map(f=>f.check)])el.disabled=false;if(current===reviewGeneration)refresh();}
   });
  }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось загрузить цены. Обновите панель.';}
 }

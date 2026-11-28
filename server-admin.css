@@ -51,3 +51,5 @@
 .sa-bulk-form .sa-review-actions{margin:0}
 
 .sa-old-price{display:block;margin-top:4px;color:#6b7280;font-size:12px}.sa-copy-sku input[type=number]{box-sizing:border-box;width:100%;height:44px;padding:8px 12px;border:1px solid #cbd5df;border-radius:8px;font:inherit}
+
+.sa-promo-select-all{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e1e5ea;border-radius:8px;cursor:pointer;font-weight:600}.sa-promo-select-all input{appearance:auto;accent-color:#16324f;width:19px;height:19px;flex:0 0 19px;margin:0}.sa-promo-current{display:block;font-size:11px;color:#64748b;margin-top:4px}
