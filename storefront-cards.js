@@ -65,10 +65,20 @@ const href=productUrl(p.sku)+(preview?'&layout=check':'');
     b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
     b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}});sizes.append(b);
    }
-   const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';dd.append(sizes,custom);sizeRow.append(node('dt','Размер'),dd);specs.append(sizeRow);
+   const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';const scroll=node('div',undefined,'ds-size-scroll');
+   if(p.variants.length>1){
+    const prev=node('button','‹','ds-size-arrow'),next=node('button','›','ds-size-arrow');
+    prev.type=next.type='button';prev.setAttribute('aria-label','Предыдущие размеры');next.setAttribute('aria-label','Следующие размеры');
+    prev.disabled=true;
+    const sync=()=>{prev.disabled=sizes.scrollLeft<=2;next.disabled=sizes.scrollLeft+sizes.clientWidth>=sizes.scrollWidth-2;};
+    const move=dir=>{const step=(sizes.firstElementChild?.getBoundingClientRect().width||90)+5;sizes.scrollBy({left:dir*step,behavior:'smooth'});};
+    prev.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));sizes.addEventListener('scroll',sync,{passive:true});
+    scroll.append(prev,sizes,next);requestAnimationFrame(sync);
+   }else{scroll.classList.add('ds-size-single');scroll.append(sizes);}
+   dd.append(scroll,custom);sizeRow.append(node('dt',p.variants.length>1?'Размер · '+p.variants.length+' вариантов':'Размер'),dd);specs.append(sizeRow);
    const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
    priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
    const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));if(!preview)bindCart(buy,p.sku,()=>selectedVariant,'В корзину');
    actions.append(buy);actions.style.gridTemplateColumns='minmax(0,1fr)';bottom.append(priceBlock,actions);
-   card.addEventListener('click',e=>{if(!e.defaultPrevented&&e.button===0&&!e.target.closest('a,button,input,select,textarea,label')&&!window.getSelection()?.toString()){if(e.metaKey||e.ctrlKey)window.open(href,'_blank','noopener');else location.assign(href);}});body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);return card;
+   card.addEventListener('click',e=>{if(!e.defaultPrevented&&e.button===0&&!e.target.closest('a,button,input,select,textarea,label,.ds-size-scroll')&&!window.getSelection()?.toString()){if(e.metaKey||e.ctrlKey)window.open(href,'_blank','noopener');else location.assign(href);}});body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);return card;
 }

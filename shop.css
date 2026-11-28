@@ -3139,3 +3139,17 @@ html:has(.custom-size-dialog[open]){overflow:hidden}
   body .popular-card[data-product-card] .custom-size-link{font-size:10px!important}
   body .popular-card[data-product-card] .popular-card-price{font-size:16px!important}
 }
+
+/* Mobile dynamic size carousel: visible next choice and real scroll controls. */
+.ds-size-scroll{min-width:0}
+.ds-size-scroll>.ds-size-arrow{display:none}
+@media screen and (max-width:760px){
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll{display:grid!important;grid-template-columns:24px minmax(0,1fr) 24px;gap:3px;align-items:center;position:relative;z-index:10;min-width:0;width:100%}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll.ds-size-single{grid-template-columns:minmax(0,1fr)}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll>.popular-size-switcher{display:flex!important;flex-wrap:nowrap!important;gap:5px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity!important;scrollbar-width:none!important;padding:0!important;min-width:0!important;max-width:100%!important;overscroll-behavior-x:contain}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll>.popular-size-switcher::-webkit-scrollbar{display:none}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll:not(.ds-size-single) .popular-size-choice{flex:0 0 auto!important;width:auto!important;min-width:92px!important;max-width:none!important;padding:5px 7px!important;scroll-snap-align:start!important;min-height:36px!important}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll.ds-size-single .popular-size-choice{flex:1 1 100%!important;width:100%!important;min-width:0!important}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll>.ds-size-arrow{display:grid!important;place-items:center;width:24px;min-width:0;height:36px;padding:0;border:1px solid #d1c7b5;border-radius:6px;background:#faf7ef;color:#80602d;font:24px/1 Arial,sans-serif;cursor:pointer}
+ body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll>.ds-size-arrow:disabled{opacity:.28;cursor:default}
+}

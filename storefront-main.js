@@ -1,4 +1,4 @@
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-layout2';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-sizes3';
 const section=document.querySelector('#popular'),grid=section?.querySelector('.popular-grid');
 if(grid&&location.origin==='https://gerbrf.ru'){
  let live=false,busy=false;
