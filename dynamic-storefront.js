@@ -1,6 +1,7 @@
 import {renderProductCard} from './storefront-product.js?v=20261128-promo1';
 import {productKeys} from './dynamic-search.js?v=20261128-search1';
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-sizeorder1';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-private1';
+import {adminPreview,previewProduct,previewProducts,adminPhoto,addPreviewNotice} from './admin-storefront-preview.js?v=20261128-private1';
 const $=s=>document.querySelector(s);
 const content=$('[data-ds-content]'),status=$('[data-ds-status]'),kind=document.body.dataset.dynamicPage;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
@@ -36,7 +37,7 @@ function bindCart(button,sku,selected,label){
 }
 function renderProduct(p){
  document.title=p.title+' | Держава';$('[data-ds-crumb]').textContent=p.title;
- renderProductCard(p,{target:content,makePhoto:(id,alt)=>layoutCheck?legacyImage(id,alt):image(id,alt),bindPurchase:bindCart,backHref:'products.html'+(layoutCheck?'?layout=check':'')});
+ renderProductCard(p,{target:content,makePhoto:(id,alt)=>adminPreview?adminPhoto(id,alt):layoutCheck?legacyImage(id,alt):image(id,alt),bindPurchase:adminPreview?undefined:bindCart,backHref:adminPreview?'catalog.html?preview=admin':'products.html'+(layoutCheck?'?layout=check':'')});
  showContent();
 }
 function validProduct(p,sku){
@@ -114,5 +115,12 @@ async function loadLayoutCheck(){
  }catch{showStatus('Не удалось загрузить образцы оформления. Обновите страницу.');}
 }
 if(location.origin!=='https://gerbrf.ru')showStatus('Динамический каталог доступен на gerbrf.ru.');
+else if(adminPreview){
+ addPreviewNotice(status);
+ (async()=>{try{
+  if(kind==='product'){const sku=new URLSearchParams(location.search).get('sku');const p=await previewProduct(sku);if(!validProduct(p,sku))throw Error();renderProduct(p);}
+  else{const p=await previewProducts();renderList(p.products,'admin');}
+ }catch{showStatus('Предпросмотр недоступен. Войдите в админку и откройте ссылку снова.');}})();
+}
 else if(layoutCheck)loadLayoutCheck();
 else if(kind==='product')loadProduct();else loadList();

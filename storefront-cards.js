@@ -55,10 +55,10 @@ function bindCart(button,sku,selected,label){
 }
 
 export function renderCard(p,preview=false){
-const href=productUrl(p.sku)+(preview?'&layout=check':'');
+const href=productUrl(p.sku)+(preview==='admin'?'&preview=admin':preview?'&layout=check':'');
    const card=node('article',undefined,'popular-card');card.dataset.productCard='';card.dataset.popularCard='';card.dataset.dynamicCard='';card.dataset.category=p.category;card.dataset.group=p.category==='rf'?'rf':p.category==='city'&&/москв/i.test(p.title)?'moscow':p.category;card.dataset.search=productKeys(p);
    const hit=node('a',undefined,'popular-hit');hit.href=href;hit.setAttribute('aria-label','Открыть '+p.title);
-   const media=node('div',undefined,'popular-media'),im=preview?legacyImage(p.image,p.title):image(p.imageId,p.title);im.loading='lazy';media.append(im);
+   const media=node('div',undefined,'popular-media'),im=preview==='admin'?node('img'):preview?legacyImage(p.image,p.title):image(p.imageId,p.title);if(preview==='admin'){im.src='/api/admin/catalog/photo?id='+encodeURIComponent(p.imageId);im.alt=p.title;im.decoding='async';}im.loading='lazy';media.append(im);
    const body=node('div',undefined,'popular-body popular-body-pro'),title=node('div',undefined,'popular-title-block');
    title.append(node('p','Настенное исполнение','popular-overline'),node('h3',p.title));
    const chips=node('div',undefined,'popular-chips');
@@ -83,7 +83,7 @@ const href=productUrl(p.sku)+(preview?'&layout=check':'');
      }
     });sizes.append(b);
    }
-   const custom=node('a','Нужен другой размер?','custom-size-link');custom.href='offer.html';const scroll=node('div',undefined,'ds-size-scroll');
+   const custom=node('a','Нужен другой размер?','custom-size-link');if(preview==='admin')custom.setAttribute('aria-disabled','true');else custom.href='offer.html';const scroll=node('div',undefined,'ds-size-scroll');
    if(p.variants.length>1){
     const prev=node('button','‹','ds-size-arrow'),next=node('button','›','ds-size-arrow');
     prev.type=next.type='button';prev.setAttribute('aria-label','Предыдущие размеры');next.setAttribute('aria-label','Следующие размеры');
