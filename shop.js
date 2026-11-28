@@ -458,7 +458,7 @@
       if(comparison.missing.length)note='Некоторые размеры больше недоступны. Удалите их из корзины.';
       else if(comparison.changed.length)note='Цены изменились. Подтвердите обновление стоимости корзины.';
       else if(!catalogSnapshot.intakeEnabled)note='Приём заказов пока закрыт.';
-    }else note=catalogState==='draft'?'Тестовый каталог. Приём заказов закрыт.':catalogState==='pending'?'Проверяем актуальные цены…':'Не удалось проверить каталог. Обновите страницу.';
+    }else note=catalogState==='draft'?'Тестовый каталог. Приём заказов закрыт.':catalogState==='closed'?'Каталог закрыт. Корзина сохранена.':catalogState==='pending'?'Проверяем актуальные цены…':'Не удалось проверить каталог. Обновите страницу.';
     button.disabled=!!note;
     if(note){
       const el=document.createElement('p');el.className='cart-summary-note';el.dataset.catalogCartNote='';el.textContent=note;button.insertAdjacentElement('beforebegin',el);
@@ -486,7 +486,7 @@
         if(!r.ok)throw Error();
         const snapshot=catalogModel.parseCatalog(await r.json());
         if(current!==catalogGeneration)return;
-        catalogSnapshot=snapshot;catalogState=snapshot.published?'published':'draft';
+        catalogSnapshot=snapshot;catalogState=snapshot.published?'published':window.derzhavaStorefrontMode==='dynamic'?'closed':'draft';
       }catch{if(current===catalogGeneration){catalogSnapshot=null;catalogState='error';}}
       finally{if(current===catalogGeneration){applyCatalogPrices();if(render&&!busy)renderCart();catalogPromise=null;}}
     })();

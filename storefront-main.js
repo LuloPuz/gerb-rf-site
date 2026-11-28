@@ -1,12 +1,12 @@
 import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-snapshot1';
 const section=document.querySelector('#popular'),grid=section?.querySelector('.popular-grid');
 if(grid&&location.origin==='https://gerbrf.ru'){
+ const dynamic=window.derzhavaStorefrontMode==='dynamic';
  let live=false,busy=false;
  const count=section.querySelector('.home-popular-summary > span,.catalog-section-count');
  const summary=document.querySelector('.catalog-meta-full span:last-child');
- const originals=[...grid.children];
- const originalCount=count?.textContent,originalSummary=summary?.textContent;
  const notice=document.createElement('p');notice.setAttribute('role','status');notice.hidden=true;grid.before(notice);
+ function clear(message){grid.replaceChildren();live=false;if(count)count.textContent='0 товаров с фото';if(summary)summary.textContent='0 товаров с фото';notice.textContent=message;notice.hidden=false;document.dispatchEvent(new CustomEvent('derzhava:storefront-render'));}
  function update(products){
   const fragment=document.createDocumentFragment();
   for(const p of products)fragment.append(renderCard(p));
@@ -16,21 +16,21 @@ if(grid&&location.origin==='https://gerbrf.ru'){
   document.dispatchEvent(new CustomEvent('derzhava:storefront-render'));
  }
  async function refresh(){
-  if(busy)return;busy=true;
+  if(busy||!dynamic)return;busy=true;
   try{
    const data=await fetchProducts();
    if(!data.published){
-    if(live){grid.replaceChildren(...originals);live=false;if(count)count.textContent=originalCount;if(summary)summary.textContent=originalSummary;document.dispatchEvent(new CustomEvent('derzhava:storefront-render'));}
-    notice.hidden=true;return;
+    clear('Каталог пока закрыт. Можно обратиться за индивидуальным предложением.');return;
    }
    update(data.products);
    if(!data.products.length){notice.textContent='Пока нет опубликованных товаров. Обратитесь к менеджеру для индивидуального заказа.';notice.hidden=false;}
   }catch{
    // After cutover never retain stale public dynamic items on an API failure.
    // During staging the old static catalog remains visible.
-   if(live){grid.replaceChildren();notice.textContent='Не удалось обновить ассортимент. Попробуйте обновить страницу.';notice.hidden=false;document.dispatchEvent(new CustomEvent('derzhava:storefront-render'));}
+   clear('Не удалось обновить ассортимент. Попробуйте обновить страницу.');
   }finally{busy=false;}
  }
+ if(dynamic){grid.replaceChildren();notice.textContent='Загружаем каталог…';notice.hidden=false;document.dispatchEvent(new CustomEvent('derzhava:storefront-render'));}
  refresh();
  window.addEventListener('pageshow',e=>{if(e.persisted)refresh();});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});

@@ -375,7 +375,9 @@ document.addEventListener('keydown', event => {
     };
   });
 
-  let indexedPages=indexPages(pages), publishedSearch=false, searchLoading=null;
+  const dynamicMode=window.derzhavaStorefrontMode==='dynamic';
+  const referencePages=pages.filter(p=>!Object.hasOwn(skuByUrl,p.url.split(/[?#]/)[0]));
+  let indexedPages=indexPages(dynamicMode?referencePages:pages), publishedSearch=false, searchLoading=null;
   window.derzhavaProductMatches=(query,keys)=>{
     const q=tokens(query),target=tokens(keys);
     return q.every(qt=>target.some(tt=>tokenMatches(qt,tt)));
@@ -423,7 +425,7 @@ document.addEventListener('keydown', event => {
     .replace(/"/g,'&quot;');
 
   const searchDestination=query=>{
-    const dynamic=publishedSearch&&rankPages(query).some(p=>p.dynamic);
+    const dynamic=dynamicMode&&publishedSearch&&rankPages(query).some(p=>p.dynamic);
     return (dynamic?'products.html':'catalog.html')+(query?'?q='+encodeURIComponent(query):'');
   };
   const render = query => {
@@ -461,17 +463,17 @@ document.addEventListener('keydown', event => {
   };
 
   async function refreshSearch(){
-    if(location.origin!=='https://gerbrf.ru'||searchLoading)return searchLoading;
+    if(!dynamicMode||location.origin!=='https://gerbrf.ru'||searchLoading)return searchLoading;
     searchLoading=(async()=>{
       try{
-        const module=await import('./dynamic-search.js?v=20261128-search1');
+        const module=await import('./dynamic-search.js?v=20261128-cutover1');
         const response=await fetch('/api/catalog/products',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(8000)});
         if(!response.ok)throw Error();
         const snapshot=module.publicSearchPages(await response.json());
-        indexedPages=indexPages(module.mergeSearchPages(pages,skuByUrl,snapshot));publishedSearch=snapshot.published;
+        indexedPages=indexPages(module.mergeSearchPages(pages,skuByUrl,snapshot,true));publishedSearch=snapshot.published;
       }catch{
         // A network error must not keep previously published product links cached.
-        indexedPages=indexPages(publishedSearch?pages.filter(p=>!Object.hasOwn(skuByUrl,p.url.split(/[?#]/)[0])):pages);
+        indexedPages=indexPages(referencePages);publishedSearch=false;
       }finally{searchLoading=null;if(document.activeElement===input&&normalize(input.value))render(input.value);}
     })();
     return searchLoading;

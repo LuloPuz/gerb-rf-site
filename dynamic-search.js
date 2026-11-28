@@ -16,8 +16,8 @@ export function publicSearchPages(data){
  });
  return {published:data.published,pages};
 }
-export function mergeSearchPages(base,skuByUrl,snapshot){
- if(!snapshot.published)return base.slice();
+export function mergeSearchPages(base,skuByUrl,snapshot,dynamicMode=false){
+ if(!snapshot.published&&!dynamicMode)return base.slice();
  // After cutover the old product pages are not a source of available merchandise.
  // Keep the category and request-only reference directory entries.
  return [...snapshot.pages,...base.filter(p=>!Object.hasOwn(skuByUrl,p.url.split(/[?#]/)[0]))];

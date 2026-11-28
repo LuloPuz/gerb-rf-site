@@ -3153,3 +3153,6 @@ html:has(.custom-size-dialog[open]){overflow:hidden}
  body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll>.ds-size-arrow{display:grid!important;place-items:center;width:24px;min-width:0;height:36px;padding:0;border:1px solid #d1c7b5;border-radius:6px;background:#faf7ef;color:#80602d;font:24px/1 Arial,sans-serif;cursor:pointer}
  body .popular-card[data-product-card][data-dynamic-card] .ds-size-scroll>.ds-size-arrow:disabled{opacity:.28;cursor:default}
 }
+
+/* Hide legacy merchandise before the dynamic catalog paints. */
+html[data-storefront-mode="dynamic"] #popular .popular-card:not([data-dynamic-card]){display:none!important}
