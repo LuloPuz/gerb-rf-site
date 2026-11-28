@@ -31,8 +31,15 @@ export function projectProducts(data,variants){
  if(snapshot.bySku.size!==products.length)throw Error('Unexpected variants');
  return {published:true,products};
 }
-async function get(path){const r=await fetch(path,{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}
-export async function fetchProducts(){const [data,variants]=await Promise.all([get('/api/catalog/products'),get('/api/catalog/variants')]);return projectProducts(data,variants);}
+async function get(path){const r=await fetch(path,{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});if(!r.ok){const e=Error('HTTP '+r.status);e.status=r.status;throw e;}return r.json();}
+export async function fetchProducts(){
+ // During deployment an old API may reject the new query. In that case
+ // retain the previous read-only staging path, never fallback after errors.
+ let snapshot;
+ try{snapshot=await get('/api/catalog/products?snapshot=1');}
+ catch(e){if(e.status!==400)throw e;const [data,variants]=await Promise.all([get('/api/catalog/products'),get('/api/catalog/variants')]);return projectProducts(data,variants);}
+ return projectProducts(snapshot.catalog,snapshot.pricing);
+}
 function bindCart(button,sku,selected,label){
  if(layoutCheck||typeof window.derzhavaDynamicCartAdd!=='function')return;
  button.disabled=false;button.removeAttribute('title');
