@@ -25,7 +25,7 @@ const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocal
 function clear(){
  generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();clearPreview();clearReview();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
  dashboard.hidden=true;gate.hidden=false;$('[data-logout]').hidden=true;
- for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-code]'])$(s).replaceChildren();
+ for(const s of ['[data-stats]','[data-intake]','[data-orders]','[data-catalog]','[data-release]','[data-code]'])$(s).replaceChildren();
  for(const s of ['[data-enroll]','[data-code]','[data-copy]','[data-login]','[data-retry]','[data-orders-more]','[data-catalog-more]'])$(s).hidden=true;
  $('[data-enroll-status]').textContent='';message.textContent='';
 }
@@ -59,10 +59,10 @@ async function select(key){
  tab=key;const current=++generation;busy=false;
  all('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab===key)));
  all('[data-panel]').forEach(p=>p.hidden=p.dataset.panel!==key);
- $('[data-title]').textContent={overview:'Обзор',orders:'Заказы',catalog:'Товары'}[key];
+ $('[data-title]').textContent={overview:'Обзор',orders:'Заказы',catalog:'Товары',publication:'Публикация'}[key];
  // Drop private data from inactive panels.
  orders=[];variants=[];orderCursor=null;catalogCursor=null;
- $('[data-orders]').replaceChildren();$('[data-catalog]').replaceChildren();
+ $('[data-orders]').replaceChildren();$('[data-catalog]').replaceChildren();$('[data-release]').replaceChildren();
  $('[data-orders-more]').hidden=true;$('[data-catalog-more]').hidden=true;
  message.textContent='Загружаем…';
  if(key==='overview'){
@@ -74,8 +74,64 @@ async function select(key){
    $('[data-intake]').textContent=v.intakeEnabled?'Приём заказов включён':'Приём заказов закрыт';
    message.textContent='';
   }catch(err){failure(err,current);}
- }else await load(false);
+ }else if(key==='publication')await loadRelease(current);
+ else await load(false);
 }
+
+function validRelease(data){
+ const p=data?.preflight;
+ return data&&['published','intakeEnabled'].every(k=>typeof data[k]==='boolean')&&typeof data.revision==='string'&&/^[a-f0-9]{64}$/.test(data.revision)&&Array.isArray(data.queue)&&p&&typeof p.eligible==='boolean'&&['products','queued','ready','selectedVariants','approved'].every(k=>Number.isSafeInteger(p[k])&&p[k]>=0)&&Array.isArray(p.entries)&&p.entries.every(e=>typeof e.sku==='string'&&/^[0-9]{4}$/.test(e.sku)&&typeof e.valid==='boolean'&&Number.isSafeInteger(e.selected)&&Array.isArray(e.issues));
+}
+function renderRelease(data){
+ const target=$('[data-release]'),p=data.preflight;
+ target.replaceChildren();
+ const stats=node('div',undefined,'sa-stats');
+ for(const [label,value] of [['Всего товаров',p.products],['В очереди',p.queued],['Проверено',p.ready],['Выбрано размеров',p.selectedVariants],['Опубликовано',p.approved]]){
+  const item=node('article',undefined,'sa-stat');item.append(node('span',label),node('strong',value));stats.append(item);
+ }
+ target.append(stats);
+ const state=node('section',undefined,'sa-release-card');
+ state.append(node('h2',data.published?'Серверный каталог опубликован':'Публикация закрыта'),node('p','Приём заказов: '+(data.intakeEnabled?'открыт':'закрыт'),'sa-note'));
+ state.append(node('p',data.published?'Для редактирования закройте серверную витрину. Закрытие сохраняет карточки, цены и фотографии, но очищает очередь.':'Публикуются только проверенные карточки и выбранные размеры. Приём заказов не открывается. Старые статические страницы пока существуют отдельно.','sa-note'));
+ const actions=node('div',undefined,'sa-release-actions'),refresh=node('button','Проверить очередь'),button=node('button',data.published?'Закрыть серверную витрину':'Опубликовать серверный каталог','sa-status-save');
+ refresh.type=button.type='button';refresh.onclick=()=>{if(!mutationBusy)select('publication');};button.disabled=data.intakeEnabled||(!data.published&&!p.eligible);
+ button.onclick=()=>changeRelease(data,button);actions.append(refresh,button);state.append(actions);target.append(state);
+ if(!data.published&&!p.entries.length)target.append(node('p','Очередь пуста. Подтвердите готовность товара и добавьте его в очередь в разделе «Товары».','sa-note'));
+ if(!data.published)for(const e of p.entries){
+  const row=node('div',undefined,'sa-review-checklist');row.append(node('strong','Арт. '+e.sku+' · '+(e.valid?'Готов':'Требует проверки')),node('p','Размеров: '+e.selected,'sa-note'));
+  const labels={...issueNames,stale:'Требуется повторное подтверждение',selection:'Выбранные размеры изменились',metadata:'Различаются данные вариантов'};
+  for(const issue of e.issues)row.append(node('p',labels[issue]||'Проверьте карточку'));
+  target.append(row);
+ }
+}
+async function loadRelease(current){
+ const session=marker;
+ try{
+  const r=await fetch('/api/admin/catalog/review?release=1',{credentials:'same-origin',cache:'no-store',redirect:'error',headers:{Accept:'application/json','X-Session-Marker':session},signal:AbortSignal.timeout(35000)});
+  if(current!==generation||session!==marker)return;
+  if(!r.ok){const e=Error();e.status=r.status;throw e;}
+  const data=await r.json();if(current!==generation||session!==marker)return;
+  if(!validRelease(data))throw Error();renderRelease(data);message.textContent='';
+ }catch(e){failure(e,current);}
+}
+async function changeRelease(data,button){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='publication'||data.intakeEnabled||(!data.published&&!data.preflight.eligible))return;
+ const action=data.published?'close':'publish';
+ const prompt=action==='publish'?'Опубликовать '+data.preflight.ready+' товаров и '+data.preflight.selectedVariants+' размеров в серверном каталоге? Проверьте реальные цены, фото и сроки. Приём заказов останется закрытым.':'Закрыть серверный каталог? Очередь будет очищена. Товары, цены и фотографии сохранятся.';
+ if(!window.confirm(prompt))return;
+ const current=generation,session=marker;mutationBusy=true;button.disabled=true;
+ try{
+  const r=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action,expected:data.revision}),signal:AbortSignal.timeout(35000)});
+  if(current!==generation||session!==marker)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!r.ok){await select('publication');message.textContent='Действие отклонено. Проверьте актуальное состояние.';return;}
+  const result=await r.json();if(current!==generation||session!==marker)return;
+  if(!validRelease(result)||result.published!==(action==='publish')||result.intakeEnabled)throw Error();
+  renderRelease(result);message.textContent=action==='publish'?'Серверный каталог опубликован. Приём заказов закрыт.':'Серверный каталог закрыт.';
+ }catch{if(current===generation){message.textContent='Не удалось подтвердить результат. Обновите состояние перед повтором.';}}
+ finally{mutationBusy=false;}
+}
+
 async function changeStatus(o,next,button,selectControl){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='orders'||!transitions[o.status]?.includes(next))return;
  if(!window.confirm('Изменить статус заказа ДРЖ-'+o.number+' на «'+next+'»?'))return;
