@@ -49,3 +49,5 @@
 .sa-bulk-changed{font-weight:700;color:#16324f}
 .sa-bulk-form .sa-note{margin:0}
 .sa-bulk-form .sa-review-actions{margin:0}
+
+.sa-old-price{display:block;margin-top:4px;color:#6b7280;font-size:12px}.sa-copy-sku input[type=number]{box-sizing:border-box;width:100%;height:44px;padding:8px 12px;border:1px solid #cbd5df;border-radius:8px;font:inherit}

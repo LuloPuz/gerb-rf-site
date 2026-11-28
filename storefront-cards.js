@@ -66,12 +66,13 @@ const href=productUrl(p.sku)+(preview?'&layout=check':'');
    const fields=p.fields||finishFields(p.finish);
    for(const [k,v] of fields){const row=node('div');row.append(node('dt',k),node('dd',v));specs.append(row);}
    const sizeRow=node('div',undefined,'popular-spec-size'),dd=node('dd'),sizes=node('div',undefined,'popular-size-switcher');sizes.setAttribute('role','group');sizes.setAttribute('aria-label','Выберите размер');
-   const price=node('strong',money(p.variants[0].price),'popular-card-price');let selectedVariant=p.variants[0];
+   const price=node('strong',money(p.variants[0].price),'popular-card-price'),old=node('s',undefined,'ds-old-price'),badge=node('span',undefined,'ds-discount-badge'),oldRow=node('div',undefined,'ds-promo-old-row');oldRow.append(old,badge);let selectedVariant=p.variants[0];
+   function showPrice(v){price.textContent=money(v.price);const sale=Number.isSafeInteger(v.oldPrice)&&v.oldPrice>v.price;old.hidden=badge.hidden=oldRow.hidden=!sale;if(sale){old.textContent=money(v.oldPrice);const pct=Math.floor((v.oldPrice-v.price)*100/v.oldPrice);badge.textContent=pct>0?'−'+pct+'%':'Акция';}card.classList.toggle('ds-has-promo',sale);}showPrice(selectedVariant);
    for(const [i,v] of p.variants.entries()){
     const b=node('button',undefined,'popular-size-choice'+(i===0?' active':''));b.type='button';b.setAttribute('aria-pressed',String(i===0));
     b.append(node('span',v.size.replace(/\s*см$/u,'')),node('small','см'));
     b.addEventListener('click',()=>{
-     selectedVariant=v;price.textContent=money(v.price);
+     selectedVariant=v;showPrice(v);
      for(const t of sizes.children){t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b));}
      // Scroll only this horizontal size strip, never the page.
      if(sizes.scrollWidth>sizes.clientWidth+2){
@@ -93,7 +94,7 @@ const href=productUrl(p.sku)+(preview?'&layout=check':'');
    }else{scroll.classList.add('ds-size-single');scroll.append(sizes);}
    dd.append(scroll,custom);sizeRow.append(node('dt',p.variants.length>1?'Размер · '+p.variants.length+' вариантов':'Размер'),dd);specs.append(sizeRow);
    const bottom=node('div',undefined,'popular-card-bottom'),priceBlock=node('div',undefined,'popular-price-block'),actions=node('div',undefined,'popular-card-actions');
-   priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price);
+   priceBlock.append(node('span','Цена выбранного размера','popular-price-caption'),price,oldRow);
    const buy=node('button',undefined,'popular-add-cart');buy.type='button';buy.disabled=true;buy.title='Приём заказов пока закрыт';buy.append(node('span','В корзину'));if(!preview)bindCart(buy,p.sku,()=>selectedVariant,'В корзину');
    actions.append(buy);actions.style.gridTemplateColumns='minmax(0,1fr)';bottom.append(priceBlock,actions);
    card.addEventListener('click',e=>{if(!e.defaultPrevented&&e.button===0&&!e.target.closest('a,button,input,select,textarea,label,.ds-size-scroll')&&!window.getSelection()?.toString()){if(e.metaKey||e.ctrlKey)window.open(href,'_blank','noopener');else location.assign(href);}});body.append(title,chips,specs,bottom);card.append(hit,node('span','арт. '+p.sku,'popular-card-sku'),media,body);return card;

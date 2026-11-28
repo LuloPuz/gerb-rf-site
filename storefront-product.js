@@ -23,12 +23,14 @@ export function renderProductCard(p,{target,makePhoto,preview=false,bindPurchase
  const info=node('div',undefined,'final-product-info');
  info.append(node('p',p.eyebrow||categories[p.category],'eyebrow'),node('h1',p.productTitle||p.title),node('p',p.productFinish||p.finish,'final-finish'),node('p','Артикул: '+p.sku,'product-article'));
  const sizes=[...p.variants];let selectedVariant=sizes[0];
- const price=node('div',money(sizes[0].price),'final-price'),options=node('div',undefined,'size-options');
+ const price=node('div',money(sizes[0].price),'final-price'),priceGroup=node('div',undefined,'ds-promo-product-price'),old=node('s',undefined,'ds-old-price'),badge=node('span',undefined,'ds-discount-badge'),options=node('div',undefined,'size-options');
+ function showPrice(v){price.textContent=money(v.price);const sale=Number.isSafeInteger(v.oldPrice)&&v.oldPrice>v.price;old.hidden=badge.hidden=!sale;if(sale){old.textContent=money(v.oldPrice);const pct=Math.floor((v.oldPrice-v.price)*100/v.oldPrice);badge.textContent=pct>0?'−'+pct+'%':'Акция';}priceGroup.classList.toggle('ds-has-promo',sale);}
+ const oldRow=node('div',undefined,'ds-promo-old-row');oldRow.append(old,badge);priceGroup.append(price,oldRow);showPrice(sizes[0]);
  options.setAttribute('role','group');options.setAttribute('aria-label','Выберите размер');
- info.append(price,node('p','Выберите размер','size-label'),options);
+ info.append(priceGroup,node('p','Выберите размер','size-label'),options);
  for(const [i,v] of sizes.entries()){
   const b=node('button',v.size,'size-option');b.type='button';b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);
-  b.addEventListener('click',()=>{selectedVariant=v;price.textContent=money(v.price);for(const t of options.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});options.append(b);
+  b.addEventListener('click',()=>{selectedVariant=v;showPrice(v);for(const t of options.children){t.setAttribute('aria-pressed',String(t===b));t.classList.toggle('active',t===b);}});options.append(b);
  }
  const custom=node('a',undefined,'custom-size-inline'),copy=node('span',undefined,'custom-size-inline-copy');
  if(preview)custom.setAttribute('aria-disabled','true');else custom.href='offer.html';copy.append(node('strong','Не нашли нужного размера?'),node('small','Возможно изготовление герба под индивидуальный запрос'));custom.append(copy,node('span','Уточнить размер'));info.append(custom);

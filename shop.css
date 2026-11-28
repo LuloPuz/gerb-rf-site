@@ -3156,3 +3156,13 @@ html:has(.custom-size-dialog[open]){overflow:hidden}
 
 /* Hide legacy merchandise before the dynamic catalog paints. */
 html[data-storefront-mode="dynamic"] #popular .popular-card:not([data-dynamic-card]){display:none!important}
+
+/* Promotional price presentation; regular price is only rendered for actual discounts. */
+.ds-promo-old-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px;justify-content:flex-end;line-height:1.25}
+.ds-promo-old-row[hidden],.ds-promo-old-row [hidden]{display:none!important}
+.ds-old-price{font-size:13px;color:#68717a;font-weight:500;font-variant-numeric:tabular-nums}
+.ds-discount-badge{display:inline-block;padding:3px 6px;border-radius:5px;background:#a23333;color:#fff;font-size:11px;font-weight:700;white-space:nowrap}
+.ds-promo-product-price .ds-promo-old-row{justify-content:flex-start}
+.ds-promo-product-price:not(.ds-has-promo) .ds-promo-old-row{display:none}
+.ds-promo-product-price .ds-old-price{font-size:16px}
+.ds-has-promo .popular-card-price,.ds-has-promo .final-price{color:#a23333}
