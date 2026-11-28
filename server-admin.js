@@ -423,6 +423,7 @@ previewDialog.addEventListener('cancel',e=>{e.preventDefault();clearPreview();})
 function clearReview(){
  reviewGeneration++;reviewBody.replaceChildren();reviewStatus.textContent='';
  if(reviewDialog.open)reviewDialog.close();
+ reviewDialog.removeAttribute('data-copy-mode');$('#sa-review-title').textContent='Подготовка к публикации';$('[data-review-intro]').hidden=false;
 }
 const reviewNames={draft:'Черновик',ready:'Готов к публикации',stale:'Требуется повторная проверка',archived:'В архиве'};
 const issueNames={category:'Выберите категорию',description:'Заполните описание',photos:'Загрузите хотя бы одну фотографию',sizes:'Добавьте размер'};
@@ -570,18 +571,19 @@ reviewDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy)c
 async function openCopy(sku){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
  clearReview();const current=reviewGeneration,session=marker;
- $('[data-review-sku]').textContent='Копирование артикула '+sku;
+ $('[data-review-sku]').textContent='Исходный артикул '+sku;
+ reviewDialog.setAttribute('data-copy-mode','');$('#sa-review-title').textContent='Дублировать товар';$('[data-review-intro]').hidden=true;
  reviewDialog.showModal();reviewStatus.textContent='Подбираем свободный артикул…';
  try{
   const [source,suggested]=await Promise.all([fetchIndividual(sku,session),nextSku(session)]);
   if(current!==reviewGeneration||session!==marker)return;
   if(source.intakeEnabled){reviewStatus.textContent='Копирование пока доступно только при закрытом приёме заказов.';return;}
   reviewStatus.textContent='';
-  const title=node('h3','Дублировать товар'),note=node('p','Описание, характеристики, размеры и цены будут скопированы в новый черновик. Исходный товар не изменится. Проверьте данные перед публикацией.','sa-note');
-  const form=node('form'),label=node('label',undefined,'sa-review-size'),input=node('input');input.type='text';input.inputMode='numeric';input.pattern='[0-9]{4}';input.maxLength=4;input.required=true;input.value=suggested;input.className='sa-price-input';input.setAttribute('aria-label','Новый артикул');label.append(node('span','Новый артикул'),input);
-  const photoLabel=node('label',undefined,'sa-review-size'),photos=node('input');photos.type='checkbox';photos.checked=true;photoLabel.append(photos,node('span','Скопировать загруженные фотографии'));
+  const note=node('p','Описание, характеристики, размеры и цены будут скопированы в новый черновик. Исходный товар не изменится. Проверьте данные перед публикацией.','sa-note');
+  const form=node('form',undefined,'sa-copy-form'),label=node('label',undefined,'sa-copy-sku'),input=node('input');input.type='text';input.inputMode='numeric';input.pattern='[0-9]{4}';input.maxLength=4;input.required=true;input.value=suggested;input.id='sa-copy-target';input.autocomplete='off';label.htmlFor=input.id;label.append(node('span','Новый артикул'),input,node('small','Предложен свободный номер. Можно изменить вручную.','sa-note'));
+  const photoLabel=node('label',undefined,'sa-copy-photos'),photos=node('input');photos.type='checkbox';photos.id='sa-copy-photos';photos.checked=true;photoLabel.htmlFor=photos.id;photoLabel.append(photos,node('span','Скопировать загруженные фотографии'));
   const hint=node('p','Копируются только фотографии из базы данных. Старые изображения сайта не переносятся.','sa-note');
-  const actions=node('div',undefined,'sa-review-actions'),button=node('button','Создать копию','sa-status-save');button.type='submit';actions.append(button);form.append(label,photoLabel,hint,actions);reviewBody.append(title,note,form);
+  const actions=node('div',undefined,'sa-review-actions'),button=node('button','Создать копию','sa-status-save');button.type='submit';actions.append(button);form.append(label,photoLabel,hint,actions);reviewBody.append(note,form);
   form.addEventListener('submit',async e=>{
    e.preventDefault();if(mutationBusy||current!==reviewGeneration||session!==marker||!form.reportValidity())return;
    const target=input.value.trim();if(target===sku){reviewStatus.textContent='Укажите другой артикул.';return;}
