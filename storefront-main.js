@@ -1,7 +1,7 @@
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-promo1';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-placement1';
 const section=document.querySelector('#popular'),grid=section?.querySelector('.popular-grid');
 if(grid&&location.origin==='https://gerbrf.ru'){
- const dynamic=window.derzhavaStorefrontMode==='dynamic';
+ const dynamic=window.derzhavaStorefrontMode==='dynamic',home=!!section.querySelector('.home-popular-summary');
  let live=false,busy=false;
  const count=section.querySelector('.home-popular-summary > span,.catalog-section-count');
  const summary=document.querySelector('.catalog-meta-full span:last-child');
@@ -22,8 +22,9 @@ if(grid&&location.origin==='https://gerbrf.ru'){
    if(!data.published){
     clear('Каталог пока закрыт. Можно обратиться за индивидуальным предложением.');return;
    }
-   update(data.products);
-   if(!data.products.length){notice.textContent='Пока нет опубликованных товаров. Обратитесь к менеджеру для индивидуального заказа.';notice.hidden=false;}
+   const products=home?data.products.filter(p=>p.featured===true):data.products;
+   update(products);
+   if(!products.length){notice.textContent=data.products.length&&home?'В разделе пока нет выбранных товаров. Перейдите в полный каталог.':'Пока нет опубликованных товаров. Обратитесь к менеджеру для индивидуального заказа.';notice.hidden=false;}
   }catch{
    // After cutover never retain stale public dynamic items on an API failure.
    // During staging the old static catalog remains visible.

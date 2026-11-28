@@ -24,12 +24,13 @@ export function projectProducts(data,variants){
  if(list.published!==snapshot.published)throw Error('Catalog policy mismatch');
  if(!list.published)return {published:false,products:[]};
  const products=data.products.map(p=>{
+  if(Object.hasOwn(p,'position')&&(!Number.isInteger(p.position)||p.position<1||p.position>999999)||Object.hasOwn(p,'featured')&&typeof p.featured!=='boolean')throw Error('Invalid placement');
   const rows=snapshot.bySku.get(p.sku)||[];
   if(!rows.length||rows.some(v=>v.dynamicImageId!==p.imageId||v.title!==p.title||v.finish!==p.finish)||Math.min(...rows.map(v=>v.price))!==p.priceFrom)throw Error('Catalog projection mismatch');
-  return {...p,variants:[...rows].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))};
+  return {...p,position:p.position??Number(p.sku)*10,featured:p.featured??(/^10(?:0[1-9]|1[0-8])$/.test(p.sku)),variants:[...rows].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))};
  });
  if(snapshot.bySku.size!==products.length)throw Error('Unexpected variants');
- return {published:true,products};
+ return {published:true,products:products.sort((a,b)=>a.position-b.position||a.sku.localeCompare(b.sku))};
 }
 async function get(path){const r=await fetch(path,{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});if(!r.ok){const e=Error('HTTP '+r.status);e.status=r.status;throw e;}return r.json();}
 export async function fetchProducts(){
