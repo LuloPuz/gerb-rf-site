@@ -402,7 +402,7 @@ async function renderPreview(data,current,session){
  })));
  if(current!==previewGeneration||session!==marker)return;
  const makePhoto=(url,alt)=>{const im=node('img');im.alt=alt;im.src=url;im.decoding='async';return im;};
- renderProductCard({...f,sku:data.sku,photos,variants:[...data.variants].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))},{target,makePhoto,preview:true,zoomRoot:body});
+ renderProductCard({...f,sku:data.sku,photos,variants:data.variants},{target,makePhoto,preview:true,zoomRoot:body});
  host.hidden=false;
 }
 async function openPreview(sku){
@@ -605,6 +605,53 @@ async function openCopy(sku){
   });
  }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подготовить копирование. Обновите панель.';}
 }
+async function openSizeOrder(sku){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ clearReview();const current=reviewGeneration,session=marker;
+ reviewDialog.setAttribute('data-copy-mode','');$('#sa-review-title').textContent='Порядок размеров';$('[data-review-intro]').hidden=true;$('[data-review-sku]').textContent='Артикул '+sku;
+ reviewDialog.showModal();reviewStatus.textContent='Загружаем размеры…';
+ try{
+  const r=await fetch('/api/admin/catalog/review?sizeOrder=1&sku='+encodeURIComponent(sku),{credentials:'same-origin',cache:'no-store',redirect:'error',headers:{Accept:'application/json','X-Session-Marker':session},signal:AbortSignal.timeout(12000)});
+  if(current!==reviewGeneration||session!==marker)return;
+  if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!r.ok)throw Error();const data=await r.json();if(current!==reviewGeneration||session!==marker)return;
+  if(data.sku!==sku||!Array.isArray(data.order)||!Array.isArray(data.variants)||data.order.length!==data.variants.length||!data.order.length||data.order.length>100||new Set(data.order).size!==data.order.length||!data.variants.every((v,i)=>v.id===data.order[i]&&/^[a-f0-9-]{36}$/.test(v.id)&&typeof v.size==='string'&&Number.isSafeInteger(v.price))||typeof data.custom!=='boolean')throw Error();
+  let rows=[...data.variants],reset=false;
+  const note=node('p','Перемещайте размеры стрелками. Первый размер будет выбран по умолчанию на витрине, если он опубликован. Цены и доступность не изменятся.','sa-note');
+  const list=node('div',undefined,'sa-size-order-list'),hint=node('p',undefined,'sa-note'),actions=node('div',undefined,'sa-review-actions'),natural=node('button','От меньшего к большему'),save=node('button','Сохранить порядок','sa-status-save');
+  natural.type=save.type='button';actions.append(natural,save);reviewBody.append(note,list,hint,actions);reviewStatus.textContent='';
+  const compare=(a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true});
+  function render(){
+   list.replaceChildren();
+   const moved=rows.some((v,i)=>v.id!==data.order[i]);
+   for(const [i,v] of rows.entries()){
+    const row=node('div',undefined,'sa-size-order-row'),name=node('div'),buttons=node('div',undefined,'sa-size-order-buttons'),up=node('button','↑'),down=node('button','↓');
+    name.append(node('strong',v.size),node('small',money(v.price),'sa-note'));up.type=down.type='button';up.disabled=mutationBusy||i===0;down.disabled=mutationBusy||i===rows.length-1;
+    up.setAttribute('aria-label','Переместить выше: '+v.size);down.setAttribute('aria-label','Переместить ниже: '+v.size);
+    for(const [b,delta] of [[up,-1],[down,1]])b.onclick=()=>{if(mutationBusy)return;const j=i+delta;if(j<0||j>=rows.length)return;[rows[i],rows[j]]=[rows[j],rows[i]];reset=false;render();list.children[j]?.querySelector(delta<0?'button:first-child':'button:last-child')?.focus();};
+    buttons.append(up,down);row.append(node('span',String(i+1),'sa-size-order-number'),name,buttons);list.append(row);
+   }
+   hint.textContent=reset?'Будет восстановлен автоматический порядок.':moved?'Порядок изменён. Сохраните изменения.':data.custom?'Используется ручной порядок.':'Используется автоматический порядок.';
+   natural.disabled=mutationBusy;save.disabled=mutationBusy||(!moved&&!(reset&&data.custom));
+  }
+  natural.onclick=()=>{if(mutationBusy)return;rows=[...data.variants].sort(compare);reset=true;render();};
+  save.onclick=async()=>{
+   if(mutationBusy||save.disabled||current!==reviewGeneration||session!==marker)return;
+   mutationBusy=true;render();reviewStatus.textContent='Сохраняем порядок…';
+   try{
+    const response=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action:'sizeOrder',sku,expected:data.order,order:rows.map(v=>v.id),reset}),signal:AbortSignal.timeout(12000)});
+    if(current!==reviewGeneration||session!==marker)return;
+    if(response.status===401||response.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+    if(!response.ok){reviewStatus.textContent=response.status===409?'Список размеров изменился. Откройте окно заново.':'Не удалось сохранить порядок.';return;}
+    const result=await response.json();if(current!==reviewGeneration||session!==marker)return;
+    if(result.sku!==sku||!Array.isArray(result.order)||result.order.length!==rows.length||new Set(result.order).size!==rows.length||!result.order.every(id=>data.order.includes(id)))throw Error();
+    expandedProducts.add(sku);clearReview();await select('catalog');message.textContent='Порядок размеров сохранён.';
+   }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить сохранение. Откройте окно заново.';}
+   finally{mutationBusy=false;if(current===reviewGeneration)render();}
+  };
+  render();
+ }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось загрузить порядок размеров.';}
+}
 async function openPlacement(sku){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
  clearReview();const current=reviewGeneration,session=marker;
@@ -786,7 +833,7 @@ function renderCatalog(){
  const summary=$('[data-catalog-summary]');
  summary.textContent='Найдено товаров: '+catalogTotal+' · Показано: '+groups.size+' · Размеров: '+list.length+(catalogCursor!==null?' · Загрузите ещё для просмотра остальных':'');
  for(const [sku,rows] of groups){
-  rows.sort((a,b)=>parseFloat(a.size.replace(',','.'))-parseFloat(b.size.replace(',','.'))||a.size.localeCompare(b.size,'ru',{numeric:true}));
+  rows.sort((a,b)=>(a.sizePosition??99999)-(b.sizePosition??99999)||parseFloat(a.size.replace(',','.'))-parseFloat(b.size.replace(',','.'))||a.size.localeCompare(b.size,'ru',{numeric:true}));
   const v=rows[0],card=node('details',undefined,'sa-catalog-card');
   card.open=expandedProducts.has(sku)||!!q;
   card.addEventListener('toggle',()=>{if(!q){if(card.open)expandedProducts.add(sku);else expandedProducts.delete(sku);}});
@@ -822,8 +869,8 @@ function renderCatalog(){
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
-  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));const review=node('button','Готовность и публикация');review.type='button';review.addEventListener('click',()=>openReview(sku));const copy=node('button','Дублировать товар');copy.type='button';copy.addEventListener('click',()=>openCopy(sku));const bulk=node('button','Изменить цены');bulk.type='button';bulk.addEventListener('click',()=>openBulkPrices(sku));const promo=node('button','Акция / скидка');promo.type='button';promo.addEventListener('click',()=>openPromotion(sku));const placement=node('button','Положение в каталоге');placement.type='button';placement.addEventListener('click',()=>openPlacement(sku));review.classList.add('sa-publication-button');
-  for(const [heading,buttons] of [['Карточка товара',[preview,edit,gallery,copy]],['Размеры и цены',[addSize,bulk,promo]],['Публикация и витрина',[review,placement]]]){
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));const review=node('button','Готовность и публикация');review.type='button';review.addEventListener('click',()=>openReview(sku));const copy=node('button','Дублировать товар');copy.type='button';copy.addEventListener('click',()=>openCopy(sku));const bulk=node('button','Изменить цены');bulk.type='button';bulk.addEventListener('click',()=>openBulkPrices(sku));const promo=node('button','Акция / скидка');promo.type='button';promo.addEventListener('click',()=>openPromotion(sku));const placement=node('button','Положение в каталоге');placement.type='button';placement.addEventListener('click',()=>openPlacement(sku));review.classList.add('sa-publication-button');const sizeOrder=node('button','Порядок размеров');sizeOrder.type='button';sizeOrder.addEventListener('click',()=>openSizeOrder(sku));
+  for(const [heading,buttons] of [['Карточка товара',[preview,edit,gallery,copy]],['Размеры и цены',[addSize,sizeOrder,bulk,promo]],['Публикация и витрина',[review,placement]]]){
    const group=node('div',undefined,'sa-action-group'),controls=node('div',undefined,'sa-action-group-controls');controls.append(...buttons);group.append(node('span',heading,'sa-action-group-label'),controls);addRow.append(group);
   }
   card.append(addRow);target.append(card);

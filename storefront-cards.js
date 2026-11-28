@@ -1,5 +1,5 @@
 import {productKeys,publicSearchPages} from './dynamic-search.js?v=20261128-search1';
-import {parseCatalog} from './catalog-pricing.js?v=20261128-promo1';
+import {parseCatalog} from './catalog-pricing.js?v=20261128-sizeorder1';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const productUrl=sku=>'product.html?sku='+encodeURIComponent(sku);
@@ -27,7 +27,7 @@ export function projectProducts(data,variants){
   if(Object.hasOwn(p,'position')&&(!Number.isInteger(p.position)||p.position<1||p.position>999999)||Object.hasOwn(p,'featured')&&typeof p.featured!=='boolean')throw Error('Invalid placement');
   const rows=snapshot.bySku.get(p.sku)||[];
   if(!rows.length||rows.some(v=>v.dynamicImageId!==p.imageId||v.title!==p.title||v.finish!==p.finish)||Math.min(...rows.map(v=>v.price))!==p.priceFrom)throw Error('Catalog projection mismatch');
-  return {...p,position:p.position??Number(p.sku)*10,featured:p.featured??(/^10(?:0[1-9]|1[0-8])$/.test(p.sku)),variants:[...rows].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))};
+  return {...p,position:p.position??Number(p.sku)*10,featured:p.featured??(/^10(?:0[1-9]|1[0-8])$/.test(p.sku)),variants:[...rows].sort((a,b)=>(a.sizePosition??99999)-(b.sizePosition??99999)||a.size.localeCompare(b.size,'ru',{numeric:true}))};
  });
  if(snapshot.bySku.size!==products.length)throw Error('Unexpected variants');
  return {published:true,products:products.sort((a,b)=>a.position-b.position||a.sku.localeCompare(b.sku))};
