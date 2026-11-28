@@ -70,3 +70,5 @@
 .account-withdrawal-confirm{border:1px solid #9b3b34;background:#9b3b34;color:#fff;border-radius:8px;padding:10px 16px;font:600 12px/1.5 Manrope,Arial,sans-serif;cursor:pointer}
 .account-withdrawal-confirm:disabled,.account-withdrawal-actions button:disabled{opacity:.6;cursor:wait}
 .account-withdrawal-dialog [data-withdrawal-dialog-status]{color:#9b3b34;margin-top:12px}
+
+.account-nav .account-admin-link{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding:13px 12px;background:#102b44;color:#fff;border:1px solid #102b44;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none}.account-nav .account-admin-link:hover{background:#183a5a}.account-admin-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}.account-admin-link[hidden],.account-admin-actions [hidden]{display:none!important}

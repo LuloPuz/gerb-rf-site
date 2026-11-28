@@ -17,6 +17,35 @@
   const consentRetry=find('[data-consent-retry]');
   let consentReady=false,consentRequired=false,consentGeneration=0;
   const logout = find('[data-server-logout]');
+  const adminLink=find('[data-admin-link]'),adminReauth=find('[data-admin-reauth]');
+  const adminIntentKey='derzhava:admin-login-intent';
+  const adminRequested=new URLSearchParams(location.search).get('admin')==='1';
+  let adminIntent=adminRequested;
+  try{
+    const expires=Number(sessionStorage.getItem(adminIntentKey));
+    if(new URLSearchParams(location.search).get('auth')==='yandex_success'&&expires>Date.now())adminIntent=true;
+    sessionStorage.removeItem(adminIntentKey);
+  }catch{}
+  function hideAdmin(){adminLink.hidden=true;adminReauth.hidden=true;}
+  async function checkAdmin(current){
+    try{
+      const r=await fetch('/api/admin/session',{credentials:'same-origin',cache:'no-store',redirect:'error',headers:{Accept:'application/json'},signal:AbortSignal.timeout(12000)});
+      if(current!==generation||dashboard.hidden||loggingOut)return;
+      if(r.status===401||r.status===403){
+        if(adminIntent){adminReauth.hidden=false;status('Для управления магазином войдите заново через Яндекс ID.');}
+        return;
+      }
+      if(!r.ok)throw Error();
+      const p=await r.json();
+      if(current!==generation||dashboard.hidden||loggingOut)return;
+      if(p.authorized!==true||typeof p.sessionMarker!=='string'||!/^[a-f0-9]{64}$/.test(p.sessionMarker))return;
+      adminLink.hidden=false;
+      if(adminIntent){adminIntent=false;location.replace('/admin.html');}
+    }catch{
+      if(current===generation&&!dashboard.hidden&&adminIntent)status('Не удалось проверить доступ к управлению. Обновите страницу.');
+    }
+  }
+  adminReauth.addEventListener('click',()=>{adminIntent=true;logout.click();});
   const withdrawalPanel=find('[data-withdrawal-panel]');
   const withdrawalOpen=find('[data-withdrawal-open]');
   const withdrawalStatus=find('[data-withdrawal-status]');
@@ -108,6 +137,7 @@
   }
   function hideAccount() {
     clearWithdrawal();
+    hideAdmin();
     dashboard.hidden = true;
     greeting.textContent = '';
     clearProfile();
@@ -215,6 +245,7 @@
       status('');
       showProfileLoading();
       loadProfile();
+      checkAdmin(current);
     } catch {
       if (current === generation) unavailable('Не удалось проверить авторизацию. Повторите проверку.');
     } finally { if (current === generation) pending = false; }
@@ -230,11 +261,13 @@
       }
       return;
     }
+    if(adminIntent)try{sessionStorage.setItem(adminIntentKey,String(Date.now()+10*60*1000));}catch{}
     loginButton.disabled=true;
   });
   logout.addEventListener('click', async () => {
     if (loggingOut || profileBusy && profileLoaded) return;
     loggingOut = true;
+    hideAdmin();
     clearOrders();
     clearProfile();
     generation++;
@@ -247,7 +280,7 @@
         redirect: 'error', signal: AbortSignal.timeout(12000)
       });
       if (response.status !== 204) throw Error('Logout unavailable');
-      showGate('Вы вышли из личного кабинета.');
+      showGate(adminIntent?'Войдите через Яндекс ID для управления магазином.':'Вы вышли из личного кабинета.');
     } catch {
       unavailable('Не удалось подтвердить выход. Повторите проверку и при необходимости выйдите ещё раз.');
     } finally { loggingOut = false; logout.disabled = false; }

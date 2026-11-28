@@ -52,7 +52,7 @@ async function boot(){
  marker=r.sessionMarker;
  gate.hidden=true;dashboard.hidden=false;$('[data-logout]').hidden=false;
  await select(tab);
- }catch(err){if(current!==generation)return;deny(err.status===401?'Войдите в личный кабинет.':err.status===403?'У аккаунта нет действующих административных полномочий.':'Не удалось проверить доступ. Повторите попытку.',err.status===401||err.status===403,err.status===403);}
+ }catch(err){if(current!==generation)return;deny(err.status===401?'Войдите в личный кабинет.':err.status===403?'Административный доступ не подтверждён. Если вы владелец, войдите заново через Яндекс ID (административная сессия действует 12 часов).':'Не удалось проверить доступ. Повторите попытку.',err.status===401||err.status===403,err.status===403);}
 }
 async function select(key){
  tab=key;const current=++generation;busy=false;

@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="shop.css?v=20261125-firstauth2" data-shop-styles="true">
 <link rel="stylesheet" href="mobile.css?v=20261124-header-search3" data-mobile-styles="true">
 <style>[data-server-account] [hidden]{display:none!important}.account-login-coming{margin:18px 0 0!important}.account-signout:disabled,.account-auth-primary:disabled{opacity:.6;cursor:wait}[data-server-greeting]{overflow-wrap:anywhere}</style>
-<link rel="stylesheet" href="account-profile.css?v=20261127-withdrawal1">
+<link rel="stylesheet" href="account-profile.css?v=20261128-adminlogin1">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner" data-static-header>
@@ -71,13 +71,14 @@
           <h1 data-server-greeting></h1>
           <p class="account-dashboard-login-state">Вход выполнен через защищённую серверную сессию</p>
         </div>
-        <button class="account-signout" type="button" data-server-logout>Выйти</button>
+        <div class="account-admin-actions"><button class="account-signout" type="button" data-server-logout>Выйти</button><button class="account-signout" type="button" data-admin-reauth hidden>Войти заново для админки</button></div>
       </div>
       <div class="account-layout account-layout-v2" data-server-layout>
         <nav class="account-nav" data-server-nav aria-label="Разделы личного кабинета" hidden>
           <button class="active" type="button" data-server-tab="orders" aria-pressed="true">Мои заказы</button>
           <button type="button" data-server-tab="overview" aria-pressed="false">Обзор</button>
           <button type="button" data-server-tab="profile" aria-pressed="false">Мои данные</button>
+          <a class="account-admin-link" data-admin-link href="/admin.html" hidden><span>Управление магазином</span><span aria-hidden="true">→</span></a>
         </nav>
         <div>
           <section class="account-panel" data-server-panel="orders">
@@ -152,5 +153,5 @@
   <img data-order-photo-large alt="">
 </dialog>
 <script src="script.js?v=20261128-search1"></script><script src="shop.js?v=20261127-orders1" data-shop-runtime="true"></script>
-<script src="account-session.js?v=20261127-withdrawal1" defer></script>
+<script src="account-session.js?v=20261128-adminlogin1" defer></script>
 </body></html>
