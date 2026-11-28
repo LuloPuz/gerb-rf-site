@@ -382,7 +382,7 @@ async function renderPreview(data,current,session){
  const body=node('body',undefined,'product-paint-page');body.dataset.dynamicPage='product';
  const section=node('section',undefined,'product-final ds-main'),target=node('div',undefined,'container');section.append(target);body.append(section);
  const html=node('html');html.append(body);root.append(html);
- const styles=['styles.css?v=20261128-shared1','shop.css?v=20261125-firstauth1','mobile.css?v=20261124-header-search3','dynamic-storefront.css?v=20261128-cart2'];
+ const styles=['styles.css?v=20261128-shared1','shop.css?v=20261125-firstauth1','mobile.css?v=20261124-header-search3','dynamic-storefront.css?v=20261128-uniform1'];
  await Promise.all(styles.map(path=>new Promise((resolve,reject)=>{
   const link=node('link');link.rel='stylesheet';link.href=path;link.onload=resolve;link.onerror=reject;root.insertBefore(link,html);
  })));
