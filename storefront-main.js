@@ -1,4 +1,4 @@
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-snapshot1';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-promo1';
 const section=document.querySelector('#popular'),grid=section?.querySelector('.popular-grid');
 if(grid&&location.origin==='https://gerbrf.ru'){
  const dynamic=window.derzhavaStorefrontMode==='dynamic';

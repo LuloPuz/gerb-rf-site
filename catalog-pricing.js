@@ -11,6 +11,7 @@ export function parseCatalog(p){
  for(const v of p.variants){
   if(!v||typeof v.sku!=='string'||!/^[A-Za-z0-9_-]{1,40}$/.test(v.sku)||typeof v.size!=='string'||canonicalSize(v.size)!==v.size||
      !Number.isSafeInteger(v.price)||v.price<1||v.price>100000000||
+     (Object.hasOwn(v,'oldPrice')&&(!Number.isSafeInteger(v.oldPrice)||v.oldPrice<=v.price||v.oldPrice>100000000))||
      typeof v.title!=='string'||!v.title||typeof v.finish!=='string'||typeof v.url!=='string'||!/^[a-z0-9-]+\.html$/.test(v.url)||
      typeof v.image!=='string'||v.image.length>300)throw Error('Invalid catalog variant');
   let resolved=v;

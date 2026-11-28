@@ -1,5 +1,5 @@
 import {productKeys,publicSearchPages} from './dynamic-search.js?v=20261128-search1';
-import {parseCatalog} from './catalog-pricing.js?v=20261128-cart2';
+import {parseCatalog} from './catalog-pricing.js?v=20261128-promo1';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const productUrl=sku=>'product.html?sku='+encodeURIComponent(sku);

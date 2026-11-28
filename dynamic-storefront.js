@@ -1,6 +1,6 @@
-import {renderProductCard} from './storefront-product.js?v=20261128-shared1';
+import {renderProductCard} from './storefront-product.js?v=20261128-promo1';
 import {productKeys} from './dynamic-search.js?v=20261128-search1';
-import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-snapshot1';
+import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-promo1';
 const $=s=>document.querySelector(s);
 const content=$('[data-ds-content]'),status=$('[data-ds-status]'),kind=document.body.dataset.dynamicPage;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
@@ -40,7 +40,7 @@ function renderProduct(p){
  showContent();
 }
 function validProduct(p,sku){
- return p?.sku===sku&&['title','finish','description','specs','material','leadTime'].every(k=>typeof p[k]==='string')&&Object.hasOwn(categories,p.category)&&Array.isArray(p.variants)&&p.variants.length>0&&p.variants.every(v=>typeof v.size==='string'&&priceOK(v.price))&&Array.isArray(p.photos)&&p.photos.length>0&&p.photos.length<=8&&p.photos.every(ph=>uuidOK(ph.id));
+ return p?.sku===sku&&['title','finish','description','specs','material','leadTime'].every(k=>typeof p[k]==='string')&&Object.hasOwn(categories,p.category)&&Array.isArray(p.variants)&&p.variants.length>0&&p.variants.every(v=>typeof v.size==='string'&&priceOK(v.price)&&(!Object.hasOwn(v,'oldPrice')||priceOK(v.oldPrice)&&v.oldPrice>v.price))&&Array.isArray(p.photos)&&p.photos.length>0&&p.photos.length<=8&&p.photos.every(ph=>uuidOK(ph.id));
 }
 async function loadProduct(){
  const params=new URLSearchParams(location.search),sku=params.get('sku');
