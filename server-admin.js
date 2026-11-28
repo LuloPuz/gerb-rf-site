@@ -21,6 +21,30 @@ const transitions={'Новая заявка':['Подтверждён','Отме
 const originOK=location.origin==='https://gerbrf.ru';
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
 const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₽';
+const validCost=n=>Number.isSafeInteger(n)&&n>=1&&n<=100000000;
+const taxRate=7;
+const decimalMoney=n=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(n)+' ₽';
+const percent=n=>new Intl.NumberFormat('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:2}).format(n)+'%';
+function economics(price,cost){
+ if(!validCost(price)||!validCost(cost))return null;
+ const tax=price*taxRate/100,profit=(price*93-cost*100)/100;
+ return {tax,profit,margin:profit/price*100};
+}
+async function editPurchaseCost(item,cost,button){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog'||!validCost(cost)||!Object.hasOwn(item,'cost'))return;
+ if(cost===item.cost)return;
+ const current=generation,session=marker;mutationBusy=true;button.disabled=true;
+ try{
+  const response=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action:'purchaseCost',id:item.id,expectedCost:item.cost,cost}),signal:AbortSignal.timeout(12000)});
+  if(current!==generation)return;
+  if(response.status===401||response.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(response.status===409){await select('catalog');message.textContent='Закупочная цена или сессия изменились. Проверьте обновлённые данные.';return;}
+  if(!response.ok)throw Error();
+  const result=await response.json();if(result?.id!==item.id||result.cost!==cost)throw Error();
+  item.cost=cost;await select('catalog');message.textContent='Закупочная цена сохранена.';
+ }catch{if(current===generation)message.textContent='Не удалось подтвердить сохранение закупки. Обновите данные.';}
+ finally{mutationBusy=false;button.disabled=false;}
+}
 const date=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'}):'—';};
 function clear(){
  generation++;busy=false;marker=null;reference='';clearPhotos();clearDetails();clearPreview();clearReview();if(createDialog.open)createDialog.close();createForm.reset();createStatus.textContent='';catalogDrafts.clear();expandedProducts.clear();orders=[];variants=[];orderCursor=null;catalogCursor=null;
@@ -833,11 +857,31 @@ function renderCatalog(){
   const meta=node('div',undefined,'sa-catalog-meta');meta.append(node('strong','от '+money(Math.min(...rows.map(x=>x.price)))),node('p',rows.length+' разм.','sa-note'));
   head.append(photo,title,meta);card.append(head);
   const tableWrap=node('div',undefined,'sa-variant-wrap'),table=node('table'),thead=node('thead'),headers=node('tr');
-  for(const h of ['Размер','Цена, ₽','Доступность','Действие'])headers.append(node('th',h));
+  for(const h of ['Размер','Цена, ₽','Закупка, ₽','Прибыль / маржа','Доступность','Действие'])headers.append(node('th',h));
+  table.classList.add('sa-economics-table');
   thead.append(headers);const tbody=node('tbody');table.append(thead,tbody);tableWrap.append(table);
   for(const item of rows){
    const tr=node('tr'),priceCell=node('td'),price=node('input'),draft=catalogDrafts.get(item.id);
    price.type='number';price.min='1';price.max='100000000';price.step='1';price.value=draft?.price??String(item.price);price.className='sa-price-input';price.setAttribute('aria-label','Цена '+item.sku+' '+item.size);priceCell.append(price);if(item.oldPrice){price.readOnly=true;priceCell.append(node('s',money(item.oldPrice),'sa-old-price'));priceCell.append(node('small','Акция','sa-note'));}
+   const costCell=node('td',undefined,'sa-cost-cell'),cost=node('input'),costSave=node('button','Сохранить закупку','sa-cost-save'),profitCell=node('td',undefined,'sa-economics-cell');
+   const profit=node('strong','—'),margin=node('small','—'),tax=node('small','Налог 7%: —');
+   profitCell.append(profit,margin,tax);
+   cost.type='number';cost.min='1';cost.max='100000000';cost.step='1';cost.className='sa-price-input';cost.value=validCost(item.cost)?String(item.cost):'';cost.placeholder='Не указана';cost.setAttribute('aria-label','Закупочная цена '+item.sku+' '+item.size);
+   costSave.type='button';costCell.append(cost,costSave);
+   const supported=Object.hasOwn(item,'cost');cost.disabled=!supported;
+   if(!supported)costCell.append(node('small','Ожидается обновление API','sa-note'));
+   function refreshEconomics(){
+    const c=cost.value===''?NaN:Number(cost.value),p=price.value===''?NaN:Number(price.value);
+    const values=economics(p,c);
+    costSave.disabled=!supported||!validCost(c)||c===item.cost;
+    profit.textContent=values?decimalMoney(values.profit):'—';
+    margin.textContent=values?'Маржа '+percent(values.margin):'Закупка и цена обязательны';
+    tax.textContent=values?'Налог 7%: '+decimalMoney(values.tax):'Налог 7%: —';
+    profitCell.classList.toggle('sa-economics-negative',!!values&&values.profit<0);
+    profitCell.classList.toggle('sa-economics-positive',!!values&&values.profit>=0);
+   }
+   price.addEventListener('input',refreshEconomics);cost.addEventListener('input',refreshEconomics);
+   costSave.addEventListener('click',()=>editPurchaseCost(item,Number(cost.value),costSave));refreshEconomics();
    const activeCell=node('td'),label=node('label',undefined,'sa-active-toggle'),active=node('input');active.type='checkbox';active.checked=draft?.active??item.active;active.disabled=item.storefrontReady!==true||item.status==='published';if(item.status==='published')active.title='Доступность опубликованного размера меняется через публикацию, цена редактируется отдельно';label.append(active,node('span',item.storefrontReady!==true?'Черновик':active.checked?'Активен':'Неактивен'));activeCell.append(label);
    const action=node('td'),save=node('button','Сохранить','sa-status-save');save.type='button';
    function changed(){
@@ -848,9 +892,9 @@ function renderCatalog(){
    }
    price.addEventListener('input',changed);active.addEventListener('change',changed);
    save.addEventListener('click',()=>editVariant(item,Number(price.value),active.checked,save));const controls=node('div',undefined,'sa-variant-actions'),remove=node('button','Удалить','sa-remove-size');remove.type='button';remove.setAttribute('aria-label','Удалить размер '+item.size+' артикула '+item.sku);remove.disabled=rows.length<=1;if(remove.disabled)remove.title='Нельзя удалить последний размер';remove.addEventListener('click',()=>openRemoveSize(item));controls.append(save,remove);action.append(controls);
-   tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
+   tr.append(node('td',item.size),priceCell,costCell,profitCell,activeCell,action);tbody.append(tr);changed();
   }
-  card.append(tableWrap);
+  card.append(tableWrap,node('p','Прибыль после закупки и налога 7% от цены продажи. Без доставки, рекламы и прочих расходов. Изменения в полях — предварительный расчёт до сохранения.','sa-economics-note'));
   const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));const review=node('button',v.status==='published'?'Скрыть с сайта':v.status==='archived'?'Восстановить':'Опубликовать');review.type='button';review.addEventListener('click',()=>openReview(sku));const copy=node('button','Дублировать товар');copy.type='button';copy.addEventListener('click',()=>openCopy(sku));const bulk=node('button','Изменить цены');bulk.type='button';bulk.addEventListener('click',()=>openBulkPrices(sku));const promo=node('button','Акция / скидка');promo.type='button';promo.addEventListener('click',()=>openPromotion(sku));const placement=node('button','Положение в каталоге');placement.type='button';placement.addEventListener('click',()=>openPlacement(sku));review.classList.add('sa-publication-button');const sizeOrder=node('button','Порядок размеров');sizeOrder.type='button';sizeOrder.addEventListener('click',()=>openSizeOrder(sku));
   for(const [heading,buttons] of [['Карточка товара',[preview,edit,gallery,copy]],['Размеры и цены',[addSize,sizeOrder,bulk,promo]],['Публикация и витрина',[review,placement]]]){
    const group=node('div',undefined,'sa-action-group'),controls=node('div',undefined,'sa-action-group-controls');controls.append(...buttons);group.append(node('span',heading,'sa-action-group-label'),controls);addRow.append(group);
@@ -882,6 +926,7 @@ async function load(more){
    renderOrders();moreButton.hidden=!orderCursor;
   }else{
    if(!list.every(v=>v&&typeof v.sku==='string'&&typeof v.title==='string'&&Number.isSafeInteger(v.price)&&typeof v.active==='boolean'&&typeof v.storefrontReady==='boolean'))throw Error();
+   if(!list.every(v=>!Object.hasOwn(v,'cost')||v.cost===null||validCost(v.cost)))throw Error();
    if(!Number.isSafeInteger(data.totalProducts)||data.totalProducts<0||!(data.nextOffset===null||Number.isSafeInteger(data.nextOffset))||!list.every(v=>['published','draft','ready','stale','archived'].includes(v.status)&&Number.isInteger(v.photoCount)&&v.photoCount>=0&&v.photoCount<=8&&(v.photoId===null||/^[a-f0-9-]{36}$/.test(v.photoId))))throw Error();
    const byId=new Map((more?variants:[]).map(v=>[v.id,v]));for(const v of list)byId.set(v.id,v);variants=[...byId.values()];catalogCursor=data.nextOffset;catalogTotal=data.totalProducts;
    renderCatalog();moreButton.hidden=catalogCursor===null;
