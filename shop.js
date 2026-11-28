@@ -379,9 +379,12 @@
         const response=await fetch('/api/orders',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...payload,requestKey:key}),signal:AbortSignal.timeout(15000)});
         const result=await response.json();
         if(!response.ok){
-          const messages={orders_closed:'Приём заказов пока закрыт. Корзина сохранена.',invalid_order:'Проверьте контактные данные и товары.',price_changed:'Цена изменилась. Обновите карточку товара и добавьте его в корзину заново.',variant_unavailable:'Этот вариант товара пока недоступен.',rate_limited:'Слишком много запросов. Повторите попытку позже.',session_expired:'Сессия завершена. Войдите снова в личный кабинет.',request_conflict:'Не удалось повторить заявку. Свяжитесь с менеджером.'};
+          const messages={orders_closed:'Приём заказов пока закрыт. Корзина сохранена.',invalid_order:'Проверьте контактные данные и товары.',price_changed:'Цена изменилась. Проверьте новые цены в корзине и подтвердите их перед повторным оформлением.',variant_unavailable:'Этот вариант товара пока недоступен.',rate_limited:'Слишком много запросов. Повторите попытку позже.',session_expired:'Сессия завершена. Войдите снова в личный кабинет.',request_conflict:'Не удалось повторить заявку. Свяжитесь с менеджером.'};
           // Only discard a key after a definite rejection of this attempt.
           if(['orders_closed','invalid_order','price_changed','variant_unavailable','rate_limited','session_expired'].includes(result.error))clearAttempt();
+          if(['price_changed','variant_unavailable'].includes(result.error)){
+            await refreshCatalog({render:false});renderCart();
+          }
           status(messages[result.error]||'Не удалось подтвердить отправку. Повторите с теми же данными.');return;
         }
         if(!/^[1-9][0-9]*$/.test(result.number)||!Number.isSafeInteger(result.total)||result.total<1||typeof result.linked!=='boolean')throw Error();
@@ -481,7 +484,7 @@
     const current=++catalogGeneration;
     catalogPromise=(async()=>{
       try{
-        catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261128-cart2');
+        catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261128-promo1');
         const r=await fetch('/api/catalog/variants',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
         if(!r.ok)throw Error();
         const snapshot=catalogModel.parseCatalog(await r.json());
@@ -504,7 +507,7 @@
         if(typeof sku!=='string'||!/^[0-9]{4}$/.test(sku)||!canonicalSize(size)||!Number.isSafeInteger(price)||price<1)return false;
         adding=true;
         try{
-          catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261128-cart2');
+          catalogModel=catalogModel||await import('./catalog-pricing.js?v=20261128-promo1');
           const response=await fetch('/api/catalog/variants',{credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
           if(!response.ok)throw Error();
           const snapshot=catalogModel.parseCatalog(await response.json());
