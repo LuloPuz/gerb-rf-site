@@ -3,7 +3,7 @@
 const $=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)];
 const gate=$('[data-gate]'),dashboard=$('[data-dashboard]'),message=$('[data-message]');
 let generation=0,tab='overview',busy=false,orders=[],variants=[],orderCursor=null,catalogCursor=null,reference='';
-let marker=null,mutationBusy=false;
+let marker=null,mutationBusy=false,catalogTotal=0,filterTimer=null;
 const catalogDrafts=new Map(),expandedProducts=new Set();
 const createDialog=$('[data-create-dialog]'),createForm=$('[data-create-form]'),createStatus=$('[data-create-status]');
 let createExisting=false;
@@ -193,7 +193,7 @@ async function editVariant(v,price,active,button){
   if(!r.ok)throw Error();
   const data=await r.json();
   if(data.id!==v.id||data.price!==price||data.active!==active)throw Error();
-  Object.assign(v,data);catalogDrafts.delete(v.id);renderCatalog();message.textContent='Вариант сохранён в серверном каталоге.';
+  Object.assign(v,data);catalogDrafts.delete(v.id);await select('catalog');message.textContent='Вариант сохранён в серверном каталоге.';
  }catch{if(current===generation)message.textContent='Не удалось подтвердить сохранение. Обновите данные.';}
  finally{mutationBusy=false;button.disabled=false;}
 }
@@ -249,7 +249,7 @@ createForm.addEventListener('submit',async e=>{
   createDialog.close();createForm.reset();
   // A confirmed new record is displayed immediately, with no duplicate id.
   variants=variants.filter(v=>v.id!==data.id);variants.push(data);expandedProducts.add(p.sku);
-  $('[data-catalog-search]').value=p.sku;renderCatalog();
+  resetCatalogFilters(p.sku);await select('catalog');
   message.textContent='Черновик сохранён. Публикация отключена.';
  }catch{if(current===generation)createStatus.textContent='Не удалось подтвердить создание. Обновите список, прежде чем повторять.';}
  finally{mutationBusy=false;submit.disabled=false;}
@@ -306,8 +306,8 @@ function openPhotos(sku){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
  clearPhotos();photoSku=sku;$('[data-photo-title]').textContent='Артикул '+sku;photoDialog.showModal();$('[data-photo-submit]').disabled=true;loadPhotos(sku,photoGeneration);
 }
-$('[data-photo-close]').addEventListener('click',()=>{if(!mutationBusy)clearPhotos();});
-photoDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy)clearPhotos();});
+$('[data-photo-close]').addEventListener('click',()=>{if(!mutationBusy){clearPhotos();if(tab==='catalog')select('catalog');}});
+photoDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy){clearPhotos();if(tab==='catalog')select('catalog');}});
 photoForm.addEventListener('submit',async e=>{
  e.preventDefault();
  if(mutationBusy||!marker||!photoSku||!photoDialog.open||dashboard.hidden)return;
@@ -373,7 +373,7 @@ detailsForm.addEventListener('submit',async e=>{
   const data=await r.json();
   if(!r.ok){detailsStatus.textContent=data.error==='details_changed'?'Карточка изменилась. Закройте и откройте редактор заново.':data.error==='publication_open'?'Перед изменением снимите этот товар с публикации и закройте приём заказов.':'Не удалось сохранить. Проверьте поля.';return;}
   if(data.sku!==sku||typeof data.revision!=='string')throw Error();
-  clearDetails();catalogDrafts.clear();expandedProducts.add(sku);$('[data-catalog-search]').value=sku;
+  clearDetails();catalogDrafts.clear();expandedProducts.add(sku);resetCatalogFilters(sku);
   await select('catalog');message.textContent='Карточка сохранена в серверном каталоге.';
  }catch{if(current===detailsGeneration)detailsStatus.textContent='Не удалось подтвердить сохранение. Проверьте карточку перед повтором.';}
  finally{mutationBusy=false;if(current===detailsGeneration)submit.disabled=false;}
@@ -561,7 +561,7 @@ async function saveReview(data,next,selected){
   if(next==='prepare'){if(result.state!=='ready'||result.publicationState!=='prepared')throw Error();}
   else if(next==='cancel'){if(result.publicationState!=='none')throw Error();}
   else if(result.state!==next||result.publicationState!=='none')throw Error();
-  if(next==='archived'){catalogDrafts.clear();expandedProducts.add(data.sku);$('[data-catalog-search]').value=data.sku;await select('catalog');}
+  if(next==='archived'){catalogDrafts.clear();expandedProducts.add(data.sku);resetCatalogFilters(data.sku);}await select('catalog');
   if(current===reviewGeneration){const individual=await fetchIndividual(data.sku,session);if(current!==reviewGeneration||session!==marker)return;renderReview(individual.review,individual);reviewStatus.textContent=next==='prepare'?'Товар в очереди.':next==='cancel'?'Товар убран из очереди.':'Состояние сохранено.';}
  }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить изменение. Откройте проверку заново.';}
  finally{mutationBusy=false;}
@@ -596,7 +596,7 @@ async function openCopy(sku){
     if(!r.ok){reviewStatus.textContent=r.status===409?'Копирование отклонено: артикул занят, карточка изменилась или достигнут лимит. Закройте окно и повторите проверку.':'Не удалось создать копию.';return;}
     const data=await r.json();if(current!==reviewGeneration||session!==marker)return;
     if(data.sku!==target||data.source!==sku||data.state!=='draft')throw Error();
-    clearReview();catalogDrafts.clear();expandedProducts.add(target);$('[data-catalog-search]').value=target;await select('catalog');
+    clearReview();catalogDrafts.clear();expandedProducts.add(target);resetCatalogFilters(target);await select('catalog');
     for(let page=0;page<20&&session===marker&&tab==='catalog'&&catalogCursor&&!variants.some(v=>v.sku===target);page++){const cursor=catalogCursor;await load(true);if(catalogCursor===cursor)break;}
     if(session===marker&&tab==='catalog')message.textContent='Создан черновик арт. '+target+'. Проверьте данные и фотографии перед публикацией.';
    }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Проверьте наличие нового артикула перед повтором.';}
@@ -634,7 +634,7 @@ async function openPlacement(sku){
     const result=await response.json();if(current!==reviewGeneration||session!==marker)return;
     if(result.sku!==sku||result.position!==position||result.featured!==featured)throw Error();
     for(const v of variants)if(v.sku===sku){v.position=position;v.featured=featured;}
-    expandedProducts.add(sku);clearReview();renderCatalog();message.textContent='Положение товара сохранено.';
+    expandedProducts.add(sku);clearReview();await select('catalog');message.textContent='Положение товара сохранено.';
    }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Откройте окно заново.';}
    finally{mutationBusy=false;input.disabled=check.disabled=cancel.disabled=false;if(current===reviewGeneration)refresh();}
   });
@@ -666,7 +666,7 @@ async function openRemoveSize(item){
     if(!r.ok){reviewStatus.textContent=r.status===409?'Размер не удалён: данные изменились или действует ограничение публикации. Обновите каталог.':'Не удалось удалить размер.';return;}
     const data=await r.json();if(current!==reviewGeneration||session!==marker)return;
     if(data.removed!==v.id||data.sku!==sku||!validReview(data.review,sku)||data.review.state!=='draft'||data.review.variants.some(x=>x.id===v.id))throw Error();
-    variants=variants.filter(x=>x.id!==v.id);catalogDrafts.delete(v.id);expandedProducts.add(sku);clearReview();renderCatalog();message.textContent='Размер '+v.size+' удалён. История заказов сохранена.';
+    variants=variants.filter(x=>x.id!==v.id);catalogDrafts.delete(v.id);expandedProducts.add(sku);clearReview();await select('catalog');message.textContent='Размер '+v.size+' удалён. История заказов сохранена.';
    }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Обновите каталог перед повтором.';}
    finally{mutationBusy=false;remove.disabled=cancel.disabled=false;}
   };
@@ -708,7 +708,7 @@ async function openPromotion(sku){
     if(!r.ok){reviewStatus.textContent=r.status===409?'Акция не сохранена: данные изменились или товар опубликован. Обновите каталог.':'Не удалось сохранить акцию.';return;}
     const result=await r.json();if(current!==reviewGeneration||session!==marker)return;if(!validReview(result,sku))throw Error();
     for(const item of result.variants){const v=variants.find(x=>x.id===item.id);if(v){delete v.oldPrice;Object.assign(v,item);if(selected.includes(item.id))catalogDrafts.delete(v.id);}}
-    clearReview();renderCatalog();message.textContent=percent===0?'Акция снята. Обычные цены восстановлены.':'Акция сохранена. Проверьте готовность карточки к публикации.';
+    clearReview();await select('catalog');message.textContent=percent===0?'Акция снята. Обычные цены восстановлены.':'Акция сохранена. Проверьте готовность карточки к публикации.';
    }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Обновите каталог перед повтором.';}
    finally{mutationBusy=false;amount.disabled=remove.disabled=false;for(const el of [allCheck,toggle,...fields.map(f=>f.check)])el.disabled=false;if(current===reviewGeneration)refresh();}
   });
@@ -717,7 +717,7 @@ async function openPromotion(sku){
 function openBulkPrices(sku=null,manual=false){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
- const rows=variants.filter(v=>!v.oldPrice&&(manual?catalogDrafts.has(v.id)&&catalogDrafts.get(v.id).price!==String(v.price):sku?v.sku===sku:[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q)));
+ const rows=variants.filter(v=>!v.oldPrice&&(manual?catalogDrafts.has(v.id)&&catalogDrafts.get(v.id).price!==String(v.price):sku?v.sku===sku:true));
  if(!rows.length){message.textContent=manual?'Нет изменённых цен.':'Нет загруженных вариантов для изменения.';return;}
  clearReview();const current=reviewGeneration,session=marker;
  reviewDialog.setAttribute('data-copy-mode','');$('#sa-review-title').textContent=manual?'Сохранить изменённые цены':'Массовое изменение цен';$('[data-review-intro]').hidden=true;
@@ -761,22 +761,30 @@ function openBulkPrices(sku=null,manual=false){
    const data=await r.json();if(current!==reviewGeneration||session!==marker)return;
    const expected=new Map(submitted.map(x=>[x.id,x.price]));if(!Array.isArray(data.variants)||data.variants.length!==expected.size||new Set(data.variants.map(x=>x.id)).size!==expected.size||!data.variants.every(x=>expected.get(x.id)===x.price&&typeof x.active==='boolean'))throw Error();
    for(const update of data.variants){const v=variants.find(x=>x.id===update.id);if(v){const draft=catalogDrafts.get(v.id);Object.assign(v,update);if(draft&&draft.active!==v.active)catalogDrafts.set(v.id,{price:String(v.price),active:draft.active});else catalogDrafts.delete(v.id);}}
-   clearReview();renderCatalog();message.textContent='Сохранено цен: '+submitted.length+'.';
+   clearReview();await select('catalog');message.textContent='Сохранено цен: '+submitted.length+'.';
   }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Обновите каталог перед повтором.';}
   finally{mutationBusy=false;for(const el of controlsToDisable)el.disabled=false;type.disabled=manual;if(current===reviewGeneration)refresh();}
  });
 }
 $('[data-bulk-prices]').addEventListener('click',()=>openBulkPrices());
 $('[data-save-prices]').addEventListener('click',()=>openBulkPrices(null,true));
+function currentFilters(){
+ return {q:$('[data-catalog-search]').value.trim(),category:$('[data-filter-category]').value,status:$('[data-filter-status]').value,sale:$('[data-filter-sale]').value,sort:$('[data-filter-sort]').value,featured:$('[data-filter-featured]').checked,noPhotos:$('[data-filter-photos]').checked};
+}
+function resetCatalogFilters(q=''){
+ $('[data-catalog-search]').value=q;
+ for(const k of ['category','status','sale'])$('[data-filter-'+k+']').value='';
+ $('[data-filter-sort]').value='position';$('[data-filter-featured]').checked=false;$('[data-filter-photos]').checked=false;
+}
 function renderCatalog(){
  const q=$('[data-catalog-search]').value.trim().toLowerCase();
- const list=variants.filter(v=>[v.sku,v.title,v.finish,v.size].join(' ').toLowerCase().includes(q));
+ const list=variants;
  const groups=new Map();
  for(const v of list){if(!groups.has(v.sku))groups.set(v.sku,[]);groups.get(v.sku).push(v);}
  const target=$('[data-catalog]');target.replaceChildren();
  const summary=$('[data-catalog-summary]');
- summary.textContent='Артикулов: '+groups.size+' · Вариантов: '+list.length+(catalogCursor?' · Показана часть каталога':'');
- for(const [sku,rows] of [...groups].sort((a,b)=>(a[1][0].position??Number(a[0])*10)-(b[1][0].position??Number(b[0])*10)||a[0].localeCompare(b[0],'ru',{numeric:true}))){
+ summary.textContent='Найдено товаров: '+catalogTotal+' · Показано: '+groups.size+' · Размеров: '+list.length+(catalogCursor!==null?' · Загрузите ещё для просмотра остальных':'');
+ for(const [sku,rows] of groups){
   rows.sort((a,b)=>parseFloat(a.size.replace(',','.'))-parseFloat(b.size.replace(',','.'))||a.size.localeCompare(b.size,'ru',{numeric:true}));
   const v=rows[0],card=node('details',undefined,'sa-catalog-card');
   card.open=expandedProducts.has(sku)||!!q;
@@ -785,11 +793,13 @@ function renderCatalog(){
   photo.append(node('span','Нет фото','sa-note'));
   try{
    const u=new URL(v.image,location.href);
+   if(v.photoId){const im=node('img');im.src='/api/admin/catalog/photo?id='+encodeURIComponent(v.photoId);im.alt='';im.loading='lazy';im.addEventListener('load',()=>photo.replaceChildren(im),{once:true});im.addEventListener('error',()=>im.remove(),{once:true});photo.append(im);}
+   else
    if(v.image&&u.origin===location.origin&&/\.(png|jpe?g|webp)$/i.test(u.pathname)){
     const im=node('img');im.src=u.pathname+u.search;im.alt='';im.loading='lazy';im.addEventListener('load',()=>photo.replaceChildren(im),{once:true});im.addEventListener('error',()=>im.remove(),{once:true});photo.append(im);
    }
   }catch{}
-  const title=node('div',undefined,'sa-catalog-title');title.append(node('strong',v.title),node('p',v.finish,'sa-note'),node('p','Арт. '+sku+' · Приоритет '+(v.position??Number(sku)*10),'sa-sku'));if(v.featured===true)title.append(node('span','На главной','sa-featured-marker'));
+  const title=node('div',undefined,'sa-catalog-title');title.append(node('strong',v.title),node('p',v.finish,'sa-note'),node('p','Арт. '+sku+' · Приоритет '+(v.position??Number(sku)*10),'sa-sku'));const marks=node('div',undefined,'sa-catalog-marks');marks.append(node('span',v.status==='published'?'Опубликован':reviewNames[v.status]||'Черновик','sa-product-state sa-state-'+v.status));if(v.featured===true)marks.append(node('span','Для главной','sa-featured-marker'));if(rows.some(x=>x.oldPrice))marks.append(node('span','Акция','sa-product-sale'));if(v.photoCount===0)marks.append(node('span','Нет фото в галерее','sa-product-no-photo'));title.append(marks);
   const meta=node('div',undefined,'sa-catalog-meta');meta.append(node('strong','от '+money(Math.min(...rows.map(x=>x.price)))),node('p',rows.length+' вар. · '+rows.filter(x=>x.active).length+' актив.','sa-note'));
   head.append(photo,title,meta);card.append(head);
   const tableWrap=node('div',undefined,'sa-variant-wrap'),table=node('table'),thead=node('thead'),headers=node('tr');
@@ -807,7 +817,7 @@ function renderCatalog(){
     save.disabled=!price.checkValidity()||price.value===''||!dirty;
    }
    price.addEventListener('input',changed);active.addEventListener('change',changed);
-   save.addEventListener('click',()=>editVariant(item,Number(price.value),active.checked,save));const controls=node('div',undefined,'sa-variant-actions'),remove=node('button','Удалить','sa-remove-size');remove.type='button';remove.setAttribute('aria-label','Удалить размер '+item.size+' артикула '+item.sku);remove.disabled=rows.length<=1&&!catalogCursor;if(remove.disabled)remove.title='Нельзя удалить последний размер';remove.addEventListener('click',()=>openRemoveSize(item));controls.append(save,remove);action.append(controls);
+   save.addEventListener('click',()=>editVariant(item,Number(price.value),active.checked,save));const controls=node('div',undefined,'sa-variant-actions'),remove=node('button','Удалить','sa-remove-size');remove.type='button';remove.setAttribute('aria-label','Удалить размер '+item.size+' артикула '+item.sku);remove.disabled=rows.length<=1;if(remove.disabled)remove.title='Нельзя удалить последний размер';remove.addEventListener('click',()=>openRemoveSize(item));controls.append(save,remove);action.append(controls);
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
@@ -826,18 +836,25 @@ async function load(more){
  const moreButton=$(isOrders?'[data-orders-more]':'[data-catalog-more]');
  moreButton.disabled=true;message.textContent='Загружаем…';
  try{
-  const data=await get(isOrders?'/api/admin/orders'+(more&&cursor?'?before='+encodeURIComponent(cursor):''):'/api/admin/catalog'+(more&&cursor?'?after='+encodeURIComponent(cursor):''));
+  let data;
+  if(isOrders)data=await get('/api/admin/orders'+(more&&cursor?'?before='+encodeURIComponent(cursor):''));
+  else{
+   const params=new URLSearchParams({browse:'1',filters:JSON.stringify(currentFilters()),offset:String(more?cursor??0:0)});
+   const r=await fetch('/api/admin/catalog/review?'+params,{credentials:'same-origin',cache:'no-store',redirect:'error',headers:{Accept:'application/json','X-Session-Marker':marker},signal:AbortSignal.timeout(30000)});
+   if(!r.ok){const e=Error('HTTP '+r.status);e.status=r.status;throw e;}data=await r.json();
+  }
   if(current!==generation)return;
   const list=isOrders?data.orders:data.variants;
-  if(!Array.isArray(list)||list.length>(isOrders?20:100))throw Error();
+  if(!Array.isArray(list)||(isOrders&&list.length>20))throw Error();
   if(isOrders){
    if(!list.every(o=>o&&typeof o.number==='string'&&typeof o.status==='string'&&Number.isSafeInteger(o.total)&&Array.isArray(o.items)))throw Error();
    orders=more?[...orders,...list]:list;orderCursor=data.nextBefore;
    renderOrders();moreButton.hidden=!orderCursor;
   }else{
    if(!list.every(v=>v&&typeof v.sku==='string'&&typeof v.title==='string'&&Number.isSafeInteger(v.price)&&typeof v.active==='boolean'&&typeof v.storefrontReady==='boolean'))throw Error();
-   variants=more?[...variants,...list]:list;catalogCursor=data.nextAfter;
-   renderCatalog();moreButton.hidden=!catalogCursor;
+   if(!Number.isSafeInteger(data.totalProducts)||data.totalProducts<0||!(data.nextOffset===null||Number.isSafeInteger(data.nextOffset))||!list.every(v=>['published','draft','ready','stale','archived'].includes(v.status)&&Number.isInteger(v.photoCount)&&v.photoCount>=0&&v.photoCount<=8&&(v.photoId===null||/^[a-f0-9-]{36}$/.test(v.photoId))))throw Error();
+   const byId=new Map((more?variants:[]).map(v=>[v.id,v]));for(const v of list)byId.set(v.id,v);variants=[...byId.values()];catalogCursor=data.nextOffset;catalogTotal=data.totalProducts;
+   renderCatalog();moreButton.hidden=catalogCursor===null;
   }message.textContent='';
  }catch(err){failure(err,current);}
  finally{if(current===generation){busy=false;moreButton.disabled=false;}}
@@ -845,7 +862,13 @@ async function load(more){
 all('[data-tab]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.tab)));
 $('[data-refresh]').addEventListener('click',boot);$('[data-retry]').addEventListener('click',boot);
 $('[data-orders-more]').addEventListener('click',()=>load(true));$('[data-catalog-more]').addEventListener('click',()=>load(true));
-$('[data-order-search]').addEventListener('input',renderOrders);$('[data-order-filter]').addEventListener('change',renderOrders);$('[data-catalog-search]').addEventListener('input',renderCatalog);
+$('[data-order-search]').addEventListener('input',renderOrders);$('[data-order-filter]').addEventListener('change',renderOrders);$('[data-catalog-search]').addEventListener('input',()=>{
+ clearTimeout(filterTimer);if(tab!=='catalog')return;
+ generation++;busy=false;variants=[];catalogCursor=null;catalogTotal=0;$('[data-catalog]').replaceChildren();$('[data-catalog-more]').hidden=true;$('[data-catalog-summary]').textContent='Поиск…';
+ filterTimer=setTimeout(()=>{if(tab==='catalog'&&!dashboard.hidden)select('catalog');},250);
+});
+for(const el of all('[data-catalog-filters] select,[data-catalog-filters] input'))el.addEventListener('change',()=>{clearTimeout(filterTimer);if(tab==='catalog')select('catalog');});
+$('[data-filter-reset]').addEventListener('click',()=>{clearTimeout(filterTimer);resetCatalogFilters();if(tab==='catalog')select('catalog');});
 $('[data-reference]').addEventListener('click',async()=>{
  const current=generation;reference='';$('[data-code]').hidden=true;$('[data-copy]').hidden=true;
  $('[data-enroll-status]').textContent='Получаем код…';
