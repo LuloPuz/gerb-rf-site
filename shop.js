@@ -3,9 +3,18 @@
   if(window.__derzhavaShopInit) return;
   window.__derzhavaShopInit=true;
   const CART_KEY='derzhava_cart_v1';
+  // Test page uses only memory. Never persist or submit a real order from it.
+  const checkoutTest=location.origin==='https://gerbrf.ru'&&location.pathname==='/cart.html'&&new URLSearchParams(location.search).get('checkout')==='test';
+  let testItems=[],testAuthorized=false,testSeeded=false;
+  async function verifyTestAdmin(){
+    try{const r=await fetch('/api/admin/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(8000)});
+      if(!r.ok)return false;const p=await r.json();return p.authorized===true;
+    }catch{return false;}
+  }
+  function checkoutAllowed(){return checkoutTest?testAuthorized:catalogSnapshot?.intakeEnabled===true;}
   const money=n=>new Intl.NumberFormat('ru-RU').format(Number(n)||0)+' ₽';
-  const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
-  const write=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
+  const read=(key,fallback)=>{if(checkoutTest&&key===CART_KEY)return testItems.map(x=>({...x}));try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
+  const write=(key,value)=>{if(checkoutTest&&key===CART_KEY){testItems=value.map(x=>({...x}));return;}localStorage.setItem(key,JSON.stringify(value));};
   const cart=()=>{const items=read(CART_KEY,[]);return Array.isArray(items)?items:[];};
   const cartCount=()=>cart().reduce((sum,item)=>sum+(Number(item.qty)||1),0);
   const cartTotal=()=>cart().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||1),0);
@@ -306,6 +315,7 @@
     const form=document.querySelector('[data-checkout-form]');if(!form||busy)return;
     const current=++fillGeneration,note=document.querySelector('[data-checkout-identity]');
     if(!canonical){note.textContent='Оформление доступно только на gerbrf.ru.';return;}
+    if(checkoutTest){note.textContent='Тестовое оформление: используйте вымышленные данные. Заявка не отправляется.';return;}
     note.textContent='Проверяем личный кабинет…';
     try{
       const response=await fetch('/api/account/profile',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
@@ -351,7 +361,7 @@
       event.preventDefault();if(busy)return;
       const items=cart();if(!items.length)return;
       if(!canonical){status('Оформление доступно только на gerbrf.ru.');return;}
-      if(catalogState!=='published'||!catalogSnapshot?.intakeEnabled){status('Приём заказов пока закрыт.');return;}
+      if(catalogState!=='published'||!checkoutAllowed()){status('Приём заказов пока закрыт.');return;}
       const fd=new FormData(form),get=k=>String(fd.get(k)||'').trim(),lines=new Map();
       for(const item of items){
         const size=canonicalSize(item.size),sku=String(item.sku||''),quantity=Number(item.qty),expectedPrice=Number(item.price);
@@ -368,15 +378,23 @@
       controls.forEach(el=>el.disabled=true);submit.textContent='Отправляем…';status('');
       try{
         await refreshCatalog({render:false});
-        if(catalogState!=='published'||!catalogSnapshot?.intakeEnabled){status('Приём заказов закрыт или каталог недоступен. Корзина сохранена.');return;}
+        if(catalogState!=='published'||!checkoutAllowed()){status('Приём заказов закрыт или каталог недоступен. Корзина сохранена.');return;}
         const comparison=catalogModel.compareCart(items,catalogSnapshot);
         if(comparison.missing.length||comparison.changed.length||JSON.stringify(cart())!==snapshot){
           status('Цена или доступность изменились. Проверьте корзину перед оформлением.');
           applyCartPolicy(document.querySelector('[data-cart-page]'),cart(),document.querySelector('[data-cart-summary]'));
           return;
         }
+        let response;
+        if(checkoutTest){
+          if(!await verifyTestAdmin()){testAuthorized=false;status('Сессия администратора завершена. Войдите снова.');return;}
+          // Simulated acknowledgement only; production API is never called here.
+          const total=payload.items.reduce((n,v)=>n+v.quantity*v.expectedPrice,0);
+          response={ok:true,json:async()=>({number:'1',total,linked:false})};
+        }else{
         const key=await requestKey(payload);
-        const response=await fetch('/api/orders',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...payload,requestKey:key}),signal:AbortSignal.timeout(15000)});
+        response=await fetch('/api/orders',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...payload,requestKey:key}),signal:AbortSignal.timeout(15000)});
+        }
         const result=await response.json();
         if(!response.ok){
           const messages={orders_closed:'Приём заказов пока закрыт. Корзина сохранена.',invalid_order:'Проверьте контактные данные и товары.',price_changed:'Цена изменилась. Проверьте новые цены в корзине и подтвердите их перед повторным оформлением.',variant_unavailable:'Этот вариант товара пока недоступен.',rate_limited:'Слишком много запросов. Повторите попытку позже.',session_expired:'Сессия завершена. Войдите снова в личный кабинет.',request_conflict:'Не удалось повторить заявку. Свяжитесь с менеджером.'};
@@ -390,15 +408,15 @@
         if(!/^[1-9][0-9]*$/.test(result.number)||!Number.isSafeInteger(result.total)||result.total<1||typeof result.linked!=='boolean')throw Error();
         let cleared=false;
         if(JSON.stringify(cart())===snapshot){try{setCart([]);cleared=true;}catch{}}
-        if(cleared)clearAttempt();
+        if(cleared&&!checkoutTest)clearAttempt();
         form.reset();saved.replaceChildren();saved.hidden=true;
         document.querySelector('[data-checkout-panel]').hidden=true;renderCart();
         const success=document.querySelector('[data-order-success]');success.hidden=false;
-        const note=result.linked?'Заявка сохранена. Статус доступен в личном кабинете.':'Заявка сохранена. Менеджер свяжется с вами по указанным контактам.';
+        const note=checkoutTest?'Проверка формы успешна. Тестовая заявка не отправлена и не записана в базу.':result.linked?'Заявка сохранена. Статус доступен в личном кабинете.':'Заявка сохранена. Менеджер свяжется с вами по указанным контактам.';
         const warning=cleared?'':'<p>Корзина не очищена. Не отправляйте этот заказ повторно.</p>';
         const link=result.linked?'<a class="button button-gold" href="account.html">Перейти в личный кабинет</a>':'';
         if(cleared)document.querySelector('[data-cart-page]').classList.add('order-completed');
-        success.innerHTML='<p class="order-success-kicker">ЗАЯВКА ПРИНЯТА</p><h2>Заказ ДРЖ-'+esc(result.number)+'</h2><p>'+note+'</p>'+warning+'<div class="order-success-total"><span>Стоимость товаров</span><strong>'+money(result.total)+'</strong></div><div class="order-success-actions">'+link+'<a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
+        success.innerHTML='<p class="order-success-kicker">'+(checkoutTest?'ТЕСТОВОЕ ОФОРМЛЕНИЕ':'ЗАЯВКА ПРИНЯТА')+'</p><h2>'+(checkoutTest?'Проверка пройдена':'Заказ ДРЖ-'+esc(result.number))+'</h2><p>'+note+'</p>'+warning+'<div class="order-success-total"><span>Стоимость товаров</span><strong>'+money(result.total)+'</strong></div><div class="order-success-actions">'+link+'<a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
         requestAnimationFrame(()=>scrollCartSection(success));
       }catch(error){status(error?.message?.startsWith('Результат предыдущей')?error.message:'Не удалось подтвердить отправку. Корзина сохранена; повторите с теми же данными.');}
       finally{busy=false;controls.forEach(el=>el.disabled=false);submit.textContent='Оформить заказ';}
@@ -460,7 +478,7 @@
       comparison=catalogModel.compareCart(items,catalogSnapshot);
       if(comparison.missing.length)note='Некоторые размеры больше недоступны. Удалите их из корзины.';
       else if(comparison.changed.length)note='Цены изменились. Подтвердите обновление стоимости корзины.';
-      else if(!catalogSnapshot.intakeEnabled)note='Приём заказов пока закрыт.';
+      else if(!checkoutAllowed())note=checkoutTest?'Требуется действующая сессия администратора.':'Приём заказов пока закрыт.';
     }else note=catalogState==='draft'?'Тестовый каталог. Приём заказов закрыт.':catalogState==='closed'?'Каталог закрыт. Корзина сохранена.':catalogState==='pending'?'Проверяем актуальные цены…':'Не удалось проверить каталог. Обновите страницу.';
     button.disabled=!!note;
     if(note){
@@ -490,12 +508,14 @@
         const snapshot=catalogModel.parseCatalog(await r.json());
         if(current!==catalogGeneration)return;
         catalogSnapshot=snapshot;catalogState=snapshot.published?'published':window.derzhavaStorefrontMode==='dynamic'?'closed':'draft';
+        if(checkoutTest&&!testSeeded&&snapshot.published){testAuthorized=await verifyTestAdmin();if(testAuthorized){const v=snapshot.bySku.get('1001')?.[0]||snapshot.byKey.values().next().value;if(v){testItems=[{...v,id:v.sku+'|'+v.size,qty:2}];testSeeded=true;updateHeaderCount();}}const notice=document.querySelector('.shop-preview-notice');if(notice)notice.textContent=testAuthorized?'Тест администратора · отдельная корзина · заявка не отправляется.':'Тест недоступен. Войдите в админку и обновите страницу.';}
       }catch{if(current===catalogGeneration){catalogSnapshot=null;catalogState='error';}}
       finally{if(current===catalogGeneration){applyCatalogPrices();if(render&&!busy)renderCart();catalogPromise=null;}}
     })();
     return catalogPromise;
   }
 
+  if(checkoutTest){const notice=document.querySelector('.shop-preview-notice');if(notice)notice.textContent='Проверяем права администратора…';}
   injectHeader();
   {
     let adding=false;
