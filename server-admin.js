@@ -604,6 +604,38 @@ async function openCopy(sku){
   });
  }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подготовить копирование. Обновите панель.';}
 }
+async function openRemoveSize(item){
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
+ clearReview();const current=reviewGeneration,session=marker,sku=item.sku;
+ reviewDialog.setAttribute('data-copy-mode','');$('#sa-review-title').textContent='Удалить размер';$('[data-review-intro]').hidden=true;$('[data-review-sku]').textContent='Артикул '+sku;
+ reviewDialog.showModal();reviewStatus.textContent='Проверяем размер…';
+ try{
+  const source=await fetchIndividual(sku,session);if(current!==reviewGeneration||session!==marker)return;
+  const v=source.review.variants.find(x=>x.id===item.id);
+  if(!v){reviewStatus.textContent='Размер уже отсутствует. Обновите каталог.';return;}
+  if(source.listed||source.intakeEnabled||source.review.state==='archived'){reviewStatus.textContent='Удаление доступно для черновика при закрытом приёме заказов. Снимите товар с публикации или верните его из архива.';return;}
+  if(source.review.variants.length<=1){reviewStatus.textContent='Нельзя удалить последний размер товара. Добавьте другой размер или отправьте товар в архив.';return;}
+  reviewStatus.textContent='';
+  const summary=node('div',undefined,'sa-remove-summary');summary.append(node('strong',item.title),node('p',v.size),node('strong',money(v.price)));
+  if(v.oldPrice)summary.append(node('s',money(v.oldPrice),'sa-old-price'));
+  const note=node('p','Размер исчезнет из каталога. История заказов и изменений сохранится. Подтверждение готовности карточки будет сброшено. Остальные размеры не изменятся.','sa-note');
+  const actions=node('div',undefined,'sa-review-actions'),cancel=node('button','Отмена'),remove=node('button','Удалить размер','sa-remove-confirm');cancel.type=remove.type='button';cancel.onclick=()=>{if(!mutationBusy)clearReview();};actions.append(cancel,remove);reviewBody.append(summary,note,actions);
+  remove.onclick=async()=>{
+   if(mutationBusy||current!==reviewGeneration||session!==marker)return;
+   mutationBusy=true;remove.disabled=cancel.disabled=true;reviewStatus.textContent='Удаляем размер…';
+   try{
+    const r=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action:'removeSize',sku,id:v.id,expected:source.review.revision}),signal:AbortSignal.timeout(35000)});
+    if(current!==reviewGeneration||session!==marker)return;
+    if(r.status===401||r.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+    if(!r.ok){reviewStatus.textContent=r.status===409?'Размер не удалён: данные изменились или действует ограничение публикации. Обновите каталог.':'Не удалось удалить размер.';return;}
+    const data=await r.json();if(current!==reviewGeneration||session!==marker)return;
+    if(data.removed!==v.id||data.sku!==sku||!validReview(data.review,sku)||data.review.state!=='draft'||data.review.variants.some(x=>x.id===v.id))throw Error();
+    variants=variants.filter(x=>x.id!==v.id);catalogDrafts.delete(v.id);expandedProducts.add(sku);clearReview();renderCatalog();message.textContent='Размер '+v.size+' удалён. История заказов сохранена.';
+   }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Обновите каталог перед повтором.';}
+   finally{mutationBusy=false;remove.disabled=cancel.disabled=false;}
+  };
+ }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось проверить размер. Обновите панель.';}
+}
 async function openPromotion(sku){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
  clearReview();const current=reviewGeneration,session=marker;
@@ -739,7 +771,7 @@ function renderCatalog(){
     save.disabled=!price.checkValidity()||price.value===''||!dirty;
    }
    price.addEventListener('input',changed);active.addEventListener('change',changed);
-   save.addEventListener('click',()=>editVariant(item,Number(price.value),active.checked,save));action.append(save);
+   save.addEventListener('click',()=>editVariant(item,Number(price.value),active.checked,save));const controls=node('div',undefined,'sa-variant-actions'),remove=node('button','Удалить','sa-remove-size');remove.type='button';remove.setAttribute('aria-label','Удалить размер '+item.size+' артикула '+item.sku);remove.disabled=rows.length<=1&&!catalogCursor;if(remove.disabled)remove.title='Нельзя удалить последний размер';remove.addEventListener('click',()=>openRemoveSize(item));controls.append(save,remove);action.append(controls);
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
