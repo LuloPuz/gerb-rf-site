@@ -1,5 +1,5 @@
 import {fetchProducts,renderCard} from './storefront-cards.js?v=20261128-private1';
-import {adminPreview,previewProducts,addPreviewNotice} from './admin-storefront-preview.js?v=20261128-private1';
+import {adminPreview,previewProducts,addPreviewNotice} from './storefront-private-preview.js?v=20261128-private2';
 const section=document.querySelector('#popular'),grid=section?.querySelector('.popular-grid');
 if(grid&&location.origin==='https://gerbrf.ru'){
  const dynamic=window.derzhavaStorefrontMode==='dynamic',home=!!section.querySelector('.home-popular-summary');
