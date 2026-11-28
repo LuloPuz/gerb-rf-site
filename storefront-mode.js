@@ -1,7 +1,7 @@
 // Explicit release switch. Keep false until real catalog has been approved.
 // This is a frontend routing switch, not authorization to publish or accept orders.
 (()=> {
- const enabled=false;
+ const enabled=true;
  window.derzhavaStorefrontMode=enabled?'dynamic':'legacy';
  if(!enabled||location.origin!=='https://gerbrf.ru')return;
  document.documentElement.dataset.storefrontMode='dynamic';
