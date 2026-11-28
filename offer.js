@@ -25,11 +25,13 @@
     const email=v==='email';
     contactLabel.textContent=email?'Email для связи':'Номер телефона для связи';
     contactInput.type=email?'email':'tel';
-    contactInput.placeholder=email?'name@example.ru':'+7 999 999-99-99';
+    contactInput.placeholder=email?'name@example.ru':'+7 (___) ___-__-__';
     contactInput.autocomplete=email?'email':'tel';
+    contactInput.inputMode=email?'email':'tel';
     contactHelp.textContent=email
       ? 'Ответ и предложение отправим на указанную почту.'
       : (v==='phone'?'Позвоним на указанный номер.':'Этот номер должен быть привязан к выбранному мессенджеру.');
+    if(!email)contactHelp.textContent+=' Код +7 подставится автоматически; другой код можно ввести с «+».';
   }
   method.addEventListener('change',updateContact);
   updateContact();

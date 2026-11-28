@@ -29,7 +29,7 @@
 <p data-checkout-identity class="account-panel-lead" role="status">Можно оформить заказ без регистрации.</p><form data-checkout-form autocomplete="off"><div class="checkout-grid checkout-grid-columns">
 <div class="checkout-column">
   <div class="field"><label>Имя / контактное лицо</label><input name="name" required maxlength="150" autocomplete="off"></div>
-  <div class="field"><label>Телефон</label><input name="phone" type="tel" inputmode="tel" required maxlength="30" autocomplete="off"></div>
+  <div class="field"><label>Телефон</label><input name="phone" type="tel" inputmode="tel" required maxlength="30" autocomplete="tel" placeholder="+7 (___) ___-__-__"><small class="phone-input-hint">Код +7 добавится автоматически.</small></div>
   <div class="field"><label>Способ получения</label><select name="delivery"><option>Доставка транспортной компанией</option><option>Самовывоз</option><option>Согласовать с менеджером</option></select></div>
 </div>
 <div class="checkout-column">
@@ -47,4 +47,5 @@
 <footer class="site-footer"><div class="container footer-grid"><div class="brand footer-brand"><span><strong>ДЕРЖАВА</strong><small>Государственная и муниципальная символика</small></span></div><div><h3>Каталог</h3><a href="catalog.html">Весь каталог</a><a href="gerb-rf.html">Герб РФ</a><a href="gerb-moskvy.html">Герб Москвы</a></div><div><h3>Покупателям</h3><a href="payment-delivery.html#payment">Оплата</a><a href="payment-delivery.html#delivery">Доставка</a><a href="payment-delivery.html#contacts">Контакты</a><a href="privacy.html">Политика обработки данных (проект)</a><a href="account.html">Личный кабинет</a><a href="cart.html">Корзина</a></div></div><div class="container legal-line"><span>© <span id="year"></span> Держава</span><span>Сайт не является официальным сайтом государственного органа.</span></div></footer>
 <script src="script.js?v=20261128-search1"></script><script src="shop.js?v=20261128-home1" data-shop-runtime="true"></script>
 
+<script src="phone-input.js?v=20261128-phone1"></script>
 </body></html>
