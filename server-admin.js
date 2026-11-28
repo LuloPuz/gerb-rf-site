@@ -86,23 +86,16 @@ function renderRelease(data){
  const target=$('[data-release]'),p=data.preflight;
  target.replaceChildren();
  const stats=node('div',undefined,'sa-stats');
- for(const [label,value] of [['Всего товаров',p.products],['В очереди',p.queued],['Проверено',p.ready],['Выбрано размеров',p.selectedVariants],['Опубликовано',p.approved]]){
+ for(const [label,value] of [['Всего товаров',p.products],['Опубликовано',p.approved]]){
   const item=node('article',undefined,'sa-stat');item.append(node('span',label),node('strong',value));stats.append(item);
  }
  target.append(stats);
  const state=node('section',undefined,'sa-release-card');
- state.append(node('h2',data.published?'Серверный каталог опубликован':'Публикация закрыта'),node('p','Приём заказов: '+(data.intakeEnabled?'открыт':'закрыт'),'sa-note'));
- state.append(node('p',data.published?'Для редактирования закройте серверную витрину. Закрытие сохраняет карточки, цены и фотографии, но очищает очередь.':'Публикуются только проверенные карточки и выбранные размеры. Приём заказов не открывается. Старые статические страницы пока существуют отдельно.','sa-note'));
- const actions=node('div',undefined,'sa-release-actions'),refresh=node('button','Проверить очередь'),button=node('button',data.published?'Закрыть серверную витрину':'Опубликовать серверный каталог','sa-status-save');
- refresh.type=button.type='button';refresh.onclick=()=>{if(!mutationBusy)select('publication');};button.disabled=data.intakeEnabled||(!data.published&&!p.eligible);
+ state.append(node('h2',data.published?'Серверная витрина открыта':'Серверная витрина закрыта'),node('p','Приём заказов: '+(data.intakeEnabled?'открыт':'закрыт'),'sa-note'));
+ state.append(node('p','Публикуйте и скрывайте отдельные товары в разделе «Товары». Здесь можно закрыть всю серверную витрину при необходимости.','sa-note'));
+ const actions=node('div',undefined,'sa-release-actions'),refresh=node('button','Обновить'),button=node('button','Закрыть всю витрину','sa-status-save');
+ refresh.type=button.type='button';refresh.onclick=()=>{if(!mutationBusy)select('publication');};button.disabled=data.intakeEnabled||!data.published;
  button.onclick=()=>changeRelease(data,button);actions.append(refresh,button);state.append(actions);target.append(state);
- if(!data.published&&!p.entries.length)target.append(node('p','Очередь пуста. Подтвердите готовность товара и добавьте его в очередь в разделе «Товары».','sa-note'));
- if(!data.published)for(const e of p.entries){
-  const row=node('div',undefined,'sa-review-checklist');row.append(node('strong','Арт. '+e.sku+' · '+(e.valid?'Готов':'Требует проверки')),node('p','Размеров: '+e.selected,'sa-note'));
-  const labels={...issueNames,stale:'Требуется повторное подтверждение',selection:'Выбранные размеры изменились',metadata:'Различаются данные вариантов'};
-  for(const issue of e.issues)row.append(node('p',labels[issue]||'Проверьте карточку'));
-  target.append(row);
- }
 }
 async function loadRelease(current){
  const session=marker;
@@ -115,9 +108,9 @@ async function loadRelease(current){
  }catch(e){failure(e,current);}
 }
 async function changeRelease(data,button){
- if(mutationBusy||!marker||dashboard.hidden||tab!=='publication'||data.intakeEnabled||(!data.published&&!data.preflight.eligible))return;
- const action=data.published?'close':'publish';
- const prompt=action==='publish'?'Опубликовать '+data.preflight.ready+' товаров и '+data.preflight.selectedVariants+' размеров в серверном каталоге? Проверьте реальные цены, фото и сроки. Приём заказов останется закрытым.':'Закрыть серверный каталог? Очередь будет очищена. Товары, цены и фотографии сохранятся.';
+ if(mutationBusy||!marker||dashboard.hidden||tab!=='publication'||data.intakeEnabled||!data.published)return;
+ const action='close';
+ const prompt='Закрыть всю серверную витрину? Все товары будут скрыты. Цены и фотографии сохранятся.';
  if(!window.confirm(prompt))return;
  const current=generation,session=marker;mutationBusy=true;button.disabled=true;
  try{
@@ -183,7 +176,7 @@ async function editVariant(v,price,active,button){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
  if(!Number.isSafeInteger(price)||price<1||price>100000000){message.textContent='Введите целую цену от 1 до 100 000 000 ₽.';return;}
  if(price===v.price&&active===v.active)return;
- if(!window.confirm('Сохранить изменения артикула '+v.sku+' · '+v.size+'? Цена: '+money(price)+'. '+(active?'Вариант подготовлен к продаже.':'Вариант неактивен.')))return;
+ 
  const current=generation,session=marker;mutationBusy=true;button.disabled=true;
  try{
   const priceOnly=active===v.active;
@@ -365,7 +358,7 @@ detailsForm.addEventListener('submit',async e=>{
  const sku=detailsSku,current=detailsGeneration,session=marker,submit=$('[data-details-submit]');
  const fields=Object.fromEntries([...detailsKeys,...(displaySupported?displayKeys:[])].map(k=>[k,detailsForm.elements[k].value.trim()]));
  if(!fields.title){detailsStatus.textContent='Укажите название.';return;}
- if(!window.confirm('Сохранить карточку артикула '+sku+'? При изменении все его размеры перейдут в черновик.'))return;
+ 
  mutationBusy=true;submit.disabled=true;detailsStatus.textContent='Сохраняем…';
  try{
   const r=await fetch('/api/admin/catalog/product/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({sku,expected:detailsRevision,fields}),signal:AbortSignal.timeout(12000)});
@@ -457,50 +450,39 @@ async function changeIndividual(data,button){
 }
 function renderReview(data,individual){
  reviewBody.replaceChildren();
- if(individual){
-  const info=node('div',undefined,'sa-review-checklist');
-  info.append(node('strong',individual.listed?'Опубликован на витрине':'Не опубликован'),node('p',individual.intakeEnabled?'При открытом приёме заказов изменение публикации пока заблокировано.':individual.published?'Управление публикацией этого артикула.':'Серверная витрина закрыта. Подготовьте товар к общей публикации.','sa-note'));
-  if(individual.canPublish||individual.canUnpublish){
-   const b=node('button',individual.listed?'Снять с публикации':'Опубликовать товар','sa-status-save');b.type='button';b.onclick=()=>changeIndividual(individual,b);info.append(b);
-  }
-  reviewBody.append(info);
-  if(individual.listed||individual.intakeEnabled){reviewBody.append(node('p',individual.listed?'Для редактирования сначала снимите товар с публикации.':'Редактирование пока закрыто.','sa-note'));return;}
- }
- reviewBody.append(node('h3',reviewNames[data.state]),node('p','Проверьте фотографии, описание и реальные цены поставщика в предпросмотре.','sa-note'));
- const publicationNames={none:'Не включён в очередь публикации',prepared:'В очереди публикации',stale:'Очередь: требуется повторное подтверждение'};
- reviewBody.append(node('strong',publicationNames[data.publicationState]),node('p','Очередь не открывает витрину и не активирует продажу.','sa-note'));
- const checklist=node('div',undefined,'sa-review-checklist');
- if(data.issues.length)for(const issue of data.issues)checklist.append(node('p',issueNames[issue]||'Проверьте карточку'));
- else checklist.append(node('p','Обязательные поля заполнены.','sa-note'));
- reviewBody.append(checklist);
- const list=node('div',undefined,'sa-review-sizes'),checks=[];
- if(data.state!=='archived'){
-  reviewBody.append(node('h3','Размеры для будущей публикации'));
-  for(const v of [...data.variants].sort((a,b)=>a.size.localeCompare(b.size,'ru',{numeric:true}))){
-   const label=node('label',undefined,'sa-review-size'),check=node('input');check.type='checkbox';check.value=v.id;
-   check.checked=data.selected.includes(v.id);
-   const txt=node('span',v.size);label.append(check,txt,node('strong',money(v.price)));list.append(label);checks.push(check);
-  }
-  reviewBody.append(list);
+ const archived=data.state==='archived',listed=individual.listed;
+ reviewBody.append(node('h3',listed?'Опубликован':archived?'В архиве':'Черновик'));
+ if(!listed&&!archived&&data.issues.length){
+  const note=node('div',undefined,'sa-review-checklist');note.append(node('strong','Для публикации необходимо'));
+  for(const issue of data.issues)note.append(node('p',issue==='photos'?'Добавьте фото в галерею товара. Если старое фото уже есть на сайте, его нужно перенести в галерею.':issueNames[issue]||'Заполните карточку.'));
+  reviewBody.append(note);
  }
  const actions=node('div',undefined,'sa-review-actions');
- const button=(name,cls,fn)=>{const b=node('button',name,cls);b.type='button';b.addEventListener('click',fn);actions.append(b);return b;};
- const selected=()=>checks.filter(c=>c.checked).map(c=>c.value);
- if(data.state!=='archived'){
-  const ready=button('Подтвердить готовность','sa-status-save',()=>{if(window.confirm('Подтвердить выбранные размеры и текущие цены? Товар пока не публикуется.'))saveReview(data,'ready',selected());});
-  const update=()=>ready.disabled=data.issues.length>0||selected().length===0||selected().length>100;
-  checks.forEach(c=>c.addEventListener('change',update));update();
-  if(data.state==='ready'&&data.publicationState!=='prepared'){
-   const prepare=button('В очередь публикации','sa-status-save',()=>{if(window.confirm('Включить товар с подтверждёнными размерами и ценами в очередь? Покупатели пока его не увидят.'))saveReview(data,'prepare',data.selected);});
-   const sameSelection=()=>{const values=selected();return values.length===data.selected.length&&values.every(id=>data.selected.includes(id));};
-   const syncPrepare=()=>{prepare.disabled=data.issues.length>0||data.selected.length===0||!sameSelection();};
-   checks.forEach(c=>c.addEventListener('change',syncPrepare));syncPrepare();
-  }
-  if(data.publicationState!=='none')button('Убрать из очереди','',()=>{if(window.confirm('Убрать товар из очереди публикации? Проверка готовности и данные сохранятся.'))saveReview(data,'cancel',[]);});
-  if(data.state!=='draft')button('Вернуть в черновик','',()=>saveReview(data,'draft',[]));
-  button('В архив','',()=>{if(window.confirm('Переместить товар в архив? Все размеры будут отключены, данные и фотографии сохранятся.'))saveReview(data,'archived',[]);});
- }else button('Восстановить черновик','sa-status-save',()=>saveReview(data,'draft',[]));
+ const button=(name,action,cls,disabled=false)=>{const b=node('button',name,cls);b.type='button';b.disabled=disabled;b.onclick=()=>simpleProductAction(individual,action,b);actions.append(b);return b;};
+ if(archived)button('Восстановить товар','simpleRestore','sa-status-save');
+ else if(listed){button('Скрыть с сайта','simpleHide','sa-status-save');button('В архив','simpleArchive');}
+ else{
+  button('Опубликовать',''+(individual.published?'simplePublish':'simpleLaunchPublish'),'sa-status-save',data.issues.length>0||(!individual.published&&individual.intakeEnabled));
+  button('В архив','simpleArchive');
+  if(!individual.published)reviewBody.append(node('p','При первой публикации потребуется подтверждение запуска серверной витрины. Приём заказов останется закрытым.','sa-note'));
+ }
  reviewBody.append(actions);
+}
+async function simpleProductAction(data,action,button){
+ if(mutationBusy||!marker||dashboard.hidden||!reviewDialog.open)return;
+ if(action==='simpleLaunchPublish'&&!window.confirm('Включить серверную витрину и опубликовать товар арт. '+data.sku+'? Приём заказов останется закрытым. Продолжайте только после проверки готовности магазина к запуску.'))return;
+ if(action==='simpleArchive'&&!window.confirm('Переместить товар в архив? Он будет скрыт с сайта, данные сохранятся.'))return;
+ const current=reviewGeneration,session=marker;mutationBusy=true;button.disabled=true;reviewStatus.textContent='Сохраняем…';
+ try{
+  const response=await fetch('/api/admin/catalog/review/edit',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',headers:{'Content-Type':'application/json','X-Session-Marker':session},body:JSON.stringify({action,sku:data.sku,expected:data.revision}),signal:AbortSignal.timeout(35000)});
+  if(current!==reviewGeneration||session!==marker)return;
+  if(response.status===401||response.status===403){deny('Доступ закрыт. Войдите заново.',true);return;}
+  if(!response.ok){reviewStatus.textContent='Не удалось изменить статус. Обновите карточку и проверьте обязательные данные.';return;}
+  const result=await response.json();if(current!==reviewGeneration||session!==marker)return;
+  if(!validIndividual(result,data.sku)||result.listed!==['simplePublish','simpleLaunchPublish'].includes(action))throw Error();
+  clearReview();expandedProducts.add(data.sku);await select('catalog');message.textContent={simplePublish:'Товар опубликован.',simpleLaunchPublish:'Товар опубликован. Приём заказов закрыт.',simpleHide:'Товар скрыт с сайта.',simpleArchive:'Товар в архиве.',simpleRestore:'Товар восстановлен как черновик.'}[action];
+ }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Откройте окно заново.';}
+ finally{mutationBusy=false;if(current===reviewGeneration)button.disabled=false;}
 }
 function validReview(d,sku){
  return d?.sku===sku&&Object.hasOwn(reviewNames,d.state)&&['none','prepared','stale'].includes(d.publicationState)&&typeof d.revision==='string'&&/^[a-f0-9]{64}$/.test(d.revision)&&Array.isArray(d.issues)&&Array.isArray(d.selected)&&Array.isArray(d.variants)&&d.variants.every(v=>typeof v.id==='string'&&typeof v.size==='string'&&Number.isSafeInteger(v.price));
@@ -537,11 +519,11 @@ async function openPublicationSummary(){
   reviewStatus.textContent='Проверка завершена. Данные не изменены.';
  }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось проверить очередь. Повторите проверку.';}
 }
-$('[data-publication-summary]').addEventListener('click',openPublicationSummary);
+
 
 async function openReview(sku){
  if(mutationBusy||!marker||dashboard.hidden||tab!=='catalog')return;
- clearReview();const current=reviewGeneration,session=marker;$('[data-review-sku]').textContent='Артикул '+sku;
+ clearReview();const current=reviewGeneration,session=marker;$('[data-review-sku]').textContent='Артикул '+sku;reviewDialog.setAttribute('data-copy-mode','');$('#sa-review-title').textContent='Публикация товара';$('[data-review-intro]').hidden=true;
  reviewDialog.showModal();reviewStatus.textContent='Проверяем карточку…';
  try{
   const data=await fetchIndividual(sku,session);
@@ -702,7 +684,7 @@ async function openRemoveSize(item){
   reviewStatus.textContent='';
   const summary=node('div',undefined,'sa-remove-summary');summary.append(node('strong',item.title),node('p',v.size),node('strong',money(v.price)));
   if(v.oldPrice)summary.append(node('s',money(v.oldPrice),'sa-old-price'));
-  const note=node('p','Размер исчезнет из каталога. История заказов и изменений сохранится. Подтверждение готовности карточки будет сброшено. Остальные размеры не изменятся.','sa-note');
+  const note=node('p','Размер исчезнет из каталога. История заказов и изменений сохранится. Остальные размеры не изменятся.','sa-note');
   const actions=node('div',undefined,'sa-review-actions'),cancel=node('button','Отмена'),remove=node('button','Удалить размер','sa-remove-confirm');cancel.type=remove.type='button';cancel.onclick=()=>{if(!mutationBusy)clearReview();};actions.append(cancel,remove);reviewBody.append(summary,note,actions);
   remove.onclick=async()=>{
    if(mutationBusy||current!==reviewGeneration||session!==marker)return;
@@ -756,7 +738,7 @@ async function openPromotion(sku){
     if(!r.ok){reviewStatus.textContent=r.status===409?'Акция не сохранена: данные изменились или товар недоступен для редактирования. Обновите каталог.':'Не удалось сохранить акцию.';return;}
     const result=await r.json();if(current!==reviewGeneration||session!==marker)return;if(!validReview(result,sku))throw Error();
     for(const item of result.variants){const v=variants.find(x=>x.id===item.id);if(v){delete v.oldPrice;Object.assign(v,item);if(selected.includes(item.id))catalogDrafts.delete(v.id);}}
-    clearReview();await select('catalog');message.textContent=percent===0?'Акция снята. Обычные цены восстановлены.':(source.listed?'Акция сохранена. Товар остаётся опубликованным.':'Акция сохранена. Проверьте готовность карточки к публикации.');
+    clearReview();await select('catalog');message.textContent=percent===0?'Акция снята. Обычные цены восстановлены.':(source.listed?'Акция сохранена. Товар остаётся опубликованным.':'Акция сохранена.');
    }catch{if(current===reviewGeneration)reviewStatus.textContent='Не удалось подтвердить результат. Обновите каталог перед повтором.';}
    finally{mutationBusy=false;amount.disabled=remove.disabled=false;for(const el of [allCheck,toggle,...fields.map(f=>f.check)])el.disabled=false;if(current===reviewGeneration)refresh();}
   });
@@ -847,8 +829,8 @@ function renderCatalog(){
     const im=node('img');im.src=u.pathname+u.search;im.alt='';im.loading='lazy';im.addEventListener('load',()=>photo.replaceChildren(im),{once:true});im.addEventListener('error',()=>im.remove(),{once:true});photo.append(im);
    }
   }catch{}
-  const title=node('div',undefined,'sa-catalog-title');title.append(node('strong',v.title),node('p',v.finish,'sa-note'),node('p','Арт. '+sku+' · Приоритет '+(v.position??Number(sku)*10),'sa-sku'));const marks=node('div',undefined,'sa-catalog-marks');marks.append(node('span',v.status==='published'?'Опубликован':reviewNames[v.status]||'Черновик','sa-product-state sa-state-'+v.status));if(v.featured===true)marks.append(node('span','Для главной','sa-featured-marker'));if(rows.some(x=>x.oldPrice))marks.append(node('span','Акция','sa-product-sale'));if(v.photoCount===0)marks.append(node('span','Нет фото в галерее','sa-product-no-photo'));title.append(marks);
-  const meta=node('div',undefined,'sa-catalog-meta');meta.append(node('strong','от '+money(Math.min(...rows.map(x=>x.price)))),node('p',rows.length+' вар. · '+rows.filter(x=>x.active).length+' актив.','sa-note'));
+  const title=node('div',undefined,'sa-catalog-title');title.append(node('strong',v.title),node('p',v.finish,'sa-note'),node('p','Арт. '+sku+' · Приоритет '+(v.position??Number(sku)*10),'sa-sku'));const marks=node('div',undefined,'sa-catalog-marks');marks.append(node('span',v.status==='published'?'Опубликован':v.status==='archived'?'В архиве':'Черновик','sa-product-state sa-state-'+v.status));if(v.featured===true)marks.append(node('span','Для главной','sa-featured-marker'));if(rows.some(x=>x.oldPrice))marks.append(node('span','Акция','sa-product-sale'));if(v.photoCount===0&&!v.image)marks.append(node('span','Нет фото','sa-product-no-photo'));title.append(marks);
+  const meta=node('div',undefined,'sa-catalog-meta');meta.append(node('strong','от '+money(Math.min(...rows.map(x=>x.price)))),node('p',rows.length+' разм.','sa-note'));
   head.append(photo,title,meta);card.append(head);
   const tableWrap=node('div',undefined,'sa-variant-wrap'),table=node('table'),thead=node('thead'),headers=node('tr');
   for(const h of ['Размер','Цена, ₽','Доступность','Действие'])headers.append(node('th',h));
@@ -869,7 +851,7 @@ function renderCatalog(){
    tr.append(node('td',item.size),priceCell,activeCell,action);tbody.append(tr);changed();
   }
   card.append(tableWrap);
-  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));const review=node('button','Готовность и публикация');review.type='button';review.addEventListener('click',()=>openReview(sku));const copy=node('button','Дублировать товар');copy.type='button';copy.addEventListener('click',()=>openCopy(sku));const bulk=node('button','Изменить цены');bulk.type='button';bulk.addEventListener('click',()=>openBulkPrices(sku));const promo=node('button','Акция / скидка');promo.type='button';promo.addEventListener('click',()=>openPromotion(sku));const placement=node('button','Положение в каталоге');placement.type='button';placement.addEventListener('click',()=>openPlacement(sku));review.classList.add('sa-publication-button');const sizeOrder=node('button','Порядок размеров');sizeOrder.type='button';sizeOrder.addEventListener('click',()=>openSizeOrder(sku));
+  const addRow=node('div',undefined,'sa-catalog-add-row'),addSize=node('button','+ Добавить размер');addSize.type='button';addSize.addEventListener('click',()=>openCreate(sku));const gallery=node('button','Фотографии');gallery.type='button';gallery.addEventListener('click',()=>openPhotos(sku));const edit=node('button','Редактировать карточку');edit.type='button';edit.addEventListener('click',()=>openDetails(sku));const preview=node('button','Предпросмотр');preview.type='button';preview.addEventListener('click',()=>openPreview(sku));const review=node('button',v.status==='published'?'Скрыть с сайта':v.status==='archived'?'Восстановить':'Опубликовать');review.type='button';review.addEventListener('click',()=>openReview(sku));const copy=node('button','Дублировать товар');copy.type='button';copy.addEventListener('click',()=>openCopy(sku));const bulk=node('button','Изменить цены');bulk.type='button';bulk.addEventListener('click',()=>openBulkPrices(sku));const promo=node('button','Акция / скидка');promo.type='button';promo.addEventListener('click',()=>openPromotion(sku));const placement=node('button','Положение в каталоге');placement.type='button';placement.addEventListener('click',()=>openPlacement(sku));review.classList.add('sa-publication-button');const sizeOrder=node('button','Порядок размеров');sizeOrder.type='button';sizeOrder.addEventListener('click',()=>openSizeOrder(sku));
   for(const [heading,buttons] of [['Карточка товара',[preview,edit,gallery,copy]],['Размеры и цены',[addSize,sizeOrder,bulk,promo]],['Публикация и витрина',[review,placement]]]){
    const group=node('div',undefined,'sa-action-group'),controls=node('div',undefined,'sa-action-group-controls');controls.append(...buttons);group.append(node('span',heading,'sa-action-group-label'),controls);addRow.append(group);
   }
