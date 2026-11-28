@@ -35,7 +35,10 @@
  <p class="sa-note">Изменения относятся ко всем размерам артикула. После изменения карточка станет черновиком до подготовки витрины.</p>
  <div class="sa-form-grid">
  <label class="sa-form-wide">Название<input name="title" required maxlength="200"></label>
- <label class="sa-form-wide">Исполнение<input name="finish" maxlength="200"></label>
+ <label class="sa-form-wide">Исполнение в каталоге<input name="finish" maxlength="200"></label>
+ <label class="sa-form-wide" data-display-field hidden>Полное название на странице товара<input name="productTitle" maxlength="200"></label>
+ <label class="sa-form-wide" data-display-field hidden>Надпись над названием<input name="eyebrow" maxlength="200"></label>
+ <label class="sa-form-wide" data-display-field hidden>Подзаголовок на странице товара<input name="productFinish" maxlength="200"></label>
  <label>Категория<select name="category"><option value="rf">Гербы РФ</option><option value="region">Гербы субъектов РФ</option><option value="city">Гербы городов РФ</option><option value="department">Эмблемы ведомств</option><option value="other">Прочие / не выбрана</option></select></label>
  <label>Материал<input name="material" maxlength="200"></label>
  <label class="sa-form-wide">Описание<textarea name="description" maxlength="4000" rows="5" placeholder="Описание товара"></textarea></label>
@@ -58,4 +61,4 @@
  <div data-review-body></div><p data-review-status role="status" class="sa-create-status"></p>
  <div class="sa-dialog-actions"><button type="button" data-review-close>Закрыть</button></div>
 </dialog>
-<script src="server-admin.js?v=20261128-adminlogin1" defer></script></body></html>
+<script src="server-admin.js?v=20261128-metadata1" defer></script></body></html>

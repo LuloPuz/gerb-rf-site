@@ -11,7 +11,8 @@ const photoDialog=$('[data-photo-dialog]'),photoForm=$('[data-photo-form]'),phot
 let photoSku=null,photoGeneration=0,photoRecords=[];
 const detailsDialog=$('[data-details-dialog]'),detailsForm=$('[data-details-form]'),detailsStatus=$('[data-details-status]');
 const detailsKeys=['title','finish','category','description','material','specs','leadTime'];
-let detailsSku=null,detailsRevision=null,detailsGeneration=0;
+const displayKeys=['productTitle','eyebrow','productFinish'];
+let detailsSku=null,detailsRevision=null,detailsGeneration=0,displaySupported=false;
 const previewDialog=$('[data-preview-dialog]'),previewBody=$('[data-preview-body]'),previewStatus=$('[data-preview-status]');
 let previewGeneration=0;
 const reviewDialog=$('[data-review-dialog]'),reviewBody=$('[data-review-body]'),reviewStatus=$('[data-review-status]');
@@ -281,7 +282,9 @@ async function openDetails(sku){
   const data=await get('/api/admin/catalog/product?sku='+encodeURIComponent(sku));
   if(current!==detailsGeneration||!detailsDialog.open)return;
   if(data.sku!==sku||typeof data.revision!=='string'||!/^[a-f0-9]{64}$/.test(data.revision)||!detailsKeys.every(k=>typeof data.fields?.[k]==='string'))throw Error();
-  for(const k of detailsKeys)detailsForm.elements[k].value=data.fields[k];
+  displaySupported=displayKeys.every(k=>typeof data.fields[k]==='string');
+  for(const label of detailsForm.querySelectorAll('[data-display-field]'))label.hidden=!displaySupported;
+  for(const k of [...detailsKeys,...displayKeys])detailsForm.elements[k].value=data.fields[k]||'';
   detailsRevision=data.revision;detailsStatus.textContent='';$('[data-details-submit]').disabled=false;
  }catch(e){if(current===detailsGeneration){detailsStatus.textContent='Не удалось загрузить карточку.';if(e.status===401||e.status===403)deny('Доступ закрыт. Войдите заново.',true);}}
 }
@@ -290,7 +293,7 @@ detailsDialog.addEventListener('cancel',e=>{e.preventDefault();if(!mutationBusy)
 detailsForm.addEventListener('submit',async e=>{
  e.preventDefault();if(mutationBusy||!marker||!detailsSku||!detailsRevision||dashboard.hidden||!detailsDialog.open)return;
  const sku=detailsSku,current=detailsGeneration,session=marker,submit=$('[data-details-submit]');
- const fields=Object.fromEntries(detailsKeys.map(k=>[k,detailsForm.elements[k].value.trim()]));
+ const fields=Object.fromEntries([...detailsKeys,...(displaySupported?displayKeys:[])].map(k=>[k,detailsForm.elements[k].value.trim()]));
  if(!fields.title){detailsStatus.textContent='Укажите название.';return;}
  if(!window.confirm('Сохранить карточку артикула '+sku+'? При изменении все его размеры перейдут в черновик.'))return;
  mutationBusy=true;submit.disabled=true;detailsStatus.textContent='Сохраняем…';
