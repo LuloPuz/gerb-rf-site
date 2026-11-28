@@ -166,6 +166,31 @@ async function changeStatus(o,next,button,selectControl){
  }catch{if(current===generation)message.textContent='Не удалось подтвердить изменение. Обновите список перед повтором.';}
  finally{mutationBusy=false;button.disabled=false;selectControl.disabled=false;}
 }
+function paymentPreparation(o){
+ const panel=node('details',undefined,'sa-payment-prep');
+ panel.append(node('summary','Подготовить оплату'));
+ const body=node('div',undefined,'sa-payment-prep-body');
+ body.append(node('p','Подготовка суммы для платёжной ссылки Точка Банка или счёта. Это расчёт, а не выставленный счёт.','sa-note'));
+ const grid=node('div',undefined,'sa-payment-grid');
+ const goods=node('div',undefined,'sa-payment-value');goods.append(node('span','Стоимость товаров'),node('strong',money(o.total)));
+ const deliveryLabel=node('label',undefined,'sa-payment-value');deliveryLabel.append(node('span','Согласованная доставка, ₽'));
+ const shipping=node('input');shipping.type='number';shipping.min='0';shipping.max='100000000';shipping.step='0.01';shipping.placeholder='Укажите сумму';shipping.inputMode='decimal';deliveryLabel.append(shipping);
+ const totalBox=node('div',undefined,'sa-payment-value sa-payment-total'),total=node('strong','—');totalBox.append(node('span','100% предоплата'),total);grid.append(goods,deliveryLabel,totalBox);body.append(grid);
+ const action=node('div',undefined,'sa-payment-actions'),copy=node('button','Скопировать сумму и назначение','sa-status-save'),feedback=node('p','','sa-note');copy.type='button';copy.disabled=true;feedback.setAttribute('role','status');
+ function amount(){
+  const shippingNumber=Number(shipping.value),shippingCents=Math.round(shippingNumber*100),goodsCents=o.total*100;
+  if(shipping.value.trim()===''||!shipping.checkValidity()||!Number.isSafeInteger(goodsCents)||goodsCents<=0||!Number.isSafeInteger(shippingCents)||shippingCents<0||!Number.isSafeInteger(goodsCents+shippingCents))return null;
+  return (goodsCents+shippingCents)/100;
+ }
+ function refresh(){const n=amount();total.textContent=n===null?'—':decimalMoney(n);copy.disabled=n===null;feedback.textContent='';}
+ shipping.addEventListener('input',refresh);
+ copy.addEventListener('click',async()=>{
+  const n=amount();if(n===null||dashboard.hidden||!marker||tab!=='orders')return;
+  const text='Заказ ДРЖ-'+o.number+'\\nТовары: '+money(o.total)+'\\nДоставка: '+decimalMoney(Number(shipping.value))+'\\nК оплате (100% предоплата): '+decimalMoney(n)+'\\nНазначение: Предоплата за товар по заказу ДРЖ-'+o.number;
+  try{await navigator.clipboard.writeText(text);feedback.textContent='Скопировано. Используйте данные при создании ссылки в банке или счёта.';}catch{feedback.textContent='Не удалось скопировать. Сумму и номер заказа можно переписать вручную.';}
+ });
+ action.append(copy);body.append(action,feedback,node('p','Эквайринг и кассовые чеки ещё не подключены. Расчёт не сохраняется, платёж не создаётся и статус заказа не меняется.','sa-note'));panel.append(body);return panel;
+}
 function renderOrders(){
  const q=$('[data-order-search]').value.trim().toLowerCase(),status=$('[data-order-filter]').value;
  const list=orders.filter(o=>(!status||o.status===status)&&(!q||[o.number,o.customer?.name,o.customer?.phone,o.customer?.organization].join(' ').toLowerCase().includes(q)));
@@ -182,6 +207,7 @@ function renderOrders(){
   for(const i of o.items||[]){const item=node('div',undefined,'sa-item');item.append(node('strong',i.title),node('p',[i.sku,i.size,i.finish].filter(Boolean).join(' · '),'sa-note'),node('p',i.quantity+' шт. × '+money(i.price)));details.append(item);}
   if(o.history?.length){details.append(node('h3','История статусов'));for(const h of o.history)details.append(node('p',date(h.at)+' · '+h.status,'sa-note'));}
   card.append(details);
+  if(['Подтверждён','Ожидает оплаты'].includes(o.status))card.append(paymentPreparation(o));
   const available=transitions[o.status]||[];
   if(available.length){
    const action=node('div',undefined,'sa-status-action'),selectControl=node('select');
