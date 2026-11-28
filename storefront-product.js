@@ -35,7 +35,7 @@ export function renderProductCard(p,{target,makePhoto,preview=false,bindPurchase
  const custom=node('a',undefined,'custom-size-inline'),copy=node('span',undefined,'custom-size-inline-copy');
  if(preview)custom.setAttribute('aria-disabled','true');else custom.href='offer.html';copy.append(node('strong','Не нашли нужного размера?'),node('small','Возможно изготовление герба под индивидуальный запрос'));custom.append(copy,node('span','Уточнить размер'));info.append(custom);
  if(p.material)info.append(node('p','Материал: '+p.material,'ds-detail'));
- if(p.leadTime){const time=node('div',undefined,'production-time');time.append(node('strong','Срок изготовления'),node('span',p.leadTime));info.append(time);}
+ {const time=node('div',undefined,'production-time');time.append(node('strong','Срок изготовления'),node('span',String(p.leadTime||'').trim()||'Уточняется при оформлении заказа.'));info.append(time);}
  const actions=node('div',undefined,'shop-product-actions'),buy=node('button','Добавить в корзину','shop-add-button'),cart=node('a','Корзина','shop-go-cart');buy.type='button';buy.disabled=true;buy.title=preview?'Покупка отключена в предпросмотре':'Приём заказов пока закрыт';if(preview)cart.setAttribute('aria-disabled','true');else{cart.href='cart.html';bindPurchase?.(buy,p.sku,()=>selectedVariant,'Добавить в корзину');}actions.append(buy,cart);info.append(actions);
  const back=node('a','← Продолжить покупки','button final-order-button shop-direct-order');if(preview)back.setAttribute('aria-disabled','true');else back.href=backHref;info.append(back);
  layout.append(gallery,info);target.replaceChildren(layout);

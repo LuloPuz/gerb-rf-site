@@ -378,7 +378,7 @@ function clearPreview(){
 }
 const categoryNames={rf:'Гербы РФ',region:'Гербы субъектов РФ',city:'Гербы городов РФ',department:'Эмблемы ведомств',other:'Категория не выбрана'};
 async function renderPreview(data,current,session){
- const {renderProductCard}=await import('./storefront-product.js?v=20261128-promo1');
+ const {renderProductCard}=await import('./storefront-product.js?v=20261128-leadtime1');
  if(current!==previewGeneration||session!==marker)return;
  const f=data.fields,photos=data.photos.map(p=>({id:'/api/admin/catalog/photo?id='+encodeURIComponent(p.id)}));
  if(!photos.length&&data.legacyImage){
