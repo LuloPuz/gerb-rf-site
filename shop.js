@@ -282,7 +282,7 @@
       '<div class="summary-total"><span>Итого</span><strong>'+money(cartTotal())+'</strong></div>'+
       '<button class="cart-checkout-button" type="button" data-open-checkout>Перейти к оформлению</button>'+
       '<a class="cart-continue-button" href="catalog.html">← Продолжить покупки</a>'+
-      '<p class="cart-summary-note">Оплата и доставка согласовываются отдельно.</p>';
+      '<p class="cart-summary-note">Предоплата 100% после согласования наличия, сроков и доставки. Доставка оплачивается отдельно.</p>';
 
     list.querySelectorAll('[data-cart-index]').forEach(row=>{
       const i=Number(row.dataset.cartIndex);
@@ -394,14 +394,14 @@
         form.reset();saved.replaceChildren();saved.hidden=true;
         document.querySelector('[data-checkout-panel]').hidden=true;renderCart();
         const success=document.querySelector('[data-order-success]');success.hidden=false;
-        const note=result.linked?'Заявка сохранена. Статус доступен в личном кабинете.':'Заявка сохранена. Менеджер свяжется с вами по указанным контактам.';
+        const note=result.linked?'Менеджер согласует наличие, сроки и доставку до оплаты. Статус доступен в личном кабинете.':'Менеджер свяжется с вами для согласования наличия, сроков и доставки до оплаты.';
         const warning=cleared?'':'<p>Корзина не очищена. Не отправляйте этот заказ повторно.</p>';
         const link=result.linked?'<a class="button button-gold" href="account.html">Перейти в личный кабинет</a>':'';
         if(cleared)document.querySelector('[data-cart-page]').classList.add('order-completed');
-        success.innerHTML='<p class="order-success-kicker">ЗАЯВКА ПРИНЯТА</p><h2>Заказ ДРЖ-'+esc(result.number)+'</h2><p>'+note+'</p>'+warning+'<div class="order-success-total"><span>Стоимость товаров</span><strong>'+money(result.total)+'</strong></div><div class="order-success-actions">'+link+'<a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
+        success.innerHTML='<p class="order-success-kicker">ЗАЯВКА ПРИНЯТА</p><h2>Заявка ДРЖ-'+esc(result.number)+'</h2><p>'+note+'</p>'+warning+'<div class="order-success-total"><span>Стоимость товаров</span><strong>'+money(result.total)+'</strong></div><div class="order-success-actions">'+link+'<a class="button order-secondary" href="catalog.html">Продолжить покупки</a></div>';
         requestAnimationFrame(()=>scrollCartSection(success));
       }catch(error){status(error?.message?.startsWith('Результат предыдущей')?error.message:'Не удалось подтвердить отправку. Корзина сохранена; повторите с теми же данными.');}
-      finally{busy=false;controls.forEach(el=>el.disabled=false);submit.textContent='Оформить заказ';}
+      finally{busy=false;controls.forEach(el=>el.disabled=false);submit.textContent='Отправить заявку';}
     });
     window.addEventListener('pagehide',()=>{++fillGeneration;form.reset();saved.replaceChildren();saved.hidden=true;});
     window.addEventListener('pageshow',event=>{if(event.persisted&&!document.querySelector('[data-checkout-panel]').hidden)fillCheckout();});
