@@ -38,3 +38,14 @@
 .sa-copy-photos input[type=checkbox]{appearance:auto;accent-color:#16324f;width:19px;height:19px;flex:0 0 19px;margin:0;cursor:pointer}
 .sa-copy-form .sa-note{margin:0}
 .sa-copy-form .sa-review-actions{margin:0}
+
+.sa-bulk-form{display:grid;gap:12px;margin:12px 0}
+.sa-bulk-controls{display:flex;gap:10px;flex-wrap:wrap}
+.sa-bulk-controls select,.sa-bulk-controls input{flex:1 1 140px;min-width:0;box-sizing:border-box;min-height:42px;padding:8px 10px;border:1px solid #cbd5df;border-radius:8px;background:#fff;color:#16324f;font:inherit}
+.sa-bulk-controls input[hidden]{display:none!important}
+.sa-bulk-table td:nth-child(3),.sa-bulk-table td:nth-child(4){white-space:nowrap;font-variant-numeric:tabular-nums}
+.sa-bulk-table input[type=checkbox]{appearance:auto;accent-color:#16324f;width:18px;height:18px;margin:0}
+.sa-bulk-table td .sa-note{margin:4px 0 0}
+.sa-bulk-changed{font-weight:700;color:#16324f}
+.sa-bulk-form .sa-note{margin:0}
+.sa-bulk-form .sa-review-actions{margin:0}
